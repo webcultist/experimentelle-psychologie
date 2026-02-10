@@ -1,0 +1,11 @@
+# Resources (PDFs, exam papers, lecture slides - not for public repo)
+resources/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~

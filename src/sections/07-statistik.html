@@ -1,0 +1,69 @@
+
+<!-- ══════════════ 7. STATISTIK ══════════════ -->
+<section id="statistik">
+  <div class="section-number">07</div>
+  <h2>Statistische Auswertung</h2>
+  <p class="section-subtitle">Von Daten zu Entscheidungen</p>
+
+  <h3 class="sub">NHST</h3>
+  <div class="flow">
+    <div class="flow-step">H₀<small>„Kein Effekt"</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Daten<small>Experiment</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Teststatistik<small>t, F, χ²</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">p-Wert</div><span class="flow-arrow">→</span>
+    <div class="flow-step">p &lt; α?<small>→ H₀ ablehnen</small></div>
+  </div>
+
+  <div class="def-box"><div class="label">p-Wert</div><p>P(Daten so extrem oder extremer | H₀). <strong>NICHT:</strong> P(H₀ | Daten)!</p></div>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th>H₀ wahr</th><th>H₀ falsch</th></tr></thead>
+    <tbody>
+      <tr><td><strong>H₀ ablehnen</strong></td><td style="background:#fadbd8"><strong>α-Fehler</strong> (Typ I) 🚨</td><td style="background:#d5f5e3"><strong>Power</strong> = 1−β 💪</td></tr>
+      <tr><td><strong>H₀ beibehalten</strong></td><td style="background:#d5f5e3">Korrekt ✓</td><td style="background:#fadbd8"><strong>β-Fehler</strong> (Typ II) 😶</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="achtung">
+    <p>❌ „p=.03 → H₀ ist 3 % wahrscheinlich" — P(D|H₀) ≠ P(H₀|D)!</p>
+    <p>❌ „p=.06 → kein Effekt" — .05 ist willkürlich.</p>
+  </div>
+
+  <h3 class="sub">Bayes</h3>
+  <div class="def-box gold"><div class="label">Bayes-Faktor</div><p>BF₁₀ = „Wie stark stützen Daten H₁ vs. H₀?" 1 = neutral, 10 = stark für H₁, 0.1 = stark für H₀.</p></div>
+
+  <div class="deep-dive" id="dd-stat">
+    <button class="deep-dive-toggle" onclick="toggleDD('dd-stat')"><span class="dd-icon">▼</span>Vertiefung: Effektstärke, Power & Multiple Vergleiche<span class="dd-badge">Erweitert</span></button>
+    <div class="deep-dive-content">
+      <h4>Effektstärke</h4>
+      <div class="formula"><span class="keyword">Cohen's d</span> = (M₁−M₂)/SD_pooled   <span class="comment">// 0.2 klein, 0.5 mittel, 0.8 groß</span></div>
+      <p>Signifikant + d=0.05 → „echt", aber praktisch irrelevant.</p>
+
+      <h4>Power = 1−β</h4>
+      <p>Ziel: ≥ .80. Hängt ab von: Effektstärke, n, α, Streuung.</p>
+
+      <h4>NHST vs. Bayes</h4>
+      <div class="vergleich">
+        <div class="vergleich-seite"><h4>NHST</h4><ul><li>Binär (sig/nicht)</li><li>Kann H₀ nicht stützen</li><li>p kontraintuitiv</li></ul></div>
+        <div class="vergleich-seite"><h4>Bayes</h4><ul><li>Kontinuierliche Evidenz</li><li>Kann H₀ stützen</li><li>Braucht Prior</li></ul></div>
+      </div>
+
+      <h4>Multiple Vergleiche</h4>
+      <p>20 Tests, α=.05 → ~1 Falsch-Positiv! <strong>Bonferroni:</strong> α/k. <strong>FDR:</strong> weniger konservativ.</p>
+
+      <h4>Konfidenzintervall</h4>
+      <p>95%-KI: Bei ∞ Wiederholungen enthält 95 % den wahren Wert. <strong>Nicht:</strong> „95 % Wahrsch., dass Wert drin liegt."</p>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz-stat">
+    <h4>🧠 Schnellcheck</h4>
+    <p style="margin-bottom:1rem; font-size:0.9rem;">p = .02 — korrekte Interpretation?</p>
+    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz-stat',this,false)">H₀ ist 2 % wahrscheinlich</button>
+    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz-stat',this,false)">Effekt zu 98 % real</button>
+    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz-stat',this,true)">Unter H₀ hätte man solche Daten nur in 2 % der Fälle erwartet</button>
+    <div class="quiz-feedback correct-fb">Richtig! p = P(Daten≥extrem | H₀). Nicht P(H₀ | Daten)!</div>
+    <div class="quiz-feedback wrong-fb">p = „Wie wahrscheinlich diese Daten unter H₀?" Nicht „Wie wahrscheinlich ist H₀?"</div>
+  </div>
+</section>
+<div class="sep">· · ·</div>

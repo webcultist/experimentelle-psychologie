@@ -1,0 +1,118 @@
+
+<!-- ══════════════ 6. VERSUCHSPLANUNG ══════════════ -->
+<section id="versuchsplanung">
+  <div class="section-number">06</div>
+  <h2>Versuchsplanung</h2>
+  <p class="section-subtitle">Das Herzstück der experimentellen Methode</p>
+
+  <div class="flow">
+    <div class="flow-step">Theorie<small>Modell</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Hypothese<small>Vorhersage</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Operationali-<br>sierung<small>Messbar</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Experiment<small>Durchführung</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Auswertung<small>Statistik</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Interpretation<small>→ Theorie</small></div>
+  </div>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Variable</th><th>Was?</th><th>Beispiel</th></tr></thead>
+    <tbody>
+      <tr><td><strong>UV</strong></td><td>Manipuliert</td><td>Koffein-Dosis</td></tr>
+      <tr><td><strong>AV</strong></td><td>Gemessen</td><td>Reaktionszeit</td></tr>
+      <tr><td><strong>Störvariable</strong></td><td>Beeinflusst AV, nicht untersucht</td><td>Müdigkeit</td></tr>
+      <tr><td><strong>Konfundierung</strong></td><td>SV kovariiert mit UV</td><td>→ Int. Validität ↓</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="analogie"><p><strong>Kochen:</strong> UV = Zutat. AV = Geschmack. Störvar. = Ofentemp. Konfundierung = Salz UND Pfeffer gleichzeitig ändern.</p></div>
+
+  <div class="merksatz"><p><strong>Max-Kon-Min-Prinzip (Kerlinger):</strong> <strong>Max</strong>imiere Primärvarianz (starke UV-Manipulation). <strong>Kon</strong>trolliere Sekundärvarianz (Störvariablen ausschalten). <strong>Min</strong>imiere Fehlervarianz (präzise Messung, große Stichprobe).</p></div>
+
+  <h3 class="sub">Designs</h3>
+  <div class="vergleich">
+    <div class="vergleich-seite"><h4>Between-Subjects 👤👤</h4><ul><li>Verschiedene Gruppen</li><li>Keine Übertragung</li><li>Mehr VPn nötig</li><li>Individuelle Unterschiede = Fehler</li></ul></div>
+    <div class="vergleich-seite"><h4>Within-Subjects 🔄</h4><ul><li>Jede VP alle Bedingungen</li><li>Ind. Unterschiede kontrolliert</li><li>Reihenfolgeeffekte!</li><li>Counterbalancing nötig</li></ul></div>
+  </div>
+
+  <div class="def-box blue">
+    <div class="label">Validität</div>
+    <p><strong>Intern:</strong> UV→AV eindeutig? <strong>Extern:</strong> Generalisierbar? <strong>Konstrukt:</strong> Misst es das Konstrukt? <strong>Statistisch:</strong> Effekt korrekt?</p>
+  </div>
+
+  <h3 class="sub">Randomisierung vs. Parallelisierung</h3>
+  <p>In <strong>jeder Klausur</strong> gefragt: „Nennen Sie zwei Vorteile der Randomisierung gegenüber der Parallelisierung!"</p>
+  <div class="vergleich">
+    <div class="vergleich-seite"><h4>Randomisierung</h4><ul><li>Kontrolliert <strong>alle</strong> SVs (auch unbekannte!)</li><li>Einfach durchführbar</li><li>Keine Vorabmessung nötig</li><li>Benötigt große Stichproben</li></ul></div>
+    <div class="vergleich-seite"><h4>Parallelisierung</h4><ul><li>Kontrolliert nur <strong>bekannte</strong> SVs</li><li>Unbekannte SVs bleiben unkontrolliert</li><li>Vorabmessung der Parallelisierungsvariable nötig</li><li>Funktioniert auch bei kleinen Stichproben</li></ul></div>
+  </div>
+
+  <div class="def-box red">
+    <div class="label">Ceteris-paribus-Klausel</div>
+    <p>„Unter sonst gleichen Bedingungen." Kernprinzip: Zwischen den Gruppen darf sich <strong>nur die UV</strong> unterscheiden — alles andere wird konstant gehalten. Verletzung → Konfundierung → keine Kausalaussage.</p>
+  </div>
+
+  <h3 class="sub">Messwiederholung</h3>
+  <div class="merksatz"><p><strong>Klausurliebling:</strong> Unterschied between/within? Within = Messwiederholung = jede VP durchläuft alle Bedingungen. Vorteil: weniger VPn, Kontrolle individueller Unterschiede. Problem: <strong>zeitgebundene Störvariablen</strong> (Übung, Ermüdung, Reihenfolgeeffekte). Lösung: <strong>Counterbalancing</strong> (Lateinisches Quadrat).</p></div>
+
+  <h3 class="sub">Versuchsleitereffekte & Verblindung</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Technik</th><th>Was wird verblindet?</th><th>Gegen was?</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Einfach</strong></td><td>VP weiß nicht, in welcher Bedingung</td><td>Placebo-Effekt, Demand Characteristics</td></tr>
+      <tr><td><strong>Doppelt</strong></td><td>VP + VL wissen es nicht</td><td>+ Rosenthal-Effekt (VL-Erwartung)</td></tr>
+      <tr><td><strong>Dreifach</strong></td><td>VP + VL + Auswerter</td><td>+ Auswertungsbias</td></tr>
+    </tbody>
+  </table></div>
+  <div class="example"><p><strong>Pygmalion im Klassenzimmer (Rosenthal & Jacobson):</strong> Lehrer erfuhren, bestimmte Schüler seien „Hochbegabte" (zufällig gewählt). Diese Schüler zeigten tatsächlich bessere Leistung — <strong>self-fulfilling prophecy</strong>. → Deshalb Doppelblind!</p></div>
+
+  <h3 class="sub">Fallbeispiel: Therapiestudie (BDI)</h3>
+  <div class="def-box blue">
+    <div class="label">Typische Klausuraufgabe</div>
+    <p>Eine kognitive Verhaltenstherapie wird mit dem <strong>Beck-Depressions-Inventar (BDI)</strong> evaluiert. Versuchsplan:</p>
+    <div class="table-wrap"><table style="text-align:center;">
+      <thead><tr><th></th><th>Vortest</th><th>Treatment</th><th>Nachtest</th></tr></thead>
+      <tbody>
+        <tr><td><strong>EG</strong></td><td>O₁</td><td>X</td><td>O₂</td></tr>
+        <tr><td><strong>KG</strong></td><td>O₃</td><td>—</td><td>O₄</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Frage:</strong> „Kann man schließen, dass die Therapie wirkt?" → Nur wenn <strong>Interaktion</strong> vorliegt: EG verbessert sich MEHR als KG. Haupteffekt allein reicht nicht (Spontanremission!).</p>
+    <p><strong>Interaktionstypen:</strong> <strong>Ordinal</strong> = beide Gruppen verbessern sich, aber EG stärker (Linien divergieren). <strong>Disordinal</strong> = Linien kreuzen sich (Therapie hilft EG, schadet KG). Die BDI-Studie testet typisch eine ordinale Interaktion.</p>
+  </div>
+
+  <h3 class="sub">Forschungsethik</h3>
+  <div class="card-grid">
+    <div class="card"><h3><span class="icon">⚡</span> Milgram (1963)</h3><p>Gehorsamsexperiment: VPn gaben vermeintliche Stromschläge. 65% gingen bis 450V. → Extremer <strong>psychischer Stress</strong>, kein informed consent, kein echtes Recht auf Abbruch.</p></div>
+    <div class="card"><h3><span class="icon">🏛️</span> Stanford Prison (1971)</h3><p>Zimbardo: Studenten als Wärter/Häftlinge. Abbruch nach 6 (statt 14) Tagen. → <strong>Kontrollverlust</strong> des Forschers, keine Sicherheitsmaßnahmen.</p></div>
+    <div class="card"><h3><span class="icon">👶</span> Little Albert (1920)</h3><p>Watson: 11 Monate altes Kind, Konditionierung von Angst. Keine Dekonditionierung. → Ethisch inakzeptabel, Kind langfristig geschädigt.</p></div>
+  </div>
+  <div class="merksatz"><p><strong>Ethische Grundsätze heute:</strong> (1) <strong>Informierte Einwilligung</strong> — freiwillig, aufgeklärt, jederzeit widerrufbar. (2) <strong>Ethik-Kommission</strong> — Vorabprüfung. (3) <strong>Debriefing</strong> — Aufklärung nach dem Experiment. (4) <strong>Datenschutz</strong> — Anonymisierung/Pseudonymisierung. (5) <strong>Schadensvermeidung</strong> — kein nachhaltiger Schaden.</p></div>
+
+  <div class="deep-dive" id="dd-vp">
+    <button class="deep-dive-toggle" onclick="toggleDD('dd-vp')"><span class="dd-icon">▼</span>Vertiefung: Kontrolltechniken, Interaktionen & Bedrohungen<span class="dd-badge">Erweitert</span></button>
+    <div class="deep-dive-content">
+      <h4>Kontrolltechniken</h4>
+      <p><strong>Randomisierung:</strong> Verteilt alle SVs (auch unbekannte) gleichmäßig. <strong>Konstanthalten:</strong> SV fixieren. <strong>Counterbalancing:</strong> Latin Square. <strong>Matching:</strong> Paarweise zuordnen. <strong>Verblindung:</strong> Einfach/doppelt → gegen Erwartungseffekte.</p>
+
+      <h4>Interaktionen</h4>
+      <p>2×2: Koffein × Schlafentzug. <strong>Keine Interaktion:</strong> parallele Linien. <strong>Interaktion:</strong> Koffein hilft nur bei Schlafentzug → Linien divergieren/kreuzen.</p>
+
+      <h4>Quasi-Experiment</h4>
+      <p>UV = bestehende Eigenschaft (Geschlecht). Keine Randomisierung → keine Kausalaussagen.</p>
+
+      <h4>Bedrohungen interner Validität</h4>
+      <p><strong>Selektion:</strong> Gruppen vorher verschieden. <strong>Reifung:</strong> Ermüdung. <strong>Regression zur Mitte:</strong> Extreme → Mittel. <strong>Demand Characteristics:</strong> VP erkennt Hypothese.</p>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz2">
+    <h4>🧠 Schnellcheck</h4>
+    <p style="margin-bottom:1rem; font-size:0.9rem;">Warum ist „Reagieren Männer schneller?" kein echtes Experiment?</p>
+    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz2',this,false)">Stichprobe zu klein</button>
+    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz2',this,true)">Geschlecht nicht manipulierbar → Quasi-Experiment</button>
+    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz2',this,false)">Keine Kontrollgruppe</button>
+    <div class="quiz-feedback correct-fb">Richtig! Geschlecht = nicht manipulierbar → keine Randomisierung → Quasi-Experiment.</div>
+    <div class="quiz-feedback wrong-fb">Echtes Experiment: UV aktiv manipuliert + Randomisierung. Geschlecht → beides nicht möglich.</div>
+  </div>
+</section>
+<div class="sep">· · ·</div>

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wissenstest — Experimentelle Psychologie | Uni Tübingen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8; --bg-card: #fffdf8; --text: #2a2520; --text-secondary: #6b5e52;
+  --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a5276; --accent4: #7d3c98; --accent5: #b7950b;
+  --border: #d4cbbf; --highlight: #fef3c7; --shadow: rgba(42,37,32,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Source Sans 3',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+::selection{background:var(--accent);color:#fff}
+a{color:var(--accent3);text-decoration:none}a:hover{text-decoration:underline}
+
+header{padding:3rem 2rem 2.5rem;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#ece5d8,var(--bg));position:relative}
+header::after{content:'§';position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 1rem;font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--accent)}
+.uni-badge{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1.5px solid var(--accent);padding:.3em 1em;margin-bottom:1rem;border-radius:2px}
+header h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;line-height:1.2;margin-bottom:.4rem}
+header h1 em{color:var(--accent);font-style:italic}
+.subtitle{font-size:1rem;color:var(--text-secondary);font-weight:300;max-width:620px;margin:0 auto}
+.back-link{margin-top:1rem;font-size:.85rem}
+
+.container{max-width:880px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── START SCREEN ── */
+#startScreen .intro{text-align:center;margin-bottom:2rem}
+#startScreen .intro h2{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:.5rem}
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin:1.5rem 0}
+.topic-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:6px;padding:1.2rem 1.4rem;cursor:pointer;transition:all .2s;position:relative;user-select:none}
+.topic-card:hover{border-color:var(--accent3);transform:translateY(-2px);box-shadow:0 6px 20px var(--shadow)}
+.topic-card.selected{border-color:var(--accent2);background:linear-gradient(135deg,#eaf5ee,#d5f5e3)}
+.topic-card .check{position:absolute;top:.8rem;right:.8rem;width:22px;height:22px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:#fff;transition:all .2s}
+.topic-card.selected .check{background:var(--accent2);border-color:var(--accent2)}
+.topic-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:.3rem;padding-right:2rem}
+.topic-card .num{font-size:.7rem;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
+.topic-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.5}
+
+.config-row{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;margin:1.5rem 0;padding:1.2rem 1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:6px}
+.config-row label{font-size:.88rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.config-row select,.config-row input[type=number]{font-family:inherit;font-size:.88rem;padding:.3em .6em;border:1px solid var(--border);border-radius:4px;background:var(--bg)}
+.config-row .toggle{display:flex;align-items:center;gap:.4rem;cursor:pointer}
+.config-row .toggle input{accent-color:var(--accent3)}
+
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;font-family:inherit;font-size:1rem;font-weight:600;border:none;border-radius:4px;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#a93226;transform:translateY(-1px)}
+.btn-secondary{background:var(--accent3);color:#fff}.btn-secondary:hover{background:#154360}
+.btn-outline{background:transparent;border:1.5px solid var(--accent3);color:var(--accent3)}.btn-outline:hover{background:var(--accent3);color:#fff}
+.btn:disabled{opacity:.4;cursor:default;transform:none}
+.btn-row{display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap}
+.select-helpers{display:flex;gap:.8rem;margin-bottom:1rem}
+.select-helpers button{font-size:.78rem;padding:.3em .8em;background:transparent;border:1px solid var(--border);border-radius:3px;cursor:pointer;font-family:inherit;color:var(--text-secondary)}
+.select-helpers button:hover{border-color:var(--accent3);color:var(--accent3)}
+
+/* ── TEST SCREEN ── */
+#testScreen{display:none}
+.test-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.8rem}
+.test-header .progress-text{font-size:.88rem;font-weight:600;color:var(--text-secondary)}
+.test-header .timer{font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:500;color:var(--accent3);background:rgba(26,82,118,.06);padding:.3em .8em;border-radius:4px}
+.progress-bar-wrap{width:100%;height:6px;background:var(--border);border-radius:3px;margin-bottom:2rem;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--accent2);border-radius:3px;transition:width .3s}
+
+.question-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:8px;padding:2rem;margin-bottom:1.5rem}
+.question-card .q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.question-card .q-section{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent3);background:rgba(26,82,118,.08);padding:.2em .7em;border-radius:3px}
+.question-card .q-type{font-size:.68rem;font-weight:600;color:var(--text-secondary)}
+.question-card .q-text{font-family:'Playfair Display',serif;font-size:1.15rem;line-height:1.5;margin-bottom:1.2rem}
+.question-card .q-text code{font-family:'JetBrains Mono',monospace;background:rgba(42,37,32,.06);padding:.1em .35em;border-radius:3px;font-size:.88em}
+
+.options-list{display:flex;flex-direction:column;gap:.5rem}
+.opt-btn{display:block;width:100%;text-align:left;padding:.75rem 1.1rem;background:transparent;border:1.5px solid var(--border);border-radius:4px;cursor:pointer;font-family:inherit;font-size:.92rem;color:var(--text);transition:all .15s;line-height:1.5}
+.opt-btn:hover:not(:disabled){border-color:var(--accent3);background:rgba(26,82,118,.03)}
+.opt-btn.correct{border-color:var(--accent2)!important;background:#d5f5e3!important;color:var(--accent2);font-weight:600}
+.opt-btn.wrong{border-color:var(--accent)!important;background:#fadbd8!important;color:var(--accent);opacity:.75}
+.opt-btn.reveal{border-color:var(--accent2);background:rgba(44,110,73,.08)}
+.opt-btn:disabled{cursor:default}
+
+.feedback{margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;font-size:.9rem;line-height:1.6;display:none}
+.feedback.show{display:block}
+.feedback.correct-fb{background:#d5f5e3;color:#1e7e34;border:1px solid #a9dfbf}
+.feedback.wrong-fb{background:#fadbd8;color:var(--accent);border:1px solid #f1948a}
+.next-btn-wrap{text-align:right;margin-top:1.2rem}
+
+/* ── RESULTS SCREEN ── */
+#resultScreen{display:none}
+.result-header{text-align:center;margin-bottom:2rem}
+.result-header h2{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:.5rem}
+.score-big{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:700;color:var(--accent2)}
+.score-big.mediocre{color:var(--accent5)}.score-big.poor{color:var(--accent)}
+.result-summary{font-size:1rem;color:var(--text-secondary);margin-top:.5rem}
+
+.section-results{margin:2rem 0}
+.section-result-row{display:flex;align-items:center;gap:1rem;padding:.8rem 1.2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;margin-bottom:.5rem}
+.section-result-row .sr-name{flex:1;font-weight:600;font-size:.92rem}
+.section-result-row .sr-bar{flex:2;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.section-result-row .sr-bar-fill{height:100%;border-radius:4px;transition:width .5s}
+.section-result-row .sr-score{font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:600;min-width:60px;text-align:right}
+
+.review-section{margin-top:2.5rem}
+.review-section h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:1rem}
+.review-item{padding:1rem 1.2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;margin-bottom:.6rem;font-size:.9rem}
+.review-item.was-correct{border-left:4px solid var(--accent2)}
+.review-item.was-wrong{border-left:4px solid var(--accent)}
+.review-item .ri-q{font-weight:600;margin-bottom:.3rem}
+.review-item .ri-answer{font-size:.85rem;color:var(--text-secondary)}
+.review-item .ri-answer strong{color:var(--accent2)}
+.review-item .ri-explain{font-size:.82rem;color:var(--text-secondary);margin-top:.3rem;font-style:italic}
+
+footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-size:.82rem;color:var(--text-secondary)}
+
+@media(max-width:640px){
+  header{padding:2rem 1rem 1.5rem}.container{padding:1.5rem 1rem 3rem}
+  .topic-grid{grid-template-columns:1fr}.config-row{flex-direction:column;align-items:flex-start}
+  .question-card{padding:1.3rem}.score-big{font-size:2.5rem}
+  .section-result-row{flex-wrap:wrap}.section-result-row .sr-bar{flex-basis:100%;order:3}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="uni-badge">Universität Tübingen · Fachbereich Psychologie</div>
+  <h1>Wissens<em>test</em></h1>
+  <p class="subtitle">Prüfe dein Verständnis der experimentellen Psychologie</p>
+  <p class="back-link"><a href="index.html">← Zurück zur Lernseite</a></p>
+</header>
+
+<div class="container">
+
+<!-- ════ START ════ -->
+<div id="startScreen">
+  <div class="intro">
+    <h2>Themen auswählen</h2>
+    <p style="color:var(--text-secondary);font-size:.95rem">Wähle die Kapitel, die du testen möchtest. Pro Kapitel werden zufällig 10 Fragen aus einem größeren Pool gezogen.</p>
+  </div>
+
+  <div class="select-helpers">
+    <button onclick="selectAll()">Alle auswählen</button>
+    <button onclick="selectNone()">Keine</button>
+  </div>
+
+  <div class="topic-grid">
+    <div class="topic-card selected" data-section="wisstheorie" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 01</div>
+      <h3>Wissenschaftstheorie</h3>
+      <p>Popper, Kuhn, Strukturalismus, Statement/Non-Statement View, Overfitting</p>
+    </div>
+    <div class="topic-card selected" data-section="logik" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 02</div>
+      <h3>Formale Logik</h3>
+      <p>Junktoren, Modus Ponens/Tollens, Mengenlehre, Kontraposition, Wahrheitstabellen</p>
+    </div>
+    <div class="topic-card selected" data-section="messung" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 03</div>
+      <h3>Messtheorie</h3>
+      <p>Skalenniveaus, Homomorphismus, Matrix-Aufgaben, Ordinalskala, Eindeutigkeitssatz</p>
+    </div>
+    <div class="topic-card selected" data-section="psychophysik" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 04</div>
+      <h3>Psychophysik</h3>
+      <p>Weber-Formelvarianten, PSE, jnd, Fechner, Stevens, Grenz-/Konstanzmethode</p>
+    </div>
+    <div class="topic-card selected" data-section="wahrscheinlichkeit" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 05</div>
+      <h3>Wahrscheinlichkeit</h3>
+      <p>Kolmogorov, Bayes, Normalverteilung, ZGS</p>
+    </div>
+    <div class="topic-card selected" data-section="versuchsplanung" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 06</div>
+      <h3>Versuchsplanung</h3>
+      <p>Randomisierung/Parallelisierung, Ethik, BDI-Studie, Verblindung, Max-Kon-Min</p>
+    </div>
+    <div class="topic-card selected" data-section="statistik" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 07</div>
+      <h3>Statistik</h3>
+      <p>NHST, p-Wert, Fehlerarten, Effektstärke, Bayes-Faktor</p>
+    </div>
+    <div class="topic-card selected" data-section="lernen" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 08</div>
+      <h3>Lernexperimente</h3>
+      <p>Rock, Substitutionsmethode, Positionseffekte, Mehrspeichermodell, Dissoziation</p>
+    </div>
+  </div>
+
+  <div class="config-row">
+    <label>Fragen pro Kapitel:
+      <select id="cfgCount">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="99">Alle</option>
+      </select>
+    </label>
+    <label class="toggle"><input type="checkbox" id="cfgTimer"> Timer anzeigen</label>
+    <label class="toggle"><input type="checkbox" id="cfgShuffle" checked> Fragen mischen</label>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="startBtn" onclick="startTest()">Test starten</button>
+  </div>
+</div>
+
+<!-- ════ TEST ════ -->
+<div id="testScreen">
+  <div class="test-header">
+    <span class="progress-text" id="progressText">Frage 1 / 10</span>
+    <span class="timer" id="timerDisplay" style="display:none">00:00</span>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+  <div id="questionArea"></div>
+  <div class="next-btn-wrap">
+    <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()" style="display:none">Nächste Frage →</button>
+    <button class="btn btn-primary" id="finishBtn" onclick="showResults()" style="display:none">Ergebnis anzeigen</button>
+  </div>
+</div>
+
+<!-- ════ RESULTS ════ -->
+<div id="resultScreen">
+  <div class="result-header">
+    <h2>Dein Ergebnis</h2>
+    <div class="score-big" id="totalScore">0%</div>
+    <div class="result-summary" id="resultSummary"></div>
+  </div>
+  <div class="section-results" id="sectionResults"></div>
+  <div class="review-section">
+    <h3>Detailansicht</h3>
+    <div id="reviewList"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="restart()">Neuer Test (neue Fragen)</button>
+    <button class="btn btn-outline" onclick="location.href='index.html'">Zurück zur Lernseite</button>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <p>Lernhilfe · Fachbereich Psychologie · Universität Tübingen</p>
+  <p style="margin-top:.4rem">Basierend auf: Heller, J. (2012). <em>Experimentelle Psychologie.</em> Oldenbourg.</p>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   QUESTION POOL — ~20 questions per section
+   Types: mc (multiple choice, 4 opts), tf (wahr/falsch)
+   ══════════════════════════════════════════════════════════════ */
+const POOL = {
+
+wisstheorie: [
+{type:'mc',q:'Was ist das zentrale Kriterium für Wissenschaftlichkeit nach Karl Popper?',options:['Verifizierbarkeit','Falsifizierbarkeit','Reproduzierbarkeit','Objektivität'],correct:1,explanation:'Popper: Eine Theorie ist wissenschaftlich, wenn sie prinzipiell falsifizierbar ist — es muss ein denkbares Experiment geben, das sie widerlegen könnte.'},
+{type:'mc',q:'Welcher wissenschaftstheoretische Ansatz wurde vom Wiener Kreis vertreten?',options:['Falsifikationismus','Kritischer Rationalismus','Logischer Empirismus','Konstruktivismus'],correct:2,explanation:'Der Wiener Kreis (Carnap, Schlick) vertrat den Logischen Empirismus: Nur empirisch überprüfbare Aussagen sind wissenschaftlich.'},
+{type:'mc',q:'Was beschreibt Thomas Kuhns Konzept des Paradigmenwechsels?',options:['Schrittweise Verbesserung von Theorien','Revolutionäre Ablösung eines dominierenden Paradigmas durch ein neues','Falsifikation einzelner Hypothesen','Induktive Ableitung neuer Gesetze'],correct:1,explanation:'Kuhn: Wissenschaft verläuft nicht linear, sondern in Revolutionen. Ein Paradigma dominiert die Normalwissenschaft, bis Anomalien eine Krise und schließlich einen Umsturz erzwingen.'},
+{type:'tf',q:'Nach Popper können wissenschaftliche Theorien endgültig verifiziert werden.',correct:false,explanation:'Das Asymmetrie-Argument: Theorien können nie endgültig verifiziert werden (egal wie viele bestätigende Beobachtungen), aber mit einem einzigen Gegenbeispiel falsifiziert.'},
+{type:'mc',q:'Welche Methode propagiert Popper für die Wissenschaft?',options:['Induktive Methode','Hermeneutische Methode','Hypothetisch-deduktive Methode','Phänomenologische Methode'],correct:2,explanation:'Popper: Hypothetisch-deduktive Methode — Hypothese aufstellen → Vorhersage ableiten → empirisch prüfen (versuchen zu falsifizieren).'},
+{type:'mc',q:'Was ist der Unterschied zwischen Induktion und Deduktion?',options:['Induktion: Allgemeines → Einzelfall; Deduktion: Einzelfall → Allgemeines','Induktion: Einzelfall → Allgemeines; Deduktion: Allgemeines → Einzelfall','Induktion ist sicher, Deduktion unsicher','Beide sind dasselbe'],correct:1,explanation:'Induktion schließt vom Einzelfall aufs Allgemeine (unsicher!). Deduktion schließt vom Allgemeinen auf den Einzelfall (logisch gültig).'},
+{type:'tf',q:'Die Aussage „Irgendwo im Universum gibt es Geister" ist nach Popper wissenschaftlich.',correct:false,explanation:'Nicht falsifizierbar — kein denkbares Experiment könnte diese Aussage widerlegen. Daher nach Popper nicht wissenschaftlich.'},
+{type:'mc',q:'Welches Beispiel zeigt die kognitive Wende in der Psychologie nach Kuhns Modell?',options:['Freuds Psychoanalyse verdrängt die Phrenologie','Der Behaviorismus wird durch kognitive Ansätze abgelöst','Wundt gründet das erste psychologische Labor','Die Gestaltpsychologie entsteht'],correct:1,explanation:'Behaviorismus → Chomsky (Sprache ≠ nur Verstärkung) + Tolman (kognitive Karten) → Kognitive Wende — ein klassischer Paradigmenwechsel nach Kuhn.'},
+{type:'mc',q:'Was besagt das Duhem-Quine-Problem?',options:['Theorien können nie falsifiziert werden','Hypothesen werden nie isoliert getestet, sondern immer zusammen mit Hilfsannahmen','Paradigmen sind inkommensurabel','Induktion ist logisch ungültig'],correct:1,explanation:'Duhem-Quine: Hypothesen werden nie isoliert getestet. Bei Widerlegung ist unklar, ob die Hypothese oder eine Hilfsannahme falsch ist. Falsifikation ist weniger eindeutig als Popper suggeriert.'},
+{type:'mc',q:'Was ist der „harte Kern" in Lakatos\' Forschungsprogrammen?',options:['Die Gesamtheit aller empirischen Befunde','Der unveränderbare Kern an Grundannahmen','Die statistischen Methoden','Die experimentellen Geräte'],correct:1,explanation:'Lakatos: Forschungsprogramme haben einen harten Kern (unveränderbar) und einen Schutzgürtel (anpassbar). Anomalien treffen erst den Schutzgürtel.'},
+{type:'tf',q:'Laut Kuhn verläuft wissenschaftlicher Fortschritt kumulativ und linear.',correct:false,explanation:'Kuhn beschreibt Wissenschaft als revolutionär: Phasen der Normalwissenschaft werden durch Krisen und Paradigmenwechsel unterbrochen — nicht linear.'},
+{type:'mc',q:'Was bedeutet „Theorie-Beladenheit der Beobachtung"?',options:['Theorien belasten die Forschung','Es gibt keine theoriefreie, reine Beobachtung','Beobachtungen sind immer fehlerhaft','Theorien sind durch Beobachtungen belastet'],correct:1,explanation:'Ein Radiologe sieht auf einem Röntgenbild etwas anderes als ein Laie. Experiment und Theorie sind wechselseitig bedingt — es gibt keine „reine" Beobachtung.'},
+{type:'mc',q:'Welche Phase kommt in Kuhns Modell NACH der Normalwissenschaft?',options:['Vorparadigmatische Phase','Anomalien und Krise','Revolution','Paradigmenbildung'],correct:1,explanation:'Kuhns Phasenmodell: Vorparadigmatisch → Normalwissenschaft → Anomalien/Krise → Revolution → Neues Paradigma.'},
+{type:'tf',q:'Das Asymmetrie-Argument besagt: Eine Theorie kann mit einem einzigen Gegenbeispiel falsifiziert werden, aber nie endgültig verifiziert.',correct:true,explanation:'Genau. Egal wie viele weiße Schwäne man findet — „Alle Schwäne sind weiß" ist nie bewiesen. Aber ein einziger schwarzer Schwan widerlegt die Aussage.'},
+{type:'mc',q:'Wann wird ein Forschungsprogramm nach Lakatos abgelöst?',options:['Wenn eine Anomalie auftritt','Wenn der harte Kern widerlegt wird','Wenn das Programm degenerativ wird','Wenn Popper es falsifiziert'],correct:2,explanation:'Lakatos: Ein Forschungsprogramm wird abgelöst, wenn es degenerativ wird — wenn der Schutzgürtel keine neuen Vorhersagen mehr liefert und nur noch Ad-hoc-Anpassungen macht.'},
+{type:'mc',q:'Welche Aussage ist nach Popper NICHT wissenschaftlich?',options:['Koffein verkürzt die Reaktionszeit um 10 ms','Licht wird durch Gravitation abgelenkt','Das Unterbewusste beeinflusst alles — auch wenn man es nicht nachweisen kann','Die Erde ist älter als 4 Milliarden Jahre'],correct:2,explanation:'Nicht falsifizierbar: Jeder Gegenbeleg wird absorbiert (\"man kann es eben nicht nachweisen\"). Kein denkbares Experiment könnte die Aussage widerlegen.'},
+{type:'tf',q:'Der Wiener Kreis vertrat die Position, dass nur empirisch überprüfbare Aussagen wissenschaftlich sind.',correct:true,explanation:'Der Logische Empirismus des Wiener Kreises (Carnap, Schlick) forderte: Theorie + Beobachtung = Erkenntnis. Nicht-empirische Aussagen galten als sinnlos.'},
+{type:'mc',q:'Was ist eine Anomalie im Sinne von Kuhn?',options:['Ein statistischer Fehler','Ein Befund, der das herrschende Paradigma nicht erklären kann','Eine neue Theorie','Ein Methodenfehler'],correct:1,explanation:'Anomalien sind Befunde, die das aktuelle Paradigma nicht erklären kann. Häufen sich Anomalien, entsteht eine Krise, die zum Paradigmenwechsel führen kann.'},
+{type:'mc',q:'Welches Prinzip nutzt die Analogie „Gerichtsprozess: Unschuld nie beweisbar, Schuld schon"?',options:['Induktionsproblem','Duhem-Quine-Problem','Asymmetrie von Verifikation und Falsifikation','Paradigmenwechsel'],correct:2,explanation:'Die Gerichts-Analogie illustriert Poppers Asymmetrie-Argument: Wie Unschuld nie endgültig bewiesen werden kann, können Theorien nie endgültig verifiziert werden — aber mit einem Gegenbeweis falsifiziert.'},
+{type:'tf',q:'Popper zufolge ist Wissenschaft dadurch gekennzeichnet, dass man versucht, die eigenen Theorien zu bestätigen.',correct:false,explanation:'Popper fordert das Gegenteil: Wissenschaftler sollen aktiv versuchen, ihre Theorien zu falsifizieren — nicht zu bestätigen.'},
+{type:'mc',q:'Was unterscheidet den Statement View vom Non-Statement View?',options:['Statement View: Theorien = Modelle; Non-Statement View: Theorien = Sätze','Statement View: Theorien = Sätze; Non-Statement View: Theorien = Modelle','Beide sind identisch, nur andere Begriffe','Statement View ist moderner als Non-Statement View'],correct:1,explanation:'Statement View (Log. Empirismus, Popper): Theorien sind Mengen von Aussagen/Sätzen. Non-Statement View (Sneed/Stegmüller): Theorien sind Mengen von Modellen, formal rekonstruiert als T=(K,I).'},
+{type:'mc',q:'Was bedeutet T = (K, I) in der strukturalistischen Theorienkonzeption?',options:['Theorie = Korrelation und Induktion','Theorie = Kern und intendierte Anwendungen','Theorie = Konstrukt und Interpretation','Theorie = Koeffizient und Intervall'],correct:1,explanation:'Sneed/Stegmüller: T = (K, I). K = mathematischer Kern (formale Struktur, Axiome). I = intendierte Anwendungen (reale Systeme, auf die die Theorie zutreffen soll).'},
+{type:'mc',q:'Welche erkenntnistheoretische Position sagt: Erkenntnis kommt durch Sinneserfahrung?',options:['Rationalismus','Empirismus','Idealismus','Skeptizismus'],correct:1,explanation:'Empirismus (Locke, Hume, Wiener Kreis): Erkenntnis stammt aus Sinneserfahrung. Im Gegensatz zum Rationalismus (Erkenntnis durch Vernunft/Denken).'},
+{type:'mc',q:'Was versteht man unter „Overfitting" bei Theorien?',options:['Die Theorie ist zu einfach für die Daten','Die Theorie passt perfekt auf vorhandene Daten, versagt aber bei neuen','Die Theorie wurde nicht empirisch geprüft','Die Theorie widerspricht sich selbst'],correct:1,explanation:'Overfitting: Eine Theorie mit zu vielen Parametern passt perfekt auf die Trainingsdaten, generalisiert aber schlecht. Gute Theorien sind sparsam (Ockhams Rasiermesser) UND generalisierbar.'},
+{type:'mc',q:'Was fordert Ockhams Rasiermesser?',options:['Theorien müssen empirisch überprüfbar sein','Die einfachste Erklärung ist vorzuziehen','Theorien müssen falsifizierbar sein','Alle Variablen müssen operationalisiert werden'],correct:1,explanation:'Ockhams Rasiermesser (Sparsamkeitsprinzip): Unter konkurrierenden Theorien ist die einfachste (mit den wenigsten Annahmen) vorzuziehen — solange sie die Daten erklärt.'},
+{type:'tf',q:'Im Non-Statement View können Theorien sich weiterentwickeln, ohne völlig aufgegeben zu werden.',correct:true,explanation:'Vorteil des Strukturalismus: Der Kern K bleibt, aber die intendierten Anwendungen I können sich ändern. Eine Theorie kann modifiziert werden, ohne komplett verworfen zu werden.'},
+{type:'mc',q:'Welcher Paradigmenwechsel markiert die „Kognitive Wende" in der Psychologie?',options:['Von Psychoanalyse zu Behaviorismus','Von Behaviorismus zu kognitiven Ansätzen','Von Gestaltpsychologie zu Neurowissenschaft','Von Phrenologie zu experimenteller Psychologie'],correct:1,explanation:'Behaviorismus (Watson, Skinner: S→R) → Chomsky (Sprache ≠ nur Verstärkung) + Tolman (kognitive Karten) → Kognitive Wende (~1960). Klassischer Paradigmenwechsel nach Kuhn.'},
+{type:'mc',q:'Was zeigt die „Lachs-fMRI-Studie" (Bennett et al.)?',options:['Dass fMRI sehr zuverlässig ist','Dass selbst bei einem toten Lachs ohne Korrektur für multiples Testen „Aktivierung" gefunden wird','Dass Lachse Emotionen erkennen können','Dass Behaviorismus widerlegt wurde'],correct:1,explanation:'Bennett et al. zeigten: Ohne Korrektur für multiples Testen findet man sogar bei einem toten Lachs im MRT scheinbare Hirnaktivierung. Kritik an unreflektierter Neuroimaging-Statistik.'},
+{type:'mc',q:'Welcher Begriff beschreibt die drei Genauigkeitsstufen von Begriffen in Theorien?',options:['Reliabilität, Validität, Objektivität','Nominal, ordinal, metrisch','Klassifikatorisch, komparativ, quantitativ','Induktiv, deduktiv, abduktiv'],correct:2,explanation:'Terminologische Exaktheit: Klassifikatorisch (= / ≠), komparativ (>, <), quantitativ (Zahlenwerte). Je quantitativer, desto präziser die Theorie.'}
+],
+
+logik: [
+{type:'mc',q:'Was ist Modus Ponens?',options:['A→B, ¬B, also ¬A','A→B, A, also B','A→B, B, also A','A→B, ¬A, also ¬B'],correct:1,explanation:'Modus Ponens: Wenn A→B gilt und A wahr ist, dann folgt zwingend B. „Vorwärts-Schluss".'},
+{type:'mc',q:'Was ist Modus Tollens?',options:['A→B, A, also B','A→B, B, also A','A→B, ¬B, also ¬A','A→B, ¬A, also ¬B'],correct:2,explanation:'Modus Tollens: Wenn A→B gilt und B nicht eintritt (¬B), dann ist A falsch (¬A). Basis der Falsifikation!'},
+{type:'mc',q:'Welcher Schluss ist ein Fehlschluss?',options:['A→B, A → B (Modus Ponens)','A→B, ¬B → ¬A (Modus Tollens)','A→B, B → A (Bejahung der Konsequens)','¬(A∧B) → ¬A∨¬B (De Morgan)'],correct:2,explanation:'Bejahung der Konsequens ist ein Fehlschluss: Aus A→B und B folgt NICHT zwingend A. Andere Ursachen für B sind möglich.'},
+{type:'tf',q:'Das Konditional A→B ist nur dann falsch, wenn A wahr und B falsch ist.',correct:true,explanation:'Das ist die Definition des Konditionals. Bei falschem A ist A→B immer wahr (ex falso quodlibet) — kontraintuitiv!'},
+{type:'mc',q:'Was bedeutet <code>¬(∀x: P(x))</code>?',options:['Für alle x gilt nicht P','Es gibt mindestens ein x, für das P nicht gilt','Es gibt kein x mit P','Für kein x gilt P'],correct:1,explanation:'Die Negation des Allquantors: ¬(∀x: P(x)) ≡ ∃x: ¬P(x) — Ein Gegenbeispiel reicht, um die Allaussage zu widerlegen. Basis der Falsifikation!'},
+{type:'mc',q:'Was besagt De Morgans erstes Gesetz?',options:['¬(A∧B) ≡ ¬A∧¬B','¬(A∧B) ≡ ¬A∨¬B','¬(A∨B) ≡ ¬A∨¬B','¬(A∧B) ≡ A∨B'],correct:1,explanation:'De Morgan: ¬(A∧B) ≡ ¬A∨¬B. „Nicht (hungrig UND müde)" = „Nicht hungrig ODER nicht müde." Das ∧ wird zum ∨.'},
+{type:'mc',q:'Welcher Junktor steht für „genau dann, wenn"?',options:['→ (Konditional)','∧ (Konjunktion)','↔ (Bikonditional)','∨ (Disjunktion)'],correct:2,explanation:'Das Bikonditional A↔B ist wahr, wenn beide Seiten den gleichen Wahrheitswert haben — „genau dann, wenn".'},
+{type:'tf',q:'Die Verneinung des Antezedens (A→B, ¬A, also ¬B) ist ein gültiger Schluss.',correct:false,explanation:'Die Verneinung des Antezedens ist ein Fehlschluss! Aus A→B und ¬A folgt nicht ¬B. Beispiel: „Wenn Regen, dann nasse Straße." Kein Regen → Straße kann trotzdem nass sein (Sprinkler).'},
+{type:'mc',q:'„Wenn depressiv (A), dann niedrige Serotoninaktivität (B)." Niedrige Serotoninaktivität beobachtet. Was folgt?',options:['Person ist depressiv (Modus Ponens)','Person ist nicht depressiv (Modus Tollens)','Nichts Zwingendes — Bejahung der Konsequens','Person ist depressiv (Modus Tollens)'],correct:2,explanation:'Das ist die Bejahung der Konsequens (Fehlschluss): A→B und B erlaubt NICHT den Schluss auf A. Andere Ursachen für niedrige Serotonin sind möglich.'},
+{type:'mc',q:'Welche Schlussregel entspricht der wissenschaftlichen Falsifikation?',options:['Modus Ponens','Modus Tollens','Bejahung der Konsequens','Disjunktiver Syllogismus'],correct:1,explanation:'Modus Tollens = Falsifikation: Wenn Theorie T → Effekt E (T→E), und E tritt nicht auf (¬E), dann stimmt T nicht (¬T).'},
+{type:'tf',q:'<code>A→B</code> ist bei falschem A immer wahr.',correct:true,explanation:'Ex falso quodlibet: Das Konditional ist nur falsch bei A=wahr und B=falsch. Bei A=falsch ist es immer wahr — kontraintuitiv, aber logisch definiert.'},
+{type:'mc',q:'Was ist eine Tautologie?',options:['Eine Aussage, die immer falsch ist','Eine Aussage, die immer wahr ist','Eine Aussage, die manchmal wahr ist','Eine widersprüchliche Aussage'],correct:1,explanation:'Eine Tautologie ist eine Aussage, die unter allen Belegungen wahr ist. Beispiele: A∨¬A (Gesetz des ausgeschlossenen Dritten), ¬(A∧¬A) (Widerspruchsfreiheit).'},
+{type:'mc',q:'Die Kontraposition von A→B ist:',options:['B→A','¬A→¬B','¬B→¬A','A→¬B'],correct:2,explanation:'Kontraposition: (A→B) ↔ (¬B→¬A). Diese logische Äquivalenz ist die Basis des Modus Tollens.'},
+{type:'mc',q:'Was bedeutet <code>∃x: P(x)</code>?',options:['Für alle x gilt P','Es gibt mindestens ein x, für das P gilt','Es gibt kein x mit P','P gilt für genau ein x'],correct:1,explanation:'Der Existenzquantor ∃ bedeutet: Es gibt mindestens ein x, für das die Eigenschaft P zutrifft.'},
+{type:'tf',q:'¬(A∨B) ist äquivalent zu ¬A∧¬B.',correct:true,explanation:'De Morgans zweites Gesetz: ¬(A∨B) ≡ ¬A∧¬B. „Nicht (A oder B)" = „Nicht A und nicht B".'},
+{type:'mc',q:'Wenn eine Theorie T den Effekt E vorhersagt (T→E) und E eintritt — was kann man folgern?',options:['T ist bewiesen','T ist wahrscheinlicher (aber nicht bewiesen)','T ist definitiv wahr','T ist falsifiziert'],correct:1,explanation:'Das Eintreten des vorhergesagten Effekts bestätigt T nicht logisch (Bejahung der Konsequens = Fehlschluss). T wird nur wahrscheinlicher, aber nie bewiesen.'},
+{type:'mc',q:'Welche der folgenden ist die korrekte Konjunktion?',options:['A∨B — wahr wenn mind. eines wahr','A∧B — wahr wenn beide wahr','A→B — wahr wenn A falsch oder B wahr','A↔B — wahr bei gleichem Wahrheitswert'],correct:1,explanation:'Konjunktion (A∧B, „A und B") ist nur wahr, wenn beide Teilaussagen wahr sind.'},
+{type:'tf',q:'Der Universalquantor ∀ kann durch ein einziges Gegenbeispiel widerlegt werden.',correct:true,explanation:'¬(∀x: P(x)) ≡ ∃x: ¬P(x). Ein einziges x, für das P nicht gilt, widerlegt die Allaussage — Grundlage der Falsifikation.'},
+{type:'mc',q:'Wie heißt der Fehlschluss: A→B, ¬A, also ¬B?',options:['Bejahung der Konsequens','Verneinung des Antezedens','Modus Tollens','Disjunktiver Syllogismus'],correct:1,explanation:'Verneinung des Antezedens: Aus A→B und ¬A folgt nicht ¬B. Beispiel: Kein Regen heißt nicht, dass die Straße trocken ist.'},
+{type:'mc',q:'„Wenn Regen (A), dann Straße nass (B)." Straße trocken (¬B). Was folgt?',options:['Es regnet','Kein Regen (¬A) — Modus Tollens','Man kann nichts folgern','Straße ist trocken'],correct:1,explanation:'Modus Tollens: A→B und ¬B → ¬A. Wenn die Straße trocken ist, regnet es nicht.'},
+{type:'mc',q:'Was ist eine injektive Abbildung?',options:['Jedes Element der Zielmenge wird getroffen','Verschiedene Urbilder haben verschiedene Bilder','Die Abbildung ist umkehrbar','Alle Elemente werden auf dasselbe Bild abgebildet'],correct:1,explanation:'Injektiv: Verschiedene Urbilder → verschiedene Bilder (kein Element der Zielmenge hat mehr als ein Urbild). Beispiel: Matrikelnummer → Student.'},
+{type:'mc',q:'Was kennzeichnet eine bijektive Abbildung?',options:['Sie ist injektiv, aber nicht surjektiv','Sie ist surjektiv, aber nicht injektiv','Sie ist sowohl injektiv als auch surjektiv — also umkehrbar','Sie bildet alle Elemente auf 0 ab'],correct:2,explanation:'Bijektiv = injektiv + surjektiv = umkehrbar (eineindeutig). In der Messtheorie: Bijektive Transformationen definieren die Nominalskala.'},
+{type:'mc',q:'Welcher Operator macht <code>(A ∧ B) ? (A → B)</code> zur Tautologie?',options:['∧ (Konjunktion)','∨ (Disjunktion)','→ (Konditional)','↔ (Bikonditional)'],correct:2,explanation:'(A∧B) → (A→B) ist immer wahr. Trick: Wenn A∧B falsch ist, ist das Konditional automatisch wahr (ex falso quodlibet). Wenn A∧B wahr, dann A wahr und B wahr, also A→B auch wahr.'},
+{type:'mc',q:'Bilde die Kontraposition von: „Wenn jemand neurotisch ist (A), dann hat er Angst (B)."',options:['Wenn jemand Angst hat, ist er neurotisch','Wenn jemand nicht neurotisch ist, hat er keine Angst','Wenn jemand keine Angst hat, ist er nicht neurotisch','Wenn jemand neurotisch ist, hat er keine Angst'],correct:2,explanation:'Kontraposition: (A→B) ≡ (¬B→¬A). „Keine Angst → nicht neurotisch." Die Kontraposition ist logisch äquivalent zum Original.'},
+{type:'mc',q:'Was ist eine n-stellige Relation?',options:['Eine Abbildung von n Mengen auf eine Menge','Eine Teilmenge des kartesischen Produkts A₁ × A₂ × … × Aₙ','Eine Funktion mit n Parametern','Ein Vektor mit n Einträgen'],correct:1,explanation:'Eine n-stellige Relation R ⊆ A₁ × A₂ × … × Aₙ ist eine Teilmenge des kartesischen Produkts. Wichtig für die Messtheorie: Ein empirisches Relativ besteht aus einer Menge M und einer Relation R auf M.'},
+{type:'tf',q:'Eine surjektive Abbildung trifft jedes Element der Zielmenge mindestens einmal.',correct:true,explanation:'Surjektiv: Jedes Element der Zielmenge hat mindestens ein Urbild. In der Messtheorie relevant: Noten → {1,2,3,4,5} ist surjektiv, wenn jede Note mindestens einmal vergeben wird.'}
+],
+
+messung: [
+{type:'mc',q:'Was ist ein Homomorphismus in der Messtheorie?',options:['Eine zufällige Zuordnung von Zahlen','Eine strukturerhaltende Abbildung vom empirischen ins numerische Relativ','Eine bijektive Funktion','Ein statistischer Test'],correct:1,explanation:'Messen = Homomorphismus: Eine Zuordnung von empirischen Objekten zu Zahlen, die die Beziehungen (z.B. leiser-als → kleiner-als) erhält.'},
+{type:'mc',q:'Welches Skalenniveau erlaubt nur die Unterscheidung von Gleichheit und Verschiedenheit?',options:['Ordinalskala','Intervallskala','Nominalskala','Verhältnisskala'],correct:2,explanation:'Nominalskala: Nur = / ≠ möglich. Beispiel: Geschlecht, Augenfarbe. Erlaubte Statistik: Modus, χ².'},
+{type:'mc',q:'Welche Transformation ist bei der Intervallskala erlaubt?',options:['Beliebige bijektive Abbildung','Monotone Abbildung','y = ax + b (linear)','y = ax (proportional)'],correct:2,explanation:'Intervallskala: Erlaubt lineare Transformationen y=ax+b (a>0). Beispiel: Celsius ↔ Fahrenheit. Abstände sind interpretierbar, aber kein absoluter Nullpunkt.'},
+{type:'tf',q:'Auf einer Ordinalskala sind Aussagen wie „doppelt so viel" zulässig.',correct:false,explanation:'Verhältnisaussagen sind nur bei Verhältnisskala erlaubt! Bei Ordinalskala sind nur Rangfolgen interpretierbar, keine Abstände oder Verhältnisse.'},
+{type:'mc',q:'Was bestimmt der Eindeutigkeitssatz?',options:['Ob ein Homomorphismus existiert','Wie viele Homomorphismen es gibt — und damit das Skalenniveau','Die statistische Signifikanz','Die Messgenauigkeit'],correct:1,explanation:'Der Eindeutigkeitssatz klärt, wie viele strukturerhaltende Abbildungen existieren. Je weniger, desto höher das Skalenniveau.'},
+{type:'mc',q:'Welche Skala hat einen echten Nullpunkt?',options:['Nominalskala','Ordinalskala','Intervallskala','Verhältnisskala'],correct:3,explanation:'Die Verhältnisskala hat einen absoluten Nullpunkt (z.B. Reaktionszeit, Gewicht). Erlaubte Transformation: y=ax. Verhältnisaussagen sind möglich.'},
+{type:'mc',q:'Was ist ein Beispiel für eine Intervallskala?',options:['Reaktionszeit in ms','Schulnoten','Temperatur in °C','Anzahl richtiger Antworten'],correct:2,explanation:'°C ist intervallskaliert: Abstände sind gleich (10° Unterschied ist überall gleich), aber 0°C ist kein „Nichts" — Verhältnisse sind nicht sinnvoll (20°C ist nicht doppelt so warm wie 10°C).'},
+{type:'tf',q:'Likert-Skalen sind streng genommen ordinalskaliert.',correct:true,explanation:'Likert-Skalen (z.B. 1-5: stimme gar nicht zu bis stimme voll zu) sind streng ordinal. Mittelwerte sind pragmatisch OK bei symmetrischer Verteilung und genug Items, aber formal nicht korrekt.'},
+{type:'mc',q:'Welche Statistik ist auf Nominalskalen NICHT erlaubt?',options:['Modus','Chi-Quadrat-Test','Mittelwert','Häufigkeitsverteilung'],correct:2,explanation:'Der Mittelwert ist auf Nominalskalen sinnlos (mittleres Geschlecht?). Erlaubt: Modus und χ²-Test.'},
+{type:'mc',q:'Was klärt der Repräsentationssatz?',options:['Wie viele Homomorphismen existieren','Unter welchen Axiomen ein Homomorphismus überhaupt existiert','Welche Statistiken erlaubt sind','Wie Messfehler verteilt sind'],correct:1,explanation:'Der Repräsentationssatz klärt, ob und unter welchen Bedingungen eine strukturerhaltende Abbildung (Homomorphismus) vom empirischen ins numerische Relativ existiert.'},
+{type:'mc',q:'Bei welchem Skalenniveau ist der Median die höchste erlaubte Lagemaß-Statistik?',options:['Nominalskala','Ordinalskala','Intervallskala','Verhältnisskala'],correct:1,explanation:'Ordinalskala: + Median (neben Modus). Mittelwerte erfordern mindestens Intervallskalierung.'},
+{type:'tf',q:'Die Absolutskala erlaubt nur die Identitätstransformation.',correct:true,explanation:'Bei der Absolutskala ist die einzige erlaubte Transformation die Identität — die Zahlen haben eine feste Bedeutung. Beispiel: Anzahl (3 Äpfel sind genau 3).'},
+{type:'mc',q:'Warum ist „doppelt so viel Schmerz" auf einer 1-10-Skala problematisch?',options:['Schmerz ist nicht messbar','Die Skala ist ordinal — Verhältnisaussagen sind unzulässig','Die Skala hat zu wenige Stufen','Schmerz ist subjektiv'],correct:1,explanation:'Eine Schmerzskala 1-10 ist ordinal. Verhältnisaussagen wie „doppelt" setzen eine Verhältnisskala mit echtem Nullpunkt voraus.'},
+{type:'mc',q:'Was sind „permissible statistics"?',options:['Statistiken, die von der Ethikkommission genehmigt sind','Statistiken, deren Ergebnisse unter den erlaubten Transformationen invariant bleiben','Alle Statistiken, die signifikante Ergebnisse liefern','Parametrische Tests'],correct:1,explanation:'Permissible Statistics: Nur statistische Aussagen, die sich unter den erlaubten Transformationen des Skalenniveaus nicht ändern, sind sinnvoll.'},
+{type:'mc',q:'Welche Transformation ist bei der Verhältnisskala erlaubt?',options:['y = ax + b','y = ax (a > 0)','Beliebige monotone Funktion','Nur die Identität'],correct:1,explanation:'Verhältnisskala: y=ax mit a>0. Der Nullpunkt bleibt erhalten, Verhältnisse bleiben gleich. Beispiel: kg ↔ Pfund.'},
+{type:'tf',q:'Der IQ ist verhältnisskaliert.',correct:false,explanation:'Der IQ ist intervallskaliert. 0 IQ-Punkte bedeuten nicht „keine Intelligenz", und ein IQ von 140 ist nicht „doppelt so intelligent" wie 70.'},
+{type:'mc',q:'Welches ist das höchste Skalenniveau?',options:['Verhältnisskala','Intervallskala','Absolutskala','Ordinalskala'],correct:2,explanation:'Die Absolutskala ist das höchste Niveau: Nur die Identität als Transformation. Alle Statistiken sind erlaubt. Beispiel: Anzahl.'},
+{type:'mc',q:'Unter welchen Bedingungen sind Mittelwerte bei Likert-Skalen pragmatisch vertretbar?',options:['Immer','Nie','Bei symmetrischer Verteilung, genug Items (5+) und angenommenen gleichen Abständen','Nur bei mindestens 100 Versuchspersonen'],correct:2,explanation:'Likert-Skalen sind ordinal, aber Mittelwerte sind pragmatisch OK wenn: symmetrische Verteilung, genügend Items (5+), und die Annahme ungefähr gleicher Abstände. Vorsicht bei einzelnen Items!'},
+{type:'mc',q:'Was bedeutet die formale Bedingung <code>a ≿ b ⇔ φ(a) ≥ φ(b)</code>?',options:['Eine Abbildung ist surjektiv','Der Homomorphismus erhält die Ordnung in beiden Richtungen','Die Skala ist mindestens intervallskaliert','Die Transformation ist linear'],correct:1,explanation:'Das ist die formale Definition eines Homomorphismus: Die Äquivalenz (⇔, nicht nur →) stellt sicher, dass die empirische Ordnung und die numerische Ordnung sich in BEIDEN Richtungen entsprechen.'},
+{type:'mc',q:'Was muss für eine schwache Ordnung (M, ≥) gelten?',options:['Nur Transitivität','Nur Konnexität','Transitivität UND Konnexität','Transitivität, Konnexität UND Antisymmetrie'],correct:2,explanation:'Schwache Ordnung: (1) Transitivität: x≥y ∧ y≥z → x≥z. (2) Konnexität: x≥y ∨ y≥x (alle Paare vergleichbar). Antisymmetrie macht es zur totalen Ordnung.'},
+{type:'mc',q:'Wie prüft man Konnexität in einer Vergleichsmatrix?',options:['Alle Diagonaleinträge müssen 1 sein','Für jedes Paar (i,j) muss in Zelle (i,j) ODER (j,i) eine 1 stehen','Alle Zeilensummen müssen gleich sein','Die Matrix muss symmetrisch sein'],correct:1,explanation:'Konnexität: Für alle i≠j muss gelten: i≥j oder j≥i. In der Matrix: Mindestens eine 1 in Zelle (i,j) oder (j,i). Ist dies für alle Paare erfüllt, ist die Relation konnex.'},
+{type:'mc',q:'Was ist eine „zyklische Triade" und was bedeutet sie?',options:['Ein Lernzyklus mit drei Phasen','A≥B, B≥C, C≥A — verletzt die Transitivität','Ein Testdesign mit drei Messzeitpunkten','Eine Dreiergruppe im Lateinischen Quadrat'],correct:1,explanation:'Zyklische Triade: A schlägt B, B schlägt C, C schlägt A — ein Kreis. Sobald so ein Kreis existiert, ist die Transitivität verletzt und keine ordinale Messung möglich.'},
+{type:'mc',q:'Was liefert der Zeilensummen-Homomorphismus bei einer gültigen schwachen Ordnung?',options:['Die Intervallskalenwerte','Rangzahlen für eine ordinale Messung','Die Mittelwerte pro Person','Die Standardabweichungen'],correct:1,explanation:'Wenn eine schwache Ordnung vorliegt, können die Zeilensummen der Vergleichsmatrix als ordinaler Homomorphismus dienen: Höhere Zeilensumme = höherer Rang.'},
+{type:'tf',q:'Antisymmetrie bedeutet: Wenn x≥y und y≥x, dann muss x=y gelten.',correct:true,explanation:'Antisymmetrie zusammen mit Transitivität und Konnexität ergibt eine totale (= strenge) Ordnung. Ohne Antisymmetrie können verschiedene Objekte den gleichen Rang haben (schwache Ordnung).'},
+{type:'mc',q:'Was besagt der Eindeutigkeitssatz?',options:['Ob ein Homomorphismus existiert','Wie viele verschiedene Homomorphismen es gibt','Ob die Daten normalverteilt sind','Wie groß die Stichprobe sein muss'],correct:1,explanation:'Der Eindeutigkeitssatz bestimmt, wie viele Homomorphismen existieren — und damit das Skalenniveau. Eindeutig bis auf lineare Transformation (y=ax+b) → Intervallskala.'}
+],
+
+psychophysik: [
+{type:'mc',q:'Was besagt Webers Gesetz?',options:['Die Empfindung wächst logarithmisch mit der Reizstärke','Der eben merkliche Unterschied (JND) ist proportional zur Ausgangsreizstärke','Die Empfindung folgt einer Potenzfunktion','Die Schwelle ist für alle Reize gleich'],correct:1,explanation:'Weber: ΔI/I = k (konstant). Der JND ist proportional zur aktuellen Reizstärke. Je stärker der Reiz, desto größer muss der Unterschied sein.'},
+{type:'mc',q:'Wie lautet Fechners Gesetz?',options:['E = a · I^n','E = c · log(I/I₀)','ΔI/I = k','E = I · k'],correct:1,explanation:'Fechner: E = c · log(I/I₀). Die Empfindung wächst logarithmisch mit der physikalischen Reizintensität.'},
+{type:'mc',q:'Stevens\' Potenzgesetz lautet E = a · I^n. Was bedeutet n < 1?',options:['Empfindung wächst schneller als der Reiz (Expansion)','Empfindung wächst langsamer als der Reiz (Kompression)','Linearer Zusammenhang','Kein Zusammenhang'],correct:1,explanation:'Bei n<1 (z.B. Helligkeit) wächst die Empfindung langsamer als der Reiz — Kompression. Bei n>1 (z.B. Stromschlag) wächst sie schneller — Expansion.'},
+{type:'mc',q:'Weber-Bruch für Gewicht: k = 1/50. Du hältst 10 kg. Wie groß ist der JND?',options:['50 g','100 g','200 g','500 g'],correct:2,explanation:'ΔI = k · I = (1/50) · 10.000 g = 200 g. Man braucht mindestens 200 g Unterschied, um einen Gewichtsunterschied zu bemerken.'},
+{type:'tf',q:'In der Signalentdeckungstheorie (SDT) gibt es eine feste, absolute Wahrnehmungsschwelle.',correct:false,explanation:'SDT lehnt feste Schwellen ab! Stattdessen: Sensitivität (d\') und Antwortneigung (β) als getrennte Parameter. Die „Schwelle" hängt vom Entscheidungskriterium ab.'},
+{type:'mc',q:'Was misst d\' in der Signalentdeckungstheorie?',options:['Die Antwortneigung des Probanden','Die Sensitivität — Fähigkeit, Signal von Rauschen zu unterscheiden','Die Reaktionszeit','Die absolute Schwelle'],correct:1,explanation:'d\' = z(Hit-Rate) − z(False-Alarm-Rate). d\' misst die Sensitivität: Wie gut kann die Person Signal und Rauschen unterscheiden?'},
+{type:'mc',q:'Was passiert bei Stevens\' Gesetz, wenn n > 1?',options:['Kompression — Empfindung wächst langsamer','Expansion — Empfindung wächst schneller als der Reiz','Logarithmischer Zusammenhang','Kein Zusammenhang'],correct:1,explanation:'Bei n>1 (z.B. Stromschlag) wächst die Empfindung überproportional zum Reiz — Expansion. Kleine Reizänderungen erzeugen große Empfindungsänderungen.'},
+{type:'mc',q:'Welche Methode zur Schwellenbestimmung arbeitet mit zufälliger Reihenfolge und einer S-Kurve?',options:['Methode der Grenzen','Methode der konstanten Reize','Herstellungsmethode','Adaptives Verfahren'],correct:1,explanation:'Methode der konstanten Reize: Reize in zufälliger Reihenfolge dargeboten → S-förmige psychometrische Funktion. Die Schwelle liegt beim 50%-Punkt.'},
+{type:'tf',q:'Fechner baute sein Gesetz auf Weber auf, indem er die JNDs als gleich große Empfindungsschritte interpretierte.',correct:true,explanation:'Fechner nahm an, dass jeder JND einen gleich großen subjektiven Empfindungszuwachs darstellt. Integration des Weber-Gesetzes ergibt dann die logarithmische Beziehung.'},
+{type:'mc',q:'Bei der Methode der Grenzen wird der Reiz schrittweise erhöht oder gesenkt. Welches Problem tritt dabei auf?',options:['Falsch-Alarm-Rate','Erwartungsfehler (Gewöhnung/Antizipation)','Ceiling-Effekt','Basisraten-Vernachlässigung'],correct:1,explanation:'Methode der Grenzen: Bei auf- bzw. absteigenden Serien treten Erwartungsfehler auf — VP antizipiert den Umschlagpunkt oder gewöhnt sich.'},
+{type:'mc',q:'Was ist β (Beta) in der SDT?',options:['Die Sensitivität','Das Antwortkriterium / die Antwortneigung','Die False-Alarm-Rate','Der Weber-Bruch'],correct:1,explanation:'β = Antwortneigung. Liberal (niedriges β) → viele Hits, aber auch viele Fehlalarme. Konservativ (hohes β) → wenige Fehlalarme, verpasst aber echte Signale.'},
+{type:'mc',q:'Welcher psychophysische Zusammenhang ist korrekt für Helligkeit (Licht)?',options:['Stevens mit n > 1 (Expansion)','Stevens mit n < 1 (Kompression)','Linearer Zusammenhang','Umgekehrt proportional'],correct:1,explanation:'Helligkeit: Stevens mit n<1 (ca. 0.33) — Kompression. Ein Verdoppeln der Lichtintensität verdoppelt nicht die wahrgenommene Helligkeit.'},
+{type:'tf',q:'Die Herstellungsmethode ist die genaueste der drei klassischen Methoden.',correct:false,explanation:'Die Herstellungsmethode (VP stellt selbst ein) ist schnell, aber systematisch verzerrt. Die Methode der konstanten Reize gilt als am genauesten.'},
+{type:'mc',q:'Weber-Bruch für Tonhöhe: k ≈ 1/333. Was bedeutet das im Vergleich zum Gewicht (k ≈ 1/50)?',options:['Gewichtsunterscheidung ist feiner','Tonhöhenunterscheidung ist viel feiner','Beide gleich','Tonhöhe hat keinen Weber-Bruch'],correct:1,explanation:'Je kleiner k, desto feiner die Unterscheidung. k=1/333 (Tonhöhe) ist viel kleiner als k=1/50 (Gewicht) — unser Gehör ist viel empfindlicher für relative Unterschiede als unser Gewichtssinn.'},
+{type:'mc',q:'Was ist die JND (Just Noticeable Difference)?',options:['Die absolute Wahrnehmungsschwelle','Der kleinste wahrnehmbare Unterschied zwischen zwei Reizen','Die maximale Reizstärke','Der Weber-Bruch'],correct:1,explanation:'JND = Just Noticeable Difference = eben merklicher Unterschied. Der kleinste Reizunterschied, der in 50% der Fälle wahrgenommen wird.'},
+{type:'mc',q:'Die SDT-Analogie „Rauchmelder": Was entspricht d\'?',options:['Wie empfindlich der Auslöser eingestellt ist','Wie gut der Melder echten Rauch von Kochdampf unterscheiden kann','Die Häufigkeit von Fehlalarmen','Die Reaktionszeit des Melders'],correct:1,explanation:'d\' = Sensitivität = Wie gut der Rauchmelder Rauch (Signal) von Kochdampf (Rauschen) unterscheiden kann. β = Auslöseschwelle (liberal vs. konservativ).'},
+{type:'tf',q:'Fechners logarithmisches Gesetz und Stevens\' Potenzgesetz machen für alle Reize dieselben Vorhersagen.',correct:false,explanation:'Die Gesetze machen unterschiedliche Vorhersagen. Fechner sagt logarithmisches Wachstum voraus, Stevens ein potenzförmiges. Für n=1 wäre Stevens linear, Fechner nie. Empirisch beschreibt Stevens die Daten oft besser.'},
+{type:'mc',q:'Weber-Bruch k = 1/50. Bei einem Ausgangsreiz von 1 kg beträgt der JND 50 g. Wie groß ist er bei 20 kg?',options:['50 g','100 g','200 g','400 g'],correct:3,explanation:'ΔI = k · I = (1/50) · 20.000 g = 400 g. Der JND wächst proportional zum Ausgangsreiz.'},
+{type:'mc',q:'Welche Methode erzeugt die wenigsten Fehler durch Erwartungseffekte?',options:['Methode der Grenzen','Herstellungsmethode','Methode der konstanten Reize','Keine — alle gleich'],correct:2,explanation:'Die Methode der konstanten Reize (zufällige Reihenfolge) minimiert Erwartungseffekte, da die VP den nächsten Reiz nicht vorhersagen kann.'},
+{type:'mc',q:'Was beschreibt <code>p(x, s) = p(λx, λs)</code>?',options:['Fechners logarithmisches Gesetz','Stevens Potenzgesetz','Webersches Gesetz (multiplikative Invarianz)','Die Signalentdeckungstheorie'],correct:2,explanation:'Webersches Gesetz: Wenn Vergleichsreiz x und Standardreiz s beide mit dem gleichen Faktor λ multipliziert werden, ändert sich die Antwortwahrscheinlichkeit nicht. Multiplikative Invarianz!'},
+{type:'tf',q:'Die Formel <code>Δπ(λs) = λ·Δπ(s)</code> folgt aus dem Weberschen Gesetz.',correct:true,explanation:'Ja! Der ebenmerkliche Unterschied (jnd) skaliert proportional mit dem Standardreiz. Verdoppelter Standardreiz → doppelter jnd. Das ist eine direkte Konsequenz der multiplikativen Invarianz.'},
+{type:'tf',q:'Die Formel <code>p(x+a, s+a) = p(x, s)</code> gilt beim Weberschen Gesetz.',correct:false,explanation:'NEIN! Weber basiert auf multiplikativer, nicht additiver Invarianz. Addition einer Konstante ändert die Verhältnisse — nur Multiplikation mit dem gleichen Faktor lässt sie gleich.'},
+{type:'mc',q:'Was ist der Punkt der subjektiven Gleichheit (PSE)?',options:['Der Reiz mit maximaler Empfindung','Der Vergleichsreiz, bei dem p = 0.5 gilt','Der Standardreiz im Experiment','Die absolute Wahrnehmungsschwelle'],correct:1,explanation:'PSE = der Vergleichsreiz x₀.₅, bei dem die Wahrscheinlichkeit einer „größer"-Antwort genau 50% beträgt: p(x₀.₅, s) = 0.5.'},
+{type:'mc',q:'Wie berechnet sich der π-Unterschied (jnd)?',options:['xπ + x₀.₅','xπ · x₀.₅','xπ − x₀.₅','x₀.₅ / xπ'],correct:2,explanation:'Δπ = xπ − x₀.₅. Der Abstand vom PSE zum Reiz, bei dem die Wahrscheinlichkeit π (z.B. 0.75) beträgt. Maß für die Diskriminationsfähigkeit.'},
+{type:'mc',q:'Was ist der Hauptnachteil der Grenzmethode?',options:['Sie ist zu genau','Erwartungs- und Gewöhnungsfehler durch systematische Reizvorgabe','Sie braucht zu viele Versuchspersonen','Sie kann nur für Lautstärke verwendet werden'],correct:1,explanation:'Grenzmethode: Reiz wird systematisch auf-/absteigend variiert. Problem: VP kann den nächsten Reiz vorhersagen → Erwartungsfehler und Gewöhnungsfehler verzerren die Schwelle.'},
+{type:'mc',q:'Bei der Herstellungsmethode stellt die VP den Reiz selbst ein. Was ist der Hauptvorteil?',options:['Höchste Genauigkeit','Am schnellsten durchführbar','Keine systematische Verzerrung','Braucht keine Kalibrierung'],correct:1,explanation:'Die Herstellungsmethode ist schnell, weil die VP aktiv mitwirkt. Nachteil: Systematische Verzerrungen (z.B. Zentraltendenz — VP tendiert zur Mitte des Einstellbereichs).'},
+{type:'tf',q:'Die Formel <code>λ·p(x, s) = p(λx, λs)</code> ist eine korrekte Darstellung des Weberschen Gesetzes.',correct:false,explanation:'FALSCH! Die Wahrscheinlichkeit p wird NICHT mit λ skaliert. Korrekt ist: p(x,s) = p(λx,λs) — die Wahrscheinlichkeit bleibt GLEICH, nicht wird sie multipliziert.'},
+{type:'mc',q:'Welche psychometrische Funktion entsteht bei der Methode der konstanten Reize?',options:['Eine Gerade','Eine U-förmige Kurve','Eine S-Kurve (logistische Funktion)','Eine Glockenkurve'],correct:2,explanation:'Bei konstanten Reizen in zufälliger Reihenfolge ergibt sich eine psychometrische Funktion (S-Kurve/Ogive). Die Schwelle liegt beim 50%-Punkt dieser Kurve.'}
+],
+
+wahrscheinlichkeit: [
+{type:'mc',q:'Welches der Kolmogorov-Axiome besagt, dass P(Ω) = 1?',options:['Nichtnegativität','Normiertheit','Additivität','Unabhängigkeit'],correct:1,explanation:'Kolmogorov-Axiom 2 (Normiertheit): P(Ω) = 1 — die Wahrscheinlichkeit des sicheren Ereignisses ist 1.'},
+{type:'mc',q:'Wie ist die bedingte Wahrscheinlichkeit P(A|B) definiert?',options:['P(A) · P(B)','P(A∩B) / P(B)','P(A) + P(B)','P(B|A) / P(A)'],correct:1,explanation:'P(A|B) = P(A∩B) / P(B). Die Wahrscheinlichkeit von A, gegeben dass B eingetreten ist.'},
+{type:'mc',q:'Bayes-Theorem: Test 90% sensitiv, Grundrate 5%, Falsch-Positiv-Rate 10%. Wie hoch ist P(krank|+)?',options:['90%','45%','32%','5%'],correct:2,explanation:'P(krank|+) = (0.9×0.05) / (0.9×0.05 + 0.1×0.95) = 0.045/0.14 ≈ 32%. Basisraten-Vernachlässigung: Der positive Test bedeutet nur 32% Wahrscheinlichkeit!'},
+{type:'tf',q:'Wenn A und B unabhängig sind, gilt P(A∩B) = P(A) · P(B).',correct:true,explanation:'Definition der stochastischen Unabhängigkeit: A⊥B ⟺ P(A∩B) = P(A)·P(B). Zentrale Annahme vieler statistischer Tests!'},
+{type:'mc',q:'Was besagt der Zentrale Grenzwertsatz (ZGS)?',options:['Alle Daten sind normalverteilt','Die Summe vieler kleiner unabhängiger Einflüsse ist annähernd normalverteilt','Der Mittelwert ist immer 0','Große Stichproben sind immer repräsentativ'],correct:1,explanation:'ZGS: Die Summe (bzw. der Mittelwert) vieler unabhängiger, identisch verteilter Zufallsvariablen nähert sich einer Normalverteilung an — egal wie die Ausgangsvariablen verteilt sind.'},
+{type:'mc',q:'Die 68-95-99.7-Regel: Wie viel Prozent der Werte liegen innerhalb von μ ± 2σ?',options:['68%','95%','99.7%','50%'],correct:1,explanation:'Bei der Normalverteilung: ~68% in μ±1σ, ~95% in μ±2σ, ~99.7% in μ±3σ.'},
+{type:'tf',q:'P(A) kann negativ sein.',correct:false,explanation:'Kolmogorov-Axiom 1 (Nichtnegativität): P(A) ≥ 0 für jedes Ereignis A. Wahrscheinlichkeiten sind nie negativ.'},
+{type:'mc',q:'Was ist Basisraten-Vernachlässigung (base rate neglect)?',options:['Man ignoriert die Testgenauigkeit','Man ignoriert die A-priori-Wahrscheinlichkeit eines Ereignisses bei der Bewertung','Man vergisst die Stichprobengröße','Man verwechselt Korrelation mit Kausalität'],correct:1,explanation:'Basisraten-Vernachlässigung: Menschen überschätzen die Bedeutung eines positiven Tests, weil sie die geringe Grundrate (Prior) ignorieren. Bayes-Theorem korrigiert dies.'},
+{type:'mc',q:'Was ist die Varianz Var(X)?',options:['E(X)','E[(X − μ)²]','√E[(X − μ)²]','P(X > μ)'],correct:1,explanation:'Varianz = E[(X−μ)²] — der erwartete quadratische Abstand vom Mittelwert. Die Standardabweichung ist die Wurzel davon: SD = √Var.'},
+{type:'mc',q:'Wenn A∩B = ∅ (disjunkte Ereignisse), was gilt dann?',options:['P(A∪B) = P(A) · P(B)','P(A∪B) = P(A) + P(B)','P(A|B) = P(A)','P(A∩B) = P(A) + P(B)'],correct:1,explanation:'Kolmogorov-Axiom 3 (Additivität): Für disjunkte Ereignisse (A∩B=∅) gilt P(A∪B) = P(A) + P(B).'},
+{type:'tf',q:'Die Normalverteilung ist symmetrisch um den Mittelwert μ.',correct:true,explanation:'Die Normalverteilung (Gauß-Glocke) ist perfekt symmetrisch um μ. Mittelwert = Median = Modus.'},
+{type:'mc',q:'Was ist E(X) für eine diskrete Zufallsvariable?',options:['Der häufigste Wert','Σ xᵢ · P(xᵢ) — der gewichtete Mittelwert','Der Median','Die Varianz'],correct:1,explanation:'Erwartungswert E(X) = Σ xᵢ · P(xᵢ). Jeder mögliche Wert wird mit seiner Wahrscheinlichkeit gewichtet und aufsummiert.'},
+{type:'mc',q:'Wie lautet Bayes\' Theorem?',options:['P(A|B) = P(A∩B) / P(B)','P(A|B) = P(B|A) · P(A) / P(B)','P(A|B) = P(A) + P(B)','P(A|B) = P(A) · P(B)'],correct:1,explanation:'Bayes: P(A|B) = P(B|A) · P(A) / P(B). Erlaubt die Umkehrung bedingter Wahrscheinlichkeiten: vom Likelihood + Prior zum Posterior.'},
+{type:'tf',q:'Unabhängige Ereignisse sind immer disjunkt (sich ausschließend).',correct:false,explanation:'Unabhängig ≠ disjunkt! Disjunkte Ereignisse (A∩B=∅) können gar nicht gleichzeitig eintreten — sie sind sogar maximal abhängig (wenn A eintritt, kann B nicht eintreten).'},
+{type:'mc',q:'~99.7% der Werte einer Normalverteilung liegen in welchem Bereich?',options:['μ ± 1σ','μ ± 2σ','μ ± 3σ','μ ± 4σ'],correct:2,explanation:'68-95-99.7-Regel: ~99.7% der Werte liegen innerhalb von μ ± 3σ.'},
+{type:'mc',q:'Was bedeutet P(Ω) = 1?',options:['Nichts ist sicher','Irgendein Ergebnis tritt sicher ein','Alle Ereignisse sind gleich wahrscheinlich','Die Varianz ist 1'],correct:1,explanation:'P(Ω) = 1 bedeutet: Die Wahrscheinlichkeit, dass irgendein Ergebnis aus der Ergebnismenge eintritt, ist 1 (sicher).'},
+{type:'mc',q:'Warum ist das Bayes-Ergebnis von 32% bei dem Krankheitstest so überraschend niedrig?',options:['Der Test ist schlecht','Die Grundrate der Krankheit ist sehr niedrig (5%)','Die Stichprobe ist zu klein','Der p-Wert ist zu hoch'],correct:1,explanation:'Bei nur 5% Grundrate gibt es viel mehr Gesunde, die fälschlich positiv getestet werden, als tatsächlich Kranke. Daher ist P(krank|+) trotz 90% Sensitivität nur 32%.'},
+{type:'tf',q:'Der Erwartungswert E(X) muss ein Wert sein, den X tatsächlich annehmen kann.',correct:false,explanation:'Der Erwartungswert muss kein möglicher Wert sein. Beispiel: Beim fairen Würfel ist E(X) = 3.5, aber 3.5 kann nie gewürfelt werden.'}
+],
+
+versuchsplanung: [
+{type:'mc',q:'Was ist die unabhängige Variable (UV)?',options:['Die Variable, die gemessen wird','Die Variable, die vom Versuchsleiter manipuliert wird','Die Variable, die zufällig variiert','Die Konfundierung'],correct:1,explanation:'UV = unabhängige Variable: Die Variable, die der Versuchsleiter systematisch verändert (manipuliert), um ihren Einfluss auf die AV zu untersuchen.'},
+{type:'mc',q:'Was ist eine Konfundierung?',options:['Eine Störvariable, die mit der UV kovariiert','Ein statistischer Fehler','Eine fehlende Kontrollgruppe','Ein Erwartungseffekt'],correct:0,explanation:'Konfundierung: Eine Störvariable variiert systematisch mit der UV. Dadurch kann der Effekt nicht eindeutig auf die UV zurückgeführt werden → interne Validität sinkt.'},
+{type:'mc',q:'Was ist der Hauptvorteil eines Within-Subjects-Designs?',options:['Keine Reihenfolgeeffekte','Mehr Versuchspersonen','Individuelle Unterschiede werden kontrolliert','Kein Counterbalancing nötig'],correct:2,explanation:'Within-Subjects: Jede VP durchläuft alle Bedingungen → individuelle Unterschiede (Intelligenz, Motivation etc.) sind kontrolliert, da sie in allen Bedingungen gleich wirken.'},
+{type:'mc',q:'Was ist der Hauptnachteil eines Within-Subjects-Designs?',options:['Benötigt mehr Versuchspersonen','Individuelle Unterschiede','Reihenfolgeeffekte (Übung, Ermüdung)','Keine Randomisierung möglich'],correct:2,explanation:'Within-Subjects-Problem: Reihenfolgeeffekte — Übung, Ermüdung oder Transfer zwischen Bedingungen. Gegenmittel: Counterbalancing (z.B. Latin Square).'},
+{type:'tf',q:'Bei einem Quasi-Experiment wird die UV aktiv manipuliert.',correct:false,explanation:'Quasi-Experiment: UV ist eine bestehende Eigenschaft (z.B. Geschlecht, Alter). Keine aktive Manipulation, keine Randomisierung → keine Kausalaussagen möglich.'},
+{type:'mc',q:'Welche Validitätsart fragt: „Ist der Effekt auf die UV zurückzuführen?"',options:['Externe Validität','Konstruktvalidität','Interne Validität','Statistische Validität'],correct:2,explanation:'Interne Validität: Kann der beobachtete Effekt eindeutig auf die UV zurückgeführt werden? Bedrohungen: Konfundierung, Selektion, Reifung etc.'},
+{type:'mc',q:'Was ist Counterbalancing?',options:['Zufällige Zuweisung zu Gruppen','Systematische Variation der Reihenfolge der Bedingungen','Ausbalancieren der Stichprobengröße','Kontrolle von Störvariablen durch Elimination'],correct:1,explanation:'Counterbalancing: Die Reihenfolge der experimentellen Bedingungen wird systematisch variiert (z.B. Latin Square), um Reihenfolgeeffekte auszugleichen.'},
+{type:'mc',q:'Was bedeutet „Regression zur Mitte"?',options:['Extreme Werte nähern sich bei Wiederholung dem Mittelwert an','Alle Werte werden gleich','Die Varianz wird kleiner','Die Mittelwerte aller Gruppen sind gleich'],correct:0,explanation:'Regression zur Mitte: Extrem hohe/niedrige Messwerte tendieren bei wiederholter Messung zum Durchschnitt — ein statistisches Artefakt, das fälschlich als Effekt interpretiert werden kann.'},
+{type:'mc',q:'Was sind Demand Characteristics?',options:['Anforderungen an die Stichprobengröße','Hinweise, die der VP die Hypothese verraten','Statistische Voraussetzungen','Ethische Anforderungen'],correct:1,explanation:'Demand Characteristics: Hinweise in der Versuchssituation, die der VP ermöglichen, die Hypothese zu erraten — und ihr Verhalten entsprechend anzupassen. Bedrohung der internen Validität.'},
+{type:'mc',q:'Die Analogie „Kochen": Was entspricht der UV?',options:['Der Geschmack','Die Ofentemperatur','Die Zutat, die man systematisch variiert','Das Rezept'],correct:2,explanation:'Koch-Analogie: UV = Zutat (wird systematisch manipuliert). AV = Geschmack (wird gemessen). Störvar. = Ofentemperatur. Konfundierung = Salz UND Pfeffer gleichzeitig ändern.'},
+{type:'tf',q:'Randomisierung kontrolliert nur bekannte Störvariablen.',correct:false,explanation:'Randomisierung verteilt ALLE Störvariablen — auch unbekannte! — gleichmäßig auf die Gruppen. Das ist ihr großer Vorteil gegenüber anderen Kontrolltechniken.'},
+{type:'mc',q:'Was ist eine Interaktion in einem 2×2-Design?',options:['Die UV hat keinen Effekt','Der Effekt einer UV hängt von der Stufe der anderen UV ab','Beide UVs haben den gleichen Effekt','Die Gruppen unterscheiden sich nicht'],correct:1,explanation:'Interaktion: Der Effekt einer UV hängt von der Stufe der anderen ab. Beispiel: Koffein hilft nur bei Schlafentzug → Linien im Diagramm kreuzen sich oder divergieren.'},
+{type:'mc',q:'Warum ist „Reagieren Männer schneller?" kein echtes Experiment?',options:['Zu wenige Versuchspersonen','Geschlecht kann nicht manipuliert werden → Quasi-Experiment','Keine Hypothese formuliert','Reaktionszeit ist nicht messbar'],correct:1,explanation:'Geschlecht ist eine bestehende Eigenschaft, die nicht manipuliert werden kann. Keine aktive Manipulation + keine Randomisierung = Quasi-Experiment. Keine Kausalaussagen möglich.'},
+{type:'mc',q:'Was versteht man unter externer Validität?',options:['Ob der Effekt auf die UV zurückzuführen ist','Ob das Ergebnis auf andere Populationen/Situationen generalisierbar ist','Ob das Messinstrument das Konstrukt misst','Ob der statistische Test korrekt ist'],correct:1,explanation:'Externe Validität: Generalisierbarkeit der Befunde auf andere Personen, Situationen, Zeitpunkte. Oft im Spannungsfeld mit interner Validität.'},
+{type:'mc',q:'Welche Kontrolltechnik fixiert eine Störvariable auf einem konstanten Wert?',options:['Randomisierung','Counterbalancing','Konstanthalten','Matching'],correct:2,explanation:'Konstanthalten: Die Störvariable wird auf einem festen Wert fixiert (z.B. alle Tests um 10 Uhr). Nachteil: Eingeschränkte Generalisierbarkeit.'},
+{type:'mc',q:'Was ist der Unterschied zwischen Einfach- und Doppelverblindung?',options:['Einfach: VP blind, Doppelt: VP und VL blind','Einfach: VL blind, Doppelt: VP blind','Einfach: eine UV, Doppelt: zwei UVs','Kein Unterschied'],correct:0,explanation:'Einfachblind: Nur die VP weiß nicht, in welcher Bedingung sie ist. Doppelblind: Auch der VL weiß es nicht → schützt zusätzlich gegen Versuchsleitereffekte.'},
+{type:'tf',q:'Matching ist eine Alternative zur Randomisierung, bei der Paare mit ähnlichen Merkmalen gebildet werden.',correct:true,explanation:'Matching: Versuchspersonen werden paarweise anhand wichtiger Merkmale (z.B. Alter, IQ) zugeordnet. Je ein Partner kommt in jede Gruppe. Kontrolliert bekannte Störvariablen.'},
+{type:'mc',q:'Bei einer Interaktion: Was bedeuten parallele Linien im Diagramm?',options:['Es gibt eine Interaktion','Es gibt KEINE Interaktion — beide UVs wirken additiv','Die UVs sind konfundiert','Kein Effekt vorhanden'],correct:1,explanation:'Parallele Linien = keine Interaktion. Der Effekt einer UV ist unabhängig von der anderen. Sich kreuzende oder divergierende Linien deuten auf eine Interaktion hin.'},
+{type:'mc',q:'Was bedroht die interne Validität am stärksten?',options:['Kleine Stichprobe','Konfundierung von UV und Störvariable','Geringe externe Validität','Niedrige Reliabilität'],correct:1,explanation:'Konfundierung: Wenn eine Störvariable systematisch mit der UV kovariiert, kann der Effekt nicht eindeutig zugeordnet werden — die interne Validität ist direkt bedroht.'},
+{type:'mc',q:'Was misst die Konstruktvalidität?',options:['Ob der Effekt kausal ist','Ob die Operationalisierung tatsächlich das theoretische Konstrukt erfasst','Ob die Ergebnisse generalisierbar sind','Ob der Test reliabel ist'],correct:1,explanation:'Konstruktvalidität: Misst das Messinstrument wirklich das, was es messen soll? Z.B.: Misst ein „Intelligenztest" tatsächlich Intelligenz oder nur Schulwissen?'},
+{type:'mc',q:'Nennen Sie einen Vorteil der Randomisierung gegenüber der Parallelisierung.',options:['Funktioniert bei kleinen Stichproben besser','Kontrolliert auch UNBEKANNTE Störvariablen','Ist präziser bei der Kontrolle bekannter SVs','Braucht weniger VPn'],correct:1,explanation:'Randomisierung kontrolliert ALLE Störvariablen (auch unbekannte!) durch Zufall. Parallelisierung kontrolliert nur bekannte SVs — unbekannte bleiben unkontrolliert.'},
+{type:'mc',q:'Was besagt die Ceteris-paribus-Klausel?',options:['Die UV muss mindestens zwei Stufen haben','Zwischen den Gruppen darf sich nur die UV unterscheiden','Alle VPn müssen gleich alt sein','Die AV muss normalverteilt sein'],correct:1,explanation:'Ceteris paribus = „unter sonst gleichen Bedingungen". Zwischen den Gruppen soll sich NUR die UV unterscheiden — alles andere wird konstant gehalten.'},
+{type:'mc',q:'Was ist das Max-Kon-Min-Prinzip (Kerlinger)?',options:['Maximiere Stichprobe, Kontrolliere Reliabilität, Minimiere Validität','Maximiere Primärvarianz, Kontrolliere Sekundärvarianz, Minimiere Fehlervarianz','Maximiere Effektstärke, Kontrolliere p-Wert, Minimiere α-Fehler','Maximiere Generalisierbarkeit, Kontrolliere Ethik, Minimiere Aufwand'],correct:1,explanation:'Kerlinger: Max(Primärvarianz) = starke UV-Manipulation. Kon(Sekundärvarianz) = Störvariablen kontrollieren. Min(Fehlervarianz) = präzise Messung, große N.'},
+{type:'mc',q:'Was ist der Hauptnachteil von Messwiederholungsdesigns?',options:['Brauchen mehr VPn','Keine Kontrolle individueller Unterschiede','Zeitgebundene Störvariablen (Übung, Ermüdung, Reihenfolgeeffekte)','Keine statistische Auswertung möglich'],correct:2,explanation:'Within-Subjects/Messwiederholung: Jede VP alle Bedingungen. Problem: Übung, Ermüdung, Reihenfolgeeffekte sind zeitgebundene Störvariablen. Lösung: Counterbalancing (Lateinisches Quadrat).'},
+{type:'mc',q:'Was schützt Doppelblindung zusätzlich zur Einfachblindung?',options:['Gegen den Hawthorne-Effekt','Gegen den Rosenthal-Effekt (Versuchsleitererwartung)','Gegen Regression zur Mitte','Gegen Selektionsbias'],correct:1,explanation:'Einfachblind: VP weiß nicht, in welcher Bedingung → schützt gegen Placebo. Doppelblind: auch VL weiß es nicht → schützt zusätzlich gegen Rosenthal-Effekt (unbewusste Erwartungsbeeinflussung).'},
+{type:'mc',q:'Was demonstriert das Pygmalion-Experiment (Rosenthal & Jacobson)?',options:['Dass IQ-Tests unreliabel sind','Dass Lehrererwartungen die Schülerleistung beeinflussen (self-fulfilling prophecy)','Dass Randomisierung besser ist als Parallelisierung','Dass Doppelblindung nicht funktioniert'],correct:1,explanation:'Pygmalion: Lehrer erfuhren, bestimmte (zufällig gewählte) Schüler seien „hochbegabt". Diese Schüler zeigten tatsächlich bessere Leistung — self-fulfilling prophecy durch Versuchsleitererwartung.'},
+{type:'mc',q:'Was war ethisch problematisch am Milgram-Experiment (1963)?',options:['Zu kleine Stichprobe','Extremer psychischer Stress, kein echtes Recht auf Abbruch, kein informed consent','Nur Männer als VPn','Fehlende Kontrollgruppe'],correct:1,explanation:'Milgram: VPn gaben vermeintliche Stromschläge (65% bis 450V). Ethische Probleme: extremer Stress, mangelnde informierte Einwilligung, kein echtes Abbruchrecht, unzureichendes Debriefing.'},
+{type:'mc',q:'Bei der BDI-Therapiestudie: Warum reicht ein Haupteffekt nicht aus, um die Wirksamkeit der Therapie zu belegen?',options:['Weil der BDI nicht valide ist','Weil Spontanremission die Verbesserung erklären könnte — man braucht eine INTERAKTION','Weil die Stichprobe zu klein ist','Weil der p-Wert nicht signifikant sein kann'],correct:1,explanation:'Wenn sich auch die Kontrollgruppe verbessert (Spontanremission), zeigt ein Haupteffekt nichts. Nur wenn sich die EG MEHR verbessert als die KG (Interaktion), ist die Therapie wirksam.'},
+{type:'mc',q:'Was ist der Unterschied zwischen ordinaler und disordinaler Interaktion?',options:['Ordinal: Linien kreuzen sich; Disordinal: Linien sind parallel','Ordinal: Linien divergieren (gleiche Richtung); Disordinal: Linien kreuzen sich','Ordinal: kein Effekt; Disordinal: starker Effekt','Es gibt keinen Unterschied'],correct:1,explanation:'Ordinale Interaktion: Beide Gruppen in gleicher Richtung, aber eine stärker (Linien divergieren). Disordinale Interaktion: Linien kreuzen sich (z.B. Therapie hilft EG, schadet KG).'},
+{type:'mc',q:'Welches ethische Prinzip verlangt, dass VPn jederzeit ohne Nachteile abbrechen können?',options:['Debriefing','Schadensvermeidung','Informierte Einwilligung','Anonymisierung'],correct:2,explanation:'Informierte Einwilligung: VP muss freiwillig, aufgeklärt und jederzeit widerrufbar teilnehmen. Kein Nachteil bei Abbruch. Bei Milgram war dies verletzt — VPn fühlten sich zum Weitermachen gedrängt.'},
+{type:'tf',q:'Dreifachblindung bedeutet: VP, VL und Auswerter wissen nicht, welche Bedingung vorliegt.',correct:true,explanation:'Dreifach verblindet: (1) VP weiß nicht, in welcher Bedingung. (2) VL weiß es nicht. (3) Auch die Person, die die Daten auswertet, weiß es nicht → verhindert auch Auswertungsbias.'}
+],
+
+statistik: [
+{type:'mc',q:'Was ist der p-Wert?',options:['Die Wahrscheinlichkeit, dass H₀ wahr ist','Die Wahrscheinlichkeit, solche (oder extremere) Daten zu erhalten, WENN H₀ stimmt','Die Wahrscheinlichkeit, dass H₁ stimmt','Die Effektstärke'],correct:1,explanation:'p = P(Daten so extrem oder extremer | H₀). NICHT P(H₀|Daten)! Häufigster Fehler in der Interpretation.'},
+{type:'tf',q:'p = .03 bedeutet: „Die H₀ ist zu 3% wahrscheinlich."',correct:false,explanation:'Falsch! p = P(Daten|H₀), nicht P(H₀|Daten). Der p-Wert sagt nichts über die Wahrscheinlichkeit der Hypothese aus, sondern über die Daten unter der Annahme von H₀.'},
+{type:'mc',q:'Was ist ein α-Fehler (Typ-I-Fehler)?',options:['H₀ fälschlich beibehalten','H₀ fälschlich abgelehnt, obwohl sie wahr ist','H₁ fälschlich abgelehnt','Fehlende Power'],correct:1,explanation:'α-Fehler: H₀ wird abgelehnt, obwohl sie wahr ist — ein „Fehlalarm". Die Wahrscheinlichkeit dafür ist α (meist .05).'},
+{type:'mc',q:'Was ist ein β-Fehler (Typ-II-Fehler)?',options:['H₀ fälschlich abgelehnt','H₀ beibehalten, obwohl sie falsch ist','Zu viele Versuchspersonen','Multiple Vergleiche'],correct:1,explanation:'β-Fehler: H₀ wird beibehalten, obwohl sie falsch ist (es gibt einen echten Effekt, der übersehen wird). Power = 1−β.'},
+{type:'mc',q:'Was misst Cohen\'s d?',options:['Die statistische Signifikanz','Die Effektstärke — standardisierte Mittelwertsdifferenz','Die Power','Den p-Wert'],correct:1,explanation:'Cohen\'s d = (M₁−M₂) / SD_pooled. Klassifikation: 0.2 = klein, 0.5 = mittel, 0.8 = groß. Unabhängig von der Stichprobengröße.'},
+{type:'tf',q:'Ein signifikantes Ergebnis (p < .05) bedeutet immer einen praktisch bedeutsamen Effekt.',correct:false,explanation:'Nein! Signifikant + d=0.05 → „statistisch echt", aber praktisch irrelevant. Bei sehr großen Stichproben werden auch winzige Effekte signifikant.'},
+{type:'mc',q:'Was ist Power (Teststärke)?',options:['P(H₀ ablehnen | H₀ wahr)','P(H₀ ablehnen | H₀ falsch) = 1−β','P(H₀ beibehalten | H₀ wahr)','Der p-Wert'],correct:1,explanation:'Power = 1−β = Wahrscheinlichkeit, einen tatsächlich vorhandenen Effekt zu entdecken. Ziel: ≥ .80.'},
+{type:'mc',q:'Wovon hängt die Power ab?',options:['Nur von α','Effektstärke, Stichprobengröße, α und Streuung','Nur von der Stichprobengröße','Nur vom p-Wert'],correct:1,explanation:'Power steigt mit: größerer Effektstärke, größerem n, höherem α (liberaler) und geringerer Streuung.'},
+{type:'mc',q:'Was bedeutet ein Bayes-Faktor BF₁₀ = 10?',options:['H₀ ist 10-mal wahrscheinlicher als H₁','Die Daten sind 10-mal wahrscheinlicher unter H₁ als unter H₀','p = .10','Der Effekt ist 10-mal so groß'],correct:1,explanation:'BF₁₀ = 10: Die beobachteten Daten sind 10-mal wahrscheinlicher unter H₁ als unter H₀ → starke Evidenz für H₁.'},
+{type:'mc',q:'Was bedeutet ein Bayes-Faktor BF₁₀ = 0.1?',options:['Starke Evidenz für H₁','Starke Evidenz für H₀','Keine Evidenz','BF kann nicht 0.1 sein'],correct:1,explanation:'BF₁₀ = 0.1 (= BF₀₁ = 10): Die Daten stützen H₀ 10-mal stärker als H₁. Vorteil von Bayes: Kann H₀ aktiv stützen, NHST kann das nicht.'},
+{type:'tf',q:'„p = .06 → kein Effekt" ist eine korrekte Schlussfolgerung.',correct:false,explanation:'Falsch! Die .05-Grenze ist willkürlich. p=.06 ist nicht substanziell anders als p=.04. „Nicht signifikant" ≠ „kein Effekt". Es könnte auch an fehlender Power liegen.'},
+{type:'mc',q:'Warum ist die Bonferroni-Korrektur nötig?',options:['Um den β-Fehler zu senken','Um bei multiplen Vergleichen die α-Fehler-Inflation zu kontrollieren','Um die Power zu erhöhen','Um den p-Wert zu berechnen'],correct:1,explanation:'Bei 20 Tests mit α=.05 erwartet man ~1 Falsch-Positives! Bonferroni: α/k (k = Anzahl Tests). Konservativ, aber schützt vor α-Inflation.'},
+{type:'mc',q:'Was bedeutet ein 95%-Konfidenzintervall?',options:['Der wahre Wert liegt mit 95% Sicherheit im Intervall','Bei unendlich vielen Wiederholungen enthalten 95% der KIs den wahren Wert','95% der Daten liegen im Intervall','Der Effekt ist zu 95% real'],correct:1,explanation:'95%-KI: Würde man die Studie ∞ oft wiederholen, enthielten 95% der berechneten KIs den wahren Parameter. NICHT: „95% Wahrscheinlichkeit, dass der Wert drin liegt."'},
+{type:'mc',q:'NHST steht für:',options:['Null Hypothesis Significance Testing','New Hypothesis Statistical Testing','Normal Hypothesis Sampling Theory','Null Hypothesis Sampling Testing'],correct:0,explanation:'NHST = Null Hypothesis Significance Testing. Der klassische Ansatz: H₀ formulieren → Daten → Teststatistik → p-Wert → Entscheidung.'},
+{type:'mc',q:'Cohen\'s d = 0.2 gilt als:',options:['Großer Effekt','Mittlerer Effekt','Kleiner Effekt','Kein Effekt'],correct:2,explanation:'Cohens Konvention: d = 0.2 (klein), d = 0.5 (mittel), d = 0.8 (groß). Aber: Kontextabhängig! In manchen Bereichen ist d=0.2 durchaus relevant.'},
+{type:'mc',q:'Was ist ein Vorteil von Bayes gegenüber NHST?',options:['Braucht keinen Prior','Kann H₀ aktiv stützen (nicht nur ablehnen)','Liefert immer signifikante Ergebnisse','Ist einfacher zu berechnen'],correct:1,explanation:'NHST kann H₀ nur ablehnen oder beibehalten, nie aktiv stützen. Bayes liefert kontinuierliche Evidenz und kann H₀ aktiv stützen (BF₁₀ < 1).'},
+{type:'tf',q:'Die Power sollte mindestens .80 betragen.',correct:true,explanation:'Konvention: Power ≥ .80 (= max. 20% β-Fehler). Bei geringerer Power ist das Risiko zu hoch, einen echten Effekt zu übersehen.'},
+{type:'mc',q:'Was ist FDR (False Discovery Rate) im Vergleich zu Bonferroni?',options:['Konservativer als Bonferroni','Weniger konservativ — kontrolliert den Anteil falscher Entdeckungen statt jeden einzelnen Test','Dasselbe wie Bonferroni','Veraltet'],correct:1,explanation:'FDR (Benjamini-Hochberg): Kontrolliert den erwarteten Anteil falscher Entdeckungen unter allen Entdeckungen. Weniger konservativ als Bonferroni, daher mehr Power.'},
+{type:'mc',q:'Welche Aussage über den p-Wert ist KORREKT?',options:['p gibt die Wahrscheinlichkeit der H₀ an','p gibt die Wahrscheinlichkeit an, sich zu irren','p gibt an, wie extrem die Daten unter H₀ wären','p gibt die Effektstärke an'],correct:2,explanation:'p = P(Daten ≥ so extrem | H₀). Wie wahrscheinlich wären solche oder extremere Daten, wenn H₀ wahr wäre.'},
+{type:'mc',q:'Welche Kombination ergibt die höchste Power?',options:['Kleines n, kleiner Effekt, α=.01','Großes n, großer Effekt, α=.05','Kleines n, großer Effekt, α=.01','Großes n, kleiner Effekt, α=.01'],correct:1,explanation:'Power steigt mit: größerem n, größerem Effekt und höherem α. Kombination B maximiert alle drei Faktoren.'}
+],
+
+lernen: [
+{type:'mc',q:'Was beschreibt der Primacy-Effekt?',options:['Die letzten Items einer Liste werden besser erinnert','Die ersten Items einer Liste werden besser erinnert','Items in der Mitte werden am besten erinnert','Alle Items werden gleich gut erinnert'],correct:1,explanation:'Primacy-Effekt: Die ersten Items werden besser erinnert, weil sie innerlich öfter wiederholt und ins Langzeitgedächtnis (LZG) transferiert werden.'},
+{type:'mc',q:'Welcher Speicher ist für den Recency-Effekt verantwortlich?',options:['Langzeitgedächtnis','Sensorisches Gedächtnis','Arbeitsgedächtnis (AG)','Prozedurales Gedächtnis'],correct:2,explanation:'Recency-Effekt: Die letzten Items sind noch im Arbeitsgedächtnis (AG) und werden daher gut erinnert — bis eine Ablenkung das AG löscht.'},
+{type:'mc',q:'Was passiert laut Glanzer & Cunitz (1966) bei 30 Sek. Ablenkung nach dem Lernen?',options:['Primacy verschwindet','Recency verschwindet','Beides verschwindet','Nichts ändert sich'],correct:1,explanation:'30 Sek. Ablenkung löscht das AG → Recency-Effekt verschwindet. Der Primacy-Effekt bleibt, weil die Items bereits im LZG sind. → Experimentelle Dissoziation als Beleg für die Zwei-Speicher-Theorie.'},
+{type:'tf',q:'Die serielle Positionskurve hat eine U-Form.',correct:true,explanation:'U-Form: Anfang (Primacy) und Ende (Recency) der Liste werden besser erinnert als die Mitte. Primacy → LZG, Recency → AG.'},
+{type:'mc',q:'Wer gilt als Begründer des Behaviorismus?',options:['Chomsky','Skinner','Watson','Tolman'],correct:2,explanation:'John B. Watson begründete den Behaviorismus: Nur beobachtbares Verhalten (Stimulus → Response) ist Gegenstand der Psychologie. Innere Zustände sind nicht wissenschaftlich.'},
+{type:'mc',q:'Was ist operante Konditionierung?',options:['Lernen durch Reiz-Reiz-Assoziationen','Lernen durch Konsequenzen (Verstärkung/Bestrafung)','Lernen durch Einsicht','Lernen durch Beobachtung'],correct:1,explanation:'Skinner: Operante Konditionierung — Verhalten wird durch seine Konsequenzen geformt. Verstärkung erhöht, Bestrafung senkt die Auftretenswahrscheinlichkeit.'},
+{type:'mc',q:'Welcher Befund trug zur kognitiven Wende bei?',options:['Pawlows Hund','Skinners Taubenexperimente','Chomskys Kritik: Sprache ≠ nur Verstärkung','Wundts Introspektion'],correct:2,explanation:'Chomsky zeigte, dass Sprache nicht allein durch Verstärkung erklärbar ist (Kinder bilden neue Sätze, die sie nie gehört haben). Dies war ein Schlüsselbefund der kognitiven Wende.'},
+{type:'mc',q:'Was besagt Millers „Magical Number Seven"?',options:['Sieben ist die perfekte Zahl','Die Kapazität des Arbeitsgedächtnisses beträgt etwa 7±2 Chunks','Man braucht 7 Wiederholungen zum Lernen','Sieben Sinne existieren'],correct:1,explanation:'Miller (1956): Das Arbeitsgedächtnis kann etwa 7±2 Chunks gleichzeitig halten. Ein Chunk ist eine bedeutungsvolle Einheit (Buchstabe, Wort, Zahl etc.).'},
+{type:'mc',q:'Was ist Paarassoziationslernen?',options:['Zwei Personen lernen gemeinsam','Lernen von Wort-Wort-Paaren','Assoziatives Denken','Klassische Konditionierung'],correct:1,explanation:'Paarassoziationslernen: Wort-Wort-Paare werden präsentiert und getestet. Man zählt die Durchgänge bis zum Kriterium — schwierige Paare zeigen Gedächtnisstrukturen.'},
+{type:'tf',q:'Die kognitive Wende fand etwa um 1960 statt.',correct:true,explanation:'Die kognitive Wende (~1960): Chomsky, Tolman, Miller u.a. zeigten, dass der Behaviorismus interne kognitive Prozesse (Sprache, Karten, Kapazität) nicht erklären konnte.'},
+{type:'mc',q:'Was ist eine Lernkurve?',options:['Die Kurve der Vergessensrate','Ein Diagramm: Leistung vs. Anzahl Übungsdurchgänge','Die serielle Positionskurve','Die Normalverteilung der Lernfähigkeit'],correct:1,explanation:'Lernkurve: Leistung als Funktion der Übung. Typisch: Schneller Anfang → Plateau. Negativ beschleunigt (abnehmender Lernzuwachs).'},
+{type:'mc',q:'Die Lernkurve P(n) = 1 − (1−α)^n beschreibt:',options:['Lineares Lernen','Negativ beschleunigtes Lernen (schneller Anfang, dann Plateau)','Exponentielles Vergessen','S-förmiges Lernen'],correct:1,explanation:'P(n) = 1 − (1−α)^n mit α = Lernrate. Startet bei 0, steigt schnell an, nähert sich asymptotisch 1 an — negativ beschleunigt.'},
+{type:'mc',q:'Was ist die Positiv-Liste beim Paarassoziationslernen?',options:['Items, die positiv bewertet werden','Bereits gelernte Paare, die aus dem Testpool genommen werden','Die Kontrollgruppe','Korrekt beantwortete Fragen'],correct:1,explanation:'Positivliste: Gelernte Paare (kommen raus). Negativliste: Noch nicht gelernt (weiter üben). Erlaubt itemspezifische Analyse des Lernfortschritts.'},
+{type:'tf',q:'Tolman zeigte mit seinen Rattenexperimenten, dass Lernen auch ohne direkte Verstärkung stattfinden kann (kognitive Karten).',correct:true,explanation:'Tolman: Ratten lernten den Weg durch ein Labyrinth auch ohne Belohnung — sie bildeten kognitive Karten. Widerspruch zum Behaviorismus, der Lernen nur durch Verstärkung erklärte.'},
+{type:'mc',q:'Das Experiment von Glanzer & Cunitz (1966) stützt welche Theorie?',options:['Behaviorismus','Zwei-Speicher-Theorie (AG + LZG)','Interferenztheorie','Gestaltpsychologie'],correct:1,explanation:'Experimentelle Dissoziation: Ablenkung löscht Recency (AG), Primacy bleibt (LZG). Dies stützt die Zwei-Speicher-Theorie — AG und LZG sind separate Systeme.'},
+{type:'mc',q:'Was kennzeichnet eine negativ beschleunigte Lernkurve?',options:['Gleicher Lernzuwachs pro Durchgang','Schneller Lernzuwachs am Anfang, dann immer weniger','Kein Lernen am Anfang, dann plötzlich','Abnahme der Leistung mit Übung'],correct:1,explanation:'Negativ beschleunigt: Der Lernzuwachs ist anfangs groß und nimmt dann ab — die Kurve nähert sich einem Plateau (Asymptote) an.'},
+{type:'mc',q:'Wer prägte den Begriff „operante Konditionierung"?',options:['Watson','Pawlow','Skinner','Bandura'],correct:2,explanation:'B.F. Skinner prägte den Begriff operante Konditionierung und unterschied sie von der klassischen (Pawlow): Verhalten wird durch seine Konsequenzen gesteuert.'},
+{type:'mc',q:'Warum werden Items in der Mitte einer Liste am schlechtesten erinnert?',options:['Sie sind langweiliger','Kein Primacy (zu wenig Wiederholung) und kein Recency (nicht mehr im AG)','Sie sind schwieriger','Proaktive Interferenz'],correct:1,explanation:'Mitte: Zu spät für genug Wiederholung (→ kein Transfer ins LZG) und zu früh, um noch im AG zu sein. Daher der Tiefpunkt der U-förmigen seriellen Positionskurve.'},
+{type:'tf',q:'Der Behaviorismus erklärt Spracherwerb vollständig durch Verstärkung.',correct:false,explanation:'Chomsky zeigte: Kinder produzieren grammatisch korrekte Sätze, die sie nie gehört haben. Sprache kann nicht allein durch Verstärkung (operante Konditionierung) erklärt werden — es braucht interne kognitive Strukturen.'},
+{type:'mc',q:'Was ist ein „Chunk" im Sinne von Miller?',options:['Ein Fehler beim Lernen','Eine bedeutungsvolle Informationseinheit im Arbeitsgedächtnis','Ein Absatz im Lehrbuch','Eine Gedächtnistechnik'],correct:1,explanation:'Chunk = bedeutungsvolle Einheit. „FBI\" = 1 Chunk (nicht 3 Buchstaben). Chunking erhöht die effektive AG-Kapazität durch Zusammenfassung.'},
+{type:'mc',q:'Was ist die Substitutionsmethode (Rock, 1957)?',options:['Falsche Antworten werden durch richtige ersetzt','Nicht-gelernte Paare werden in jedem Durchgang durch neue ersetzt','Leichte Paare ersetzen schwere','VPn werden ausgetauscht'],correct:1,explanation:'Rock: In der EG werden nicht-gelernte Paare durch NEUE Paare ersetzt. In der KG bleiben alle Paare gleich. Rocks Ergebnis: Kein Unterschied → Lernen ist All-or-None, nicht inkrementell.'},
+{type:'mc',q:'Was ist der Kern von Rocks „All-or-None"-Hypothese?',options:['Jedes Item wird ein bisschen pro Durchgang gelernt','Ein Item wird in einem einzigen Durchgang komplett gelernt oder gar nicht','Lernen ist unmöglich ohne Wiederholung','Alle Items werden gleichzeitig gelernt'],correct:1,explanation:'All-or-None: Ein Item springt in einem Durchgang von „nicht gelernt" auf „gelernt" — es gibt keinen graduellen Aufbau. Die beobachtete Lernkurve sei ein Artefakt der Mittelung über Items.'},
+{type:'mc',q:'Was war Postmans Hauptkritik an Rocks Substitutionsmethode?',options:['Die Stichprobe war zu klein','Substituierte Paare waren zufällig leichter als die schwierigen Originale (Item-Selection-Artifact)','Das Experiment war nicht verblindet','Die Lernkurve war nicht signifikant'],correct:1,explanation:'Postman: Die schwierigen Paare werden aussortiert und durch zufällige (durchschnittlich leichtere) Paare ersetzt. Das verzerrt den Vergleich — Item-Selection-Artifact.'},
+{type:'mc',q:'Im Mehrspeichermodell (Atkinson & Shiffrin): Wie lang hält Information im sensorischen Speicher?',options:['Unbegrenzt','Ca. 20 Sekunden','Ca. 250 Millisekunden','Ca. 5 Minuten'],correct:2,explanation:'Sensorischer Speicher: Sehr kurz (~250ms), große Kapazität, pre-attentiv. Dann Kurzzeitspeicher (~20s, 7±2 Chunks) → Langzeitspeicher (∞ Kapazität, ∞ Dauer).'},
+{type:'mc',q:'Was zeigten Glanzer & Cunitz (1966) mit ihrem Ablenkungsexperiment?',options:['Primacy und Recency verschwinden beide','Nur der Primacy-Effekt verschwindet','Nur der Recency-Effekt verschwindet — experimentelle Dissoziation','Weder Primacy noch Recency wird beeinflusst'],correct:2,explanation:'30 Sek. Ablenkung nach Lernen: Recency weg (AG gelöscht), Primacy bleibt (im LZG). Diese experimentelle Dissoziation ist starke Evidenz für zwei getrennte Speichersysteme.'},
+{type:'tf',q:'Rock folgerte aus der Substitutionsmethode, dass Lernen inkrementell (Stück für Stück) stattfindet.',correct:false,explanation:'Das Gegenteil: Rock folgerte, dass Lernen All-or-None ist (ganz oder gar nicht). Die Substitution hatte keinen Effekt → Items werden nicht graduell gestärkt, sondern springen in einem Schritt auf „gelernt".'},
+{type:'mc',q:'Was ist eine „experimentelle Dissoziation" und warum ist sie wichtig?',options:['Ein Experiment ohne Kontrollgruppe','Zwei Bedingungen beeinflussen verschiedene Prozesse unterschiedlich → Evidenz für getrennte Mechanismen','Eine ethische Verletzung im Experiment','Ein statistischer Fehler bei der Auswertung'],correct:1,explanation:'Dissoziation: Eine Manipulation beeinflusst Prozess A, aber nicht Prozess B → beide müssen getrennt sein. Glanzer & Cunitz: Ablenkung löscht Recency (KZG), nicht Primacy (LZG) → zwei Speicher.'},
+{type:'mc',q:'Was ist der Kapazitätslimit des Kurzzeitspeichers nach Miller?',options:['3 ± 1 Chunks','5 ± 2 Chunks','7 ± 2 Chunks','12 ± 3 Chunks'],correct:2,explanation:'Miller (1956): Die „magische Zahl 7 ± 2". Das Arbeitsgedächtnis kann ca. 5-9 Chunks gleichzeitig halten. Durch Chunking kann die effektive Kapazität erhöht werden.'}
+]
+
+};
+
+/* Section display names */
+const SEC_NAMES = {
+  wisstheorie:'Wissenschaftstheorie', logik:'Formale Logik', messung:'Messtheorie',
+  psychophysik:'Psychophysik', wahrscheinlichkeit:'Wahrscheinlichkeit',
+  versuchsplanung:'Versuchsplanung', statistik:'Statistik', lernen:'Lernexperimente'
+};
+
+/* ── State ── */
+let questions=[], current=0, answers=[], timerInterval=null, seconds=0, useTimer=false;
+
+/* ── Topic selection ── */
+function toggleTopic(el){el.classList.toggle('selected')}
+function selectAll(){document.querySelectorAll('.topic-card').forEach(c=>c.classList.add('selected'))}
+function selectNone(){document.querySelectorAll('.topic-card').forEach(c=>c.classList.remove('selected'))}
+
+/* ── Shuffle (Fisher-Yates) ── */
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+
+/* ── Start test ── */
+function startTest(){
+  const selected=[...document.querySelectorAll('.topic-card.selected')].map(c=>c.dataset.section);
+  if(!selected.length) return alert('Bitte mindestens ein Kapitel auswählen.');
+  const perSection=parseInt(document.getElementById('cfgCount').value);
+  const doShuffle=document.getElementById('cfgShuffle').checked;
+  useTimer=document.getElementById('cfgTimer').checked;
+
+  questions=[];
+  selected.forEach(sec=>{
+    let pool=[...POOL[sec]].map(q=>({...q, section:sec}));
+    if(doShuffle) shuffle(pool);
+    const n=perSection>=20?pool.length:Math.min(perSection,pool.length);
+    questions.push(...pool.slice(0,n));
+  });
+  if(doShuffle) shuffle(questions);
+
+  // shuffle MC options for each question
+  questions.forEach(q=>{
+    if(q.type==='mc'){
+      const correctText=q.options[q.correct];
+      shuffle(q.options);
+      q.correct=q.options.indexOf(correctText);
+    }
+  });
+
+  current=0; answers=new Array(questions.length).fill(null);
+  document.getElementById('startScreen').style.display='none';
+  document.getElementById('testScreen').style.display='block';
+
+  if(useTimer){seconds=0;document.getElementById('timerDisplay').style.display='';timerInterval=setInterval(()=>{seconds++;const m=String(Math.floor(seconds/60)).padStart(2,'0'),s=String(seconds%60).padStart(2,'0');document.getElementById('timerDisplay').textContent=m+':'+s},1000)}
+
+  renderQuestion();
+}
+
+/* ── Render question ── */
+function renderQuestion(){
+  const q=questions[current];
+  const total=questions.length;
+  document.getElementById('progressText').textContent=`Frage ${current+1} / ${total}`;
+  document.getElementById('progressBar').style.width=((current)/total*100)+'%';
+  document.getElementById('nextBtn').style.display='none';
+  document.getElementById('finishBtn').style.display='none';
+
+  const area=document.getElementById('questionArea');
+  let typeLabel=q.type==='tf'?'Wahr / Falsch':'Multiple Choice';
+  let opts='';
+  if(q.type==='mc'){
+    opts=q.options.map((o,i)=>`<button class="opt-btn" onclick="answer(${i})">${o}</button>`).join('');
+  } else {
+    opts=`<button class="opt-btn" onclick="answer(true)">Wahr</button><button class="opt-btn" onclick="answer(false)">Falsch</button>`;
+  }
+  area.innerHTML=`<div class="question-card"><div class="q-meta"><span class="q-section">${SEC_NAMES[q.section]}</span><span class="q-type">${typeLabel}</span></div><p class="q-text">${q.q}</p><div class="options-list">${opts}</div><div class="feedback correct-fb">${q.explanation}</div><div class="feedback wrong-fb">${q.explanation}</div></div>`;
+}
+
+/* ── Answer ── */
+function answer(val){
+  const q=questions[current];
+  const card=document.querySelector('.question-card');
+  const btns=card.querySelectorAll('.opt-btn');
+  const isCorrect=(val===q.correct);
+  answers[current]={given:val,correct:q.correct,isCorrect};
+
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(q.type==='mc'){
+      if(i===q.correct)b.classList.add('correct');
+      if(i===val&&!isCorrect)b.classList.add('wrong');
+    } else {
+      const bVal=i===0?true:false;
+      if(bVal===q.correct)b.classList.add('correct');
+      if(bVal===val&&!isCorrect)b.classList.add('wrong');
+    }
+  });
+
+  const fb=card.querySelector(isCorrect?'.correct-fb':'.wrong-fb');
+  fb.classList.add('show');
+
+  if(current<questions.length-1) document.getElementById('nextBtn').style.display='';
+  else document.getElementById('finishBtn').style.display='';
+}
+
+/* ── Next ── */
+function nextQuestion(){current++;renderQuestion()}
+
+/* ── Results ── */
+function showResults(){
+  if(timerInterval)clearInterval(timerInterval);
+  document.getElementById('testScreen').style.display='none';
+  document.getElementById('resultScreen').style.display='block';
+
+  const totalCorrect=answers.filter(a=>a&&a.isCorrect).length;
+  const pct=Math.round(totalCorrect/questions.length*100);
+  const scoreEl=document.getElementById('totalScore');
+  scoreEl.textContent=pct+'%';
+  scoreEl.className='score-big'+(pct>=70?'':pct>=50?' mediocre':' poor');
+  document.getElementById('resultSummary').textContent=`${totalCorrect} von ${questions.length} Fragen richtig`+(useTimer?` · Zeit: ${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`:'');
+
+  // per-section breakdown
+  const secStats={};
+  questions.forEach((q,i)=>{
+    if(!secStats[q.section])secStats[q.section]={total:0,correct:0};
+    secStats[q.section].total++;
+    if(answers[i]&&answers[i].isCorrect)secStats[q.section].correct++;
+  });
+  let secHtml='';
+  Object.keys(secStats).forEach(sec=>{
+    const s=secStats[sec];const p=Math.round(s.correct/s.total*100);
+    const color=p>=70?'var(--accent2)':p>=50?'var(--accent5)':'var(--accent)';
+    secHtml+=`<div class="section-result-row"><span class="sr-name">${SEC_NAMES[sec]}</span><div class="sr-bar"><div class="sr-bar-fill" style="width:${p}%;background:${color}"></div></div><span class="sr-score" style="color:${color}">${s.correct}/${s.total}</span></div>`;
+  });
+  document.getElementById('sectionResults').innerHTML=secHtml;
+
+  // detailed review
+  let revHtml='';
+  questions.forEach((q,i)=>{
+    const a=answers[i];
+    const cls=a&&a.isCorrect?'was-correct':'was-wrong';
+    let givenText='';
+    if(q.type==='mc')givenText=a?q.options[a.given]:'—';
+    else givenText=a?(a.given?'Wahr':'Falsch'):'—';
+    let correctText='';
+    if(q.type==='mc')correctText=q.options[q.correct];
+    else correctText=q.correct?'Wahr':'Falsch';
+    revHtml+=`<div class="review-item ${cls}"><div class="ri-q">${i+1}. ${q.q}</div><div class="ri-answer">${a&&a.isCorrect?'✓ Richtig':'✗ Deine Antwort: '+givenText+' — <strong>Richtig: '+correctText+'</strong>'}</div><div class="ri-explain">${q.explanation}</div></div>`;
+  });
+  document.getElementById('reviewList').innerHTML=revHtml;
+}
+
+/* ── Restart ── */
+function restart(){
+  document.getElementById('resultScreen').style.display='none';
+  document.getElementById('startScreen').style.display='block';
+  seconds=0;
+  document.getElementById('timerDisplay').textContent='00:00';
+}
+</script>
+</body>
+</html>

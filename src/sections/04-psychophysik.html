@@ -1,0 +1,96 @@
+
+<!-- ══════════════ 4. PSYCHOPHYSIK ══════════════ -->
+<section id="psychophysik">
+  <div class="section-number">04</div>
+  <h2>Psychophysik</h2>
+  <p class="section-subtitle">Reiz → Empfindung</p>
+  <p>Wie hängt <strong>subjektives Erleben</strong> mit <strong>physikalischer Reizintensität</strong> zusammen?</p>
+
+  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+    <div class="card"><h3><span class="icon">📏</span> Weber</h3><div class="formula" style="font-size:0.8rem; padding:0.7rem;"><span class="keyword">ΔI</span>/<span class="keyword">I</span> = <span class="symbol">k</span></div><p>JND proportional zur Reizstärke.</p></div>
+    <div class="card"><h3><span class="icon">📐</span> Fechner</h3><div class="formula" style="font-size:0.8rem; padding:0.7rem;"><span class="keyword">E</span> = <span class="symbol">c</span>·log(<span class="keyword">I/I₀</span>)</div><p>Empfindung wächst <strong>logarithmisch</strong>.</p></div>
+    <div class="card"><h3><span class="icon">⚡</span> Stevens</h3><div class="formula" style="font-size:0.8rem; padding:0.7rem;"><span class="keyword">E</span> = <span class="symbol">a</span>·<span class="keyword">I</span><sup style="color:#e8a87c">n</sup></div><p>n&lt;1 Kompression, n&gt;1 Expansion.</p></div>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 480 250" xmlns="http://www.w3.org/2000/svg" style="max-width:480px">
+      <line x1="60" y1="215" x2="440" y2="215" stroke="#2a2520" stroke-width="1.5"/>
+      <line x1="60" y1="215" x2="60" y2="30" stroke="#2a2520" stroke-width="1.5"/>
+      <text x="250" y="246" text-anchor="middle" font-size="11" fill="#2a2520">Reizintensität I →</text>
+      <text x="20" y="122" text-anchor="middle" font-size="11" fill="#2a2520" transform="rotate(-90,20,122)">Empfindung E →</text>
+      <path d="M60,215 Q120,115 180,85 Q260,55 360,42 L440,36" fill="none" stroke="#c0392b" stroke-width="2.5"/>
+      <text x="442" y="36" font-size="10" font-weight="600" fill="#c0392b">Fechner</text>
+      <path d="M60,215 Q130,138 200,100 Q300,68 400,53 L440,48" fill="none" stroke="#2c6e49" stroke-width="2.5" stroke-dasharray="6,3"/>
+      <text x="442" y="52" font-size="10" font-weight="600" fill="#2c6e49">Stevens n&lt;1</text>
+      <path d="M60,215 Q150,208 240,190 Q320,150 380,88 L440,26" fill="none" stroke="#1a5276" stroke-width="2.5" stroke-dasharray="3,3"/>
+      <text x="442" y="26" font-size="10" font-weight="600" fill="#1a5276">Stevens n&gt;1</text>
+      <line x1="60" y1="215" x2="440" y2="36" stroke="#d4cbbf" stroke-width="1" stroke-dasharray="4,4"/>
+      <text x="385" y="82" font-size="9" fill="#d4cbbf">linear</text>
+    </svg>
+    <div class="diagram-caption">Fechner (log) vs. Stevens (Potenz) — n&lt;1: Helligkeit, n&gt;1: Stromschlag</div>
+  </div>
+
+  <div class="example"><p><strong>Weber:</strong> 1 kg → 50 g extra merkbar. 20 kg → ~400 g nötig. Weber-Bruch Gewicht: k ≈ 1/50. Tonhöhe: k ≈ 1/333!</p></div>
+
+  <h3 class="sub">Formale Psychophysik (Klausurrelevant!)</h3>
+  <div class="def-box red">
+    <div class="label">Punkt der subjektiven Gleichheit (PSE)</div>
+    <p>Derjenige Vergleichsreiz x, bei dem die Wahrscheinlichkeit einer „größer"-Antwort genau <strong>50 %</strong> beträgt:</p>
+    <div class="formula"><span class="keyword">p(x₀.₅, s)</span> = <span class="result">0.5</span>   <span class="comment">// s = Standardreiz</span></div>
+  </div>
+
+  <div class="def-box red">
+    <div class="label">Ebenmerklicher Unterschied (jnd / π-Unterschied)</div>
+    <p>Der Abstand vom PSE zu dem Reiz, bei dem die Wahrscheinlichkeit π (z.B. 0.75) beträgt:</p>
+    <div class="formula"><span class="keyword">Δπ</span> = x<sub>π</sub> − x<sub>0.5</sub>   <span class="comment">// π-Vergleichsreiz minus PSE</span></div>
+  </div>
+
+  <h3 class="sub">Webersches Gesetz — Formale Varianten</h3>
+  <p>In der Klausur kommen <strong>6 Formelvarianten</strong> zum Ankreuzen. Nur einige sind korrekt!</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Formel</th><th>Korrekt?</th><th>Erklärung</th></tr></thead>
+    <tbody>
+      <tr><td><code>p(x, s) = p(λx, λs)</code></td><td><strong>Ja</strong></td><td>Webersches Gesetz: Verhältnisse bleiben gleich bei Skalierung</td></tr>
+      <tr><td><code>λ·p(x, s) = p(λx, λs)</code></td><td>Nein</td><td>Wahrscheinlichkeit wird nicht mit λ skaliert</td></tr>
+      <tr><td><code>Δπ(λs) = λ·Δπ(s)</code></td><td><strong>Ja</strong></td><td>jnd skaliert proportional mit Standardreiz</td></tr>
+      <tr><td><code>Δπ(λs) = Δπ(s)</code></td><td>Nein</td><td>jnd ist NICHT konstant über verschiedene s</td></tr>
+      <tr><td><code>x₀.₅(λs) = λ·x₀.₅(s)</code></td><td><strong>Ja</strong></td><td>PSE skaliert mit</td></tr>
+      <tr><td><code>p(x+a, s+a) = p(x, s)</code></td><td>Nein</td><td>Additive Invarianz gilt NICHT (nur multiplikative)</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="merksatz"><p><strong>Eselsbrücke:</strong> Weber = <strong>multiplikative</strong> Invarianz (Verhältnisse!). Wenn man Standard und Vergleichsreiz mit dem <strong>gleichen Faktor</strong> multipliziert, ändert sich die Antwortwahrscheinlichkeit nicht.</p></div>
+
+  <h3 class="sub">Psychophysische Methoden</h3>
+  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+    <div class="card"><h3><span class="icon">📈</span> Grenzmethode</h3><p>Reiz wird systematisch <strong>auf-/absteigend</strong> variiert bis VP „ja"/„nein" sagt. Schwelle = Umschlagpunkt. ⚠️ <strong>Erwartungsfehler</strong> und <strong>Gewöhnungsfehler</strong>.</p></div>
+    <div class="card"><h3><span class="icon">🎲</span> Konstante Reize</h3><p>Reize in <strong>zufälliger Reihenfolge</strong>. Ergibt psychometrische Funktion (S-Kurve). Schwelle = 50%-Punkt. <strong>Genaueste</strong> Methode.</p></div>
+    <div class="card"><h3><span class="icon">🎛️</span> Herstellungsmethode</h3><p>VP stellt Reiz <strong>selbst ein</strong> bis subjektiv gleich. Schnell, aber: <strong>systematische Verzerrungen</strong> (Zentraltendenz).</p></div>
+  </div>
+
+  <div class="deep-dive" id="dd-psycho">
+    <button class="deep-dive-toggle" onclick="toggleDD('dd-psycho')"><span class="dd-icon">▼</span>Vertiefung: Methoden & Signalentdeckungstheorie<span class="dd-badge">Erweitert</span></button>
+    <div class="deep-dive-content">
+      <h4>Fechners drei Methoden</h4>
+      <p><strong>1. Grenzen:</strong> Reiz ↑/↓ bis Umschlag. ⚠️ Erwartungsfehler.</p>
+      <p><strong>2. Konstante Reize:</strong> Zufällige Reihenfolge → S-Kurve. Schwelle = 50 %-Punkt.</p>
+      <p><strong>3. Herstellung:</strong> VP stellt selbst ein. Schnell, aber systematisch verzerrt.</p>
+
+      <h4>Signalentdeckungstheorie (SDT)</h4>
+      <p>Keine feste Schwelle! SDT trennt <strong>Sensitivität</strong> (d') und <strong>Antwortneigung</strong> (β).</p>
+      <div class="formula"><span class="keyword">d'</span> = z(Hit-Rate) − z(False-Alarm-Rate)</div>
+      <div class="analogie"><p><strong>Rauchmelder:</strong> d' = Unterscheidung Rauch vs. Kochdampf. β = Auslöseschwelle. Liberal → viele Fehlalarme, konservativ → verpasst echte Brände.</p></div>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz-psphy">
+    <h4>🧠 Schnellcheck</h4>
+    <p style="margin-bottom:1rem; font-size:0.9rem;">Weber-Bruch Gewicht: k=1/50. Du hältst 10 kg. Mindest-Unterschied?</p>
+    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz-psphy',this,false)">50 g</button>
+    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz-psphy',this,true)">200 g</button>
+    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz-psphy',this,false)">500 g</button>
+    <div class="quiz-feedback correct-fb">Richtig! ΔI = (1/50)·10.000 g = 200 g.</div>
+    <div class="quiz-feedback wrong-fb">ΔI = k·I = (1/50)·10.000 g = 200 g.</div>
+  </div>
+</section>
+<div class="sep">· · ·</div>

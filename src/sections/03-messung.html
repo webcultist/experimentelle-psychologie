@@ -1,0 +1,97 @@
+
+<!-- ══════════════ 3. MESSUNG ══════════════ -->
+<section id="messung">
+  <div class="section-number">03</div>
+  <h2>Messtheorie</h2>
+  <p class="section-subtitle">Psychologische Phänomene in Zahlen fassen</p>
+  <p>Messen = <strong>Homomorphismus</strong> vom empirischen (Lautstärken, Schmerz…) ins numerische Relativ (Zahlen), der Beziehungen erhält.</p>
+  <div class="def-box red">
+    <div class="label">Homomorphismus (formal)</div>
+    <p>Eine Abbildung φ: M → ℝ heißt Homomorphismus, wenn gilt:</p>
+    <div class="formula"><span class="keyword">a ≿ b</span>  <span class="symbol">⇔</span>  <span class="result">φ(a) ≥ φ(b)</span>   <span class="comment">// "genau dann, wenn"!</span></div>
+    <p>Die Richtung der Äquivalenz (⇔, nicht nur →) ist klausurrelevant: Die Zuordnung muss in <strong>beiden Richtungen</strong> gelten.</p>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="max-width:560px">
+      <rect x="20" y="10" width="200" height="135" rx="8" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="120" y="6" text-anchor="middle" font-size="11" font-weight="700" fill="#c0392b">EMPIRISCH</text>
+      <text x="60" y="48" font-size="13" fill="#2a2520">🔊 leise</text>
+      <text x="60" y="78" font-size="13" fill="#2a2520">🔊🔊 mittel</text>
+      <text x="60" y="108" font-size="13" fill="#2a2520">🔊🔊🔊 laut</text>
+      <line x1="235" y1="78" x2="325" y2="78" stroke="#2c6e49" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="280" y="68" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49">Homomorphismus</text>
+      <defs><marker id="ar" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2c6e49"/></marker></defs>
+      <rect x="340" y="10" width="200" height="135" rx="8" fill="none" stroke="#1a5276" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="440" y="6" text-anchor="middle" font-size="11" font-weight="700" fill="#1a5276">NUMERISCH</text>
+      <text x="385" y="48" font-size="14" fill="#2a2520" font-family="monospace">30 dB</text>
+      <text x="385" y="78" font-size="14" fill="#2a2520" font-family="monospace">60 dB</text>
+      <text x="385" y="108" font-size="14" fill="#2a2520" font-family="monospace">90 dB</text>
+    </svg>
+    <div class="diagram-caption">Strukturerhaltende Zuordnung: leiser-als → kleiner-als</div>
+  </div>
+
+  <h3 class="sub">Skalenniveaus</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Skala</th><th>Eigenschaft</th><th>Transformation</th><th>Beispiel</th><th>Statistik</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Nominal</strong></td><td>= / ≠</td><td>Bijektive Abb.</td><td>Geschlecht</td><td>Modus, χ²</td></tr>
+      <tr><td><strong>Ordinal</strong></td><td>+ Rangfolge</td><td>Monotone Abb.</td><td>Schulnoten</td><td>+ Median</td></tr>
+      <tr><td><strong>Intervall</strong></td><td>+ Abstände</td><td>y = ax+b</td><td>°C, IQ</td><td>+ Mittelwert</td></tr>
+      <tr><td><strong>Verhältnis</strong></td><td>+ Nullpunkt</td><td>y = ax</td><td>Reaktionszeit</td><td>+ Verhältnisse</td></tr>
+      <tr><td><strong>Absolut</strong></td><td>+ Einheit</td><td>Identität</td><td>Anzahl</td><td>Alles</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="achtung"><p><strong>„Doppelt so viel Schmerz"</strong> — nur bei Verhältnisskala! Bei Ordinalskala (1–10) sind Verhältnisaussagen unzulässig.</p></div>
+
+  <h3 class="sub">Ordinale Messung & Matrix-Aufgaben</h3>
+  <p>In <strong>jeder Klausur</strong> kommt eine Matrix-Aufgabe: Gegeben eine Vergleichsmatrix, prüfe ob eine ordinale Messung möglich ist.</p>
+
+  <div class="def-box red">
+    <div class="label">Schwache Ordnung (M, ≥)</div>
+    <p>Ein empirisches Relativ <strong>(M, ≥)</strong> ist eine schwache Ordnung, wenn für alle x, y, z ∈ M gilt:</p>
+    <div class="formula">
+<span class="keyword">Transitivität:</span>  x ≥ y ∧ y ≥ z  →  x ≥ z
+<span class="keyword">Konnexität:</span>     x ≥ y  ∨  y ≥ x     <span class="comment">// alle Paare vergleichbar</span>
+    </div>
+    <p>Wenn zusätzlich <strong>Antisymmetrie</strong> gilt (x ≥ y ∧ y ≥ x → x = y), ist es eine <strong>totale Ordnung</strong>.</p>
+  </div>
+
+  <div class="example">
+    <p><strong>Klausurbeispiel:</strong> 5 Personen (a–e) vergleichen Attraktivität paarweise. Matrix zeigt „≥" (mindestens so attraktiv wie):</p>
+    <div class="table-wrap"><table style="text-align:center; font-family:monospace;">
+      <thead><tr><th></th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th></tr></thead>
+      <tbody>
+        <tr><td><strong>a</strong></td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td><strong>b</strong></td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td><strong>c</strong></td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td><strong>d</strong></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        <tr><td><strong>e</strong></td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Prüfung Konnexität:</strong> Für jedes Paar (i,j): mindestens eine 1 in Zelle (i,j) oder (j,i)? Ja → Konnex.</p>
+    <p><strong>Prüfung Transitivität:</strong> Wenn Zeile i hat 1 bei j, und Zeile j hat 1 bei k → muss Zeile i auch 1 bei k haben. Systematisch alle Tripel prüfen!</p>
+    <p><strong>Homomorphismus:</strong> Zeilensummen → Rangzahlen: d=5, a=e=4, b=3, c=1. Wenn schwache Ordnung gilt, sind die Zeilensummen ein gültiger Homomorphismus.</p>
+  </div>
+
+  <div class="merksatz"><p><strong>Klausurtipp:</strong> Immer <strong>konkrete Gegenbeispiele</strong> mit Zeilen-/Spaltenangabe nennen! „Transitivität verletzt bei a≥b, b≥c, aber NICHT a≥c" — mit konkreten Matrixzellen.</p></div>
+
+  <div class="achtung"><p><strong>Zyklische Triaden erkennen:</strong> Suche nach Kreisbeziehungen: A schlägt B, B schlägt C, C schlägt A. Sobald ein solcher <strong>Kreis</strong> existiert, ist die Transitivität verletzt! Das ist der schnellste Weg in der Klausur.</p></div>
+
+  <div class="deep-dive" id="dd-messung">
+    <button class="deep-dive-toggle" onclick="toggleDD('dd-messung')"><span class="dd-icon">▼</span>Vertiefung: Repräsentationssatz & Likert-Problem<span class="dd-badge">Erweitert</span></button>
+    <div class="deep-dive-content">
+      <h4>Repräsentations- & Eindeutigkeitssatz</h4>
+      <p><strong>Repräsentationssatz:</strong> Unter welchen Axiomen existiert ein Homomorphismus?</p>
+      <p><strong>Eindeutigkeitssatz:</strong> Wie viele gibt es? → Bestimmt Skalenniveau! Eindeutig bis auf lineare Transformation → Intervallskala.</p>
+
+      <h4>Das Likert-Dilemma</h4>
+      <p>Likert-Skalen sind streng genommen ordinal. Mittelwerte? <strong>Pragmatisch OK</strong> bei symmetrischer Verteilung, genug Items (5+), und Annahme ~gleicher Abstände. Aber: Vorsicht bei einzelnen Items!</p>
+
+      <h4>Permissible Statistics</h4>
+      <p>Die erlaubten statistischen Operationen hängen vom Skalenniveau ab. Mittelwerte auf Nominalskalen sind sinnlos (mittleres Geschlecht?). Nur invariante Aussagen unter den erlaubten Transformationen sind sinnvoll.</p>
+    </div>
+  </div>
+</section>
+<div class="sep">· · ·</div>

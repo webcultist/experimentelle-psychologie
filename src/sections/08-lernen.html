@@ -1,0 +1,87 @@
+
+<!-- ══════════════ 8. LERNEN ══════════════ -->
+<section id="lernen">
+  <div class="section-number">08</div>
+  <h2>Lernexperimente</h2>
+  <p class="section-subtitle">Klassische Paradigmen</p>
+
+  <div class="card-grid">
+    <div class="card"><h3><span class="icon">🔗</span> Paarassoziationslernen</h3><p>Wort-Wort-Paare. Durchgänge zählen, schwierige Paare → Gedächtnisstrukturen.</p></div>
+    <div class="card"><h3><span class="icon">📊</span> Lernkurve</h3><p>Leistung vs. Übung. Schneller Anfang → Plateau (negativ beschleunigt).</p></div>
+    <div class="card"><h3><span class="icon">📋</span> Positionseffekte</h3><p><strong>Primacy</strong> (→LZG) + <strong>Recency</strong> (→AG) = U-Kurve.</p></div>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 520 230" xmlns="http://www.w3.org/2000/svg" style="max-width:520px">
+      <line x1="60" y1="195" x2="480" y2="195" stroke="#2a2520" stroke-width="1.5"/>
+      <line x1="60" y1="195" x2="60" y2="30" stroke="#2a2520" stroke-width="1.5"/>
+      <text x="270" y="225" text-anchor="middle" font-size="11" fill="#2a2520">Position →</text>
+      <text x="18" y="112" text-anchor="middle" font-size="11" fill="#2a2520" transform="rotate(-90,18,112)">Erinnerung →</text>
+      <path d="M70,48 Q100,55 130,72 Q170,100 210,140 Q250,160 290,165 Q330,163 370,152 Q400,135 430,90 Q450,65 470,45" fill="none" stroke="#c0392b" stroke-width="2.5"/>
+      <rect x="65" y="32" width="72" height="18" rx="3" fill="#2c6e49" opacity="0.15"/>
+      <text x="101" y="45" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49">Primacy</text>
+      <rect x="220" y="155" width="100" height="18" rx="3" fill="#6b5e52" opacity="0.1"/>
+      <text x="270" y="168" text-anchor="middle" font-size="10" fill="#6b5e52">Asymptote</text>
+      <rect x="418" y="30" width="72" height="18" rx="3" fill="#1a5276" opacity="0.15"/>
+      <text x="454" y="43" text-anchor="middle" font-size="10" font-weight="700" fill="#1a5276">Recency</text>
+    </svg>
+    <div class="diagram-caption">Serielle Positionskurve: Anfang + Ende besser als Mitte</div>
+  </div>
+
+  <div class="example"><p><strong>Warum U-Form?</strong> Anfang: innerlich wiederholt → <strong>LZG</strong>. Ende: noch im <strong>Arbeitsgedächtnis</strong>. Mitte: verdrängt, nicht genug wiederholt.</p></div>
+
+  <h3 class="sub">Rock: Paarassoziationslernen im Detail</h3>
+  <p>Irving Rock (1957) stellte die <strong>inkrementelle Lerntheorie</strong> in Frage — ein Klausur-Dauerbrenner!</p>
+
+  <div class="def-box red">
+    <div class="label">Substitutionsmethode (Rock, 1957)</div>
+    <p><strong>Experimentalgruppe:</strong> Nicht-gelernte Paare werden in jedem Durchgang durch <strong>neue Paare</strong> ersetzt. <strong>Kontrollgruppe:</strong> Alle Paare bleiben über Durchgänge gleich.</p>
+    <p><strong>Ergebnis:</strong> Kein Unterschied in der Lerngeschwindigkeit! → Rocks Schluss: Lernen ist <strong>All-or-None</strong> (ganz oder gar nicht), nicht inkrementell (Stück für Stück).</p>
+  </div>
+
+  <div class="vergleich">
+    <div class="vergleich-seite"><h4>All-or-None (Rock)</h4><ul><li>Item wird in <strong>einem</strong> Durchgang gelernt oder nicht</li><li>Lernkurve = Artefakt der Mittelung</li><li>Substitution hat keinen Effekt</li></ul></div>
+    <div class="vergleich-seite"><h4>Inkrementell (klassisch)</h4><ul><li>Jeder Durchgang <strong>stärkt die Verbindung</strong></li><li>Lernkurve = echte Stärkungsfunktion</li><li>Substitution sollte Lernen verlangsamen</li></ul></div>
+  </div>
+
+  <div class="achtung"><p><strong>Postman-Kritik:</strong> Rocks Ergebnis könnte ein Artefakt sein: Substituierte Paare waren zufällig <strong>leichter</strong> als die schwierigen ursprünglichen Paare (Item-Selection-Artifact). Schwierige Paare → raus, leichte → rein = unfairer Vergleich!</p></div>
+
+  <h3 class="sub">Mehrspeichermodell (Atkinson & Shiffrin, 1968)</h3>
+  <div class="flow">
+    <div class="flow-step">Sensorischer Speicher<small>~250ms</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Kurzzeitspeicher<small>~20s, 7±2</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Langzeitspeicher<small>∞ Kapazität</small></div>
+  </div>
+  <div class="merksatz"><p><strong>Glanzer & Cunitz (1966)</strong> lieferten experimentelle Evidenz: Ablenkung nach Lernen löscht Recency (KZG), nicht Primacy (LZG). → <strong>Experimentelle Dissoziation</strong> = starkes Argument für zwei getrennte Speicher!</p></div>
+
+  <div class="deep-dive" id="dd-lernen">
+    <button class="deep-dive-toggle" onclick="toggleDD('dd-lernen')"><span class="dd-icon">▼</span>Vertiefung: Behaviorismus, Kognitive Wende & Dissoziation<span class="dd-badge">Erweitert</span></button>
+    <div class="deep-dive-content">
+      <h4>Behaviorismus</h4>
+      <p>Watson: Nur Beobachtbares zählt. S→R. Skinner: operante Konditionierung (Verstärkung/Bestrafung).</p>
+
+      <h4>Kognitive Wende (~1960)</h4>
+      <p><strong>Chomsky:</strong> Sprache ≠ nur Verstärkung. <strong>Tolman:</strong> Kognitive Karten. <strong>Miller:</strong> 7±2 Chunks → interne Kapazität.</p>
+
+      <h4>Glanzer & Cunitz (1966)</h4>
+      <p>30 Sek. Ablenkung nach Lernen: <strong>Recency weg</strong> (AG gelöscht), <strong>Primacy bleibt</strong> (im LZG). → Experimentelle Dissoziation = Zwei-Speicher-Theorie.</p>
+
+      <h4>Lernkurve mathematisch</h4>
+      <div class="formula"><span class="keyword">P(n)</span> = 1 − (1−α)<sup>n</sup>   <span class="comment">// α = Lernrate</span></div>
+
+      <h4>Positiv-/Negativliste</h4>
+      <p><strong>Positiv:</strong> gelernte Paare (kommen raus). <strong>Negativ:</strong> noch nicht gelernt (weiter üben). → Itemspezifische Analyse.</p>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz3">
+    <h4>🧠 Schnellcheck</h4>
+    <p style="margin-bottom:1rem; font-size:0.9rem;">30 Sek. Ablenkung nach Lernen. Welcher Effekt verschwindet?</p>
+    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz3',this,false)">Primacy</button>
+    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz3',this,true)">Recency</button>
+    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz3',this,false)">Beide</button>
+    <div class="quiz-feedback correct-fb">Richtig! AG wird gelöscht → Recency weg. LZG intakt → Primacy bleibt.</div>
+    <div class="quiz-feedback wrong-fb">Ablenkung löscht das AG → Recency (letzte Items) verschwindet.</div>
+  </div>
+</section>
+<div class="sep">· · · · ·</div>

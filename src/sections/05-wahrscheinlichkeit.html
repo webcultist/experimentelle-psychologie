@@ -1,0 +1,42 @@
+
+<!-- ══════════════ 5. WAHRSCHEINLICHKEIT ══════════════ -->
+<section id="wahrscheinlichkeit">
+  <div class="section-number">05</div>
+  <h2>Wahrscheinlichkeitstheorie</h2>
+  <p class="section-subtitle">Zufall ist berechenbar</p>
+
+  <div class="def-box">
+    <div class="label">Grundbegriffe</div>
+    <p><strong>Ω</strong> = Ergebnismenge. <strong>A ⊆ Ω</strong> = Ereignis. <strong>P(A)</strong> ∈ [0, 1].</p>
+  </div>
+
+  <div class="formula">
+<span class="comment">/* Kolmogorov-Axiome */</span>
+<span class="keyword">1.</span> P(A) ≥ 0    <span class="keyword">2.</span> P(Ω) = 1    <span class="keyword">3.</span> A∩B=∅ ⇒ P(A∪B)=P(A)+P(B)
+  </div>
+
+  <div class="card-grid">
+    <div class="card"><h3><span class="icon">🎲</span> Bedingte W.</h3><div class="formula" style="font-size:0.82rem; padding:0.7rem;">P(A|B) = P(A∩B)/P(B)</div><p>P(A) gegeben B eingetreten.</p></div>
+    <div class="card"><h3><span class="icon">🔁</span> Bayes</h3><div class="formula" style="font-size:0.82rem; padding:0.7rem;">P(A|B) = P(B|A)·P(A)/P(B)</div><p>Prior → Posterior.</p></div>
+  </div>
+
+  <div class="example">
+    <p><strong>Bayes-Falle:</strong> Test 90 % sensitiv, 5 % Grundrate, 10 % Falsch-Positiv. P(krank|+) = (0.9×0.05)/(0.9×0.05+0.1×0.95) ≈ <strong>32 %!</strong> → Basisraten-Vernachlässigung.</p>
+  </div>
+
+  <div class="deep-dive" id="dd-wahr">
+    <button class="deep-dive-toggle" onclick="toggleDD('dd-wahr')"><span class="dd-icon">▼</span>Vertiefung: Verteilungen, Normalverteilung & ZGS<span class="dd-badge">Erweitert</span></button>
+    <div class="deep-dive-content">
+      <h4>Zufallsvariable X: Ω → ℝ</h4>
+      <div class="formula">
+<span class="keyword">E(X)</span> = Σ xᵢ·P(xᵢ)   <span class="keyword">Var(X)</span> = E[(X−μ)²]   <span class="keyword">SD</span> = √Var
+      </div>
+      <h4>Normalverteilung</h4>
+      <p><strong>Zentraler Grenzwertsatz:</strong> Summe vieler kleiner unabhängiger Einflüsse → ~normalverteilt.</p>
+      <div class="merksatz"><p><strong>68-95-99.7:</strong> ~68 % in μ±1σ, ~95 % in μ±2σ, ~99.7 % in μ±3σ.</p></div>
+      <h4>Unabhängigkeit</h4>
+      <p>A⊥B ⟺ P(A∩B) = P(A)·P(B). Zentrale Annahme vieler Tests!</p>
+    </div>
+  </div>
+</section>
+<div class="sep">· · ·</div>

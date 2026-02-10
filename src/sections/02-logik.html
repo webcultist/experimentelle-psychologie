@@ -1,0 +1,137 @@
+
+<!-- ══════════════ 2. LOGIK ══════════════ -->
+<section id="logik">
+  <div class="section-number">02</div>
+  <h2>Formale Logik</h2>
+  <p class="section-subtitle">Das Fundament korrekten Schließens</p>
+  <p>Logik prüft, ob die Schlussfolgerung <strong>zwingend aus den Prämissen folgt</strong>.</p>
+
+  <h3 class="sub">Aussagenlogik</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Junktor</th><th>Symbol</th><th>Bedeutung</th><th>Wahr, wenn…</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Negation</strong></td><td><code>¬A</code></td><td>„nicht A"</td><td>A falsch</td></tr>
+      <tr><td><strong>Konjunktion</strong></td><td><code>A ∧ B</code></td><td>„A und B"</td><td>beide wahr</td></tr>
+      <tr><td><strong>Disjunktion</strong></td><td><code>A ∨ B</code></td><td>„A oder B"</td><td>mind. eines wahr</td></tr>
+      <tr><td><strong>Konditional</strong></td><td><code>A → B</code></td><td>„wenn A, dann B"</td><td>nicht (A wahr ∧ B falsch)</td></tr>
+      <tr><td><strong>Bikonditional</strong></td><td><code>A ↔ B</code></td><td>„genau dann, wenn"</td><td>gleicher Wahrheitswert</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="achtung"><p><strong>Konditional ist kontraintuitiv!</strong> <code>A → B</code> ist nur falsch, wenn A wahr und B falsch. Bei falschem A ist es <em>immer</em> wahr (ex falso quodlibet).</p></div>
+
+  <h3 class="sub">Schlussregeln</h3>
+  <div class="diagram">
+    <svg viewBox="0 0 660 160" xmlns="http://www.w3.org/2000/svg" style="max-width:660px">
+      <rect x="10" y="10" width="150" height="140" rx="6" fill="#eaf5ee" stroke="#a9dfbf" stroke-width="1.5"/>
+      <text x="85" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49">MODUS PONENS ✓</text>
+      <text x="85" y="55" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">A → B</text>
+      <text x="85" y="75" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">A</text>
+      <line x1="40" y1="83" x2="130" y2="83" stroke="#2c6e49" stroke-width="1.5"/>
+      <text x="85" y="103" text-anchor="middle" font-size="12" fill="#2c6e49" font-weight="700" font-family="monospace">∴ B</text>
+      <text x="85" y="140" text-anchor="middle" font-size="9" fill="#6b5e52" font-style="italic">„Vorwärts"</text>
+
+      <rect x="175" y="10" width="150" height="140" rx="6" fill="#eaf5ee" stroke="#a9dfbf" stroke-width="1.5"/>
+      <text x="250" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49">MODUS TOLLENS ✓</text>
+      <text x="250" y="55" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">A → B</text>
+      <text x="250" y="75" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">¬B</text>
+      <line x1="205" y1="83" x2="295" y2="83" stroke="#2c6e49" stroke-width="1.5"/>
+      <text x="250" y="103" text-anchor="middle" font-size="12" fill="#2c6e49" font-weight="700" font-family="monospace">∴ ¬A</text>
+      <text x="250" y="140" text-anchor="middle" font-size="9" fill="#6b5e52" font-style="italic">= Falsifikation!</text>
+
+      <rect x="345" y="10" width="150" height="140" rx="6" fill="#fdf2f2" stroke="#f1948a" stroke-width="1.5"/>
+      <text x="420" y="24" text-anchor="middle" font-size="9" font-weight="700" fill="#c0392b">BEJ. KONSEQUENS ✗</text>
+      <text x="420" y="55" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">A → B</text>
+      <text x="420" y="75" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">B</text>
+      <line x1="375" y1="83" x2="465" y2="83" stroke="#c0392b" stroke-width="1.5"/>
+      <text x="420" y="103" text-anchor="middle" font-size="12" fill="#c0392b" font-weight="700" font-family="monospace">∴ A ???</text>
+      <text x="420" y="140" text-anchor="middle" font-size="9" fill="#c0392b" font-style="italic">FEHLSCHLUSS!</text>
+
+      <rect x="510" y="10" width="140" height="140" rx="6" fill="#fdf2f2" stroke="#f1948a" stroke-width="1.5"/>
+      <text x="580" y="24" text-anchor="middle" font-size="9" font-weight="700" fill="#c0392b">VERN. ANTEZEDENS ✗</text>
+      <text x="580" y="55" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">A → B</text>
+      <text x="580" y="75" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">¬A</text>
+      <line x1="535" y1="83" x2="625" y2="83" stroke="#c0392b" stroke-width="1.5"/>
+      <text x="580" y="103" text-anchor="middle" font-size="12" fill="#c0392b" font-weight="700" font-family="monospace">∴ ¬B ???</text>
+      <text x="580" y="140" text-anchor="middle" font-size="9" fill="#c0392b" font-style="italic">FEHLSCHLUSS!</text>
+    </svg>
+    <div class="diagram-caption">Nur Modus Ponens und Modus Tollens sind gültig — die rechten zwei sind typische Denkfallen</div>
+  </div>
+
+  <div class="example"><p><strong>Psychologie:</strong> „Wenn depressiv (A), dann niedrige Serotoninaktivität (B)." ✓ Person depressiv → niedrige Serotonin (Ponens). ✗ Niedrige Serotonin → depressiv? Fehlschluss! (Andere Ursachen möglich.)</p></div>
+
+  <h3 class="sub">Prädikatenlogik</h3>
+  <div class="def-box purple">
+    <div class="label">Quantoren</div>
+    <p><code>∀x: P(x)</code> — „Für alle x gilt P." <code>∃x: P(x)</code> — „Es gibt mind. ein x mit P."</p>
+  </div>
+  <div class="merksatz"><p><strong>Negation:</strong> <code>¬(∀x: P(x)) ≡ ∃x: ¬P(x)</code> — Ein Gegenbeispiel widerlegt die Allaussage → Basis der <strong>Falsifikation</strong>!</p></div>
+
+  <h3 class="sub">Mengenlehre & Relationen</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Abbildungstyp</th><th>Eigenschaft</th><th>Beispiel</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Injektiv</strong></td><td>Verschiedene Urbilder → verschiedene Bilder</td><td>Matrikelnummer → Student</td></tr>
+      <tr><td><strong>Surjektiv</strong></td><td>Jedes Element der Zielmenge wird getroffen</td><td>Noten → {1,2,3,4,5}</td></tr>
+      <tr><td><strong>Bijektiv</strong></td><td>Injektiv + Surjektiv → umkehrbar</td><td>Nominalskala-Transformation</td></tr>
+    </tbody>
+  </table></div>
+  <div class="def-box blue">
+    <div class="label">Relationen</div>
+    <p>Eine <strong>n-stellige Relation</strong> R ⊆ A₁ × A₂ × … × Aₙ ist eine Teilmenge des kartesischen Produkts. Wichtig für Messtheorie: Empirisches Relativ = (M, R) mit einer Relation R auf M.</p>
+  </div>
+
+  <h3 class="sub">Wahrheitstabellen konstruieren</h3>
+  <p>Klausuraufgabe: Welcher Operator macht <code>(A ∧ B) ? (A → B)</code> zur <strong>Tautologie</strong>?</p>
+  <div class="table-wrap"><table style="text-align:center; font-family:monospace;">
+    <thead><tr><th>A</th><th>B</th><th>A∧B</th><th>A→B</th><th>∧B ? A→B</th></tr></thead>
+    <tbody>
+      <tr><td>w</td><td>w</td><td>w</td><td>w</td><td>? = →: w</td></tr>
+      <tr><td>w</td><td>f</td><td>f</td><td>f</td><td>? = →: w</td></tr>
+      <tr><td>f</td><td>w</td><td>f</td><td>w</td><td>? = →: w</td></tr>
+      <tr><td>f</td><td>f</td><td>f</td><td>w</td><td>? = →: w</td></tr>
+    </tbody>
+  </table></div>
+  <div class="merksatz"><p><strong>Antwort:</strong> <code>→</code> (Konditional) macht es zur Tautologie! <code>(A ∧ B) → (A → B)</code> ist immer wahr. Trick: Bei falschem Antezedens (A∧B = f) ist das Konditional automatisch wahr.</p></div>
+
+  <h3 class="sub">Kontraposition bilden</h3>
+  <div class="example"><p><strong>Klausurbeispiel:</strong> „Wenn jemand neurotisch ist, dann hat er Angst." Kontraposition: <strong>„Wenn jemand keine Angst hat, dann ist er nicht neurotisch."</strong> Formal: (A → B) ≡ (¬B → ¬A).</p></div>
+
+  <div class="deep-dive" id="dd-logik">
+    <button class="deep-dive-toggle" onclick="toggleDD('dd-logik')"><span class="dd-icon">▼</span>Vertiefung: Tautologien, De Morgan & Hypothesenlogik<span class="dd-badge">Erweitert</span></button>
+    <div class="deep-dive-content">
+      <h4>Tautologien (immer wahr)</h4>
+      <div class="formula">
+<span class="keyword">Widerspruch:</span>       ¬(A ∧ ¬A)            <span class="comment">// nie gleichzeitig</span>
+<span class="keyword">Ausgeschl. Drittes:</span> A ∨ ¬A               <span class="comment">// eines muss gelten</span>
+<span class="keyword">Kontraposition:</span>     (A→B) ↔ (¬B→¬A)      <span class="comment">// Basis Modus Tollens</span>
+      </div>
+
+      <h4>De Morgan</h4>
+      <div class="formula">
+<span class="keyword">¬(A ∧ B)</span> <span class="symbol">≡</span> <span class="result">¬A ∨ ¬B</span>
+<span class="keyword">¬(A ∨ B)</span> <span class="symbol">≡</span> <span class="result">¬A ∧ ¬B</span>
+      </div>
+      <div class="analogie"><p>„Nicht (hungrig UND müde)" = „Nicht hungrig ODER nicht müde." Das „und" wird zum „oder"!</p></div>
+
+      <h4>Wissenschaftliches Schließen = Modus Tollens</h4>
+      <div class="formula">
+<span class="keyword">P1:</span> Wenn Theorie T → Effekt E        <span class="comment">(T → E)</span>
+<span class="keyword">P2:</span> Effekt E tritt NICHT auf           <span class="comment">(¬E)</span>
+<span class="result">→</span>  Theorie T stimmt nicht               <span class="comment">(¬T) ✓</span>
+<span class="comment">// ABER: Wenn E eintritt → T bestätigt? NEIN! (Bej. d. Konsequens)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz1">
+    <h4>🧠 Schnellcheck</h4>
+    <p style="margin-bottom:1rem; font-size:0.9rem;">„Wenn Regen (A), dann Straße nass (B)." Straße trocken (¬B). Was folgt?</p>
+    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz1',this,false)">Es regnet</button>
+    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz1',this,true)">¬A (kein Regen) — Modus Tollens</button>
+    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz1',this,false)">Man kann nichts folgern</button>
+    <div class="quiz-feedback correct-fb">Richtig! Modus Tollens: A→B und ¬B → ¬A.</div>
+    <div class="quiz-feedback wrong-fb">Modus Tollens: A→B und ¬B → also ¬A.</div>
+  </div>
+</section>
+<div class="sep">· · ·</div>

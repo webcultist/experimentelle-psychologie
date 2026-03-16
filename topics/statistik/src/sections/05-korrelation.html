@@ -1,0 +1,133 @@
+<!-- ═══════════════ 5 · KORRELATION ═══════════════ -->
+<section id="korrelation">
+<div class="section-number">05</div>
+<h2>Korrelation</h2>
+<p class="section-subtitle">Zusammenhangsmaße, Korrelationskoeffizienten und partielle Korrelation</p>
+
+<p>Korrelationsmaße quantifizieren den <strong>linearen Zusammenhang</strong> zwischen zwei Merkmalen. Die Art des Zusammenhangsmaßes hängt vom Skalenniveau der beteiligten Variablen ab.</p>
+
+<h3 class="sub">Kovarianz</h3>
+
+<div class="def-box">
+  <div class="label">Definition</div>
+  <p>Die <strong>empirische Kovarianz</strong> zweier Merkmale X und Y:</p>
+  <p style="text-align:center; font-size:1.05rem">s̃<sub>xy</sub> = (1/n) · Σ(xᵢ − x̄)(yᵢ − ȳ)</p>
+  <p>Positiv → gleichsinniger Zusammenhang · Negativ → gegensinnig · Null → kein linearer Zusammenhang</p>
+</div>
+
+<h3 class="sub">Pearson-Korrelation r</h3>
+
+<div class="def-box green">
+  <div class="label">Definition</div>
+  <p>Der <strong>Produkt-Moment-Korrelationskoeffizient</strong> (Pearson):</p>
+  <p style="text-align:center; font-size:1.05rem">r = s̃<sub>xy</sub> / (s̃<sub>x</sub> · s̃<sub>y</sub>)</p>
+  <p>Es gilt immer: <strong>−1 ≤ r ≤ +1</strong>. Setzt Intervallskalenniveau voraus.</p>
+</div>
+
+<div class="card-grid">
+  <div class="card">
+    <h3>r = +1</h3>
+    <p>Perfekt positiver linearer Zusammenhang. Alle Punkte liegen auf einer Geraden mit positiver Steigung.</p>
+  </div>
+  <div class="card">
+    <h3>r = 0</h3>
+    <p>Kein linearer Zusammenhang. Aber: Es kann trotzdem ein nichtlinearer Zusammenhang bestehen!</p>
+  </div>
+  <div class="card">
+    <h3>r = −1</h3>
+    <p>Perfekt negativer linearer Zusammenhang. Alle Punkte auf einer Geraden mit negativer Steigung.</p>
+  </div>
+</div>
+
+<div class="achtung">
+  <p><strong>Korrelation ≠ Kausalität!</strong> Ein hoher Korrelationskoeffizient zeigt nur einen statistischen Zusammenhang, keine Ursache-Wirkungs-Beziehung. Klassiker: Eisverkauf und Ertrinkungsfälle korrelieren positiv — die gemeinsame Ursache ist die Temperatur.</p>
+</div>
+
+<h3 class="sub">Spearman-Rangkorrelation r<sub>s</sub></h3>
+
+<div class="def-box blue">
+  <div class="label">Definition</div>
+  <p>Für ordinale Daten: Man ersetzt die Werte durch ihre Ränge und berechnet die Pearson-Korrelation der Ränge. Bei keinen Bindungen gilt die vereinfachte Formel:</p>
+  <p style="text-align:center; font-size:1.05rem">r<sub>s</sub> = 1 − 6·Σdᵢ² / (n·(n²−1))</p>
+  <p>wobei dᵢ = Rang(xᵢ) − Rang(yᵢ) die Rangdifferenzen sind.</p>
+</div>
+
+<h3 class="sub">Zusammenhangsmaße für kategoriale Daten</h3>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Maß</th><th>Anwendung</th><th>Wertebereich</th></tr>
+  <tr><td><strong>φ-Koeffizient</strong></td><td>Zwei dichotome Merkmale (2×2-Tafel)</td><td>−1 bis +1</td></tr>
+  <tr><td><strong>Odds Ratio (OR)</strong></td><td>Vierfeldertafel: Chancenverhältnis</td><td>0 bis ∞ (1 = kein Zusammenhang)</td></tr>
+  <tr><td><strong>Kontingenzkoeffizient</strong></td><td>Allgemeine Kontingenztafeln</td><td>0 bis 1</td></tr>
+</table>
+</div>
+
+<div class="example">
+  <p><strong>Vierfeldertafel:</strong> In einer 2×2-Tafel mit Zellen a, b, c, d (zeilenweise) berechnet sich:</p>
+  <p>φ = (a·d − b·c) / √((a+b)(c+d)(a+c)(b+d))</p>
+  <p>OR = (a·d) / (b·c) — ein OR von 3 bedeutet: Die Chance für das Ereignis ist in Gruppe 1 dreimal so hoch wie in Gruppe 2.</p>
+</div>
+
+<h3 class="sub">Partielle Korrelation</h3>
+
+<p>Die <strong>partielle Korrelation</strong> r<sub>xy.z</sub> misst den Zusammenhang zwischen X und Y, nachdem der Einfluss eines dritten Merkmals Z statistisch eliminiert (herauspartialisiert) wurde.</p>
+
+<div class="def-box purple">
+  <div class="label">Formel</div>
+  <p style="text-align:center; font-size:1.05rem">r<sub>xy.z</sub> = (r<sub>xy</sub> − r<sub>xz</sub> · r<sub>yz</sub>) / √((1 − r²<sub>xz</sub>) · (1 − r²<sub>yz</sub>))</p>
+</div>
+
+<div class="example">
+  <p><strong>Scheinkorrelation:</strong> Mit r<sub>xy</sub> = 0.5, r<sub>xz</sub> = 0.5, r<sub>yz</sub> = 0.5 ergibt sich:</p>
+  <p>r<sub>xy.z</sub> = (0.5 − 0.5·0.5) / √((1−0.25)·(1−0.25)) = 0.25/0.75 = 0.33</p>
+  <p>Der Zusammenhang zwischen X und Y wird schwächer, wenn Z kontrolliert wird.</p>
+</div>
+
+<div class="example">
+  <p><strong>Suppression:</strong> Lernaufwand (X), Prüfungsleistung (Y), Prüfungsangst (Z):</p>
+  <p>r<sub>xy</sub> = +0.2, r<sub>xz</sub> = +0.8, r<sub>yz</sub> = −0.4</p>
+  <p>r<sub>xy.z</sub> = (0.2 − 0.8·(−0.4)) / √((1−0.64)·(1−0.16)) = 0.52/0.55 ≈ <strong>+0.95</strong></p>
+  <p>Nach Kontrolle der Angst wird der wahre Zusammenhang zwischen Lernen und Leistung sichtbar!</p>
+</div>
+
+<!-- Deep Dive -->
+<div class="deep-dive" id="dd5a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd5a')">
+    <span class="dd-icon">▼</span>
+    Herleitung der partiellen Korrelation
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Idee: Herauspartialisieren</h4>
+    <p>Man berechnet die Regression von X auf Z und von Y auf Z. Die Residuen (x − a<sub>xz</sub> − b<sub>xz</sub>·z) und (y − a<sub>yz</sub> − b<sub>yz</sub>·z) repräsentieren den Anteil von X bzw. Y, der nicht durch Z erklärt wird.</p>
+    <p>Die partielle Korrelation r<sub>xy.z</sub> ist dann die Pearson-Korrelation dieser Residuen.</p>
+    <h4>Herleitung</h4>
+    <p>Mithilfe der Bilinearität der Kovarianz lässt sich die <strong>partielle Kovarianz</strong> als s̃<sub>xy.z</sub> = s̃<sub>xy</sub> − s̃<sub>xz</sub>·s̃<sub>yz</sub>/s̃²<sub>z</sub> herleiten. Die Residualvarianzen sind s̃²(x−b<sub>xz</sub>z) = s̃²<sub>x</sub>·(1−r²<sub>xz</sub>) und analog für Y. Division der partiellen Kovarianz durch die Residual-Standardabweichungen ergibt die Korrelationsformel r<sub>xy.z</sub> = (r<sub>xy</sub> − r<sub>xz</sub>·r<sub>yz</sub>) / √((1−r²<sub>xz</sub>)·(1−r²<sub>yz</sub>)).</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz8">
+  <h4>🧪 Wissenscheck: Korrelation</h4>
+  <p>Der Korrelationskoeffizient r = −0.85 bedeutet:</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz8',this,false)">Es besteht kein Zusammenhang</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz8',this,false)">X verursacht Y in negativer Richtung</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz8',this,true)" data-correct="true">Es besteht ein starker negativer linearer Zusammenhang</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz8',this,false)">85% der Varianz werden erklärt</button>
+  <div class="quiz-feedback correct-fb">Richtig! r = −0.85 zeigt einen starken negativen linearen Zusammenhang. Korrelation sagt nichts über Kausalität aus, und der erklärte Varianzanteil wäre r² = 0.72 (72%).</div>
+  <div class="quiz-feedback wrong-fb">r = −0.85 bedeutet: starker negativer linearer Zusammenhang. Der erklärte Varianzanteil ist r² = 0.72, nicht 0.85. Und Korrelation impliziert keine Kausalität.</div>
+</div>
+
+<div class="quiz" id="quiz9">
+  <h4>🧪 Wissenscheck: Spearman</h4>
+  <p>Wann ist die Spearman-Rangkorrelation r<sub>s</sub> dem Pearson-r vorzuziehen?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz9',this,false)">Wenn die Daten normalverteilt sind</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz9',this,true)" data-correct="true">Wenn die Daten ordinalskaliert sind oder der Zusammenhang monoton, aber nicht linear ist</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz9',this,false)">Wenn n > 100</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz9',this,false)">Wenn die Varianz groß ist</button>
+  <div class="quiz-feedback correct-fb">Richtig! Spearman ist für ordinale Daten geeignet und erfasst auch monotone nichtlineare Zusammenhänge, da er nur die Rangordnung berücksichtigt.</div>
+  <div class="quiz-feedback wrong-fb">Spearman eignet sich für ordinal skalierte Daten und monotone (nicht notwendig lineare) Zusammenhänge — er basiert auf Rängen statt Originalwerten.</div>
+</div>
+
+</section>

@@ -154,6 +154,7 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
 <div id="progressBar"></div>
 
 <header>
+  <a href="../../index.html" style="display:inline-block;font-size:0.78rem;color:var(--text-secondary);text-decoration:none;margin-bottom:0.8rem" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-secondary)'">&larr; Alle Themen</a>
   <div class="uni-badge">Universität Tübingen · Fachbereich Psychologie</div>
   <h1>Experimentelle <em>Psychologie</em></h1>
   <p class="subtitle">Lernhilfe zum Buch von <strong>Jürgen Heller</strong> — kompakt, verständlich, prüfungsrelevant</p>
@@ -192,7 +193,7 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
 
   <div class="card-grid">
     <div class="card"><h3><span class="icon">🔬</span> Logischer Empirismus</h3><p>Nur <strong>empirisch überprüfbare</strong> Aussagen sind wissenschaftlich. Wiener Kreis (Carnap, Schlick): Theorie + Beobachtung = Erkenntnis.</p></div>
-    <div class="card"><h3><span class="icon">❌</span> Falsifikationismus</h3><p><strong>Popper:</strong> Theorien können nie bewiesen, nur <strong>widerlegt</strong> werden. Wissenschaftlich = prinzipiell falsifizierbar.</p></div>
+    <div class="card"><h3><span class="icon">❌</span> Kritischer Rationalismus</h3><p><strong>Popper (Falsifikationismus):</strong> Theorien können nie bewiesen, nur <strong>widerlegt</strong> werden. Wissenschaftlich = prinzipiell falsifizierbar.</p></div>
     <div class="card"><h3><span class="icon">🔄</span> Paradigmenwechsel</h3><p><strong>Kuhn:</strong> Wissenschaft verläuft in Revolutionen. Ein Paradigma dominiert, bis Anomalien einen Umsturz erzwingen.</p></div>
   </div>
 
@@ -227,6 +228,46 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
       <p><strong>Harter Kern</strong> (unveränderbar) + <strong>Schutzgürtel</strong> (anpassbar). Anomalien treffen erst den Schutzgürtel. Erst wenn das Programm „degenerativ" wird → Ablösung.</p>
     </div>
   </div>
+
+  <h3 class="sub">Statement View vs. Non-Statement View</h3>
+  <p>In der Klausur ein Dauerbrenner: Wie unterscheiden sich die beiden Auffassungen von Theorien?</p>
+  <div class="vergleich">
+    <div class="vergleich-seite"><h4>Statement View</h4><ul><li>Theorien = <strong>Menge von Aussagen</strong> (Sätze)</li><li>Logischer Empirismus, Popper</li><li>Theorie ist sprachliches Gebilde</li><li>Verifikation/Falsifikation von Sätzen</li></ul></div>
+    <div class="vergleich-seite"><h4>Non-Statement View</h4><ul><li>Theorien = <strong>Mengen von Modellen</strong></li><li>Sneed/Stegmüller: Strukturalismus</li><li>Formale Rekonstruktion: <code>T = (K, I)</code></li><li>K = math. Kern, I = intendierte Anwendungen</li></ul></div>
+  </div>
+  <div class="def-box purple">
+    <div class="label">Strukturalismus (Sneed/Stegmüller)</div>
+    <p>Theorie = <strong>geordnetes Paar T = (K, I)</strong>. Der <strong>Kern K</strong> enthält die formale Struktur (Axiome, Modelle). <strong>I</strong> sind die intendierten Anwendungen — reale Systeme, die der Theorie genügen sollen. Vorteil: Theorien können sich entwickeln, ohne völlig aufgegeben zu werden (Kern bleibt, I ändert sich).</p>
+  </div>
+
+  <h3 class="sub">Erkenntnistheoretische Grundpositionen</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Position</th><th>Kernaussage</th><th>Vertreter</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Empirismus</strong></td><td>Erkenntnis durch <strong>Sinneserfahrung</strong></td><td>Locke, Hume, Wiener Kreis</td></tr>
+      <tr><td><strong>Rationalismus</strong></td><td>Erkenntnis durch <strong>Vernunft/Denken</strong></td><td>Descartes, Leibniz</td></tr>
+      <tr><td><strong>Realismus</strong></td><td>Welt existiert <strong>unabhängig</strong> vom Beobachter</td><td>Popper</td></tr>
+      <tr><td><strong>Idealismus</strong></td><td>Realität ist <strong>geistabhängig</strong></td><td>Berkeley, Kant (teilw.)</td></tr>
+      <tr><td><strong>Skeptizismus</strong></td><td><strong>Sichere</strong> Erkenntnis ist unmöglich</td><td>Hume (Induktionsproblem)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">Theorienbildung: Gütekriterien</h3>
+  <div class="card-grid">
+    <div class="card"><h3><span class="icon">🎯</span> Terminol. Exaktheit</h3><p><strong>Klassifikatorisch</strong> (=/ ≠), <strong>komparativ</strong> (>, <), <strong>quantitativ</strong> (Zahlen). Je quantitativer, desto präziser.</p></div>
+    <div class="card"><h3><span class="icon">🪒</span> Sparsamkeit</h3><p><strong>Ockhams Rasiermesser:</strong> Die einfachste Erklärung gewinnt. Weniger Parameter = besser.</p></div>
+    <div class="card"><h3><span class="icon">⚖️</span> Anpassung vs. Generalisierung</h3><p><strong>Overfitting:</strong> Theorie passt perfekt auf Daten, versagt bei neuen. Gute Theorie = robust generalisierbar.</p></div>
+  </div>
+  <div class="achtung"><p><strong>Klausurfalle:</strong> Eine Theorie mit perfekter Anpassungsgüte ist nicht automatisch gut — sie kann <strong>overfitted</strong> sein! Prüfbarkeit und Sparsamkeit sind mindestens ebenso wichtig.</p></div>
+
+  <h3 class="sub">Paradigmen in der Psychologie</h3>
+  <div class="flow" style="flex-wrap:wrap;">
+    <div class="flow-step">Behaviorismus<small>Watson, Skinner</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Anomalien<small>Chomsky, Tolman</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Kognitive Wende<small>~1960</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Neuropsychologie<small>EEG, fMRI</small></div>
+  </div>
+  <div class="example"><p><strong>Behaviorismus:</strong> Watson (S→R), Skinner-Box (Verstärkung). <strong>Anomalien:</strong> Chomsky (Sprache ≠ nur Verstärkung), Tolman (kognitive Karten bei Ratten). <strong>Kritik Neuroimaging:</strong> Lachs-fMRI-Studie — selbst bei totem Lachs „Aktivierung" ohne Korrektur für multiples Testen!</p></div>
 
   <div class="quiz" id="quiz-wiss">
     <h4>🧠 Schnellcheck</h4>
@@ -308,6 +349,36 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
   </div>
   <div class="merksatz"><p><strong>Negation:</strong> <code>¬(∀x: P(x)) ≡ ∃x: ¬P(x)</code> — Ein Gegenbeispiel widerlegt die Allaussage → Basis der <strong>Falsifikation</strong>!</p></div>
 
+  <h3 class="sub">Mengenlehre & Relationen</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Abbildungstyp</th><th>Eigenschaft</th><th>Beispiel</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Injektiv</strong></td><td>Verschiedene Urbilder → verschiedene Bilder</td><td>Matrikelnummer → Student</td></tr>
+      <tr><td><strong>Surjektiv</strong></td><td>Jedes Element der Zielmenge wird getroffen</td><td>Noten → {1,2,3,4,5}</td></tr>
+      <tr><td><strong>Bijektiv</strong></td><td>Injektiv + Surjektiv → umkehrbar</td><td>Nominalskala-Transformation</td></tr>
+    </tbody>
+  </table></div>
+  <div class="def-box blue">
+    <div class="label">Relationen</div>
+    <p>Eine <strong>n-stellige Relation</strong> R ⊆ A₁ × A₂ × … × Aₙ ist eine Teilmenge des kartesischen Produkts. Wichtig für Messtheorie: Empirisches Relativ = (M, R) mit einer Relation R auf M.</p>
+  </div>
+
+  <h3 class="sub">Wahrheitstabellen konstruieren</h3>
+  <p>Klausuraufgabe: Welcher Operator macht <code>(A ∧ B) ? (A → B)</code> zur <strong>Tautologie</strong>?</p>
+  <div class="table-wrap"><table style="text-align:center; font-family:monospace;">
+    <thead><tr><th>A</th><th>B</th><th>A∧B</th><th>A→B</th><th>∧B ? A→B</th></tr></thead>
+    <tbody>
+      <tr><td>w</td><td>w</td><td>w</td><td>w</td><td>? = →: w</td></tr>
+      <tr><td>w</td><td>f</td><td>f</td><td>f</td><td>? = →: w</td></tr>
+      <tr><td>f</td><td>w</td><td>f</td><td>w</td><td>? = →: w</td></tr>
+      <tr><td>f</td><td>f</td><td>f</td><td>w</td><td>? = →: w</td></tr>
+    </tbody>
+  </table></div>
+  <div class="merksatz"><p><strong>Antwort:</strong> <code>→</code> (Konditional) macht es zur Tautologie! <code>(A ∧ B) → (A → B)</code> ist immer wahr. Trick: Bei falschem Antezedens (A∧B = f) ist das Konditional automatisch wahr.</p></div>
+
+  <h3 class="sub">Kontraposition bilden</h3>
+  <div class="example"><p><strong>Klausurbeispiel:</strong> „Wenn jemand neurotisch ist, dann hat er Angst." Kontraposition: <strong>„Wenn jemand keine Angst hat, dann ist er nicht neurotisch."</strong> Formal: (A → B) ≡ (¬B → ¬A).</p></div>
+
   <div class="deep-dive" id="dd-logik">
     <button class="deep-dive-toggle" onclick="toggleDD('dd-logik')"><span class="dd-icon">▼</span>Vertiefung: Tautologien, De Morgan & Hypothesenlogik<span class="dd-badge">Erweitert</span></button>
     <div class="deep-dive-content">
@@ -353,6 +424,12 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
   <h2>Messtheorie</h2>
   <p class="section-subtitle">Psychologische Phänomene in Zahlen fassen</p>
   <p>Messen = <strong>Homomorphismus</strong> vom empirischen (Lautstärken, Schmerz…) ins numerische Relativ (Zahlen), der Beziehungen erhält.</p>
+  <div class="def-box red">
+    <div class="label">Homomorphismus (formal)</div>
+    <p>Eine Abbildung φ: M → ℝ heißt Homomorphismus, wenn gilt:</p>
+    <div class="formula"><span class="keyword">a ≿ b</span>  <span class="symbol">⇔</span>  <span class="result">φ(a) ≥ φ(b)</span>   <span class="comment">// "genau dann, wenn"!</span></div>
+    <p>Die Richtung der Äquivalenz (⇔, nicht nur →) ist klausurrelevant: Die Zuordnung muss in <strong>beiden Richtungen</strong> gelten.</p>
+  </div>
 
   <div class="diagram">
     <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="max-width:560px">
@@ -386,6 +463,40 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
   </table></div>
 
   <div class="achtung"><p><strong>„Doppelt so viel Schmerz"</strong> — nur bei Verhältnisskala! Bei Ordinalskala (1–10) sind Verhältnisaussagen unzulässig.</p></div>
+
+  <h3 class="sub">Ordinale Messung & Matrix-Aufgaben</h3>
+  <p>In <strong>jeder Klausur</strong> kommt eine Matrix-Aufgabe: Gegeben eine Vergleichsmatrix, prüfe ob eine ordinale Messung möglich ist.</p>
+
+  <div class="def-box red">
+    <div class="label">Schwache Ordnung (M, ≥)</div>
+    <p>Ein empirisches Relativ <strong>(M, ≥)</strong> ist eine schwache Ordnung, wenn für alle x, y, z ∈ M gilt:</p>
+    <div class="formula">
+<span class="keyword">Transitivität:</span>  x ≥ y ∧ y ≥ z  →  x ≥ z
+<span class="keyword">Konnexität:</span>     x ≥ y  ∨  y ≥ x     <span class="comment">// alle Paare vergleichbar</span>
+    </div>
+    <p>Wenn zusätzlich <strong>Antisymmetrie</strong> gilt (x ≥ y ∧ y ≥ x → x = y), ist es eine <strong>totale Ordnung</strong>.</p>
+  </div>
+
+  <div class="example">
+    <p><strong>Klausurbeispiel:</strong> 5 Personen (a–e) vergleichen Attraktivität paarweise. Matrix zeigt „≥" (mindestens so attraktiv wie):</p>
+    <div class="table-wrap"><table style="text-align:center; font-family:monospace;">
+      <thead><tr><th></th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th></tr></thead>
+      <tbody>
+        <tr><td><strong>a</strong></td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td><strong>b</strong></td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td><strong>c</strong></td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td><strong>d</strong></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        <tr><td><strong>e</strong></td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Prüfung Konnexität:</strong> Für jedes Paar (i,j): mindestens eine 1 in Zelle (i,j) oder (j,i)? Ja → Konnex.</p>
+    <p><strong>Prüfung Transitivität:</strong> Wenn Zeile i hat 1 bei j, und Zeile j hat 1 bei k → muss Zeile i auch 1 bei k haben. Systematisch alle Tripel prüfen!</p>
+    <p><strong>Homomorphismus:</strong> Zeilensummen → Rangzahlen: d=5, a=e=4, b=3, c=1. Wenn schwache Ordnung gilt, sind die Zeilensummen ein gültiger Homomorphismus.</p>
+  </div>
+
+  <div class="merksatz"><p><strong>Klausurtipp:</strong> Immer <strong>konkrete Gegenbeispiele</strong> mit Zeilen-/Spaltenangabe nennen! „Transitivität verletzt bei a≥b, b≥c, aber NICHT a≥c" — mit konkreten Matrixzellen.</p></div>
+
+  <div class="achtung"><p><strong>Zyklische Triaden erkennen:</strong> Suche nach Kreisbeziehungen: A schlägt B, B schlägt C, C schlägt A. Sobald ein solcher <strong>Kreis</strong> existiert, ist die Transitivität verletzt! Das ist der schnellste Weg in der Klausur.</p></div>
 
   <div class="deep-dive" id="dd-messung">
     <button class="deep-dive-toggle" onclick="toggleDD('dd-messung')"><span class="dd-icon">▼</span>Vertiefung: Repräsentationssatz & Likert-Problem<span class="dd-badge">Erweitert</span></button>
@@ -436,6 +547,42 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
   </div>
 
   <div class="example"><p><strong>Weber:</strong> 1 kg → 50 g extra merkbar. 20 kg → ~400 g nötig. Weber-Bruch Gewicht: k ≈ 1/50. Tonhöhe: k ≈ 1/333!</p></div>
+
+  <h3 class="sub">Formale Psychophysik (Klausurrelevant!)</h3>
+  <div class="def-box red">
+    <div class="label">Punkt der subjektiven Gleichheit (PSE)</div>
+    <p>Derjenige Vergleichsreiz x, bei dem die Wahrscheinlichkeit einer „größer"-Antwort genau <strong>50 %</strong> beträgt:</p>
+    <div class="formula"><span class="keyword">p(x₀.₅, s)</span> = <span class="result">0.5</span>   <span class="comment">// s = Standardreiz</span></div>
+  </div>
+
+  <div class="def-box red">
+    <div class="label">Ebenmerklicher Unterschied (jnd / π-Unterschied)</div>
+    <p>Der Abstand vom PSE zu dem Reiz, bei dem die Wahrscheinlichkeit π (z.B. 0.75) beträgt:</p>
+    <div class="formula"><span class="keyword">Δπ</span> = x<sub>π</sub> − x<sub>0.5</sub>   <span class="comment">// π-Vergleichsreiz minus PSE</span></div>
+  </div>
+
+  <h3 class="sub">Webersches Gesetz — Formale Varianten</h3>
+  <p>In der Klausur kommen <strong>6 Formelvarianten</strong> zum Ankreuzen. Nur einige sind korrekt!</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Formel</th><th>Korrekt?</th><th>Erklärung</th></tr></thead>
+    <tbody>
+      <tr><td><code>p(x, s) = p(λx, λs)</code></td><td><strong>Ja</strong></td><td>Webersches Gesetz: Verhältnisse bleiben gleich bei Skalierung</td></tr>
+      <tr><td><code>λ·p(x, s) = p(λx, λs)</code></td><td>Nein</td><td>Wahrscheinlichkeit wird nicht mit λ skaliert</td></tr>
+      <tr><td><code>Δπ(λs) = λ·Δπ(s)</code></td><td><strong>Ja</strong></td><td>jnd skaliert proportional mit Standardreiz</td></tr>
+      <tr><td><code>Δπ(λs) = Δπ(s)</code></td><td>Nein</td><td>jnd ist NICHT konstant über verschiedene s</td></tr>
+      <tr><td><code>x₀.₅(λs) = λ·x₀.₅(s)</code></td><td><strong>Ja</strong></td><td>PSE skaliert mit</td></tr>
+      <tr><td><code>p(x+a, s+a) = p(x, s)</code></td><td>Nein</td><td>Additive Invarianz gilt NICHT (nur multiplikative)</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="merksatz"><p><strong>Eselsbrücke:</strong> Weber = <strong>multiplikative</strong> Invarianz (Verhältnisse!). Wenn man Standard und Vergleichsreiz mit dem <strong>gleichen Faktor</strong> multipliziert, ändert sich die Antwortwahrscheinlichkeit nicht.</p></div>
+
+  <h3 class="sub">Psychophysische Methoden</h3>
+  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+    <div class="card"><h3><span class="icon">📈</span> Grenzmethode</h3><p>Reiz wird systematisch <strong>auf-/absteigend</strong> variiert bis VP „ja"/„nein" sagt. Schwelle = Umschlagpunkt. ⚠️ <strong>Erwartungsfehler</strong> und <strong>Gewöhnungsfehler</strong>.</p></div>
+    <div class="card"><h3><span class="icon">🎲</span> Konstante Reize</h3><p>Reize in <strong>zufälliger Reihenfolge</strong>. Ergibt psychometrische Funktion (S-Kurve). Schwelle = 50%-Punkt. <strong>Genaueste</strong> Methode.</p></div>
+    <div class="card"><h3><span class="icon">🎛️</span> Herstellungsmethode</h3><p>VP stellt Reiz <strong>selbst ein</strong> bis subjektiv gleich. Schnell, aber: <strong>systematische Verzerrungen</strong> (Zentraltendenz).</p></div>
+  </div>
 
   <div class="deep-dive" id="dd-psycho">
     <button class="deep-dive-toggle" onclick="toggleDD('dd-psycho')"><span class="dd-icon">▼</span>Vertiefung: Methoden & Signalentdeckungstheorie<span class="dd-badge">Erweitert</span></button>
@@ -533,6 +680,8 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
 
   <div class="analogie"><p><strong>Kochen:</strong> UV = Zutat. AV = Geschmack. Störvar. = Ofentemp. Konfundierung = Salz UND Pfeffer gleichzeitig ändern.</p></div>
 
+  <div class="merksatz"><p><strong>Max-Kon-Min-Prinzip (Kerlinger):</strong> <strong>Max</strong>imiere Primärvarianz (starke UV-Manipulation). <strong>Kon</strong>trolliere Sekundärvarianz (Störvariablen ausschalten). <strong>Min</strong>imiere Fehlervarianz (präzise Messung, große Stichprobe).</p></div>
+
   <h3 class="sub">Designs</h3>
   <div class="vergleich">
     <div class="vergleich-seite"><h4>Between-Subjects 👤👤</h4><ul><li>Verschiedene Gruppen</li><li>Keine Übertragung</li><li>Mehr VPn nötig</li><li>Individuelle Unterschiede = Fehler</li></ul></div>
@@ -543,6 +692,55 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
     <div class="label">Validität</div>
     <p><strong>Intern:</strong> UV→AV eindeutig? <strong>Extern:</strong> Generalisierbar? <strong>Konstrukt:</strong> Misst es das Konstrukt? <strong>Statistisch:</strong> Effekt korrekt?</p>
   </div>
+
+  <h3 class="sub">Randomisierung vs. Parallelisierung</h3>
+  <p>In <strong>jeder Klausur</strong> gefragt: „Nennen Sie zwei Vorteile der Randomisierung gegenüber der Parallelisierung!"</p>
+  <div class="vergleich">
+    <div class="vergleich-seite"><h4>Randomisierung</h4><ul><li>Kontrolliert <strong>alle</strong> SVs (auch unbekannte!)</li><li>Einfach durchführbar</li><li>Keine Vorabmessung nötig</li><li>Benötigt große Stichproben</li></ul></div>
+    <div class="vergleich-seite"><h4>Parallelisierung</h4><ul><li>Kontrolliert nur <strong>bekannte</strong> SVs</li><li>Unbekannte SVs bleiben unkontrolliert</li><li>Vorabmessung der Parallelisierungsvariable nötig</li><li>Funktioniert auch bei kleinen Stichproben</li></ul></div>
+  </div>
+
+  <div class="def-box red">
+    <div class="label">Ceteris-paribus-Klausel</div>
+    <p>„Unter sonst gleichen Bedingungen." Kernprinzip: Zwischen den Gruppen darf sich <strong>nur die UV</strong> unterscheiden — alles andere wird konstant gehalten. Verletzung → Konfundierung → keine Kausalaussage.</p>
+  </div>
+
+  <h3 class="sub">Messwiederholung</h3>
+  <div class="merksatz"><p><strong>Klausurliebling:</strong> Unterschied between/within? Within = Messwiederholung = jede VP durchläuft alle Bedingungen. Vorteil: weniger VPn, Kontrolle individueller Unterschiede. Problem: <strong>zeitgebundene Störvariablen</strong> (Übung, Ermüdung, Reihenfolgeeffekte). Lösung: <strong>Counterbalancing</strong> (Lateinisches Quadrat).</p></div>
+
+  <h3 class="sub">Versuchsleitereffekte & Verblindung</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Technik</th><th>Was wird verblindet?</th><th>Gegen was?</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Einfach</strong></td><td>VP weiß nicht, in welcher Bedingung</td><td>Placebo-Effekt, Demand Characteristics</td></tr>
+      <tr><td><strong>Doppelt</strong></td><td>VP + VL wissen es nicht</td><td>+ Rosenthal-Effekt (VL-Erwartung)</td></tr>
+      <tr><td><strong>Dreifach</strong></td><td>VP + VL + Auswerter</td><td>+ Auswertungsbias</td></tr>
+    </tbody>
+  </table></div>
+  <div class="example"><p><strong>Pygmalion im Klassenzimmer (Rosenthal & Jacobson):</strong> Lehrer erfuhren, bestimmte Schüler seien „Hochbegabte" (zufällig gewählt). Diese Schüler zeigten tatsächlich bessere Leistung — <strong>self-fulfilling prophecy</strong>. → Deshalb Doppelblind!</p></div>
+
+  <h3 class="sub">Fallbeispiel: Therapiestudie (BDI)</h3>
+  <div class="def-box blue">
+    <div class="label">Typische Klausuraufgabe</div>
+    <p>Eine kognitive Verhaltenstherapie wird mit dem <strong>Beck-Depressions-Inventar (BDI)</strong> evaluiert. Versuchsplan:</p>
+    <div class="table-wrap"><table style="text-align:center;">
+      <thead><tr><th></th><th>Vortest</th><th>Treatment</th><th>Nachtest</th></tr></thead>
+      <tbody>
+        <tr><td><strong>EG</strong></td><td>O₁</td><td>X</td><td>O₂</td></tr>
+        <tr><td><strong>KG</strong></td><td>O₃</td><td>—</td><td>O₄</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Frage:</strong> „Kann man schließen, dass die Therapie wirkt?" → Nur wenn <strong>Interaktion</strong> vorliegt: EG verbessert sich MEHR als KG. Haupteffekt allein reicht nicht (Spontanremission!).</p>
+    <p><strong>Interaktionstypen:</strong> <strong>Ordinal</strong> = beide Gruppen verbessern sich, aber EG stärker (Linien divergieren). <strong>Disordinal</strong> = Linien kreuzen sich (Therapie hilft EG, schadet KG). Die BDI-Studie testet typisch eine ordinale Interaktion.</p>
+  </div>
+
+  <h3 class="sub">Forschungsethik</h3>
+  <div class="card-grid">
+    <div class="card"><h3><span class="icon">⚡</span> Milgram (1963)</h3><p>Gehorsamsexperiment: VPn gaben vermeintliche Stromschläge. 65% gingen bis 450V. → Extremer <strong>psychischer Stress</strong>, kein informed consent, kein echtes Recht auf Abbruch.</p></div>
+    <div class="card"><h3><span class="icon">🏛️</span> Stanford Prison (1971)</h3><p>Zimbardo: Studenten als Wärter/Häftlinge. Abbruch nach 6 (statt 14) Tagen. → <strong>Kontrollverlust</strong> des Forschers, keine Sicherheitsmaßnahmen.</p></div>
+    <div class="card"><h3><span class="icon">👶</span> Little Albert (1920)</h3><p>Watson: 11 Monate altes Kind, Konditionierung von Angst. Keine Dekonditionierung. → Ethisch inakzeptabel, Kind langfristig geschädigt.</p></div>
+  </div>
+  <div class="merksatz"><p><strong>Ethische Grundsätze heute:</strong> (1) <strong>Informierte Einwilligung</strong> — freiwillig, aufgeklärt, jederzeit widerrufbar. (2) <strong>Ethik-Kommission</strong> — Vorabprüfung. (3) <strong>Debriefing</strong> — Aufklärung nach dem Experiment. (4) <strong>Datenschutz</strong> — Anonymisierung/Pseudonymisierung. (5) <strong>Schadensvermeidung</strong> — kein nachhaltiger Schaden.</p></div>
 
   <div class="deep-dive" id="dd-vp">
     <button class="deep-dive-toggle" onclick="toggleDD('dd-vp')"><span class="dd-icon">▼</span>Vertiefung: Kontrolltechniken, Interaktionen & Bedrohungen<span class="dd-badge">Erweitert</span></button>
@@ -672,6 +870,30 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
   </div>
 
   <div class="example"><p><strong>Warum U-Form?</strong> Anfang: innerlich wiederholt → <strong>LZG</strong>. Ende: noch im <strong>Arbeitsgedächtnis</strong>. Mitte: verdrängt, nicht genug wiederholt.</p></div>
+
+  <h3 class="sub">Rock: Paarassoziationslernen im Detail</h3>
+  <p>Irving Rock (1957) stellte die <strong>inkrementelle Lerntheorie</strong> in Frage — ein Klausur-Dauerbrenner!</p>
+
+  <div class="def-box red">
+    <div class="label">Substitutionsmethode (Rock, 1957)</div>
+    <p><strong>Experimentalgruppe:</strong> Nicht-gelernte Paare werden in jedem Durchgang durch <strong>neue Paare</strong> ersetzt. <strong>Kontrollgruppe:</strong> Alle Paare bleiben über Durchgänge gleich.</p>
+    <p><strong>Ergebnis:</strong> Kein Unterschied in der Lerngeschwindigkeit! → Rocks Schluss: Lernen ist <strong>All-or-None</strong> (ganz oder gar nicht), nicht inkrementell (Stück für Stück).</p>
+  </div>
+
+  <div class="vergleich">
+    <div class="vergleich-seite"><h4>All-or-None (Rock)</h4><ul><li>Item wird in <strong>einem</strong> Durchgang gelernt oder nicht</li><li>Lernkurve = Artefakt der Mittelung</li><li>Substitution hat keinen Effekt</li></ul></div>
+    <div class="vergleich-seite"><h4>Inkrementell (klassisch)</h4><ul><li>Jeder Durchgang <strong>stärkt die Verbindung</strong></li><li>Lernkurve = echte Stärkungsfunktion</li><li>Substitution sollte Lernen verlangsamen</li></ul></div>
+  </div>
+
+  <div class="achtung"><p><strong>Postman-Kritik:</strong> Rocks Ergebnis könnte ein Artefakt sein: Substituierte Paare waren zufällig <strong>leichter</strong> als die schwierigen ursprünglichen Paare (Item-Selection-Artifact). Schwierige Paare → raus, leichte → rein = unfairer Vergleich!</p></div>
+
+  <h3 class="sub">Mehrspeichermodell (Atkinson & Shiffrin, 1968)</h3>
+  <div class="flow">
+    <div class="flow-step">Sensorischer Speicher<small>~250ms</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Kurzzeitspeicher<small>~20s, 7±2</small></div><span class="flow-arrow">→</span>
+    <div class="flow-step">Langzeitspeicher<small>∞ Kapazität</small></div>
+  </div>
+  <div class="merksatz"><p><strong>Glanzer & Cunitz (1966)</strong> lieferten experimentelle Evidenz: Ablenkung nach Lernen löscht Recency (KZG), nicht Primacy (LZG). → <strong>Experimentelle Dissoziation</strong> = starkes Argument für zwei getrennte Speicher!</p></div>
 
   <div class="deep-dive" id="dd-lernen">
     <button class="deep-dive-toggle" onclick="toggleDD('dd-lernen')"><span class="dd-icon">▼</span>Vertiefung: Behaviorismus, Kognitive Wende & Dissoziation<span class="dd-badge">Erweitert</span></button>

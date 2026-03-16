@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4h Crash Course — Statistik I | Uni Tübingen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8; --bg-card: #fffdf8; --text: #2a2520; --text-secondary: #6b5e52;
+  --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a5276; --accent4: #7d3c98; --accent5: #b7950b;
+  --border: #d4cbbf; --highlight: #fef3c7; --shadow: rgba(42,37,32,0.08);
+  --triage-red: #e74c3c; --triage-yellow: #f39c12; --triage-green: #27ae60;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Source Sans 3',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:18px;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+::selection{background:var(--accent);color:#fff}
+#topBar{position:sticky;top:0;z-index:100;background:rgba(245,240,232,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0.5rem 1rem;display:none;align-items:center;gap:1rem;flex-wrap:wrap}
+#topBar.active{display:flex}
+.tb-timer{font-family:'JetBrains Mono',monospace;font-size:0.95rem;font-weight:500;color:var(--accent);background:rgba(192,57,43,0.08);padding:0.3em 0.8em;border-radius:4px;min-width:80px;text-align:center;cursor:pointer}
+.tb-timer.paused{opacity:0.5;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tb-session{font-size:0.82rem;font-weight:600;color:var(--accent3)}
+.tb-xp{font-size:0.82rem;font-weight:700;color:var(--accent5);display:flex;align-items:center;gap:0.3rem}
+.tb-streak{font-size:0.82rem;font-weight:600;color:var(--accent2)}
+.tb-progress-wrap{flex:1;min-width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.tb-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent3));border-radius:3px;transition:width 0.3s}
+.tb-focus{background:none;border:1.5px solid var(--accent4);color:var(--accent4);font-family:inherit;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.3em 0.7em;border-radius:3px;cursor:pointer}
+.tb-focus.on{background:var(--accent4);color:#fff}
+.tb-home{background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-secondary)}
+#dashboard{max-width:720px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.dash-header{text-align:center;padding:3rem 0 2rem}
+.dash-header h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,2.6rem);font-weight:700;line-height:1.2;margin-bottom:0.3rem}
+.dash-header h1 em{color:var(--accent);font-style:italic}
+.dash-header .sub{font-size:1rem;color:var(--text-secondary);max-width:520px;margin:0 auto}
+.dash-resume{background:linear-gradient(135deg,#eaf5ee,#d5f5e3);border:1.5px solid #a9dfbf;border-radius:6px;padding:1rem 1.3rem;margin:1.5rem 0;display:none;cursor:pointer;transition:transform 0.2s}
+.dash-resume:hover{transform:translateY(-2px)}
+.dash-resume h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--accent2);margin-bottom:0.2rem}
+.dash-resume p{font-size:0.88rem;color:var(--text-secondary)}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+.sess-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:8px;padding:1.3rem;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.sess-card:hover{border-color:var(--accent3);transform:translateY(-2px);box-shadow:0 6px 20px var(--shadow)}
+.sess-card.locked{opacity:0.5;cursor:default}
+.sess-card.locked:hover{transform:none;box-shadow:none;border-color:var(--border)}
+.sess-card.completed{border-color:var(--accent2)}
+.sess-card .sc-num{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent3);margin-bottom:0.3rem}
+.sess-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:0.3rem}
+.sess-card p{font-size:0.82rem;color:var(--text-secondary);line-height:1.5}
+.sess-card .sc-meta{display:flex;gap:0.8rem;margin-top:0.6rem;font-size:0.75rem;color:var(--text-secondary)}
+.sess-card .sc-bar{height:4px;background:var(--border);border-radius:2px;margin-top:0.6rem;overflow:hidden}
+.sess-card .sc-bar-fill{height:100%;background:var(--accent2);border-radius:2px;transition:width 0.3s}
+.dash-settings{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:1rem 1.3rem;margin-top:1.5rem}
+.dash-settings h4{font-family:'Playfair Display',serif;font-size:0.92rem;margin-bottom:0.6rem}
+.dash-settings label{display:flex;align-items:center;gap:0.5rem;font-size:0.88rem;margin:0.4rem 0;cursor:pointer}
+.dash-settings input[type=range]{flex:1;accent-color:var(--accent3)}
+.dash-settings input[type=checkbox]{accent-color:var(--accent3)}
+.dash-hint{margin-top:1.5rem;text-align:center;font-size:0.82rem;color:var(--text-secondary)}
+.dash-link{margin-top:0.8rem;text-align:center;font-size:0.85rem}
+.dash-link a{color:var(--accent3);text-decoration:none}
+.dash-link a:hover{text-decoration:underline}
+.btn-reset{background:none;border:1px solid var(--accent);color:var(--accent);font-family:inherit;font-size:0.78rem;padding:0.3em 0.8em;border-radius:3px;cursor:pointer;margin-top:0.8rem}
+.btn-reset:hover{background:var(--accent);color:#fff}
+#sessionView{display:none;max-width:720px;margin:0 auto;padding:1rem 1.5rem 4rem}
+.sv-breadcrumb{font-size:0.78rem;color:var(--text-secondary);margin-bottom:1rem}
+.sv-breadcrumb span{color:var(--accent3);font-weight:600}
+.concept-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:8px;padding:1.8rem;margin-bottom:1rem;animation:slideIn 0.3s ease-out}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.concept-card .cc-tier{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.2em 0.6em;border-radius:3px;display:inline-block;margin-bottom:0.5rem}
+.cc-tier.a{background:rgba(192,57,43,0.1);color:var(--accent)}
+.cc-tier.b{background:rgba(26,82,118,0.1);color:var(--accent3)}
+.cc-tier.c{background:rgba(125,60,152,0.1);color:var(--accent4)}
+.concept-card h2{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:0.8rem}
+.concept-card .cc-body{font-size:0.95rem;line-height:1.8}
+.concept-card .cc-body p{margin-bottom:0.8rem}
+.formula{font-family:'JetBrains Mono',monospace;background:#2a2520;color:#f0e6d3;padding:1rem 1.2rem;border-radius:4px;margin:0.8rem 0;overflow-x:auto;font-size:0.85rem;line-height:1.8}
+.formula .comment{color:#8b7d6b}.formula .keyword{color:#e8a87c}
+.formula .symbol{color:#c0392b}.formula .result{color:#58d68d}
+.def-box{background:var(--bg-card);border-left:4px solid var(--accent);padding:1rem 1.2rem;margin:0.8rem 0;border-radius:0 4px 4px 0;font-size:0.92rem}
+.def-box.green{border-left-color:var(--accent2)}.def-box.blue{border-left-color:var(--accent3)}
+.def-box.purple{border-left-color:var(--accent4)}.def-box.gold{border-left-color:var(--accent5)}
+.merksatz{background:linear-gradient(135deg,#eaf5ee,#d5f5e3);border:1px solid #a9dfbf;border-radius:4px;padding:1rem 1.2rem;margin:0.8rem 0;font-size:0.92rem}
+.achtung{background:linear-gradient(135deg,#fdf2f2,#fadbd8);border:1px solid #f1948a;border-radius:4px;padding:1rem 1.2rem;margin:0.8rem 0;font-size:0.92rem}
+.example-box{background:linear-gradient(135deg,#fef9f0,#fef3c7);border:1px solid #e8d9a0;border-radius:4px;padding:1rem 1.2rem;margin:0.8rem 0;font-size:0.92rem}
+.cc-deep-dive{margin-top:0.8rem;border:1.5px solid var(--accent3);border-radius:6px;overflow:hidden}
+.cc-dd-toggle{width:100%;display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;background:linear-gradient(135deg,#eaf2f8,#d6eaf8);border:none;cursor:pointer;font-family:inherit;font-size:0.88rem;font-weight:600;color:var(--accent3);text-align:left;transition:background 0.2s}
+.cc-dd-toggle:hover{background:linear-gradient(135deg,#d6eaf8,#aed6f1)}
+.cc-dd-toggle .dd-arrow{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent3);color:#fff;font-size:0.7rem;font-weight:700;flex-shrink:0;transition:transform 0.3s}
+.cc-dd-toggle.open .dd-arrow{transform:rotate(180deg)}
+.cc-dd-content{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1),padding 0.3s;padding:0 1rem}
+.cc-dd-content.open{max-height:5000px;padding:1rem;border-top:1px solid #aed6f1}
+.cc-dd-content p{margin-bottom:0.6rem;font-size:0.92rem}
+.cc-ref-link{display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.8rem;font-size:0.82rem;color:var(--accent3);text-decoration:none;font-weight:600;padding:0.3em 0.7em;border:1px solid rgba(26,82,118,0.2);border-radius:3px;transition:all 0.15s}
+.cc-ref-link:hover{background:var(--accent3);color:#fff;border-color:var(--accent3);text-decoration:none}
+.triage-row{display:flex;gap:0.5rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
+.triage-btn{flex:1;padding:0.5rem;border:2px solid var(--border);border-radius:4px;background:none;font-family:inherit;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.15s;text-align:center}
+.triage-btn.red{color:var(--triage-red)}.triage-btn.red:hover,.triage-btn.red.active{background:var(--triage-red);color:#fff;border-color:var(--triage-red)}
+.triage-btn.yellow{color:var(--triage-yellow)}.triage-btn.yellow:hover,.triage-btn.yellow.active{background:var(--triage-yellow);color:#fff;border-color:var(--triage-yellow)}
+.triage-btn.green{color:var(--triage-green)}.triage-btn.green:hover,.triage-btn.green.active{background:var(--triage-green);color:#fff;border-color:var(--triage-green)}
+.card-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.card-nav button{padding:0.5rem 1.2rem;border:1.5px solid var(--accent3);background:none;color:var(--accent3);font-family:inherit;font-size:0.88rem;font-weight:600;border-radius:4px;cursor:pointer;transition:all 0.15s}
+.card-nav button:hover{background:var(--accent3);color:#fff}
+.card-nav button:disabled{opacity:0.3;cursor:default}
+.card-nav button:disabled:hover{background:none;color:var(--accent3)}
+.card-nav .cn-count{font-size:0.82rem;color:var(--text-secondary)}
+.cn-gaps{font-size:0.72rem!important;padding:0.3rem 0.6rem!important;border-color:var(--triage-red)!important;color:var(--triage-red)!important;letter-spacing:0.03em}
+.cn-gaps:hover,.cn-gaps.active{background:var(--triage-red)!important;color:#fff!important;border-color:var(--triage-red)!important}
+#quizView{display:none;max-width:720px;margin:0 auto;padding:1rem 1.5rem 4rem}
+.quiz-card{background:var(--bg-card);border:1.5px solid var(--accent3);border-radius:8px;padding:1.8rem;margin-bottom:1rem;animation:slideIn 0.3s ease-out}
+.quiz-card .qc-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.quiz-card .qc-section{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent3);background:rgba(26,82,118,0.08);padding:0.2em 0.7em;border-radius:3px}
+.quiz-card .qc-speed{font-family:'JetBrains Mono',monospace;font-size:0.92rem;font-weight:700;color:var(--accent);padding:0.2em 0.6em;background:rgba(192,57,43,0.08);border-radius:4px}
+.quiz-card .qc-text{font-family:'Playfair Display',serif;font-size:1.1rem;line-height:1.5;margin-bottom:1rem}
+.quiz-card .qc-text code{font-family:'JetBrains Mono',monospace;background:rgba(42,37,32,0.06);padding:0.1em 0.35em;border-radius:3px;font-size:0.88em}
+.opt-btn{display:block;width:100%;text-align:left;padding:0.7rem 1rem;margin:0.4rem 0;background:transparent;border:1.5px solid var(--border);border-radius:4px;cursor:pointer;font-family:inherit;font-size:0.92rem;color:var(--text);transition:all 0.15s;line-height:1.5}
+.opt-btn:hover:not(:disabled){border-color:var(--accent3);background:rgba(26,82,118,0.03)}
+.opt-btn.correct{border-color:var(--accent2)!important;background:#d5f5e3!important;color:var(--accent2);font-weight:600}
+.opt-btn.wrong{border-color:var(--accent)!important;background:#fadbd8!important;color:var(--accent);opacity:0.75}
+.opt-btn:disabled{cursor:default}
+.quiz-feedback{margin-top:0.8rem;padding:0.8rem 1rem;border-radius:4px;font-size:0.88rem;line-height:1.6;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.ok{background:#d5f5e3;color:#1e7e34;border:1px solid #a9dfbf}
+.quiz-feedback.nok{background:#fadbd8;color:var(--accent);border:1px solid #f1948a}
+.quiz-retry{margin-top:0.6rem;background:none;border:1px solid var(--accent3);color:var(--accent3);font-family:inherit;font-size:0.82rem;padding:0.3em 0.8em;border-radius:3px;cursor:pointer;display:none}
+.quiz-retry.show{display:inline-block}
+#feynmanView{display:none;max-width:720px;margin:0 auto;padding:1rem 1.5rem 4rem}
+.feynman-card{background:var(--bg-card);border:1.5px solid var(--accent4);border-radius:8px;padding:1.8rem;animation:slideIn 0.3s ease-out}
+.feynman-card h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--accent4);margin-bottom:0.8rem}
+.feynman-card .fc-prompt{font-size:0.95rem;margin-bottom:1rem;color:var(--text-secondary)}
+.feynman-card textarea{width:100%;min-height:120px;border:1.5px solid var(--border);border-radius:4px;padding:0.8rem;font-family:inherit;font-size:0.95rem;line-height:1.6;resize:vertical;background:var(--bg)}
+.feynman-card textarea:focus{outline:none;border-color:var(--accent4)}
+.feynman-card .fc-reveal{margin-top:1rem;padding:1rem;background:linear-gradient(135deg,#f4ecf7,#e8daef);border:1px solid #c39bd3;border-radius:4px;display:none;font-size:0.92rem}
+.feynman-card .fc-reveal.show{display:block}
+.feynman-rate{display:flex;gap:0.5rem;margin-top:1rem;display:none}
+.feynman-rate.show{display:flex}
+.feynman-rate button{flex:1;padding:0.5rem;border:2px solid var(--border);border-radius:4px;background:none;font-family:inherit;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.15s}
+.feynman-rate button:hover{transform:translateY(-1px)}
+.feynman-rate .fr-good{color:var(--accent2)}.feynman-rate .fr-good:hover{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.feynman-rate .fr-partial{color:var(--accent5)}.feynman-rate .fr-partial:hover{background:var(--accent5);color:#fff;border-color:var(--accent5)}
+.feynman-rate .fr-again{color:var(--accent)}.feynman-rate .fr-again:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.fc-btn{margin-top:1rem;padding:0.5rem 1.2rem;border:1.5px solid var(--accent4);background:none;color:var(--accent4);font-family:inherit;font-size:0.88rem;font-weight:600;border-radius:4px;cursor:pointer}
+.fc-btn:hover{background:var(--accent4);color:#fff}
+.fc-actions{display:flex;gap:0.5rem;margin-top:1rem;flex-wrap:wrap}
+.fc-btn-ai{border-color:var(--accent2)!important;color:var(--accent2)!important}
+.fc-btn-ai:hover{background:var(--accent2)!important;color:#fff!important}
+.fc-btn-ai:disabled{opacity:0.5;cursor:default}
+.fc-feedback{margin-top:1rem;padding:1rem 1.2rem;background:linear-gradient(135deg,#eaf5ee,#d5f5e3);border:1px solid #a9dfbf;border-radius:6px;font-size:0.92rem;line-height:1.7;display:none}
+.fc-feedback.show{display:block}
+.fc-feedback strong{color:var(--accent2)}
+.fc-feedback .fc-rating{margin-top:0.6rem;font-weight:700;padding:0.3em 0.7em;border-radius:3px;display:inline-block;font-size:0.82rem}
+.fc-feedback .fc-rating.good{background:rgba(39,174,96,0.15);color:var(--triage-green)}
+.fc-feedback .fc-rating.partial{background:rgba(243,156,18,0.15);color:var(--triage-yellow)}
+.fc-feedback .fc-rating.again{background:rgba(231,76,60,0.15);color:var(--triage-red)}
+.movement-overlay{position:fixed;inset:0;background:rgba(245,240,232,0.97);z-index:500;display:none;align-items:center;justify-content:center;text-align:center;padding:2rem}
+.movement-overlay.show{display:flex}
+.movement-overlay .mo-inner{max-width:400px}
+.movement-overlay h2{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:1rem}
+.movement-overlay p{font-size:1rem;color:var(--text-secondary);margin-bottom:1.5rem}
+.movement-overlay .mo-timer{font-family:'JetBrains Mono',monospace;font-size:2.5rem;font-weight:700;color:var(--accent2);margin-bottom:1.5rem}
+.movement-overlay button{padding:0.6rem 1.5rem;border:1.5px solid var(--accent2);background:var(--accent2);color:#fff;font-family:inherit;font-size:1rem;font-weight:600;border-radius:4px;cursor:pointer}
+.xp-float{position:fixed;right:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.88rem;font-weight:700;color:var(--accent5);pointer-events:none;animation:floatUp 1.2s ease-out forwards;z-index:200}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-60px)}}
+body.focus-mode #topBar .tb-session,body.focus-mode #topBar .tb-xp,body.focus-mode #topBar .tb-streak,body.focus-mode .sv-breadcrumb,body.focus-mode .dash-settings,body.focus-mode .dash-hint{display:none!important}
+body.focus-mode .concept-card,body.focus-mode .quiz-card,body.focus-mode .feynman-card{border-width:2px;box-shadow:0 8px 32px var(--shadow)}
+.chat-panel{position:fixed;right:0;top:0;width:380px;height:100vh;transform:translateX(100%);transition:transform 0.3s ease;z-index:200;background:var(--bg-card);border-left:1.5px solid var(--border);display:flex;flex-direction:column}
+.chat-panel.open{transform:translateX(0);box-shadow:-8px 0 30px var(--shadow)}
+.chat-header{display:flex;align-items:center;gap:0.6rem;padding:0.8rem 1rem;border-bottom:1px solid var(--border);flex-shrink:0}
+.chat-title{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;flex:1}
+.chat-mode{font-size:0.65rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:0.15em 0.5em;border-radius:3px}
+.chat-mode.green{background:rgba(44,110,73,0.12);color:var(--accent2)}
+.chat-mode.blue{background:rgba(26,82,118,0.12);color:var(--accent3)}
+.chat-mode.gray{background:rgba(107,94,82,0.12);color:var(--text-secondary)}
+.chat-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-secondary);padding:0.2rem 0.4rem;line-height:1}
+.chat-close:hover{color:var(--accent)}
+.chat-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.6rem}
+.chat-msg{max-width:88%;padding:0.6rem 0.9rem;border-radius:8px;font-size:0.88rem;line-height:1.6;word-wrap:break-word}
+.chat-msg.user{align-self:flex-end;background:var(--accent3);color:#fff;border-bottom-right-radius:2px}
+.chat-msg.bot{align-self:flex-start;background:linear-gradient(135deg,#f5f0e8,#ece4d8);color:var(--text);border-bottom-left-radius:2px}
+.chat-msg.bot strong{color:var(--accent)}
+.chat-msg.bot code{font-family:'JetBrains Mono',monospace;background:rgba(42,37,32,0.08);padding:0.1em 0.3em;border-radius:3px;font-size:0.85em}
+.chat-msg.bot .typing{display:inline-flex;gap:3px}
+.chat-msg.bot .typing span{width:6px;height:6px;border-radius:50%;background:var(--text-secondary);animation:typeDot 1.2s infinite}
+.chat-msg.bot .typing span:nth-child(2){animation-delay:0.2s}
+.chat-msg.bot .typing span:nth-child(3){animation-delay:0.4s}
+@keyframes typeDot{0%,60%,100%{opacity:0.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.chat-suggestions{display:flex;gap:0.4rem;padding:0.5rem 1rem 0;flex-wrap:wrap;flex-shrink:0}
+.chat-chip{background:none;border:1px solid var(--border);border-radius:20px;padding:0.3em 0.7em;font-family:inherit;font-size:0.78rem;color:var(--accent3);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.chat-chip:hover{background:var(--accent3);color:#fff;border-color:var(--accent3)}
+.chat-input-row{display:flex;gap:0.5rem;padding:0.8rem 1rem;border-top:1px solid var(--border);align-items:flex-end;flex-shrink:0}
+.chat-input-row textarea{flex:1;border:1.5px solid var(--border);border-radius:6px;padding:0.5rem 0.7rem;font-family:inherit;font-size:0.88rem;line-height:1.5;resize:none;background:var(--bg);max-height:120px}
+.chat-input-row textarea:focus{outline:none;border-color:var(--accent3)}
+.chat-send{width:36px;height:36px;border:none;background:var(--accent3);color:#fff;border-radius:6px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s}
+.chat-send:hover{background:var(--accent)}
+body.chat-open #sessionView{margin-right:380px;transition:margin 0.3s ease}
+.cc-chat-btn{display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.8rem;margin-right:0.5rem;font-family:inherit;font-size:0.82rem;font-weight:600;color:var(--accent4);background:none;border:1px solid rgba(125,60,152,0.25);padding:0.3em 0.7em;border-radius:3px;cursor:pointer;transition:all 0.15s}
+.cc-chat-btn:hover{background:var(--accent4);color:#fff;border-color:var(--accent4)}
+.cc-chat-hint{display:inline-block;margin-top:0.8rem;font-size:0.78rem;color:var(--text-secondary)}
+.cc-chat-hint a{color:var(--accent4);text-decoration:none;font-weight:600}
+.cc-chat-hint a:hover{text-decoration:underline}
+.chat-settings{margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border)}
+.chat-settings h5{font-family:'Playfair Display',serif;font-size:0.88rem;margin-bottom:0.5rem}
+.chat-status{font-size:0.82rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.4rem}
+.chat-status::before{content:'';width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.chat-status.green::before{background:var(--accent2)}.chat-status.blue::before{background:var(--accent3)}.chat-status.gray::before{background:var(--text-secondary)}
+.chat-settings label{display:block;font-size:0.85rem;margin:0.4rem 0}
+.chat-settings input[type=password]{width:100%;padding:0.3em 0.5em;border:1px solid var(--border);border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:0.8rem;margin-top:0.2rem;background:var(--bg)}
+.chat-settings small{display:block;font-size:0.75rem;color:var(--text-secondary);margin-top:0.2rem}
+.chat-settings small a{color:var(--accent3)}
+@media(max-width:640px){
+  #topBar{padding:0.4rem 0.8rem;gap:0.5rem}
+  #dashboard{padding:1rem 1rem 3rem}
+  .dash-header{padding:2rem 0 1.5rem}
+  .dash-grid{grid-template-columns:1fr}
+  #sessionView,#quizView,#feynmanView{padding:0.8rem 1rem 3rem}
+  .concept-card,.quiz-card,.feynman-card{padding:1.2rem}
+  .triage-row{flex-wrap:wrap}
+  .chat-panel{width:100vw}
+  body.chat-open #sessionView{margin-right:0}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topBar">
+  <button class="tb-home" onclick="goHome()" title="Dashboard">&#8962;</button>
+  <div class="tb-timer" id="tbTimer" onclick="toggleTimer()">60:00</div>
+  <span class="tb-session" id="tbSession">Session 1 von 4</span>
+  <span class="tb-xp" id="tbXp">&#9733; 0 XP</span>
+  <span class="tb-streak" id="tbStreak"></span>
+  <div class="tb-progress-wrap"><div class="tb-progress-fill" id="tbProgress" style="width:0%"></div></div>
+  <button class="tb-focus" id="tbFocus" onclick="toggleFocus()">Fokus</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="dash-header">
+    <h1>4h Crash <em>Course</em></h1>
+    <p class="sub">Alle Statistik-I-Themen in 4 Sessions. Karteikarten, Quizze, Feynman-Technik.</p>
+  </div>
+  <div class="dash-resume" id="dashResume" onclick="resumeSession()">
+    <h3>&#9654; Weitermachen</h3>
+    <p id="dashResumeText"></p>
+  </div>
+  <div class="dash-grid" id="dashGrid"></div>
+  <div class="dash-settings">
+    <h4>Einstellungen</h4>
+    <label>Schriftgröße: <span id="fontVal">18px</span><input type="range" min="14" max="24" value="18" oninput="setFont(this.value)"></label>
+    <label><input type="checkbox" id="cfgNoise" onchange="toggleNoise()"> Brown Noise</label>
+    <label><input type="checkbox" id="cfgAutoTimer" checked> Session-Timer automatisch starten</label>
+    <button class="btn-reset" onclick="resetAll()">Fortschritt zurücksetzen</button>
+    <div class="chat-settings">
+      <h5>Chat-Tutorin</h5>
+      <div class="chat-status gray" id="chatStatus">Prüfe Verbindung...</div>
+      <label>Server-URL:
+        <input type="text" id="cfgServerUrl" placeholder="http://localhost:3456"
+               onchange="saveServerUrl(this.value)" style="width:100%;padding:0.3em 0.5em;border:1px solid var(--border);border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:0.8rem;margin-top:0.2rem;background:var(--bg)">
+        <small>Standard: localhost:3456. Bei Tunnel z.B. https://abc.ngrok.io</small>
+      </label>
+      <label>API-Schlüssel (Fallback):
+        <input type="password" id="cfgApiKey" placeholder="sk-ant-..."
+               onchange="saveApiKey(this.value)">
+        <small>Nur nötig wenn kein Server läuft.
+          <a href="https://console.anthropic.com/" target="_blank">Key holen</a></small>
+      </label>
+    </div>
+  </div>
+  <p class="dash-hint">Tipp: Markiere Konzepte mit Rot/Gelb/Grün — Sessions 3+4 fokussieren automatisch auf deine Lücken.</p>
+  <p class="dash-link"><a href="index.html">Zurück zur Lernseite</a> · <a href="test.html">Wissenstest</a></p>
+</div>
+
+<!-- SESSION VIEW (Cards) -->
+<div id="sessionView">
+  <div class="sv-breadcrumb" id="svBreadcrumb"></div>
+  <div id="cardArea"></div>
+  <div class="card-nav" id="cardNav">
+    <button onclick="prevCard()">&#8592; Zurück</button>
+    <span class="cn-count" id="cnCount"></span>
+    <button class="cn-gaps" id="cnGaps" onclick="toggleGapsOnly()">Nur Lücken</button>
+    <button onclick="nextCard()">Weiter &#8594;</button>
+  </div>
+</div>
+
+<!-- QUIZ VIEW -->
+<div id="quizView">
+  <div class="sv-breadcrumb" id="qvBreadcrumb"></div>
+  <div id="quizArea"></div>
+  <div class="card-nav" id="quizNav">
+    <button onclick="prevQuiz()">&#8592; Zurück</button>
+    <span class="cn-count" id="qnCount"></span>
+    <button onclick="nextQuiz()">Weiter &#8594;</button>
+  </div>
+</div>
+
+<!-- FEYNMAN VIEW -->
+<div id="feynmanView">
+  <div class="sv-breadcrumb" id="fvBreadcrumb"></div>
+  <div id="feynmanArea"></div>
+  <div class="card-nav" id="feynmanNav">
+    <button onclick="prevFeynman()">&#8592; Zurück</button>
+    <span class="cn-count" id="fnCount"></span>
+    <button onclick="nextFeynman()">Weiter &#8594;</button>
+  </div>
+</div>
+
+<!-- MOVEMENT OVERLAY -->
+<div class="movement-overlay" id="moveOverlay">
+  <div class="mo-inner">
+    <h2>Bewegungspause!</h2>
+    <p>Steh auf, streck dich, hol dir Wasser. Dein Gehirn braucht die Pause zum Konsolidieren.</p>
+    <div class="mo-timer" id="moveTimer">5:00</div>
+    <button onclick="endBreak()">Weiter zur nächsten Session</button>
+  </div>
+</div>
+
+<!-- CHAT PANEL -->
+<div id="chatPanel" class="chat-panel">
+  <div class="chat-header">
+    <span class="chat-title">Tutorin</span>
+    <span class="chat-mode gray" id="chatModeLabel">offline</span>
+    <button class="chat-close" onclick="closeChat()">&#10005;</button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-suggestions" id="chatSuggestions"></div>
+  <div class="chat-input-row">
+    <textarea id="chatInput" placeholder="Deine Frage..." rows="1"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
+              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+    <button class="chat-send" onclick="sendChat()">&#8629;</button>
+  </div>
+</div>
+
+<script>
+/* ── STATE ── */
+const STATE_KEY = 'stat1v3_state';
+let S = loadState();
+
+function defaultState(){return{
+  currentSession:0,currentCard:0,currentQuiz:0,currentFeynman:0,
+  triage:{},quizHistory:{},feynmanRatings:{},
+  xp:0,streak:0,bestStreak:0,
+  sessionProgress:[0,0,0,0],
+  timerRunning:false,timerSeconds:3600,
+  fontSize:18,noiseOn:false,focusOn:false,
+  phase:'dashboard',subPhase:'cards'
+}}
+function loadState(){try{const s=localStorage.getItem(STATE_KEY);return s?{...defaultState(),...JSON.parse(s)}:defaultState()}catch(e){return defaultState()}}
+function saveState(){localStorage.setItem(STATE_KEY,JSON.stringify(S))}
+
+/* ── CARDS DATA ── */
+const CARDS=[
+// ═══ SESSION 1: GRUNDLAGEN ═══
+{id:'gr1',title:'Statistik — Etymologie & Aufgaben',tier:'a',topic:'Grundlagen',ref:'grundlagen',body:'<p><strong>Statistik</strong> (lat. <em>status</em> = Zustand): Wissenschaft vom Sammeln, Beschreiben und Interpretieren von Daten.</p><div class="def-box blue"><strong>Deskriptive Statistik:</strong> Daten zusammenfassen (Tabellen, Kennwerte, Grafiken).<br><strong>Induktive Statistik:</strong> Von Stichprobe auf Population schließen.</div>'},
+{id:'gr2',title:'Merkmale: quantitativ vs. qualitativ',tier:'a',topic:'Grundlagen',ref:'grundlagen',body:'<p><strong>Quantitativ:</strong> Zahlenwerte, messbar (Alter, Gewicht, RT).</p><p><strong>Qualitativ:</strong> Kategorien, nicht messbar (Geschlecht, Studiengang, Augenfarbe).</p><div class="merksatz">Quantitativ kann <strong>diskret</strong> (abzählbar: Kinderzahl) oder <strong>stetig</strong> (jeder Wert möglich: Körpergröße) sein.</div>',deepDive:'<p><strong>Diskret vs. stetig — Entscheidungshilfe:</strong></p><p>Frage: „Gibt es zwischen zwei Werten immer noch einen weiteren Wert?"</p><p>Ja → stetig (z.B. 170.5 cm zwischen 170 und 171). Nein → diskret (z.B. kein Wert zwischen 2 und 3 Kindern).</p><p>In der Praxis wird stetig oft gerundet (→ wirkt diskret), aber das Merkmal selbst ist stetig.</p>'},
+{id:'gr3',title:'Nominalskala',tier:'a',topic:'Grundlagen',ref:'grundlagen',body:'<p>Nur <strong>= / ≠</strong> unterscheidbar. Keine Ordnung, keine Abstände.</p><div class="formula"><span class="keyword">Erlaubt:</span> Bijektive Transformationen (1:1-Umkodierung)\n<span class="keyword">Statistik:</span> Modus, Häufigkeiten, Chi²</div><div class="example-box">Geschlecht (m/w/d), Blutgruppe (A/B/AB/0), PLZ</div>'},
+{id:'gr4',title:'Ordinalskala',tier:'a',topic:'Grundlagen',ref:'grundlagen',body:'<p>= / ≠ <strong>+ Rangfolge</strong>. Abstände NICHT interpretierbar!</p><div class="formula"><span class="keyword">Erlaubt:</span> Monotone Transformationen (Ordnung erhalten)\n<span class="keyword">Statistik:</span> + Median, Quartile, Spearman r<sub>s</sub></div><div class="example-box">Schulnoten (1-6), Likert-Skala, Platzierungen</div><div class="achtung">Note 2 ist NICHT „doppelt so gut" wie Note 4!</div>'},
+{id:'gr5',title:'Intervallskala',tier:'a',topic:'Grundlagen',ref:'grundlagen',body:'<p>= / ≠ + Rangfolge + <strong>gleiche Abstände</strong>. Kein absoluter Nullpunkt.</p><div class="formula"><span class="keyword">Erlaubt:</span> Lineare Transformation y = a·x + b (a>0)\n<span class="keyword">Statistik:</span> + Mittelwert, Standardabweichung, Pearson r</div><div class="example-box">Temperatur in °C (0°C ≠ „keine Wärme"), IQ, Jahreszahlen</div>'},
+{id:'gr6',title:'Verhältnisskala',tier:'a',topic:'Grundlagen',ref:'grundlagen',body:'<p>= / ≠ + Rangfolge + gleiche Abstände + <strong>absoluter Nullpunkt</strong>.</p><div class="formula"><span class="keyword">Erlaubt:</span> Ähnlichkeitstransformation y = a·x (a>0)\n<span class="keyword">Statistik:</span> + geometrisches Mittel, Variationskoeffizient</div><div class="example-box">Reaktionszeit (0 = keine Reaktion), Gewicht, Alter, Kelvin</div><div class="merksatz">„Doppelt so schwer" nur hier sinnvoll!</div>'},
+{id:'gr7',title:'Absolutskala',tier:'b',topic:'Grundlagen',ref:'grundlagen',body:'<p>Alle Eigenschaften + <strong>feste Einheit</strong>. Nur Identitätstransformation.</p><div class="example-box">Anzahlen (3 Kinder = 3 Kinder, nicht umkodierbar).</div>'},
+{id:'gr8',title:'Bedeutsamkeit',tier:'a',topic:'Grundlagen',ref:'grundlagen',body:'<p>Eine Aussage ist <strong>bedeutsam</strong>, wenn ihr Wahrheitswert unter allen zulässigen Transformationen gleich bleibt.</p><div class="achtung">„Mittlere Temperatur = 20°C" ist bedeutsam (bleibt unter y=ax+b erhalten).<br>„Heute ist es doppelt so warm wie gestern" auf °C-Skala ist NICHT bedeutsam (Verhältnisse nicht invariant unter y=ax+b).</div>',deepDive:'<p><strong>Warum?</strong> 20°C vs. 10°C: „doppelt so warm." Aber in Fahrenheit: 68°F vs. 50°F — Verhältnis 1.36, nicht 2. Die Aussage ändert sich je nach Skala → nicht bedeutsam.</p><p>Nur Aussagen, die unter ALLEN zulässigen Transformationen stabil bleiben, sind wissenschaftlich verwertbar.</p>'},
+// ═══ SESSION 1: HÄUFIGKEITSVERTEILUNGEN ═══
+{id:'hv1',title:'Häufigkeitstabelle',tier:'a',topic:'Häufigkeitsverteilungen',ref:'haeufigkeit',body:'<p><strong>Absolute Häufigkeit</strong> h(x): Wie oft kommt Wert x vor?</p><p><strong>Relative Häufigkeit</strong> f(x) = h(x)/n: Anteil.</p><p><strong>Kumulierte Häufigkeit</strong> F(x) = Summe aller f(y) mit y ≤ x.</p><div class="formula"><span class="keyword">Summenregel:</span> Σ h(xᵢ) = n   und   Σ f(xᵢ) = 1</div>'},
+{id:'hv2',title:'Empirische Verteilungsfunktion',tier:'a',topic:'Häufigkeitsverteilungen',ref:'haeufigkeit',body:'<p><strong>F(x)</strong> = Anteil der Beobachtungen ≤ x. Treppenfunktion, monoton steigend.</p><div class="merksatz">F ist rechtsstetig: Sprung NACH dem Wert. F(x) = Σ f(xᵢ) für alle xᵢ ≤ x.</div><div class="example-box">Bei Daten {1,2,2,3}: F(1)=0.25, F(2)=0.75, F(3)=1.0</div>'},
+{id:'hv3',title:'Histogramm',tier:'a',topic:'Häufigkeitsverteilungen',ref:'haeufigkeit',body:'<p>Balkendiagramm für <strong>klassierte stetige</strong> Daten. Y-Achse = <strong>Häufigkeitsdichte</strong> f(x)/Klassenbreite.</p><div class="achtung">Die <strong>Fläche</strong> (nicht Höhe!) entspricht der relativen Häufigkeit! Bei ungleichen Klassenbreiten ist die Höhe allein irreführend.</div>',deepDive:'<p><strong>Warum Dichte statt Häufigkeit?</strong></p><p>Bei gleichen Klassenbreiten egal. Aber bei ungleichen Breiten: Eine doppelt so breite Klasse hat automatisch mehr Beobachtungen → Höhe täuscht. Die Dichte normiert auf die Breite.</p><p><strong>Berechnung:</strong> Dichte = f(Klasse) / Klassenbreite. Fläche = Dichte × Breite = f(Klasse).</p>'},
+{id:'hv4',title:'Formen von Verteilungen',tier:'b',topic:'Häufigkeitsverteilungen',ref:'haeufigkeit',body:'<p><strong>Symmetrisch:</strong> Glockenförmig (Normalverteilung). <strong>Rechtsschief:</strong> Langer Schwanz rechts (positiv, z.B. Einkommen). <strong>Linksschief:</strong> Langer Schwanz links (negativ, z.B. Klausurergebnisse).</p><div class="merksatz">Merkhilfe: Der Name bezieht sich auf den <strong>Schwanz</strong>, nicht den Gipfel! Rechtsschief = Schwanz nach rechts.</div>'},
+{id:'hv5',title:'Klasseneinteilung',tier:'b',topic:'Häufigkeitsverteilungen',ref:'haeufigkeit',body:'<p>Stetige Daten → in Klassen einteilen. Faustregel: k ≈ √n Klassen.</p><div class="formula"><span class="keyword">Klassenbreite</span> ≈ (x_max − x_min) / k</div><p>Klassen müssen <strong>lückenlos</strong> und <strong>überschneidungsfrei</strong> sein. Konvention: links abgeschlossen, rechts offen [a, b).</p>'},
+{id:'hv6',title:'Datenstrukturen in R',tier:'b',topic:'Häufigkeitsverteilungen',ref:'haeufigkeit',body:'<p><strong>Vektor:</strong> <code>c(1,2,3)</code> — Grundbaustein. <strong>Data Frame:</strong> Tabelle (Spalten = Variablen, Zeilen = Beobachtungen).</p><div class="formula"><span class="keyword">x <- c(3,1,4,1,5)</span>\n<span class="keyword">mean(x)</span>  <span class="result"># 2.8</span>\n<span class="keyword">table(x)</span> <span class="result"># Häufigkeitstabelle</span></div>'},
+// ═══ SESSION 2: LAGEMASSE ═══
+{id:'lm0',title:'Quantile & Quartile',tier:'a',topic:'Lagemaße',ref:'lagemasse',body:'<p><strong>p-Quantil x_p:</strong> Mindestens p·100% der Werte ≤ x_p und (1−p)·100% ≥ x_p.</p><div class="formula"><span class="keyword">Q₁</span> = x_0.25   <span class="keyword">Q₂</span> = x_0.50 = Median   <span class="keyword">Q₃</span> = x_0.75</div><div class="merksatz">Quartile teilen die Daten in vier gleich große Teile.</div>'},
+{id:'lm1',title:'Modus',tier:'a',topic:'Lagemaße',ref:'lagemasse',body:'<p>Häufigster Wert. Bei klassierten Daten: <strong>Modalklasse</strong>.</p><div class="merksatz">Einziges Lagemaß für Nominalskala! Kann mehrdeutig sein (bi-/multimodal).</div>'},
+{id:'lm2',title:'Median',tier:'a',topic:'Lagemaße',ref:'lagemasse',body:'<p>Wert, der die geordnete Reihe in zwei gleiche Hälften teilt. 50%-Quantil.</p><div class="formula"><span class="keyword">n ungerade:</span> x̃ = x₍₍ₙ₊₁₎/₂₎\n<span class="keyword">n gerade:</span>   x̃ = (x₍ₙ/₂₎ + x₍ₙ/₂₊₁₎) / 2</div><div class="merksatz"><strong>Minimumeigenschaft:</strong> Der Median minimiert die Summe der <strong>absoluten</strong> Abweichungen Σ|xᵢ − c|.</div>',deepDive:'<p><strong>Vorteil:</strong> Robust gegen Ausreißer! Einkommen: {1000, 1200, 1300, 1400, 50000}. Median = 1300 (sinnvoll), Mittelwert = 10980 (verzerrt).</p>'},
+{id:'lm3',title:'Arithmetisches Mittel',tier:'a',topic:'Lagemaße',ref:'lagemasse',body:'<div class="formula"><span class="keyword">x̄</span> = (1/n) · Σ xᵢ</div><p><strong>Nulleigenschaft:</strong> Σ(xᵢ − x̄) = 0. Abweichungen heben sich auf.</p><p><strong>Minimumeigenschaft:</strong> x̄ minimiert Σ(xᵢ − c)² (Summe der quadratischen Abweichungen).</p><div class="achtung">Anfällig für Ausreißer! Ab Intervallskala sinnvoll.</div>'},
+{id:'lm4',title:'Geometrisches & Harmonisches Mittel',tier:'b',topic:'Lagemaße',ref:'lagemasse',body:'<div class="formula"><span class="keyword">Geometrisch:</span> x̄_G = (∏ xᵢ)^(1/n)   <span class="comment">// Wachstumsraten</span>\n<span class="keyword">Harmonisch:</span>  x̄_H = n / Σ(1/xᵢ)   <span class="comment">// Geschwindigkeiten</span></div><p>Es gilt immer: x̄_H ≤ x̄_G ≤ x̄ (arithmetisch).</p><div class="example-box">Hin 60 km/h, zurück 40 km/h → x̄_H = 2/(1/60+1/40) = 48 km/h ≠ 50 km/h!</div>'},
+{id:'lm5',title:'Varianz & Standardabweichung',tier:'a',topic:'Streuungsmaße',ref:'streuung',body:'<div class="formula"><span class="keyword">s²</span> = (1/n) · Σ(xᵢ − x̄)²   <span class="comment">// empirische Varianz</span>\n<span class="keyword">s</span>  = √s²                     <span class="comment">// Standardabweichung</span></div><p><strong>Verschiebungssatz:</strong> s² = x̄² − (x̄)² = (1/n)·Σxᵢ² − x̄². Rechenvorteil!</p><div class="merksatz">s² hat Einheit², s hat die Originaleinheit. s = 0 nur wenn alle Werte gleich.</div>',deepDive:'<p><strong>Verschiebungssatz Schritt für Schritt:</strong></p><p>s² = (1/n)·Σ(xᵢ − x̄)² = (1/n)·Σ(xᵢ² − 2xᵢx̄ + x̄²) = (1/n)·Σxᵢ² − 2x̄·(1/n)·Σxᵢ + x̄² = (1/n)·Σxᵢ² − x̄²</p><p>Rechenvorteil: Man muss x̄ nicht vorher berechnen und die Abweichungen einzeln quadrieren.</p>'},
+{id:'lm6',title:'Spannweite & IQR',tier:'a',topic:'Streuungsmaße',ref:'streuung',body:'<div class="formula"><span class="keyword">Spannweite</span> R = x_max − x_min\n<span class="keyword">IQR</span> = Q₃ − Q₁   <span class="comment">// mittlere 50% der Daten</span></div><p>Spannweite: extrem ausreißerempfindlich. IQR: robust.</p>'},
+{id:'lm7',title:'Lineare Transformation',tier:'a',topic:'Streuungsmaße',ref:'streuung',body:'<p>Wenn y = p·x + q, dann:</p><div class="formula"><span class="keyword">ȳ</span> = p·x̄ + q\n<span class="keyword">s²_y</span> = p²·s²_x   <span class="comment">// Verschiebung q fällt raus!</span>\n<span class="keyword">s_y</span> = |p|·s_x</div><div class="example-box">°C → °F: F = 1.8·C + 32. s_F = 1.8·s_C (Additionskonstante egal für Streuung).</div>'},
+{id:'lm8',title:'z-Transformation',tier:'a',topic:'Streuungsmaße',ref:'streuung',body:'<div class="formula"><span class="keyword">zᵢ</span> = (xᵢ − x̄) / s</div><p>Ergebnis: z̄ = 0, s_z = 1. Macht verschiedene Skalen <strong>vergleichbar</strong>.</p><div class="example-box">Klausur A: 75/100 (x̄=60, s=10) → z=1.5. Klausur B: 40/50 (x̄=30, s=5) → z=2.0. Person war in B relativ besser!</div>',deepDive:'<p><strong>z-Wert interpretieren:</strong></p><p>z = 0: genau im Mittel. z = 1: eine SD über dem Mittel. z = −2: zwei SD unter dem Mittel.</p><p>Bei Normalverteilung: z=1.96 → 97.5%-Quantil (einseitig) → 95%-Intervall = [−1.96, +1.96].</p>'},
+{id:'lm9',title:'Schiefe',tier:'b',topic:'Streuungsmaße',ref:'streuung',body:'<div class="formula"><span class="keyword">g₁</span> = (1/n) · Σ((xᵢ−x̄)/s)³</div><p>g₁ > 0: rechtsschief. g₁ < 0: linksschief. g₁ = 0: symmetrisch.</p><div class="merksatz">Dritte Potenz bewahrt das Vorzeichen! Große Abweichungen in eine Richtung dominieren.</div>'},
+{id:'lm10',title:'Boxplot',tier:'a',topic:'Streuungsmaße',ref:'streuung',body:'<p><strong>Box:</strong> Q₁ bis Q₃ (= IQR). <strong>Linie in Box:</strong> Median. <strong>Whiskers:</strong> bis max. 1.5·IQR. <strong>Punkte:</strong> Ausreißer jenseits der Whiskers.</p><div class="merksatz">5-Punkte-Zusammenfassung: Min, Q₁, Median, Q₃, Max. Boxplot = visuelle Version davon.</div>'},
+{id:'lm11',title:'Zentrierung',tier:'b',topic:'Streuungsmaße',ref:'streuung',body:'<p><strong>Zentrierung:</strong> x\'ᵢ = xᵢ − x̄. Verschiebt Mittelwert auf 0, ändert Streuung NICHT.</p><p>Ist der erste Schritt der z-Transformation (danach / s).</p>'},
+// ═══ SESSION 3: KORRELATION ═══
+{id:'ko1',title:'Kovarianz',tier:'a',topic:'Korrelation',ref:'korrelation',body:'<div class="formula"><span class="keyword">s_xy</span> = (1/n) · Σ(xᵢ − x̄)(yᵢ − ȳ)</div><p>Maß für den <strong>linearen Zusammenhang</strong>. Positiv: gleichgerichtet. Negativ: gegenläufig.</p><div class="achtung">Problem: Einheitenabhängig! Daher → Standardisierung zu r.</div>'},
+{id:'ko2',title:'Pearson-Korrelation r',tier:'a',topic:'Korrelation',ref:'korrelation',body:'<div class="formula"><span class="keyword">r</span> = s_xy / (s_x · s_y)   <span class="comment">// standardisierte Kovarianz</span></div><p>r ∈ [−1, +1]. Einheitenlos.</p><div class="merksatz">|r| = 1: perfekt linear. r = 0: kein linearer Zusammenhang (kann trotzdem nichtlinear sein!).</div>',deepDive:'<p><strong>Interpretation:</strong> |r| < 0.1: vernachlässigbar. 0.1-0.3: schwach. 0.3-0.5: mittel. > 0.5: stark.</p><p><strong>Einschränkung:</strong> Nur für <strong>lineare</strong> Zusammenhänge! Perfekter quadratischer Zusammenhang kann r ≈ 0 liefern.</p>'},
+{id:'ko3',title:'Korrelation ≠ Kausalität',tier:'a',topic:'Korrelation',ref:'korrelation',body:'<div class="achtung"><strong>Drei Möglichkeiten bei r ≠ 0:</strong><br>1. X → Y<br>2. Y → X<br>3. Z → X und Z → Y (<strong>Drittvariable!</strong>)</div><div class="example-box">Eisverkauf korreliert mit Ertrinken. Drittvariable: Temperatur!</div>'},
+{id:'ko4',title:'Spearman r_s',tier:'a',topic:'Korrelation',ref:'korrelation',body:'<p>Pearson r auf die <strong>Ränge</strong> angewendet. Robust, für ordinale Daten.</p><div class="formula"><span class="keyword">r_s</span> = Pearson(Rang(x), Rang(y))\n<span class="comment">// Ohne Bindungen: r_s = 1 − 6·Σdᵢ²/(n(n²−1))</span></div>'},
+{id:'ko5',title:'Phi-Koeffizient & Odds Ratio',tier:'b',topic:'Korrelation',ref:'korrelation',body:'<p>Zusammenhang zweier <strong>dichotomer</strong> Merkmale (Vierfeldertafel).</p><div class="formula"><span class="keyword">φ</span> = (ad − bc) / √((a+b)(c+d)(a+c)(b+d))\n<span class="keyword">OR</span> = (a·d) / (b·c)</div><p>OR = 1: kein Zusammenhang. OR > 1: positiv. OR < 1: negativ.</p>'},
+{id:'ko6',title:'Vierfeldertafel',tier:'a',topic:'Korrelation',ref:'korrelation',body:'<div class="def-box blue">Kreuzklassifikation zweier dichotomer Merkmale. Zellen a, b, c, d.</div><div class="example-box">Rauchen × Lungenkrebs: a=R+K, b=R+keinK, c=NR+K, d=NR+keinK</div>'},
+// ═══ SESSION 3: REGRESSION ═══
+{id:'re1',title:'Regressionsgerade (KQ-Methode)',tier:'a',topic:'Regression',ref:'regression',body:'<div class="formula"><span class="keyword">ŷ</span> = b̂₀ + b̂₁·x   <span class="comment">// minimiert Σ(yᵢ − ŷᵢ)²</span></div><div class="merksatz">Die Gerade geht IMMER durch (x̄, ȳ).</div>'},
+{id:'re2',title:'Regressionskoeffizienten',tier:'a',topic:'Regression',ref:'regression',body:'<div class="formula"><span class="keyword">b̂₁</span> = s_xy / s²_x   <span class="comment">// Steigung</span>\n<span class="keyword">b̂₀</span> = ȳ − b̂₁·x̄    <span class="comment">// Achsenabschnitt</span></div><p>b̂₁ = r · (s_y/s_x). Regression Y auf X ≠ X auf Y!</p>'},
+{id:'re3',title:'Determinationskoeffizient r²',tier:'a',topic:'Regression',ref:'regression',body:'<div class="formula"><span class="keyword">r²</span> = s²_ŷ / s²_y = 1 − s²_e / s²_y</div><p>Anteil der Varianz von Y, der durch X „erklärt" wird.</p><div class="example-box">r = 0.7 → r² = 0.49 → 49% erklärt, 51% Restvarianz.</div>'},
+{id:'re4',title:'Varianzzerlegung',tier:'a',topic:'Regression',ref:'regression',body:'<div class="formula"><span class="keyword">s²_y</span> = <span class="result">s²_ŷ</span> + <span class="symbol">s²_e</span>\n<span class="comment">Gesamt = Erklärt + Residuen</span></div><div class="merksatz">Residuen eᵢ = yᵢ − ŷᵢ haben Mittelwert 0 und sind unkorreliert mit x.</div>'},
+{id:'re5',title:'Partielle Korrelation',tier:'b',topic:'Regression',ref:'regression',body:'<div class="formula"><span class="keyword">r_xy.z</span> = (r_xy − r_xz·r_yz) / √((1−r²_xz)(1−r²_yz))</div><p>Zusammenhang X-Y nach Herausrechnen von Z.</p><div class="example-box">r(Eis,Ertrinken) hoch. r(Eis,Ertrinken|Temp) ≈ 0 → Scheinkorrelation.</div>'},
+{id:'re6',title:'Scheinkorrelation & Suppression',tier:'b',topic:'Regression',ref:'regression',body:'<p><strong>Scheinkorrelation:</strong> r_xy ≠ 0, aber r_xy.z ≈ 0 (verschwindet).</p><p><strong>Suppression:</strong> r_xy ≈ 0, aber r_xy.z ≠ 0 (taucht erst auf!).</p><div class="achtung">Suppression: Gegenläufige Effekte heben sich ohne Kontrolle auf.</div>'},
+// ═══ SESSION 4: WAHRSCHEINLICHKEIT ═══
+{id:'ws1',title:'Kolmogorov-Axiome',tier:'a',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">1.</span> P(A) ≥ 0\n<span class="keyword">2.</span> P(Ω) = 1\n<span class="keyword">3.</span> A∩B=∅ ⇒ P(A∪B)=P(A)+P(B)</div>'},
+{id:'ws2',title:'Folgerungen (Komplement, Additionssatz)',tier:'a',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">Komplement:</span>    P(Ā) = 1 − P(A)\n<span class="keyword">Additionssatz:</span> P(A∪B) = P(A)+P(B)−P(A∩B)\n<span class="keyword">Monotonie:</span>     A⊆B ⇒ P(A) ≤ P(B)</div>'},
+{id:'ws3',title:'Laplace-Experiment',tier:'a',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">P(A)</span> = |A| / |Ω|   <span class="comment">// günstige / mögliche</span></div><div class="example-box">Würfel: P(gerade) = 3/6 = 1/2</div>'},
+{id:'ws4',title:'Kombinatorik',tier:'a',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">Permutationen:</span>    n!\n<span class="keyword">Variation o.Z.:</span>   n!/(n−k)!\n<span class="keyword">Kombination o.Z.:</span> C(n,k) = n!/(k!(n−k)!)</div><div class="example-box">Lotto 6 aus 49 = C(49,6) = 13.983.816</div>'},
+{id:'ws5',title:'Binomialkoeffizient',tier:'a',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">C(n,k)</span> = n! / (k!(n−k)!)</div><div class="merksatz">C(n,0)=1, C(n,n)=1, C(n,k)=C(n,n−k)</div>'},
+{id:'ws6',title:'Bedingte Wahrscheinlichkeit',tier:'a',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">P(A|B)</span> = P(A∩B) / P(B)</div><div class="example-box">Würfel: P(gerade | >3) = P({4,6})/P({4,5,6}) = 2/3</div>'},
+{id:'ws7',title:'Multiplikationssatz & Unabhängigkeit',tier:'a',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">Allgemein:</span>  P(A∩B) = P(A|B)·P(B)\n<span class="keyword">Unabhängig:</span> P(A∩B) = P(A)·P(B)</div><div class="achtung">Unabhängig ≠ disjunkt! Disjunkt → maximal abhängig.</div>'},
+// ═══ SESSION 4: VERTEILUNGEN ═══
+{id:'vt1',title:'Bernoulli- & Binomialverteilung',tier:'a',topic:'Verteilungen',ref:'verteilungen',body:'<div class="formula"><span class="keyword">P(X=k)</span> = C(n,k)·p^k·(1−p)^(n−k)\n<span class="keyword">E(X)</span> = n·p   <span class="keyword">Var(X)</span> = n·p·(1−p)</div><div class="example-box">10× Münze: P(7 Köpfe) = C(10,7)·0.5¹⁰ ≈ 0.117</div>'},
+{id:'vt2',title:'Normalverteilung (Dichtefunktion)',tier:'a',topic:'Verteilungen',ref:'verteilungen',body:'<div class="formula"><span class="keyword">f(x)</span> = (1/(σ√(2π)))·exp(−(x−μ)²/(2σ²))</div><p>Symmetrisch, glockenförmig. Wendepunkte bei μ ± σ.</p>'},
+{id:'vt3',title:'Standardnormalverteilung',tier:'a',topic:'Verteilungen',ref:'verteilungen',body:'<p>N(0,1). Standardisierung: z = (x−μ)/σ.</p><div class="formula"><span class="keyword">Φ(z)</span> = P(Z ≤ z)   <span class="comment">// Verteilungsfunktion → z-Tabelle</span></div>'},
+{id:'vt4',title:'z-Tabelle: Wahrscheinlichkeit ablesen',tier:'a',topic:'Verteilungen',ref:'verteilungen',body:'<div class="formula"><span class="keyword">P(Z ≤ 1.96)</span> = <span class="result">0.975</span>\n<span class="keyword">P(Z > z)</span> = 1 − Φ(z)\n<span class="keyword">P(Z ≤ −z)</span> = 1 − Φ(z)   <span class="comment">// Symmetrie</span></div><div class="example-box">P(−1.5 ≤ Z ≤ 2.0) = Φ(2.0)−Φ(−1.5) = 0.9772−0.0668 = 0.9104</div>'},
+{id:'vt5',title:'z-Tabelle: Quantile ablesen',tier:'a',topic:'Verteilungen',ref:'verteilungen',body:'<div class="formula"><span class="keyword">z_0.975</span> = <span class="result">1.96</span>\n<span class="keyword">z_0.025</span> = <span class="result">−1.96</span>   <span class="comment">// z_α = −z_(1−α)</span></div>'},
+{id:'vt6',title:'68-95-99.7-Regel',tier:'a',topic:'Verteilungen',ref:'verteilungen',body:'<div class="merksatz"><strong>68%</strong> in μ ± 1σ. <strong>95%</strong> in μ ± 1.96σ. <strong>99.7%</strong> in μ ± 3σ.</div><div class="example-box">IQ ~ N(100,15): 68% zwischen 85-115. 95% zwischen 70-130.</div>'},
+];
+/* ── POOL DATA ── */
+const POOL={
+grundlagen:[
+{type:'mc',q:'Welche Skala erlaubt nur = / ≠?',options:['Ordinal','Intervall','Nominal','Verhältnis'],correct:2,explanation:'Nominalskala: nur Gleichheit/Verschiedenheit.'},
+{type:'mc',q:'Erlaubte Transformation bei Intervallskala?',options:['Bijektive','Monotone','y = ax + b','y = ax'],correct:2,explanation:'Intervall: lineare Transformation y=ax+b.'},
+{type:'tf',q:'Auf Ordinalskala sind „doppelt so viel"-Aussagen zulässig.',correct:false,explanation:'Nur bei Verhältnisskala!'},
+{type:'mc',q:'Welches Skalenniveau hat Temperatur in °C?',options:['Nominal','Ordinal','Intervall','Verhältnis'],correct:2,explanation:'°C: gleiche Abstände, aber 0°C ≠ kein Wärme.'},
+{type:'mc',q:'Welche Skala hat einen echten Nullpunkt?',options:['Nominal','Ordinal','Intervall','Verhältnis'],correct:3,explanation:'Verhältnisskala: absoluter Nullpunkt.'},
+{type:'mc',q:'Diskretes Merkmal = ?',options:['Jeder Wert möglich','Abzählbare Werte','Nur 0/1','Stetig gerundet'],correct:1,explanation:'Diskret: abzählbar (Kinderzahl).'},
+{type:'tf',q:'Körpergröße ist ein diskretes Merkmal.',correct:false,explanation:'Stetig — jeder Wert im Intervall ist möglich.'},
+{type:'mc',q:'Absolutskala erlaubt welche Transformation?',options:['y=ax+b','y=ax','Monotone','Nur Identität'],correct:3,explanation:'Absolutskala: einzige Transformation ist die Identität.'},
+{type:'mc',q:'Wann ist eine Aussage „bedeutsam"?',options:['Wenn p < .05','Wenn Wahrheitswert unter allen zulässigen Transformationen gleich bleibt','Wenn sie falsifizierbar ist','Wenn sie signifikant ist'],correct:1,explanation:'Bedeutsamkeit = Invarianz unter erlaubten Transformationen.'},
+{type:'tf',q:'„Doppelt so warm" ist auf der °C-Skala bedeutsam.',correct:false,explanation:'Keine Verhältnisskala → Verhältnisaussagen nicht invariant unter y=ax+b.'},
+{type:'mc',q:'Qualitatives Merkmal = ?',options:['Messbar','Kategorien','Stetig','Nur Zahlen'],correct:1,explanation:'Qualitativ: Kategorien (Geschlecht, Studiengang).'},
+{type:'mc',q:'Modus ist erlaubt ab welcher Skala?',options:['Nominal','Ordinal','Intervall','Verhältnis'],correct:0,explanation:'Modus = häufigster Wert, ab Nominal sinnvoll.'},
+{type:'mc',q:'Mittelwert ab welcher Skala sinnvoll?',options:['Nominal','Ordinal','Intervall','Verhältnis'],correct:2,explanation:'Ab Intervall: gleiche Abstände nötig.'},
+{type:'mc',q:'Median ab welcher Skala?',options:['Nominal','Ordinal','Intervall','Verhältnis'],correct:1,explanation:'Ab Ordinal: Rangfolge nötig.'},
+{type:'tf',q:'Likert-Skalen (1-5) sind streng genommen ordinalskaliert.',correct:true,explanation:'Formal ordinal. Mittelwerte nur pragmatisch OK.'},
+{type:'mc',q:'Schulnoten sind auf welcher Skala?',options:['Nominal','Ordinal','Intervall','Verhältnis'],correct:1,explanation:'Ordinal: Rangfolge ja, gleiche Abstände nein.'},
+{type:'mc',q:'Reaktionszeit (in ms) ist auf welcher Skala?',options:['Nominal','Ordinal','Intervall','Verhältnis'],correct:3,explanation:'Verhältnis: echter Nullpunkt (0 ms = keine Reaktion).'},
+{type:'tf',q:'IQ ist verhältnisskaliert.',correct:false,explanation:'Intervallskaliert. 0 IQ ≠ keine Intelligenz.'},
+{type:'mc',q:'Welche Statistik ist für Nominalskala NICHT erlaubt?',options:['Modus','Chi²','Mittelwert','Häufigkeiten'],correct:2,explanation:'Mittelwert sinnlos auf Nominalskala.'},
+{type:'mc',q:'Höchstes Skalenniveau?',options:['Verhältnis','Intervall','Absolut','Ordinal'],correct:2,explanation:'Absolutskala: nur Identität, alles erlaubt.'},
+],
+haeufigkeit:[
+{type:'mc',q:'f(x) = h(x)/n ist die …',options:['Absolute Häufigkeit','Relative Häufigkeit','Kumulierte Häufigkeit','Dichte'],correct:1,explanation:'f(x) = relative Häufigkeit.'},
+{type:'tf',q:'Die Summe aller relativen Häufigkeiten ergibt 1.',correct:true,explanation:'Σ f(xᵢ) = 1.'},
+{type:'mc',q:'Die empirische Verteilungsfunktion F(x) ist …',options:['Fallend','Zufällig','Monoton steigend (Treppe)','Glockenförmig'],correct:2,explanation:'F(x) = Treppenfunktion, steigend.'},
+{type:'mc',q:'Bei Daten {1,2,2,3}: F(2) = ?',options:['0.25','0.50','0.75','1.00'],correct:2,explanation:'3 von 4 Werten ≤ 2 → 0.75.'},
+{type:'mc',q:'Y-Achse im Histogramm bei ungleichen Klassen?',options:['Absolute Häufigkeit','Relative Häufigkeit','Häufigkeitsdichte','Kumulierte Häufigkeit'],correct:2,explanation:'Dichte = f(Klasse)/Klassenbreite. Fläche = rel. Häufigkeit.'},
+{type:'tf',q:'Im Histogramm entspricht die Höhe immer der relativen Häufigkeit.',correct:false,explanation:'Nur bei gleichen Klassenbreiten! Sonst: Fläche = Häufigkeit.'},
+{type:'mc',q:'Rechtsschief bedeutet?',options:['Gipfel rechts','Langer Schwanz nach rechts','Symmetrisch','Langer Schwanz nach links'],correct:1,explanation:'Rechtsschief = Schwanz nach rechts (positive Schiefe).'},
+{type:'mc',q:'Faustregel für Klassenzahl k?',options:['k = n','k ≈ √n','k = n/2','k = 10'],correct:1,explanation:'k ≈ √n als Ausgangspunkt.'},
+{type:'mc',q:'Klassenkonvention: links …, rechts …',options:['offen, geschlossen','geschlossen, offen','beide offen','beide geschlossen'],correct:1,explanation:'[a, b) — links abgeschlossen, rechts offen.'},
+{type:'tf',q:'Bei einer linkschiefen Verteilung liegt der Schwanz links.',correct:true,explanation:'Linksschief = negativer Schwanz.'},
+{type:'mc',q:'Was zeigt die kumulierte Häufigkeit F(x)?',options:['Anteil > x','Anteil ≤ x','Häufigste Klasse','Mittelwert'],correct:1,explanation:'F(x) = Anteil aller Beobachtungen ≤ x.'},
+{type:'mc',q:'Einkommensverteilung ist typischerweise …',options:['Symmetrisch','Linksschief','Rechtsschief','Gleichverteilt'],correct:2,explanation:'Viele niedrige, wenige sehr hohe → rechtsschief.'},
+{type:'tf',q:'Klassen im Histogramm dürfen sich überschneiden.',correct:false,explanation:'Lückenlos und überschneidungsfrei.'},
+{type:'mc',q:'Absolute Häufigkeit h(x) zählt …',options:['Anteile','Wie oft x vorkommt','Kumul. Werte','Dichten'],correct:1,explanation:'h(x) = Anzahl des Vorkommens von x.'},
+{type:'mc',q:'Bimodale Verteilung hat …',options:['Keinen Gipfel','Einen Gipfel','Zwei Gipfel','Drei Gipfel'],correct:2,explanation:'Bi-modal = zwei Häufungspunkte.'},
+{type:'mc',q:'Klassenbreite berechnet sich als …',options:['n/k','(x_max−x_min)/k','√n','x̄/k'],correct:1,explanation:'Spannweite / Anzahl Klassen.'},
+{type:'tf',q:'F(x) ist rechtsstetig.',correct:true,explanation:'Sprung nach dem Wert.'},
+{type:'mc',q:'Bei klassierten Daten heißt der Modus?',options:['Medianklasse','Modalklasse','Varianzklasse','Quantilklasse'],correct:1,explanation:'Klasse mit der höchsten Häufigkeit.'},
+{type:'mc',q:'Dichte im Histogramm = ?',options:['h(x)','f(x)','f(Klasse)/Klassenbreite','F(x)'],correct:2,explanation:'Häufigkeitsdichte normiert auf die Breite.'},
+{type:'tf',q:'Histogramm eignet sich für nominale Daten.',correct:false,explanation:'Histogramm für stetige/klassierte Daten. Nominal → Balkendiagramm.'},
+],
+lagemasse:[
+{type:'mc',q:'Einziges Lagemaß für Nominalskala?',options:['Median','Mittelwert','Modus','Geometr. Mittel'],correct:2,explanation:'Modus = häufigster Wert.'},
+{type:'mc',q:'Minimumeigenschaft des Medians?',options:['Minimiert Σ(xᵢ−c)²','Minimiert Σ|xᵢ−c|','Minimiert max|xᵢ−c|','Minimiert Σxᵢ'],correct:1,explanation:'Median minimiert Summe der absoluten Abweichungen.'},
+{type:'mc',q:'Minimumeigenschaft des arithm. Mittels?',options:['Minimiert Σ|xᵢ−c|','Minimiert Σ(xᵢ−c)²','Minimiert max(xᵢ−c)','Minimiert Σ1/xᵢ'],correct:1,explanation:'x̄ minimiert Summe der quadratischen Abweichungen.'},
+{type:'tf',q:'Σ(xᵢ − x̄) = 0 heißt Nulleigenschaft.',correct:true,explanation:'Die Abweichungen vom Mittelwert summieren sich zu 0.'},
+{type:'mc',q:'Hin 60 km/h, zurück 40 km/h. Durchschnitt?',options:['50 km/h','48 km/h','45 km/h','52 km/h'],correct:1,explanation:'Harmonisches Mittel: 2/(1/60+1/40) = 48.'},
+{type:'mc',q:'Es gilt immer: x̄_H _ x̄_G _ x̄',options:['≥ ≥','≤ ≤','= =','> <'],correct:1,explanation:'Harmonisch ≤ Geometrisch ≤ Arithmetisch.'},
+{type:'tf',q:'Der Median ist robust gegen Ausreißer.',correct:true,explanation:'Ein einzelner Extremwert ändert den Median kaum.'},
+{type:'mc',q:'Daten: {1,2,2,3,100}. Was ist besser als Lagemaß?',options:['Mittelwert','Median','Spannweite','Varianz'],correct:1,explanation:'Median (2) ist robust. Mittelwert (21.4) durch 100 verzerrt.'},
+{type:'mc',q:'Geometrisches Mittel eignet sich für …',options:['Geschwindigkeiten','Wachstumsraten','Ordinalskala','Häufigkeiten'],correct:1,explanation:'Multiplikative Zusammenhänge → geometrisches Mittel.'},
+{type:'tf',q:'Das arithmetische Mittel ist ab Ordinalskala sinnvoll.',correct:false,explanation:'Erst ab Intervallskala (gleiche Abstände nötig).'},
+{type:'mc',q:'n=5 Daten geordnet: x₁≤…≤x₅. Median?',options:['x₂','x₃','(x₂+x₃)/2','(x₃+x₄)/2'],correct:1,explanation:'n ungerade: Median = x₍₃₎ (mittlerer Wert).'},
+{type:'mc',q:'n=6 geordnet. Median?',options:['x₃','x₄','(x₃+x₄)/2','(x₂+x₅)/2'],correct:2,explanation:'n gerade: Durchschnitt der beiden mittleren.'},
+{type:'mc',q:'Welches Lagemaß kann mehrdeutig sein?',options:['Median','Mittelwert','Modus','Varianz'],correct:2,explanation:'Modus: bimodal oder multimodal möglich.'},
+{type:'tf',q:'Der Mittelwert ist anfällig für Ausreißer.',correct:true,explanation:'Ein einziger Extremwert verschiebt x̄ stark.'},
+{type:'mc',q:'Harmonisches Mittel ist sinnvoll für …',options:['Wachstumsraten','Durchschnittsgeschwindigkeiten','Häufigkeiten','Ränge'],correct:1,explanation:'Bei gleichen Strecken mit verschiedenen Geschwindigkeiten.'},
+{type:'mc',q:'Modus bei {1,2,2,3,3,4}?',options:['2','3','2 und 3','2.5'],correct:2,explanation:'Bimodal: 2 und 3 kommen je zweimal vor.'},
+{type:'tf',q:'Der Modus ist immer eindeutig.',correct:false,explanation:'Kann mehrere Modi geben (bimodal, multimodal).'},
+{type:'mc',q:'Verschiebungssatz der Varianz?',options:['s²=x̄²−(x̄)²','s²=(1/n)Σxᵢ²−x̄²','s²=Σxᵢ²/n²','s²=x̄−Median'],correct:1,explanation:'s² = Mittel der Quadrate minus Quadrat des Mittels.'},
+{type:'mc',q:'Varianz hat welche Einheit?',options:['Originaleinheit','Einheit²','Keine','Prozent'],correct:1,explanation:'s² hat Einheit², s hat Originaleinheit.'},
+{type:'mc',q:'s = 0 bedeutet?',options:['Alle Werte gleich','Mittelwert = 0','Normalverteilt','Keine Ausreißer'],correct:0,explanation:'Keine Streuung = alle identisch.'},
+],
+streuung:[
+{type:'mc',q:'IQR = ?',options:['Q₃ + Q₁','Q₃ − Q₁','Q₃ · Q₁','Q₃ / Q₁'],correct:1,explanation:'Interquartilsabstand = Q₃ − Q₁.'},
+{type:'mc',q:'Spannweite R = ?',options:['x̄ − Median','Q₃ − Q₁','x_max − x_min','s²'],correct:2,explanation:'Differenz Maximum − Minimum.'},
+{type:'tf',q:'Die Spannweite ist robust gegen Ausreißer.',correct:false,explanation:'Extrem empfindlich — ein Ausreißer ändert R sofort.'},
+{type:'mc',q:'y = 3x + 5. s²_y = ?',options:['3·s²_x','9·s²_x','3·s²_x + 5','9·s²_x + 25'],correct:1,explanation:'s²_y = p²·s²_x = 9·s²_x. Additionskonstante fällt raus.'},
+{type:'mc',q:'z-Transformation: z̄ = ? und s_z = ?',options:['0, 1','1, 0','x̄, s','0, s'],correct:0,explanation:'z̄ = 0, s_z = 1 per Definition.'},
+{type:'mc',q:'z = (xᵢ − x̄) / s. z = 2 bedeutet?',options:['x ist doppelt so groß','x liegt 2 SD über dem Mittel','x ist der Median','x = 2'],correct:1,explanation:'z = Anzahl Standardabweichungen vom Mittel.'},
+{type:'mc',q:'Klausur A: 75 Punkte (x̄=60, s=10). z = ?',options:['0.5','1.0','1.5','2.0'],correct:2,explanation:'z = (75−60)/10 = 1.5.'},
+{type:'mc',q:'g₁ > 0 bedeutet?',options:['Linksschief','Symmetrisch','Rechtsschief','Bimodal'],correct:2,explanation:'Positive Schiefe = rechtsschief.'},
+{type:'mc',q:'Boxplot-Whiskers reichen bis maximal …',options:['Min/Max','1.5·IQR ab Q₁/Q₃','2·IQR','3·SD'],correct:1,explanation:'Whiskers bis max. 1.5·IQR, darüber = Ausreißer.'},
+{type:'mc',q:'5-Punkte-Zusammenfassung?',options:['x̄, s, n, Min, Max','Min, Q₁, Median, Q₃, Max','Q₁, Q₂, Q₃, Q₄, Q₅','x̄, Median, Modus, s, R'],correct:1,explanation:'Die fünf Kennwerte des Boxplots.'},
+{type:'tf',q:'Zentrierung ändert die Streuung.',correct:false,explanation:'x\'=x−x̄ verschiebt nur, Streuung bleibt gleich.'},
+{type:'mc',q:'Bei linearer Transformation y=px+q gilt s_y = ?',options:['p·s_x','|p|·s_x','p·s_x + q','p²·s_x'],correct:1,explanation:'s_y = |p|·s_x. Betrag wegen negativem p.'},
+{type:'mc',q:'°C → °F: F = 1.8C + 32. s_F = ?',options:['1.8·s_C','1.8·s_C + 32','3.24·s_C','s_C/1.8'],correct:0,explanation:'s_F = 1.8·s_C. Additionskonstante irrelevant.'},
+{type:'tf',q:'Der IQR umfasst die mittleren 50% der Daten.',correct:true,explanation:'Von Q₁ (25%) bis Q₃ (75%) = mittlere 50%.'},
+{type:'mc',q:'Varianz s² berechnet sich als …',options:['(1/n)·Σ(xᵢ−x̄)','(1/n)·Σ(xᵢ−x̄)²','(1/n)·Σxᵢ²','Σ(xᵢ−x̄)²'],correct:1,explanation:'Mittlere quadratische Abweichung vom Mittelwert.'},
+{type:'mc',q:'Ausreißer im Boxplot = ?',options:['Innerhalb der Box','Zwischen Whisker und Box','Jenseits der Whiskers','Am Median'],correct:2,explanation:'Punkte jenseits 1.5·IQR ab Q₁/Q₃.'},
+{type:'mc',q:'Schiefe g₁ nutzt welche Potenz?',options:['Erste','Zweite','Dritte','Vierte'],correct:2,explanation:'g₁ = (1/n)·Σ((xᵢ−x̄)/s)³. Dritte Potenz bewahrt Vorzeichen.'},
+{type:'tf',q:'Die z-Transformation macht verschiedene Skalen vergleichbar.',correct:true,explanation:'Standardisiert auf z̄=0, s=1.'},
+{type:'mc',q:'Was passiert bei Zentrierung x\' = x − x̄?',options:['Mittelwert wird 0, Streuung bleibt','Streuung wird 0','Alles wird 1','Median wird 0'],correct:0,explanation:'Nur Verschiebung des Mittelwerts auf 0.'},
+],
+korrelation:[
+{type:'mc',q:'Kovarianz s_xy ist …',options:['Einheitenlos','Einheitenabhängig','Immer positiv','Immer ≤ 1'],correct:1,explanation:'Einheitenabhängig → nicht direkt vergleichbar.'},
+{type:'mc',q:'Pearson r = ?',options:['s_xy / s_x','s_xy / (s_x·s_y)','s_xy / s²_x','s²_xy / (s_x·s_y)'],correct:1,explanation:'Standardisierte Kovarianz.'},
+{type:'mc',q:'r = 0 bedeutet?',options:['Kein Zusammenhang','Kein LINEARER Zusammenhang','Unabhängigkeit','Kausalität'],correct:1,explanation:'Kann trotzdem nichtlinear zusammenhängen!'},
+{type:'tf',q:'Korrelation impliziert Kausalität.',correct:false,explanation:'Drei Möglichkeiten: X→Y, Y→X, Drittvariable.'},
+{type:'mc',q:'Spearman r_s basiert auf?',options:['Originaldaten','Rängen','z-Werten','Residuen'],correct:1,explanation:'Pearson-Korrelation der Ränge.'},
+{type:'mc',q:'φ-Koeffizient eignet sich für?',options:['Stetige Daten','Zwei dichotome Merkmale','Ordinale Daten','Zeitreihen'],correct:1,explanation:'Vierfeldertafel: 2×2 dichotom.'},
+{type:'mc',q:'OR = 1 bedeutet?',options:['Perfekter Zusammenhang','Kein Zusammenhang','Negative Korrelation','Kausalität'],correct:1,explanation:'Odds Ratio = 1: kein Zusammenhang.'},
+{type:'mc',q:'Eisverkauf korreliert mit Ertrinken. Warum?',options:['Eis verursacht Ertrinken','Ertrinken steigert Eiskonsum','Drittvariable Temperatur','Zufall'],correct:2,explanation:'Scheinkorrelation durch Drittvariable.'},
+{type:'tf',q:'|r| = 1 bedeutet perfekten linearen Zusammenhang.',correct:true,explanation:'Alle Punkte auf einer Geraden.'},
+{type:'mc',q:'r = −0.8 vs. r = 0.5: Was ist stärker?',options:['r = 0.5','r = −0.8','Gleich','Nicht vergleichbar'],correct:1,explanation:'Stärke = |r|. |−0.8| > |0.5|.'},
+{type:'mc',q:'Partielle Korrelation r_xy.z kontrolliert für …',options:['x','y','z','Alle drei'],correct:2,explanation:'Einfluss von z wird herausgerechnet.'},
+{type:'mc',q:'Scheinkorrelation: r_xy ≠ 0, aber r_xy.z ≈ ?',options:['1','0','−1','r_xy'],correct:1,explanation:'Zusammenhang verschwindet nach Kontrolle.'},
+{type:'tf',q:'Spearman r_s ist robust gegen Ausreißer.',correct:true,explanation:'Ränge sind weniger empfindlich als Originalwerte.'},
+{type:'mc',q:'Suppression bedeutet?',options:['r_xy ≠ 0, r_xy.z = 0','r_xy = 0, r_xy.z ≠ 0','r_xy = r_xy.z','r = 1'],correct:1,explanation:'Zusammenhang taucht erst nach Kontrolle auf.'},
+{type:'mc',q:'In der Vierfeldertafel: Randhäufigkeiten sind?',options:['Die Zellen a,b,c,d','Zeilen- und Spaltensummen','Korrelationen','Residuen'],correct:1,explanation:'Summen der Zeilen und Spalten.'},
+{type:'mc',q:'r kann Werte annehmen von … bis …',options:['0 bis 1','−1 bis 0','−1 bis +1','−∞ bis +∞'],correct:2,explanation:'r ∈ [−1, +1].'},
+{type:'tf',q:'Ein perfekter quadratischer Zusammenhang hat r = 1.',correct:false,explanation:'r misst nur LINEAREN Zusammenhang. Quadratisch kann r ≈ 0 sein.'},
+{type:'mc',q:'Kovarianz > 0 bedeutet?',options:['Gegenläufig','Gleichgerichtet','Kein Zusammenhang','Kausal'],correct:1,explanation:'Positive Kovarianz = gleichgerichtet.'},
+{type:'mc',q:'OR < 1 bedeutet?',options:['Positive Assoziation','Negative Assoziation','Kein Zusammenhang','Kausalität'],correct:1,explanation:'Odds Ratio < 1: negativ assoziiert.'},
+],
+regression:[
+{type:'mc',q:'KQ-Methode minimiert?',options:['Σ|yᵢ−ŷᵢ|','Σ(yᵢ−ŷᵢ)²','Max(yᵢ−ŷᵢ)','Σ(xᵢ−x̄)²'],correct:1,explanation:'Methode der kleinsten Quadrate: minimiert Σ(yᵢ−ŷᵢ)².'},
+{type:'mc',q:'b̂₁ = ?',options:['s_xy / s_y','s_xy / s²_x','r · s_x/s_y','s²_xy / s_x'],correct:1,explanation:'Steigung = Kovarianz / Varianz von x.'},
+{type:'mc',q:'Die Regressionsgerade geht immer durch?',options:['(0,0)','(Median_x, Median_y)','(x̄, ȳ)','(Q₁, Q₃)'],correct:2,explanation:'Immer durch den Schwerpunkt (x̄, ȳ).'},
+{type:'mc',q:'r² = 0.64 bedeutet?',options:['r = 0.64','64% Varianz erklärt','36% Varianz erklärt','r = 0.36'],correct:1,explanation:'r² = erklärte Varianz. r = √0.64 = 0.8.'},
+{type:'tf',q:'Regression von Y auf X = Regression von X auf Y.',correct:false,explanation:'Verschiedene Geraden (außer |r|=1).'},
+{type:'mc',q:'Residuen eᵢ haben welchen Mittelwert?',options:['1','x̄','0','ȳ'],correct:2,explanation:'ē = 0, und Residuen sind unkorreliert mit x.'},
+{type:'mc',q:'b̂₁ = r · (s_y/s_x). Wenn r = 0?',options:['b̂₁ = 1','b̂₁ = 0','b̂₁ = s_y','Undefiniert'],correct:1,explanation:'Kein linearer Zusammenhang → horizontale Gerade.'},
+{type:'mc',q:'Varianzzerlegung: s²_y = ?',options:['s²_ŷ − s²_e','s²_ŷ + s²_e','s²_ŷ · s²_e','s²_ŷ / s²_e'],correct:1,explanation:'Gesamt = Erklärt + Residuen.'},
+{type:'mc',q:'r = 0.9, r² = ?',options:['0.9','0.81','0.09','0.45'],correct:1,explanation:'r² = 0.81 = 81% erklärte Varianz.'},
+{type:'tf',q:'b̂₀ ist der Achsenabschnitt der Regressionsgeraden.',correct:true,explanation:'ŷ bei x = 0.'},
+{type:'mc',q:'Partielle Korrelation r_xy.z: Formel im Zähler?',options:['r_xy + r_xz·r_yz','r_xy − r_xz·r_yz','r_xy · r_xz · r_yz','r_xy / r_xz'],correct:1,explanation:'r_xy.z = (r_xy − r_xz·r_yz) / √(…).'},
+{type:'mc',q:'Scheinkorrelation entlarven durch?',options:['Größere Stichprobe','Partielle Korrelation','Spearman statt Pearson','Quadrierung'],correct:1,explanation:'Drittvariable kontrollieren → r_xy.z ≈ 0.'},
+{type:'mc',q:'b̂₀ = ?',options:['x̄ − b̂₁·ȳ','ȳ − b̂₁·x̄','b̂₁·x̄ − ȳ','ȳ + b̂₁·x̄'],correct:1,explanation:'b̂₀ = ȳ − b̂₁·x̄.'},
+{type:'tf',q:'r² kann negativ sein.',correct:false,explanation:'r² ∈ [0, 1]. Immer nichtnegativ.'},
+{type:'mc',q:'Wenn s²_e = 0?',options:['Kein Zusammenhang','Perfekte Vorhersage','r = 0','Alle Werte gleich'],correct:1,explanation:'Keine Residuen → alle Punkte auf der Geraden.'},
+{type:'mc',q:'s²_ŷ / s²_y = ?',options:['r','r²','1−r²','b̂₁'],correct:1,explanation:'Determinationskoeffizient.'},
+{type:'mc',q:'r = −0.7. r² = ?',options:['−0.49','0.49','0.7','−0.7'],correct:1,explanation:'r² = 0.49. Vorzeichen geht verloren.'},
+{type:'tf',q:'Residuen eᵢ sind unkorreliert mit x.',correct:true,explanation:'Eigenschaft der KQ-Regression.'},
+{type:'mc',q:'b̂₁ negativ bedeutet?',options:['Kein Zusammenhang','Y sinkt wenn X steigt','Y steigt wenn X steigt','Fehler'],correct:1,explanation:'Negative Steigung = gegenläufig.'},
+{type:'mc',q:'Wie viel Varianz ist bei r = 0.5 erklärt?',options:['50%','25%','75%','5%'],correct:1,explanation:'r² = 0.25 = 25%.'},
+],
+wahrscheinlichkeit:[
+{type:'mc',q:'P(Ω) = ?',options:['0','0.5','1','Undefiniert'],correct:2,explanation:'Axiom 2: Normiertheit.'},
+{type:'mc',q:'P(Ā) = ?',options:['P(A)','1 − P(A)','1/P(A)','P(A)²'],correct:1,explanation:'Komplement.'},
+{type:'mc',q:'P(A∪B) bei A∩B = ∅?',options:['P(A)·P(B)','P(A) + P(B)','P(A) − P(B)','0'],correct:1,explanation:'Axiom 3: Additivität bei disjunkten Ereignissen.'},
+{type:'mc',q:'Allgemeiner Additionssatz?',options:['P(A)+P(B)','P(A)+P(B)−P(A∩B)','P(A)·P(B)','P(A|B)·P(B)'],correct:1,explanation:'P(A∪B) = P(A) + P(B) − P(A∩B).'},
+{type:'mc',q:'Laplace: P(A) = ?',options:['P(A|B)','|A|/|Ω|','P(A)·P(B)','1−P(Ā)'],correct:1,explanation:'Günstige / mögliche Ergebnisse.'},
+{type:'mc',q:'5! = ?',options:['25','120','60','720'],correct:1,explanation:'5! = 5·4·3·2·1 = 120.'},
+{type:'mc',q:'C(6,2) = ?',options:['12','15','30','36'],correct:1,explanation:'6!/(2!·4!) = 720/(2·24) = 15.'},
+{type:'mc',q:'P(A|B) = ?',options:['P(A∩B)/P(A)','P(A∩B)/P(B)','P(A)·P(B)','P(B|A)'],correct:1,explanation:'Bedingte Wahrscheinlichkeit.'},
+{type:'tf',q:'Unabhängig ⟺ P(A∩B) = P(A)·P(B).',correct:true,explanation:'Definition der Unabhängigkeit.'},
+{type:'tf',q:'Disjunkte Ereignisse sind unabhängig.',correct:false,explanation:'Disjunkt → maximal abhängig!'},
+{type:'mc',q:'Multiplikationssatz (allgemein)?',options:['P(A∩B) = P(A)+P(B)','P(A∩B) = P(A|B)·P(B)','P(A∩B) = P(A)·P(B)','P(A∩B) = P(A∪B)'],correct:1,explanation:'Allgemein: P(A∩B) = P(A|B)·P(B).'},
+{type:'mc',q:'C(n,0) = ?',options:['0','1','n','n!'],correct:1,explanation:'Es gibt genau eine Möglichkeit, 0 Elemente zu wählen.'},
+{type:'tf',q:'C(n,k) = C(n, n−k).',correct:true,explanation:'Symmetrie des Binomialkoeffizienten.'},
+{type:'mc',q:'Variation ohne Zurücklegen: k aus n?',options:['n!/(n−k)!','n!/k!','C(n,k)','n^k'],correct:0,explanation:'Reihenfolge zählt, ohne Zurücklegen.'},
+{type:'mc',q:'Würfel: P(gerade | >3)?',options:['1/2','2/3','1/3','1/6'],correct:1,explanation:'P({4,6})/P({4,5,6}) = (2/6)/(3/6) = 2/3.'},
+{type:'tf',q:'P(A) kann negativ sein.',correct:false,explanation:'Axiom 1: P(A) ≥ 0.'},
+{type:'mc',q:'P(∅) = ?',options:['1','0','Undefiniert','0.5'],correct:1,explanation:'Unmögliches Ereignis hat P = 0.'},
+{type:'mc',q:'Lotto 6 aus 49: Anzahl Möglichkeiten?',options:['49⁶','C(49,6)','49!/6!','6·49'],correct:1,explanation:'C(49,6) = 13.983.816.'},
+{type:'mc',q:'Wenn A ⊆ B, dann?',options:['P(A) ≥ P(B)','P(A) ≤ P(B)','P(A) = P(B)','P(A∩B) = 0'],correct:1,explanation:'Monotonie.'},
+{type:'mc',q:'PIN aus 4 Ziffern mit Zurücklegen?',options:['C(10,4)','10⁴','10!/6!','4!'],correct:1,explanation:'10⁴ = 10.000 Möglichkeiten.'},
+],
+verteilungen:[
+{type:'mc',q:'Bernoulli: X ∈ ?',options:['{0,1}','{1,2,...,n}','ℝ','[0,1]'],correct:0,explanation:'Ein Versuch: Erfolg (1) oder Misserfolg (0).'},
+{type:'mc',q:'Binomial: E(X) = ?',options:['n·p','n·p·(1−p)','p','n/p'],correct:0,explanation:'Erwartungswert = n·p.'},
+{type:'mc',q:'Binomial: Var(X) = ?',options:['n·p','n·p·(1−p)','p·(1−p)','n²·p'],correct:1,explanation:'Varianz = n·p·(1−p).'},
+{type:'mc',q:'Normalverteilung: Wendepunkte bei?',options:['μ','μ ± σ','μ ± 2σ','μ ± 3σ'],correct:1,explanation:'Wendepunkte der Glockenkurve bei μ ± σ.'},
+{type:'mc',q:'Standardnormalverteilung hat μ = ? und σ = ?',options:['0, 1','1, 0','0, 0','1, 1'],correct:0,explanation:'Z ~ N(0, 1).'},
+{type:'mc',q:'Φ(1.96) ≈ ?',options:['0.950','0.975','0.990','0.995'],correct:1,explanation:'97.5% links von z = 1.96.'},
+{type:'mc',q:'P(Z > 1.96) ≈ ?',options:['0.975','0.025','0.050','0.005'],correct:1,explanation:'P(Z > z) = 1 − Φ(z) = 1 − 0.975 = 0.025.'},
+{type:'mc',q:'P(Z ≤ −1.96) = ?',options:['0.975','0.025','0.050','−0.975'],correct:1,explanation:'Symmetrie: P(Z ≤ −z) = 1 − Φ(z) = 0.025.'},
+{type:'mc',q:'68-95-99.7: μ ± 2σ enthält ca. …',options:['68%','95%','99.7%','50%'],correct:1,explanation:'Faustregel: μ ± 2σ ≈ 95.4%. Exakt 95% ergibt sich bei μ ± 1.96σ.'},
+{type:'mc',q:'IQ ~ N(100,15): 68% zwischen?',options:['70-130','85-115','55-145','90-110'],correct:1,explanation:'μ ± 1σ = 100 ± 15 = 85-115.'},
+{type:'tf',q:'Die Normalverteilung ist symmetrisch um μ.',correct:true,explanation:'Mittelwert = Median = Modus.'},
+{type:'mc',q:'z = (x − μ) / σ. x = 130, μ = 100, σ = 15. z = ?',options:['1','2','3','1.5'],correct:1,explanation:'z = (130−100)/15 = 2.'},
+{type:'mc',q:'z_0.975 = ?',options:['1.28','1.64','1.96','2.58'],correct:2,explanation:'97.5%-Quantil = 1.96.'},
+{type:'tf',q:'z_α = −z_(1−α).',correct:true,explanation:'Symmetrieeigenschaft der Standardnormalverteilung.'},
+{type:'mc',q:'P(−1.5 ≤ Z ≤ 2.0) = ?',options:['Φ(2.0)+Φ(−1.5)','Φ(2.0)−Φ(−1.5)','Φ(2.0)·Φ(−1.5)','1−Φ(2.0)−Φ(−1.5)'],correct:1,explanation:'Differenz der Verteilungsfunktion.'},
+{type:'mc',q:'10 Münzwürfe, p=0.5. P(genau 5 Köpfe)?',options:['0.5','C(10,5)·0.5¹⁰','0.25','C(10,5)·0.5⁵'],correct:1,explanation:'P(X=5) = C(10,5)·0.5⁵·0.5⁵ = C(10,5)·0.5¹⁰ ≈ 0.246.'},
+{type:'mc',q:'Zentraler Grenzwertsatz besagt?',options:['Alles normalverteilt','Summe vieler unabh. Einflüsse → ~normalverteilt','Mittelwert = 0','Varianz = 1'],correct:1,explanation:'Egal welche Ausgangsverteilung.'},
+{type:'tf',q:'Die Binomialverteilung ist eine stetige Verteilung.',correct:false,explanation:'Diskret: X ∈ {0, 1, ..., n}.'},
+{type:'mc',q:'Φ(0) = ?',options:['0','0.5','1','Undefiniert'],correct:1,explanation:'P(Z ≤ 0) = 0.5 (Symmetrie um 0).'},
+{type:'mc',q:'99.7% in welchem Bereich?',options:['μ±1σ','μ±2σ','μ±3σ','μ±4σ'],correct:2,explanation:'68-95-99.7-Regel.'},
+],
+};
+/* ── SESSION DEFS ── */
+const TOPIC_CARDS={};
+CARDS.forEach(c=>{if(!TOPIC_CARDS[c.topic])TOPIC_CARDS[c.topic]=[];TOPIC_CARDS[c.topic].push(c)});
+const SESSIONS=[
+  {id:0,title:'Daten & Verteilungen',subtitle:'Grundlagen + Häufigkeitsverteilungen',time:'60 min',phases:[
+    {type:'cards',topic:'Grundlagen'},
+    {type:'cards',topic:'Häufigkeitsverteilungen'},
+  ]},
+  {id:1,title:'Lage, Streuung & Transformation',subtitle:'Lagemaße + Streuung/z-Transformation + Quiz',time:'60 min',phases:[
+    {type:'cards',topic:'Lagemaße'},
+    {type:'cards',topic:'Streuungsmaße'},
+    {type:'quiz',topic:'Interleaved Quiz',pool:'all',count:30},
+  ]},
+  {id:2,title:'Zusammenhänge',subtitle:'Korrelation + Regression + Feynman',time:'60 min',phases:[
+    {type:'cards',topic:'Korrelation'},
+    {type:'cards',topic:'Regression'},
+    {type:'feynman',topic:'Feynman-Karten'},
+  ]},
+  {id:3,title:'Zufall & Verteilungen',subtitle:'Wahrscheinlichkeit + Verteilungen — Speed-Quiz',time:'60 min',phases:[
+    {type:'cards',topic:'Wahrscheinlichkeit'},
+    {type:'cards',topic:'Verteilungen'},
+    {type:'quiz',topic:'Speed-Quiz',pool:'all',count:80,speed:true},
+    {type:'quiz',topic:'Gap Review',pool:'weak',count:20},
+  ]},
+];
+function getSessionCards(sessIdx){
+  const sess=SESSIONS[sessIdx];
+  let cards=[];
+  sess.phases.filter(p=>p.type==='cards').forEach(p=>{
+    const tc=TOPIC_CARDS[p.topic]||[];
+    cards=cards.concat(tc);
+  });
+  return cards;
+}
+function getSessionQuizPool(phase){
+  if(phase.pool==='weak'){
+    const weakIds=Object.keys(S.triage).filter(id=>S.triage[id]==='red'||S.triage[id]==='yellow');
+    const weakTopics=[...new Set(weakIds.map(id=>{const c=CARDS.find(x=>x.id===id);return c?c.topic:null}).filter(Boolean))];
+    const poolKeys=Object.keys(POOL);
+    let qs=[];
+    poolKeys.forEach(k=>{qs=qs.concat(POOL[k].map(q=>({...q,options:q.options?[...q.options]:undefined,section:k})))});
+    if(weakTopics.length>0){
+      const topicMap={'Grundlagen':'grundlagen','Häufigkeitsverteilungen':'haeufigkeit','Lagemaße':'lagemasse','Streuungsmaße':'streuung','Korrelation':'korrelation','Regression':'regression','Wahrscheinlichkeit':'wahrscheinlichkeit','Verteilungen':'verteilungen'};
+      const weakKeys=weakTopics.map(t=>topicMap[t]).filter(Boolean);
+      if(weakKeys.length>0)qs=qs.filter(q=>weakKeys.includes(q.section));
+    }
+    shuffle(qs);return qs.slice(0,phase.count||20);
+  }
+  let qs=[];Object.keys(POOL).forEach(k=>{qs=qs.concat(POOL[k].map(q=>({...q,options:q.options?[...q.options]:undefined,section:k})))});
+  shuffle(qs);return qs.slice(0,phase.count||30);
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const SEC_NAMES={grundlagen:'Grundlagen',haeufigkeit:'Häufigkeitsverteilungen',lagemasse:'Lagemaße',streuung:'Streuung & z-Transformation',korrelation:'Korrelation',regression:'Regression',wahrscheinlichkeit:'Wahrscheinlichkeit',verteilungen:'Verteilungen'};
+
+/* ── RENDER ── */
+function goHome(){S.phase='dashboard';saveState();render()}
+function render(){
+  document.getElementById('dashboard').style.display=S.phase==='dashboard'?'block':'none';
+  document.getElementById('sessionView').style.display=S.phase==='session'&&S.subPhase==='cards'?'block':'none';
+  document.getElementById('quizView').style.display=S.phase==='session'&&S.subPhase==='quiz'?'block':'none';
+  document.getElementById('feynmanView').style.display=S.phase==='session'&&S.subPhase==='feynman'?'block':'none';
+  document.getElementById('topBar').classList.toggle('active',S.phase!=='dashboard');
+  if(S.phase==='dashboard')renderDashboard();
+  updateTopBar();
+}
+function renderDashboard(){
+  const g=document.getElementById('dashGrid');
+  g.innerHTML=SESSIONS.map((s,i)=>{
+    const pct=Math.round(S.sessionProgress[i]||0);
+    const locked=i>0&&S.sessionProgress[i-1]<50&&i!==S.currentSession;
+    return`<div class="sess-card${locked?' locked':pct>=100?' completed':''}" onclick="${locked?'':'startSession('+i+')'}">
+      <div class="sc-num">Session ${i+1}</div><h3>${s.title}</h3><p>${s.subtitle}</p>
+      <div class="sc-meta"><span>${s.time}</span><span>${pct}%</span></div>
+      <div class="sc-bar"><div class="sc-bar-fill" style="width:${pct}%"></div></div></div>`;
+  }).join('');
+  const r=document.getElementById('dashResume');
+  if(S.sessionProgress.some(p=>p>0&&p<100)){r.style.display='block';document.getElementById('dashResumeText').textContent=`Session ${S.currentSession+1} — ${Math.round(S.sessionProgress[S.currentSession]||0)}% abgeschlossen`}
+  else r.style.display='none';
+}
+function updateTopBar(){
+  document.getElementById('tbSession').textContent=`Session ${S.currentSession+1} von 4`;
+  document.getElementById('tbXp').innerHTML=`&#9733; ${S.xp} XP`;
+  document.getElementById('tbStreak').textContent=S.streak>1?`${S.streak}x Streak`:'';
+  const total=S.sessionProgress.reduce((a,b)=>a+b,0)/4;
+  document.getElementById('tbProgress').style.width=total+'%';
+}
+function startSession(i){
+  S.currentSession=i;S.currentCard=0;S.currentQuiz=0;S.currentFeynman=0;S.phase='session';
+  const sess=SESSIONS[i];
+  const firstPhase=sess.phases[0];
+  S.subPhase=firstPhase.type==='quiz'?'quiz':firstPhase.type==='feynman'?'feynman':'cards';
+  S.timerSeconds=3600;saveState();render();
+  if(S.subPhase==='cards')renderCards();
+  else if(S.subPhase==='quiz')startQuizPhase();
+  else if(S.subPhase==='feynman')startFeynmanPhase();
+  if(document.getElementById('cfgAutoTimer').checked&&!timerInterval)toggleTimer();
+}
+function resumeSession(){startSession(S.currentSession)}
+function setFont(v){S.fontSize=+v;document.body.style.fontSize=v+'px';document.getElementById('fontVal').textContent=v+'px';saveState()}
+function toggleFocus(){S.focusOn=!S.focusOn;document.body.classList.toggle('focus-mode',S.focusOn);document.getElementById('tbFocus').classList.toggle('on',S.focusOn);saveState()}
+function resetAll(){if(confirm('Fortschritt wirklich löschen?')){localStorage.removeItem(STATE_KEY);S=defaultState();render()}}
+
+/* ── TIMER ── */
+let timerInterval=null;
+function toggleTimer(){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;S.timerRunning=false;document.getElementById('tbTimer').classList.add('paused')}
+  else{S.timerRunning=true;document.getElementById('tbTimer').classList.remove('paused');timerInterval=setInterval(()=>{if(S.timerSeconds>0){S.timerSeconds--;updateTimerDisplay()}else{clearInterval(timerInterval);timerInterval=null;showBreak()}},1000)}
+  saveState();
+}
+function updateTimerDisplay(){const m=Math.floor(S.timerSeconds/60),s=S.timerSeconds%60;document.getElementById('tbTimer').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+
+/* ── BREAK ── */
+let breakInterval=null;
+function showBreak(){
+  document.getElementById('moveOverlay').classList.add('show');
+  let secs=300;
+  const el=document.getElementById('moveTimer');
+  breakInterval=setInterval(()=>{secs--;if(secs<=0){clearInterval(breakInterval);el.textContent='Los!'}else{el.textContent=Math.floor(secs/60)+':'+String(secs%60).padStart(2,'0')}},1000);
+}
+function endBreak(){clearInterval(breakInterval);document.getElementById('moveOverlay').classList.remove('show');if(S.currentSession<3){S.currentSession++;S.timerSeconds=3600;S.currentCard=0;S.currentQuiz=0;saveState();startSession(S.currentSession)}}
+
+/* ── BROWN NOISE ── */
+let noiseCtx=null,noiseNode=null;
+function toggleNoise(){
+  if(noiseCtx){noiseCtx.close();noiseCtx=null;noiseNode=null;S.noiseOn=false;saveState();return}
+  noiseCtx=new(window.AudioContext||window.webkitAudioContext)();
+  const bufSize=2*noiseCtx.sampleRate,buf=noiseCtx.createBuffer(1,bufSize,noiseCtx.sampleRate),data=buf.getChannelData(0);
+  let lastOut=0;for(let i=0;i<bufSize;i++){const white=Math.random()*2-1;data[i]=(lastOut+(0.02*white))/1.02;lastOut=data[i];data[i]*=3.5}
+  noiseNode=noiseCtx.createBufferSource();noiseNode.buffer=buf;noiseNode.loop=true;
+  const gain=noiseCtx.createGain();gain.gain.value=0.3;noiseNode.connect(gain);gain.connect(noiseCtx.destination);noiseNode.start();
+  S.noiseOn=true;saveState();
+}
+
+/* ── XP ── */
+function addXp(amount){
+  S.xp+=amount;saveState();updateTopBar();
+  const el=document.createElement('div');el.className='xp-float';el.textContent='+'+amount+' XP';el.style.top=(80+Math.random()*40)+'px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1300);
+}
+
+/* ── CARD RENDERING ── */
+let currentCards=[], currentPhaseIdx=0, allSessionCards=[], gapsOnly=false;
+function renderCards(){
+  const sess=SESSIONS[S.currentSession];
+  const cardPhases=sess.phases.filter(p=>p.type==='cards');
+  if(cardPhases.length===0){goToNextPhaseType();return}
+  allSessionCards=[];
+  cardPhases.forEach(p=>{const tc=TOPIC_CARDS[p.topic]||[];allSessionCards=allSessionCards.concat(tc)});
+  applyCardFilter();
+}
+function applyCardFilter(){
+  if(gapsOnly){
+    currentCards=allSessionCards.filter(c=>S.triage[c.id]!=='green');
+    if(!currentCards.length){currentCards=allSessionCards;gapsOnly=false}
+  }else{currentCards=[...allSessionCards]}
+  if(S.currentCard>=currentCards.length)S.currentCard=0;
+  const btn=document.getElementById('cnGaps');
+  if(btn)btn.classList.toggle('active',gapsOnly);
+  renderCurrentCard();
+}
+function toggleGapsOnly(){
+  gapsOnly=!gapsOnly;S.currentCard=0;saveState();applyCardFilter();
+}
+function renderCurrentCard(){
+  if(!currentCards.length)return;
+  const c=currentCards[S.currentCard];
+  const triage=S.triage[c.id]||'';
+  document.getElementById('svBreadcrumb').innerHTML=`Session ${S.currentSession+1} <span>${c.topic}</span> — ${c.title}`;
+  const ddHtml=c.deepDive?`<div class="cc-deep-dive"><button class="cc-dd-toggle" onclick="toggleDeepDive(this)"><span class="dd-arrow">▼</span>Vertiefung anzeigen</button><div class="cc-dd-content">${c.deepDive}</div></div>`:'';
+  const refHtml=c.ref?`<a class="cc-ref-link" href="index.html#${c.ref}" target="_blank">📖 Ausführlich auf der Referenzseite</a>`:'';
+  document.getElementById('cardArea').innerHTML=`<div class="concept-card">
+    <span class="cc-tier ${c.tier}">${c.tier==='a'?'Tier A — Kernstoff':c.tier==='b'?'Tier B — Vertiefung':'Tier C — Ergänzung'}</span>
+    <h2>${c.title}</h2>
+    <div class="cc-body">${c.body}</div>
+    ${ddHtml}
+    ${refHtml}
+    ${chatMode!=='none'
+      ?`<button class="cc-chat-btn" onclick="openChat('${c.id}')">💬 Frag mich!</button>`
+      :`<div class="cc-chat-hint">💬 <a href="#" onclick="event.preventDefault();goHome()">Chat einrichten</a> für Rückfragen</div>`}
+    <div class="triage-row">
+      <button class="triage-btn red${triage==='red'?' active':''}" onclick="setTriage('${c.id}','red')">Nicht verstanden</button>
+      <button class="triage-btn yellow${triage==='yellow'?' active':''}" onclick="setTriage('${c.id}','yellow')">Teilweise</button>
+      <button class="triage-btn green${triage==='green'?' active':''}" onclick="setTriage('${c.id}','green')">Verstanden</button>
+    </div></div>`;
+  document.getElementById('cnCount').textContent=gapsOnly
+    ?`${S.currentCard+1} / ${currentCards.length} (${allSessionCards.length-currentCards.length} ausgeblendet)`
+    :`${S.currentCard+1} / ${currentCards.length}`;
+  document.getElementById('cardNav').querySelector('button').disabled=S.currentCard===0;
+  document.getElementById('cardNav').querySelectorAll('button')[1].disabled=false;
+  if(!S.quizHistory['card_'+c.id]){addXp(10);S.quizHistory['card_'+c.id]=true;saveState()}
+  updateSessionProgress();
+}
+function toggleDeepDive(btn){
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+function setTriage(id,level){
+  S.triage[id]=S.triage[id]===level?'':level;saveState();
+  if(gapsOnly)applyCardFilter();else renderCurrentCard();
+}
+function prevCard(){if(S.currentCard>0){S.currentCard--;saveState();renderCurrentCard()}}
+function nextCard(){
+  if(S.currentCard<currentCards.length-1){S.currentCard++;saveState();renderCurrentCard()}
+  else{goToNextPhaseType()}
+}
+function goToNextPhaseType(){
+  const sess=SESSIONS[S.currentSession];
+  const hasQuiz=sess.phases.some(p=>p.type==='quiz');
+  const hasFeynman=sess.phases.some(p=>p.type==='feynman');
+  if(S.subPhase==='cards'&&hasQuiz){S.subPhase='quiz';S.currentQuiz=0;saveState();render();startQuizPhase()}
+  else if(S.subPhase==='cards'&&hasFeynman){S.subPhase='feynman';S.currentFeynman=0;saveState();render();startFeynmanPhase()}
+  else if(S.subPhase==='quiz'&&hasFeynman){S.subPhase='feynman';S.currentFeynman=0;saveState();render();startFeynmanPhase()}
+  else{S.sessionProgress[S.currentSession]=100;saveState();if(S.currentSession<3)showBreak();else{S.phase='dashboard';saveState();render()}}
+}
+
+/* ── QUIZ RENDERING ── */
+let currentQuizPool=[], quizAnswered=false;
+function startQuizPhase(){
+  const sess=SESSIONS[S.currentSession];
+  const quizPhase=sess.phases.find(p=>p.type==='quiz');
+  if(!quizPhase){goToNextPhaseType();return}
+  currentQuizPool=getSessionQuizPool(quizPhase);
+  currentQuizPool.forEach(q=>{if(q.type==='mc'){const ct=q.options[q.correct];shuffle(q.options);q.correct=q.options.indexOf(ct)}});
+  S.currentQuiz=0;quizAnswered=false;saveState();renderCurrentQuiz();
+}
+function renderCurrentQuiz(){
+  if(!currentQuizPool.length){goToNextPhaseType();return}
+  const q=currentQuizPool[S.currentQuiz];
+  const sess=SESSIONS[S.currentSession];
+  const quizPhase=sess.phases.find(p=>p.type==='quiz');
+  const isSpeed=quizPhase&&quizPhase.speed;
+  quizAnswered=false;
+  document.getElementById('qvBreadcrumb').innerHTML=`Session ${S.currentSession+1} <span>${quizPhase?quizPhase.topic:'Quiz'}</span>`;
+  let opts='';
+  if(q.type==='mc'){opts=q.options.map((o,i)=>`<button class="opt-btn" onclick="answerQuiz(${i})">${o}</button>`).join('')}
+  else{opts=`<button class="opt-btn" onclick="answerQuiz(true)">Wahr</button><button class="opt-btn" onclick="answerQuiz(false)">Falsch</button>`}
+  document.getElementById('quizArea').innerHTML=`<div class="quiz-card">
+    <div class="qc-meta"><span class="qc-section">${SEC_NAMES[q.section]||q.section}</span>${isSpeed?'<span class="qc-speed" id="speedTimer">15</span>':''}</div>
+    <p class="qc-text">${q.q}</p>
+    <div class="options-list">${opts}</div>
+    <div class="quiz-feedback ok">${q.explanation}</div>
+    <div class="quiz-feedback nok">${q.explanation}</div>
+    <button class="quiz-retry" onclick="retryQuiz()">Nochmal versuchen</button></div>`;
+  document.getElementById('qnCount').textContent=`${S.currentQuiz+1} / ${currentQuizPool.length}`;
+  document.getElementById('quizNav').querySelector('button').disabled=S.currentQuiz===0;
+  if(isSpeed)startSpeedTimer();
+}
+let speedInterval=null;
+function startSpeedTimer(){
+  let secs=15;const el=document.getElementById('speedTimer');
+  if(speedInterval)clearInterval(speedInterval);
+  speedInterval=setInterval(()=>{secs--;if(el)el.textContent=secs;if(secs<=0){clearInterval(speedInterval);if(!quizAnswered)answerQuiz(-1)}},1000);
+}
+function answerQuiz(val){
+  if(quizAnswered)return;
+  if(speedInterval){clearInterval(speedInterval);speedInterval=null}
+  quizAnswered=true;
+  const q=currentQuizPool[S.currentQuiz];
+  const card=document.querySelector('.quiz-card');
+  const btns=card.querySelectorAll('.opt-btn');
+  const isCorrect=(val===q.correct);
+  addXp(5);
+  if(isCorrect){addXp(10);S.streak++;if(S.streak>S.bestStreak)S.bestStreak=S.streak;if(S.streak>=3)addXp(S.streak*5)}
+  else{S.streak=0}
+  saveState();updateTopBar();
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(q.type==='mc'){if(i===q.correct)b.classList.add('correct');if(i===val&&!isCorrect)b.classList.add('wrong')}
+    else{const bVal=i===0?true:false;if(bVal===q.correct)b.classList.add('correct');if(bVal===val&&!isCorrect)b.classList.add('wrong')}
+  });
+  const fb=card.querySelector(isCorrect?'.ok':'.nok');fb.classList.add('show');
+  if(!isCorrect)card.querySelector('.quiz-retry').classList.add('show');
+  updateSessionProgress();
+}
+function retryQuiz(){
+  const q=currentQuizPool[S.currentQuiz];
+  if(q.type==='mc'){const ct=q.options[q.correct];shuffle(q.options);q.correct=q.options.indexOf(ct)}
+  renderCurrentQuiz();
+}
+function prevQuiz(){if(S.currentQuiz>0){S.currentQuiz--;saveState();renderCurrentQuiz()}}
+function nextQuiz(){
+  if(S.currentQuiz<currentQuizPool.length-1){S.currentQuiz++;saveState();renderCurrentQuiz()}
+  else{goToNextPhaseType()}
+}
+
+/* ── FEYNMAN RENDERING ── */
+let feynmanCards=[];
+function startFeynmanPhase(){
+  const weakIds=Object.keys(S.triage).filter(id=>S.triage[id]==='red'||S.triage[id]==='yellow');
+  feynmanCards=weakIds.length>0?weakIds.map(id=>CARDS.find(c=>c.id===id)).filter(Boolean):CARDS.filter(c=>c.tier==='a').slice(0,12);
+  shuffle(feynmanCards);
+  S.currentFeynman=0;saveState();renderCurrentFeynman();
+}
+function renderCurrentFeynman(){
+  if(!feynmanCards.length){goToNextPhaseType();return}
+  const c=feynmanCards[S.currentFeynman];
+  document.getElementById('fvBreadcrumb').innerHTML=`Session ${S.currentSession+1} <span>Feynman-Technik</span> — ${c.title}`;
+  document.getElementById('feynmanArea').innerHTML=`<div class="feynman-card">
+    <h3>Erkläre in eigenen Worten:</h3>
+    <p class="fc-prompt"><strong>${c.title}</strong> — Was ist das? Warum ist es wichtig?</p>
+    <textarea placeholder="Schreib deine Erklärung hier..." id="feynmanText"></textarea>
+    <div class="fc-actions" id="feynmanActions">
+      ${chatMode!=='none'?`<button class="fc-btn fc-btn-ai" onclick="checkFeynman()">Tutorin prüfen lassen</button>`:''}
+      <button class="fc-btn" onclick="revealFeynman()">Antwort aufdecken</button>
+    </div>
+    <div class="fc-feedback" id="feynmanFeedback"></div>
+    <div class="fc-reveal" id="feynmanReveal">${c.body}</div>
+    <div class="feynman-rate" id="feynmanRate">
+      <button class="fr-good" onclick="rateFeynman('good')">Verstanden</button>
+      <button class="fr-partial" onclick="rateFeynman('partial')">Teilweise</button>
+      <button class="fr-again" onclick="rateFeynman('again')">Nochmal</button>
+    </div></div>`;
+  document.getElementById('fnCount').textContent=`${S.currentFeynman+1} / ${feynmanCards.length}`;
+  document.getElementById('feynmanNav').querySelector('button').disabled=S.currentFeynman===0;
+}
+async function checkFeynman(){
+  const text=document.getElementById('feynmanText').value.trim();
+  if(!text){document.getElementById('feynmanText').focus();return}
+  const c=feynmanCards[S.currentFeynman];
+  const btn=document.querySelector('.fc-btn-ai');
+  if(btn){btn.disabled=true;btn.textContent='Prüfe...'}
+  const fb=document.getElementById('feynmanFeedback');
+  fb.className='fc-feedback show';fb.innerHTML='<span class="typing"><span></span><span></span><span></span></span>';
+  const prompt=`Du bist eine Tutorin für Statistik I (Klausur Uni Tübingen, Fahrmeir et al. Lehrbuch).
+
+Eine Studentin soll das Konzept "${c.title}" in eigenen Worten erklären (Feynman-Technik).
+
+Korrekte Inhalte:
+${stripHtml(c.body)}
+${c.deepDive?'Vertiefung: '+stripHtml(c.deepDive):''}
+
+Ihre Erklärung:
+"${text}"
+
+Bewerte ihre Erklärung:
+1. Was stimmt? Was fehlt oder ist falsch? (2-4 Sätze, **Fettdruck** für Schlüsselbegriffe)
+2. Gib am Ende GENAU eine Bewertung in eckigen Klammern: [GOOD], [PARTIAL] oder [AGAIN]
+   - [GOOD] = Kernkonzept korrekt verstanden
+   - [PARTIAL] = teilweise richtig, wichtige Lücken
+   - [AGAIN] = falsch oder viel zu vage
+
+Sprache: Deutsch, du-Form, ermutigend aber ehrlich.`;
+
+  let full='';
+  try{
+    if(chatMode==='local'){
+      const res=await serverFetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+      const reader=res.body.getReader();const dec=new TextDecoder();
+      while(true){const{done,value}=await reader.read();if(done)break;full+=dec.decode(value,{stream:true});fb.innerHTML=simpleMarkdown(full)}
+    }else{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,messages:[{role:'user',content:prompt}],stream:true})});
+      const reader=res.body.getReader();const dec=new TextDecoder();let buf='';
+      while(true){const{done,value}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});
+        const lines=buf.split('\n');buf=lines.pop();
+        for(const line of lines){if(!line.startsWith('data: '))continue;const data=line.slice(6);if(data==='[DONE]')break;
+          try{const evt=JSON.parse(data);if(evt.type==='content_block_delta'&&evt.delta&&evt.delta.text){full+=evt.delta.text;fb.innerHTML=simpleMarkdown(full)}}catch(pe){}}
+      }
+    }
+  }catch(e){full='Fehler: '+e.message}
+  const ratingMatch=full.match(/\[(GOOD|PARTIAL|AGAIN)\]/i);
+  const rating=ratingMatch?ratingMatch[1].toLowerCase():'partial';
+  const ratingMap={good:'good',partial:'partial',again:'again'};
+  const r=ratingMap[rating]||'partial';
+  const ratingLabels={good:'Verstanden',partial:'Teilweise',again:'Nochmal lernen'};
+  let cleanHtml=simpleMarkdown(full.replace(/\[(GOOD|PARTIAL|AGAIN)\]/gi,'').trim());
+  cleanHtml+=`<div class="fc-rating ${r}">${ratingLabels[r]}</div>`;
+  fb.innerHTML=cleanHtml;
+  const triageMap={good:'green',partial:'yellow',again:'red'};
+  S.triage[c.id]=triageMap[r];
+  S.feynmanRatings[c.id]=r==='again'?'again':r==='partial'?'partial':'good';
+  if(r==='good')addXp(20);else if(r==='partial')addXp(10);else addXp(5);
+  saveState();updateSessionProgress();
+  document.getElementById('feynmanReveal').classList.add('show');
+  document.getElementById('feynmanRate').classList.add('show');
+  if(btn){btn.disabled=false;btn.textContent='Tutorin prüfen lassen'}
+}
+function revealFeynman(){
+  document.getElementById('feynmanReveal').classList.add('show');
+  document.getElementById('feynmanRate').classList.add('show');
+}
+function rateFeynman(rating){
+  const c=feynmanCards[S.currentFeynman];
+  S.feynmanRatings[c.id]=rating;
+  if(rating==='good'){addXp(20);S.triage[c.id]='green'}
+  else if(rating==='partial'){addXp(10);S.triage[c.id]='yellow'}
+  else{addXp(5);S.triage[c.id]='red'}
+  saveState();updateSessionProgress();
+  if(S.currentFeynman<feynmanCards.length-1){S.currentFeynman++;saveState();renderCurrentFeynman()}
+  else{goToNextPhaseType()}
+}
+function prevFeynman(){if(S.currentFeynman>0){S.currentFeynman--;saveState();renderCurrentFeynman()}}
+function nextFeynman(){
+  if(S.currentFeynman<feynmanCards.length-1){S.currentFeynman++;saveState();renderCurrentFeynman()}
+  else{goToNextPhaseType()}
+}
+
+/* ── SESSION PROGRESS ── */
+function updateSessionProgress(){
+  const sess=SESSIONS[S.currentSession];
+  let total=0,done=0;
+  const cardPhases=sess.phases.filter(p=>p.type==='cards');
+  cardPhases.forEach(p=>{const tc=TOPIC_CARDS[p.topic]||[];total+=tc.length;tc.forEach(c=>{if(S.quizHistory['card_'+c.id])done++})});
+  const quizPhases=sess.phases.filter(p=>p.type==='quiz');
+  quizPhases.forEach(p=>{total+=p.count||30});
+  if(currentQuizPool.length)done+=Math.min(S.currentQuiz+1,currentQuizPool.length);
+  const feynmanPhases=sess.phases.filter(p=>p.type==='feynman');
+  if(feynmanPhases.length){total+=feynmanCards.length||12;done+=Object.keys(S.feynmanRatings).length}
+  S.sessionProgress[S.currentSession]=total>0?Math.min(100,Math.round(done/total*100)):0;
+  saveState();updateTopBar();
+}
+
+/* ── CHAT ── */
+let chatHistory={};
+let chatCardId=null;
+let chatMode='none';
+let chatAbort=null;
+
+const DEFAULT_SERVER='http://localhost:3456';
+function getServerUrl(){return localStorage.getItem('stat1v3_server')||DEFAULT_SERVER}
+function serverFetch(path,opts={}){
+  return fetch(getServerUrl()+path,opts);
+}
+function saveServerUrl(v){
+  const url=v.trim().replace(/\/+$/,'');
+  if(url){localStorage.setItem('stat1v3_server',url)}else{localStorage.removeItem('stat1v3_server')}
+  detectChatMode();
+}
+async function detectChatMode(){
+  const base=getServerUrl();
+  try{
+    const r=await serverFetch('/health',{signal:AbortSignal.timeout(2000)});
+    if(r.ok){chatMode='local';updateChatUI('Server','green');return}
+  }catch(e){}
+  if(getApiKey()){chatMode='api';updateChatUI('API-Key','blue')}
+  else{chatMode='none';updateChatUI('Offline','gray')}
+}
+function updateChatUI(label,color){
+  const s=document.getElementById('chatStatus');
+  const m=document.getElementById('chatModeLabel');
+  s.className='chat-status '+color;
+  s.textContent=color==='green'?'Lokaler Server verbunden':color==='blue'?'API-Key aktiv':'Kein Chat verfügbar';
+  m.className='chat-mode '+color;
+  m.textContent=label;
+}
+function getApiKey(){
+  try{const k=localStorage.getItem('stat1v3_apikey');return k?atob(k):''}catch(e){return ''}
+}
+function saveApiKey(v){
+  if(v&&v.startsWith('sk-')){localStorage.setItem('stat1v3_apikey',btoa(v));detectChatMode()}
+  else if(!v){localStorage.removeItem('stat1v3_apikey');detectChatMode()}
+}
+function openChat(cardId){
+  if(chatMode==='none'){goHome();return}
+  chatCardId=cardId;
+  document.getElementById('chatPanel').classList.add('open');
+  document.body.classList.add('chat-open');
+  if(!chatHistory[cardId]){
+    chatHistory[cardId]=[];
+    const card=CARDS.find(c=>c.id===cardId);
+    appendMsg('assistant','Hey! Ich helfe dir bei **'+card.title+'**. Was möchtest du wissen?');
+    renderSuggestions(card);
+  }
+  renderChatMessages();
+  document.getElementById('chatInput').focus();
+}
+function closeChat(){
+  if(chatAbort){chatAbort.abort();chatAbort=null}
+  document.getElementById('chatPanel').classList.remove('open');
+  document.body.classList.remove('chat-open');
+}
+function appendMsg(role,content){
+  chatHistory[chatCardId].push({role,content});
+  return chatHistory[chatCardId].length-1;
+}
+function renderChatMessages(){
+  const el=document.getElementById('chatMessages');
+  el.innerHTML=chatHistory[chatCardId].map(m=>{
+    if(m.role==='user')return`<div class="chat-msg user">${esc(m.content)}</div>`;
+    const html=m.content?simpleMarkdown(m.content):'<span class="typing"><span></span><span></span><span></span></span>';
+    return`<div class="chat-msg bot">${html}</div>`;
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function renderSuggestions(card){
+  const el=document.getElementById('chatSuggestions');
+  const suggestions=['Kannst du ein Beispiel geben?','Wie kommt das in der Klausur dran?','Erklär das nochmal einfacher'];
+  el.innerHTML=suggestions.map(s=>`<button class="chat-chip" onclick="quickChat(this,'${esc(s)}')">${s}</button>`).join('');
+}
+function quickChat(btn,text){
+  document.getElementById('chatInput').value=text;
+  document.getElementById('chatSuggestions').innerHTML='';
+  sendChat();
+}
+async function sendChat(){
+  const input=document.getElementById('chatInput');
+  const msg=input.value.trim();
+  if(!msg)return;
+  input.value='';input.style.height='auto';
+  appendMsg('user',msg);
+  renderChatMessages();
+  document.getElementById('chatSuggestions').innerHTML='';
+  const card=CARDS.find(c=>c.id===chatCardId);
+  if(chatMode==='local')await sendLocal(card,msg);
+  else await sendApi(card,msg);
+}
+async function sendLocal(card,msg){
+  const sysPrompt=buildSystemPrompt(card);
+  const hist=chatHistory[chatCardId];
+  const convStr=hist.map(m=>(m.role==='user'?'Studentin':'Tutorin')+': '+m.content).join('\n');
+  const fullPrompt=sysPrompt+'\n\nBisheriges Gespräch:\n'+convStr+'\n\nStudentin: '+msg+'\n\nTutorin:';
+  chatAbort=new AbortController();
+  const botIdx=appendMsg('assistant','');
+  renderChatMessages();
+  try{
+    const res=await serverFetch('/chat',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt:fullPrompt}),signal:chatAbort.signal
+    });
+    const reader=res.body.getReader();
+    const dec=new TextDecoder();
+    let full='';
+    while(true){
+      const{done,value}=await reader.read();
+      if(done)break;
+      full+=dec.decode(value,{stream:true});
+      chatHistory[chatCardId][botIdx].content=full;
+      renderChatMessages();
+    }
+  }catch(e){if(e.name!=='AbortError'){chatHistory[chatCardId][botIdx].content='Fehler: '+e.message}}
+  chatAbort=null;
+  renderChatMessages();
+}
+async function sendApi(card,msg){
+  const sysPrompt=buildSystemPrompt(card);
+  chatAbort=new AbortController();
+  const botIdx=appendMsg('assistant','');
+  renderChatMessages();
+  const messages=chatHistory[chatCardId].filter(m=>m.content).map(m=>({role:m.role,content:m.content}));
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':getApiKey(),
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',max_tokens:500,
+        system:sysPrompt,messages:messages,stream:true
+      }),
+      signal:chatAbort.signal
+    });
+    const reader=res.body.getReader();
+    const dec=new TextDecoder();
+    let full='',buf='';
+    while(true){
+      const{done,value}=await reader.read();
+      if(done)break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\n');
+      buf=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith('data: '))continue;
+        const data=line.slice(6);
+        if(data==='[DONE]')break;
+        try{
+          const evt=JSON.parse(data);
+          if(evt.type==='content_block_delta'&&evt.delta&&evt.delta.text){
+            full+=evt.delta.text;
+            chatHistory[chatCardId][botIdx].content=full;
+            renderChatMessages();
+          }
+        }catch(pe){}
+      }
+    }
+  }catch(e){if(e.name!=='AbortError'){chatHistory[chatCardId][botIdx].content='Fehler: '+e.message}}
+  chatAbort=null;
+  renderChatMessages();
+}
+function buildSystemPrompt(card){
+  return `Du bist eine freundliche Tutorin für Statistik I.
+Deine Studentin ist 20 Jahre alt und lernt für eine Klausur an der Uni Tübingen (Fahrmeir et al. Lehrbuch).
+
+Regeln:
+- Erkläre auf Augenhöhe, nicht herablassend — du-Form
+- Nutze Alltagsbeispiele und Analogien
+- Halte Antworten kurz (2-4 Sätze), außer sie fragt nach Details
+- Verwende **Fettdruck** für Schlüsselbegriffe
+- Sprache: Deutsch
+
+Aktuelles Thema: ${card.title}
+Karteninhalt: ${stripHtml(card.body)}
+${card.deepDive?'Vertiefung: '+stripHtml(card.deepDive):''}`;
+}
+function stripHtml(html){return html.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim()}
+function simpleMarkdown(text){
+  return esc(text)
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code>$1</code>')
+    .replace(/\n/g,'<br>');
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+/* ── INIT ── */
+document.body.style.fontSize=S.fontSize+'px';
+if(S.focusOn)document.body.classList.add('focus-mode');
+const savedKey=getApiKey();
+if(savedKey){const el=document.getElementById('cfgApiKey');if(el)el.value=savedKey.slice(0,8)+'...';}
+const savedUrl=localStorage.getItem('stat1v3_server');
+if(savedUrl){const el=document.getElementById('cfgServerUrl');if(el)el.value=savedUrl;}
+detectChatMode();
+render();
+</script>
+</body>
+</html>

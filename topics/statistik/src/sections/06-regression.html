@@ -1,0 +1,103 @@
+<!-- ═══════════════ 6 · REGRESSION ═══════════════ -->
+<section id="regression">
+<div class="section-number">06</div>
+<h2>Lineare Regression</h2>
+<p class="section-subtitle">Methode der kleinsten Quadrate, Determinationskoeffizient und Varianzzerlegung</p>
+
+<p>Die <strong>lineare Regression</strong> modelliert den Zusammenhang zwischen einem Prädiktor X und einem Kriterium Y durch eine Gerade: ŷ = â + b̂·x.</p>
+
+<h3 class="sub">Methode der kleinsten Quadrate</h3>
+
+<div class="def-box">
+  <div class="label">Prinzip</div>
+  <p>Gesucht sind â und b̂, die die <strong>Summe der quadrierten Residuen</strong> minimieren:</p>
+  <p style="text-align:center; font-size:1.05rem">Q(a, b) = Σ(yᵢ − a − b·xᵢ)² → min</p>
+</div>
+
+<p>Durch Ableiten und Nullsetzen erhält man die <strong>Normalgleichungen</strong>:</p>
+
+<div class="def-box green">
+  <div class="label">Regressionskoeffizienten</div>
+  <p><strong>Steigung:</strong> b̂ = s̃<sub>xy</sub> / s̃²<sub>x</sub></p>
+  <p><strong>Achsenabschnitt:</strong> â = ȳ − b̂·x̄</p>
+  <p>Die Regressionsgerade geht immer durch den Schwerpunkt (x̄, ȳ).</p>
+</div>
+
+<div class="merksatz">
+  <p>Der Regressionskoeffizient b̂ lässt sich mit dem Korrelationskoeffizienten r ausdrücken: <strong>b̂ = (s̃<sub>y</sub>/s̃<sub>x</sub>) · r</strong>. Bei z-transformierten Daten vereinfacht sich alles zu â = 0 und b̂ = r.</p>
+</div>
+
+<h3 class="sub">Determinationskoeffizient r²</h3>
+
+<div class="def-box blue">
+  <div class="label">Definition</div>
+  <p>Die Varianz der Residuen eᵢ = yᵢ − ŷᵢ ist:</p>
+  <p style="text-align:center">s̃²<sub>e</sub> = (1 − r²) · s̃²<sub>y</sub></p>
+  <p>Der <strong>Determinationskoeffizient</strong> r² gibt den Anteil der Varianz von Y an, der durch die Regression auf X <strong>erklärt</strong> wird.</p>
+</div>
+
+<div class="example">
+  <p>Bei r = 0.80 ist r² = 0.64 → 64% der Varianz von Y werden durch X erklärt. Die restlichen 36% sind „Residualvarianz".</p>
+</div>
+
+<h3 class="sub">Varianzzerlegung</h3>
+
+<p>Die Gesamtvarianz von Y lässt sich zerlegen in erklärte und nicht-erklärte Varianz:</p>
+
+<div class="def-box gold">
+  <div class="label">Varianzzerlegung</div>
+  <p style="text-align:center; font-size:1.05rem"><strong>s̃²<sub>y</sub> = s̃²<sub>ŷ</sub> + s̃²<sub>e</sub></strong></p>
+  <p>Gesamtvarianz = erklärte Varianz (durch Regression) + Residualvarianz (nicht erklärt)</p>
+</div>
+
+<div class="flow">
+  <div class="flow-step">Gesamtvarianz<small>s̃²<sub>y</sub></small></div>
+  <span class="flow-arrow">=</span>
+  <div class="flow-step" style="border-color:var(--accent2)">Erklärte Varianz<small>s̃²<sub>ŷ</sub> = r² · s̃²<sub>y</sub></small></div>
+  <span class="flow-arrow">+</span>
+  <div class="flow-step" style="border-color:var(--accent)">Residualvarianz<small>s̃²<sub>e</sub> = (1−r²) · s̃²<sub>y</sub></small></div>
+</div>
+
+<!-- Deep Dive -->
+<div class="deep-dive" id="dd6a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd6a')">
+    <span class="dd-icon">▼</span>
+    Herleitung: Von den Normalgleichungen zum Determinationskoeffizienten
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Residualvarianz herleiten</h4>
+    <p>s̃²<sub>e</sub> = (1/n) Σ(yᵢ − ŷᵢ)² = (1/n) Σ[yᵢ − ȳ − (s̃<sub>xy</sub>/s̃²<sub>x</sub>)(xᵢ − x̄)]²</p>
+    <p>Ausmultiplizieren und vereinfachen unter Nutzung der Definitionen von s̃²<sub>y</sub>, s̃²<sub>x</sub>, s̃<sub>xy</sub>:</p>
+    <p>s̃²<sub>e</sub> = s̃²<sub>y</sub> − 2·(s̃²<sub>xy</sub>/s̃²<sub>x</sub>) + (s̃<sub>xy</sub>/s̃²<sub>x</sub>)²·s̃²<sub>x</sub> = s̃²<sub>y</sub> − s̃²<sub>xy</sub>/s̃²<sub>x</sub></p>
+    <p>Mit r = s̃<sub>xy</sub>/(s̃<sub>x</sub>·s̃<sub>y</sub>) und b̂ = (s̃<sub>y</sub>/s̃<sub>x</sub>)·r:</p>
+    <p>s̃²<sub>e</sub> = s̃²<sub>y</sub> − s̃²<sub>y</sub>·r² = <strong>(1 − r²) · s̃²<sub>y</sub></strong> ✓</p>
+    <h4>Varianzzerlegung</h4>
+    <p>Man kann zeigen, dass der „Kreuzterm" 2·(1/n)Σ(yᵢ − ŷᵢ)(ŷᵢ − ȳ) verschwindet. Damit folgt direkt s̃²<sub>y</sub> = s̃²<sub>ŷ</sub> + s̃²<sub>e</sub>.</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz10">
+  <h4>🧪 Wissenscheck: Regression</h4>
+  <p>Die Regressionsgerade ŷ = 2 + 0.5x wurde berechnet. Durch welchen Punkt verläuft sie garantiert?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz10',this,false)">Durch den Ursprung (0, 0)</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz10',this,true)" data-correct="true">Durch den Schwerpunkt (x̄, ȳ)</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz10',this,false)">Durch den Punkt (2, 0.5)</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz10',this,false)">Durch den Median beider Variablen</button>
+  <div class="quiz-feedback correct-fb">Richtig! Die Regressionsgerade verläuft immer durch (x̄, ȳ), da â = ȳ − b̂·x̄ → ŷ(x̄) = â + b̂·x̄ = ȳ.</div>
+  <div class="quiz-feedback wrong-fb">Die Regressionsgerade verläuft immer durch den Schwerpunkt (x̄, ȳ) der Daten. Das folgt direkt aus der Bestimmungsgleichung für â.</div>
+</div>
+
+<div class="quiz" id="quiz11">
+  <h4>🧪 Wissenscheck: r²</h4>
+  <p>Wenn r² = 0.49, wie viel Prozent der Varianz von Y bleiben durch die Regression unerklärt?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz11',this,false)">49%</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz11',this,true)" data-correct="true">51%</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz11',this,false)">70%</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz11',this,false)">30%</button>
+  <div class="quiz-feedback correct-fb">Richtig! Unerklärt = 1 − r² = 1 − 0.49 = 0.51 = 51%. Bei r = 0.7 werden also „nur" knapp die Hälfte der Varianz erklärt.</div>
+  <div class="quiz-feedback wrong-fb">r² = 0.49 bedeutet 49% erklärte Varianz. Also bleiben 1 − 0.49 = 51% unerklärt.</div>
+</div>
+
+</section>

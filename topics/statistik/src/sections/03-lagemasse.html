@@ -1,0 +1,107 @@
+<!-- ═══════════════ 3 · LAGEMAßE ═══════════════ -->
+<section id="lagemasse">
+<div class="section-number">03</div>
+<h2>Lagemaße</h2>
+<p class="section-subtitle">Modus, Median, arithmetisches Mittel und weitere Mittelwerte</p>
+
+<p>Lagemaße beschreiben das „Zentrum" einer Verteilung — den typischen oder repräsentativen Wert.</p>
+
+<h3 class="sub">Modus (Modalwert)</h3>
+
+<div class="def-box">
+  <div class="label">Definition</div>
+  <p>Der <strong>Modus</strong> x<sub>mod</sub> ist die Merkmalsausprägung mit der größten Häufigkeit. Setzt mindestens <strong>Nominalskalenniveau</strong> voraus.</p>
+</div>
+
+<p>Der Modus muss nicht eindeutig sein (bimodale Verteilung). Er ist das einzige Lagemaß, das auch für qualitative Merkmale sinnvoll ist.</p>
+
+<h3 class="sub">Median (Zentralwert)</h3>
+
+<div class="def-box green">
+  <div class="label">Definition</div>
+  <p>Der <strong>Median</strong> x̃ teilt die geordnete Urliste in zwei gleich große Hälften. Setzt mindestens <strong>Ordinalskalenniveau</strong> voraus.</p>
+  <p>Für die Rangreihe x₍₁₎ ≤ x₍₂₎ ≤ … ≤ x₍ₙ₎ gilt:<br>
+  x̃ = x₍₍ₙ₊₁₎/₂₎ falls n ungerade<br>
+  x̃ = ½(x₍ₙ/₂₎ + x₍ₙ/₂₊₁₎) falls n gerade</p>
+</div>
+
+<div class="merksatz">
+  <p><strong>Minimumeigenschaft des Medians:</strong> Der Median minimiert die Summe der absoluten Abweichungen: Σ|xᵢ − a| wird minimal für a = x̃. Dies macht den Median robust gegen Ausreißer.</p>
+</div>
+
+<h3 class="sub">Arithmetisches Mittel</h3>
+
+<div class="def-box blue">
+  <div class="label">Definition</div>
+  <p>Das <strong>arithmetische Mittel</strong> x̄ = (1/n) · Σxᵢ ist der „Schwerpunkt" der Daten. Setzt mindestens <strong>Intervallskalenniveau</strong> voraus.</p>
+</div>
+
+<div class="card-grid">
+  <div class="card">
+    <h3>Nulleigenschaft</h3>
+    <p>Die Summe der Abweichungen vom Mittelwert ist null: Σ(xᵢ − x̄) = 0. Das Mittel liegt immer „in der Mitte" der Werte.</p>
+  </div>
+  <div class="card">
+    <h3>Minimumeigenschaft</h3>
+    <p>Das Mittel minimiert die Summe der <strong>quadrierten</strong> Abweichungen: Σ(xᵢ − a)² wird minimal für a = x̄.</p>
+  </div>
+</div>
+
+<h3 class="sub">Weitere Mittelwerte</h3>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Mittelwert</th><th>Formel</th><th>Anwendung</th></tr>
+  <tr><td><strong>Geometrisches Mittel</strong></td><td>x̄<sub>geo</sub> = (∏xᵢ)<sup>1/n</sup></td><td>Durchschnittliche Wachstumsraten, Verhältnisse</td></tr>
+  <tr><td><strong>Harmonisches Mittel</strong></td><td>x̄<sub>harm</sub> = n / Σ(1/xᵢ)</td><td>Durchschnittsgeschwindigkeit bei gleichen Strecken</td></tr>
+</table>
+</div>
+
+<div class="merksatz">
+  <p>Es gilt stets: x̄<sub>harm</sub> ≤ x̄<sub>geo</sub> ≤ x̄<sub>arith</sub> (Ungleichung der Mittelwerte). Gleichheit nur wenn alle Werte identisch sind.</p>
+</div>
+
+<div class="analogie">
+  <p><strong>Waage vs. Lineal:</strong> Der <strong>Mittelwert</strong> ist wie der Schwerpunkt einer Wippe — jeder Wert übt „Drehmoment" aus, proportional zu seinem Abstand. Der <strong>Median</strong> ist wie die Mitte einer Schlange — er teilt die Anzahl der Personen in zwei gleiche Gruppen, egal wie weit die Ausreißer entfernt stehen.</p>
+</div>
+
+<!-- Deep Dive: Bedeutsamkeit von Mittelwertvergleichen -->
+<div class="deep-dive" id="dd3a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd3a')">
+    <span class="dd-icon">▼</span>
+    Bedeutsamkeit: Welcher Mittelwert auf welcher Skala?
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Skalenabhängigkeit</h4>
+    <p>Der <strong>Modus</strong> ist auf allen Skalenniveaus bedeutsam (ab Nominal). Der <strong>Median</strong> erfordert Ordinalskala — er bleibt bei jeder streng monotonen Transformation erhalten. Das <strong>arithmetische Mittel</strong> erfordert Intervallskala, das <strong>geometrische Mittel</strong> erfordert Verhältnisskala.</p>
+    <h4>Vergleich von Mittelwerten</h4>
+    <p>Aussagen der Form „x̄(A) > x̄(B)" sind auf Intervallskala bedeutsam: Unter positiv linearer Transformation y = p·x + q wird ȳ(A) = p·x̄(A) + q > p·x̄(B) + q = ȳ(B) für p > 0.</p>
+    <p>Aber: „x̄(A) = 2 · x̄(B)" ist auf Intervallskala <strong>nicht</strong> bedeutsam, da die Transformation den Quotienten ändert.</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz4">
+  <h4>🧪 Wissenscheck: Lagemaße</h4>
+  <p>Für die Werte 2, 3, 3, 7, 100: Welches Lagemaß ist am robustesten gegenüber dem Ausreißer 100?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz4',this,false)">Arithmetisches Mittel</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz4',this,true)" data-correct="true">Median</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz4',this,false)">Geometrisches Mittel</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz4',this,false)">Harmonisches Mittel</button>
+  <div class="quiz-feedback correct-fb">Richtig! Der Median (= 3) ignoriert den Ausreißer 100 komplett. Das arithmetische Mittel (= 23) wird stark verzerrt.</div>
+  <div class="quiz-feedback wrong-fb">Der Median ist hier am robustesten: Er beträgt 3, unabhängig davon, ob der größte Wert 100 oder 1000 ist. Das arithmetische Mittel reagiert dagegen stark auf Extremwerte.</div>
+</div>
+
+<div class="quiz" id="quiz5">
+  <h4>🧪 Wissenscheck: Eigenschaften</h4>
+  <p>Welche Eigenschaft hat das arithmetische Mittel?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz5',this,false)">Es minimiert Σ|xᵢ − a|</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz5',this,true)" data-correct="true">Es minimiert Σ(xᵢ − a)²</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz5',this,false)">Es ist immer größer als der Median</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz5',this,false)">Es erfordert Nominalskalenniveau</button>
+  <div class="quiz-feedback correct-fb">Richtig! Das arithmetische Mittel minimiert die Summe der quadrierten Abweichungen (Minimumeigenschaft). Die absoluten Abweichungen werden vom Median minimiert.</div>
+  <div class="quiz-feedback wrong-fb">Σ(xᵢ − a)² wird durch a = x̄ minimiert (Minimumeigenschaft des Mittels). Σ|xᵢ − a| wird dagegen vom Median minimiert.</div>
+</div>
+
+</section>

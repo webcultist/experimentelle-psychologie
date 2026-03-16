@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Experimentelle Psychologie – Lernhilfe | Uni Tübingen</title>
+<title>Lernplattform | Uni Tubingen</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -16,965 +16,107 @@ body { font-family: 'Source Sans 3', Georgia, serif; background: var(--bg); colo
 body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
 ::selection { background: var(--accent); color: white; }
 
-/* HEADER */
 header { padding: 4rem 2rem 3rem; text-align: center; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #ece5d8, var(--bg)); position: relative; }
 header::after { content: '§'; position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); background: var(--bg); padding: 0 1rem; font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--accent); }
 .uni-badge { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); border: 1.5px solid var(--accent); padding: 0.3em 1em; margin-bottom: 1.5rem; border-radius: 2px; }
 header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; line-height: 1.2; margin-bottom: 0.5rem; }
 header h1 em { color: var(--accent); font-style: italic; }
 .subtitle { font-size: 1.05rem; color: var(--text-secondary); font-weight: 300; max-width: 620px; margin: 0 auto; }
-.subtitle strong { font-weight: 600; color: var(--text); }
-.header-hint { margin-top: 1.2rem; font-size: 0.82rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-.header-hint .toggle-icon { display: inline-flex; align-items: center; background: var(--accent3); color: white; padding: 0.2em 0.6em; border-radius: 3px; font-size: 0.72rem; font-weight: 600; }
 
-/* NAV */
-nav { position: sticky; top: 0; z-index: 100; background: rgba(245,240,232,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); overflow-x: auto; }
-nav::-webkit-scrollbar { height: 0; }
-nav ul { display: flex; list-style: none; max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
-nav li a { display: block; padding: 0.85rem 1rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; white-space: nowrap; border-bottom: 2.5px solid transparent; transition: all 0.2s; }
-nav li a:hover, nav li a.active { color: var(--accent); border-bottom-color: var(--accent); }
+main { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+main > h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 1.5rem; color: var(--text-secondary); font-weight: 400; }
 
-/* MAIN */
-main { max-width: 880px; margin: 0 auto; padding: 2rem 1.5rem 6rem; }
-section { margin-bottom: 4rem; scroll-margin-top: 60px; }
-.section-number { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700; color: var(--accent); opacity: 0.15; line-height: 1; margin-bottom: -0.8rem; }
-section > h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; display: inline-block; }
-section > .section-subtitle { font-size: 0.95rem; color: var(--text-secondary); font-style: italic; margin-bottom: 1.5rem; }
-section p, .deep-dive-content p { margin-bottom: 1rem; max-width: 72ch; }
-h3.sub { font-family: 'Playfair Display', serif; margin: 2rem 0 1rem; font-size: 1.2rem; }
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+.topic-card { background: var(--bg-card); border: 1.5px solid var(--border); border-radius: 8px; padding: 1.8rem; transition: all 0.2s; text-decoration: none; color: inherit; display: block; position: relative; overflow: hidden; }
+.topic-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px var(--shadow); border-color: var(--accent); }
+.topic-card .semester { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+.topic-card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin-bottom: 0.5rem; line-height: 1.3; }
+.topic-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem; }
+.topic-card .meta { display: flex; gap: 1rem; font-size: 0.75rem; color: var(--text-secondary); }
+.topic-card .meta span { display: flex; align-items: center; gap: 0.3rem; }
+.topic-card .links { display: flex; gap: 0.6rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.topic-card .links a { font-size: 0.78rem; font-weight: 600; padding: 0.3em 0.8em; border: 1px solid var(--border); border-radius: 3px; color: var(--accent3); text-decoration: none; transition: all 0.15s; }
+.topic-card .links a:hover { background: var(--accent3); color: white; border-color: var(--accent3); }
 
-/* CARDS */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
-.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; }
-.card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px var(--shadow); }
-.card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
-.card h3 .icon { font-size: 1.3rem; }
-.card p { font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary); }
+.coming-soon { opacity: 0.5; pointer-events: none; }
+.coming-soon::after { content: 'Kommt bald'; position: absolute; top: 1rem; right: 1rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--border); color: var(--text-secondary); padding: 0.2em 0.6em; border-radius: 3px; }
 
-/* BOXES */
-.def-box { background: var(--bg-card); border-left: 4px solid var(--accent); padding: 1.2rem 1.5rem; margin: 1.2rem 0; border-radius: 0 4px 4px 0; }
-.def-box.green { border-left-color: var(--accent2); } .def-box.blue { border-left-color: var(--accent3); }
-.def-box.purple { border-left-color: var(--accent4); } .def-box.gold { border-left-color: var(--accent5); }
-.def-box .label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.4rem; color: var(--accent); }
-.def-box.green .label { color: var(--accent2); } .def-box.blue .label { color: var(--accent3); }
-.def-box.purple .label { color: var(--accent4); } .def-box.gold .label { color: var(--accent5); }
-.def-box p { font-size: 0.95rem; margin-bottom: 0.5rem; }
-.def-box p:last-child { margin-bottom: 0; }
-
-/* TABLE */
-.table-wrap { overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 4px; }
-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: var(--bg-card); }
-th { background: #ece5d8; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; text-align: left; padding: 0.8rem 1rem; border-bottom: 2px solid var(--border); }
-td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
-tr:last-child td { border-bottom: none; } tr:hover td { background: var(--highlight); }
-
-/* CODE */
-.formula { font-family: 'JetBrains Mono', monospace; background: #2a2520; color: #f0e6d3; padding: 1.2rem 1.5rem; border-radius: 4px; margin: 1rem 0; overflow-x: auto; font-size: 0.85rem; line-height: 1.8; }
-.formula .comment { color: #8b7d6b; } .formula .keyword { color: #e8a87c; }
-.formula .symbol { color: #c0392b; } .formula .result { color: #58d68d; }
-code { font-family: 'JetBrains Mono', monospace; background: rgba(42,37,32,0.06); padding: 0.15em 0.4em; border-radius: 3px; font-size: 0.88em; }
-
-/* COLORED BOXES */
-.example { background: linear-gradient(135deg, #fef9f0, #fef3c7); border: 1px solid #e8d9a0; border-radius: 4px; padding: 1.3rem 1.5rem; margin: 1.2rem 0; }
-.example::before { content: '💡 Beispiel'; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent5); display: block; margin-bottom: 0.5rem; }
-.merksatz { background: linear-gradient(135deg, #eaf5ee, #d5f5e3); border: 1px solid #a9dfbf; border-radius: 4px; padding: 1.3rem 1.5rem; margin: 1.2rem 0; }
-.merksatz::before { content: '✓ Merke'; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent2); display: block; margin-bottom: 0.5rem; }
-.achtung { background: linear-gradient(135deg, #fdf2f2, #fadbd8); border: 1px solid #f1948a; border-radius: 4px; padding: 1.3rem 1.5rem; margin: 1.2rem 0; }
-.achtung::before { content: '⚠ Häufiger Fehler'; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 0.5rem; }
-.analogie { background: linear-gradient(135deg, #f4ecf7, #e8daef); border: 1px solid #c39bd3; border-radius: 4px; padding: 1.3rem 1.5rem; margin: 1.2rem 0; }
-.analogie::before { content: '🎯 Analogie'; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent4); display: block; margin-bottom: 0.5rem; }
-.example p, .merksatz p, .achtung p, .analogie p { font-size: 0.92rem; }
-
-/* DEEP DIVE */
-.deep-dive { margin: 1.5rem 0; border: 1.5px solid var(--accent3); border-radius: 6px; overflow: hidden; background: var(--bg-card); }
-.deep-dive-toggle { width: 100%; display: flex; align-items: center; gap: 0.7rem; padding: 1rem 1.3rem; background: linear-gradient(135deg, #eaf2f8, #d6eaf8); border: none; cursor: pointer; font-family: inherit; font-size: 0.92rem; font-weight: 600; color: var(--accent3); text-align: left; transition: background 0.2s; }
-.deep-dive-toggle:hover { background: linear-gradient(135deg, #d6eaf8, #aed6f1); }
-.deep-dive-toggle .dd-icon { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent3); color: white; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; transition: transform 0.3s; }
-.deep-dive.open .deep-dive-toggle .dd-icon { transform: rotate(180deg); }
-.deep-dive-toggle .dd-badge { margin-left: auto; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent3); color: white; padding: 0.2em 0.6em; border-radius: 3px; opacity: 0.8; }
-.deep-dive-content { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), padding 0.3s; padding: 0 1.5rem; }
-.deep-dive.open .deep-dive-content { max-height: 8000px; padding: 1.5rem; border-top: 1px solid #aed6f1; }
-.deep-dive-content h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin: 1.5rem 0 0.6rem; color: var(--accent3); }
-.deep-dive-content h4:first-child { margin-top: 0; }
-
-/* COMPARISON */
-.vergleich { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
-.vergleich-seite { padding: 1.2rem 1.3rem; background: var(--bg-card); font-size: 0.9rem; }
-.vergleich-seite:first-child { border-right: 1px solid var(--border); }
-.vergleich-seite h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--accent2); }
-.vergleich-seite:last-child h4 { border-bottom-color: var(--accent); }
-.vergleich-seite ul { list-style: none; padding: 0; }
-.vergleich-seite ul li { padding: 0.3rem 0 0.3rem 1.2rem; position: relative; font-size: 0.88rem; color: var(--text-secondary); }
-.vergleich-seite ul li::before { position: absolute; left: 0; font-size: 0.85rem; }
-.vergleich-seite:first-child ul li::before { content: '✓'; color: var(--accent2); }
-.vergleich-seite:last-child ul li::before { content: '✗'; color: var(--accent); }
-
-/* QUIZ */
-.quiz { background: var(--bg-card); border: 1.5px solid var(--accent3); border-radius: 4px; padding: 1.5rem; margin: 1.5rem 0; }
-.quiz h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin-bottom: 1rem; color: var(--accent3); }
-.quiz-option { display: block; width: 100%; text-align: left; padding: 0.7rem 1rem; margin: 0.4rem 0; background: transparent; border: 1px solid var(--border); border-radius: 3px; cursor: pointer; font-family: inherit; font-size: 0.9rem; color: var(--text); transition: all 0.2s; }
-.quiz-option:hover:not(:disabled) { border-color: var(--accent3); background: rgba(26,82,118,0.04); }
-.quiz-option.correct { border-color: var(--accent2) !important; background: #d5f5e3 !important; color: var(--accent2); font-weight: 600; }
-.quiz-option.wrong { border-color: var(--accent) !important; background: #fadbd8 !important; color: var(--accent); opacity: 0.7; }
-.quiz-option:disabled { cursor: default; }
-.quiz-feedback { margin-top: 0.8rem; padding: 0.8rem 1rem; border-radius: 3px; font-size: 0.88rem; display: none; line-height: 1.6; }
-.quiz-feedback.show { display: block; }
-.quiz-feedback.correct-fb { background: #d5f5e3; color: #1e7e34; }
-.quiz-feedback.wrong-fb { background: #fadbd8; color: var(--accent); }
-
-/* FLOW */
-.flow { display: flex; align-items: center; margin: 1.5rem 0; overflow-x: auto; padding: 1rem 0; flex-wrap: wrap; justify-content: center; }
-.flow-step { background: var(--bg-card); border: 1.5px solid var(--border); border-radius: 4px; padding: 0.8rem 1.2rem; font-size: 0.82rem; font-weight: 600; text-align: center; min-width: 100px; transition: transform 0.2s; }
-.flow-step:hover { transform: scale(1.05); box-shadow: 0 4px 16px var(--shadow); border-color: var(--accent); }
-.flow-step small { display: block; font-weight: 400; font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.3rem; }
-.flow-arrow { font-size: 1.2rem; color: var(--accent); padding: 0 0.4rem; flex-shrink: 0; }
-
-/* DIAGRAM */
-.diagram { margin: 1.5rem 0; text-align: center; }
-.diagram svg { max-width: 100%; height: auto; }
-.diagram-caption { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem; font-style: italic; }
-
-/* MISC */
-.sep { text-align: center; margin: 3rem 0; color: var(--border); font-family: 'Playfair Display', serif; font-size: 1.2rem; letter-spacing: 0.5em; }
-#progressBar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 200; transition: width 0.15s; width: 0; }
 footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--text-secondary); }
-#topBtn { position: fixed; bottom: 2rem; right: 2rem; background: var(--accent); color: white; border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; opacity: 0; transition: opacity 0.3s, transform 0.3s; z-index: 50; box-shadow: 0 4px 12px rgba(192,57,43,0.3); }
-#topBtn.visible { opacity: 1; } #topBtn:hover { transform: scale(1.1); }
 
 @media (max-width: 640px) {
-  header { padding: 2.5rem 1.2rem 2rem; } main { padding: 1.5rem 1rem 4rem; }
-  nav li a { padding: 0.7rem 0.6rem; font-size: 0.68rem; } .card-grid { grid-template-columns: 1fr; }
-  .flow { flex-direction: column; } .flow-arrow { transform: rotate(90deg); }
-  .section-number { font-size: 2.5rem; } section > h2 { font-size: 1.4rem; }
-  .vergleich { grid-template-columns: 1fr; } .vergleich-seite:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+  header { padding: 2.5rem 1.2rem 2rem; }
+  main { padding: 2rem 1rem 4rem; }
+  .topic-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
-<div id="progressBar"></div>
 
 <header>
-  <div class="uni-badge">Universität Tübingen · Fachbereich Psychologie</div>
-  <h1>Experimentelle <em>Psychologie</em></h1>
-  <p class="subtitle">Lernhilfe zum Buch von <strong>Jürgen Heller</strong> — kompakt, verständlich, prüfungsrelevant</p>
-  <p class="header-hint">Klick auf <span class="toggle-icon">▼ Vertiefung</span> für erweiterte Erklärungen zu jedem Thema</p>
+  <div class="uni-badge">Universitat Tubingen &middot; Fachbereich Psychologie</div>
+  <h1>Lern<em>plattform</em></h1>
+  <p class="subtitle">Lernhilfen, Wissenstests und Crash-Courses &mdash; kompakt, verstandlich, prufungsrelevant</p>
 </header>
 
-<nav><ul>
-  <li><a href="#wisstheorie">Wissenschaftstheorie</a></li>
-  <li><a href="#logik">Logik</a></li>
-  <li><a href="#messung">Messung</a></li>
-  <li><a href="#psychophysik">Psychophysik</a></li>
-  <li><a href="#wahrscheinlichkeit">Wahrscheinlichkeit</a></li>
-  <li><a href="#versuchsplanung">Versuchsplanung</a></li>
-  <li><a href="#statistik">Statistik</a></li>
-  <li><a href="#lernen">Lernen</a></li>
-</ul></nav>
-
 <main>
+  <h2>Verfugbare Themen</h2>
+  <div class="topic-grid">
 
-<!-- ══════════════ 1. WISSENSCHAFTSTHEORIE ══════════════ -->
-<section id="wisstheorie">
-  <div class="section-number">01</div>
-  <h2>Wissenschaftstheorie</h2>
-  <p class="section-subtitle">Wie Psychologie zur Wissenschaft wurde</p>
-  <p>Psychologie will nicht nur beschreiben, sondern <strong>erklären und vorhersagen</strong>. Aber was macht eine Aussage „wissenschaftlich"?</p>
-
-  <div class="diagram">
-    <svg viewBox="0 0 700 90" xmlns="http://www.w3.org/2000/svg" style="max-width:700px">
-      <line x1="30" y1="50" x2="670" y2="50" stroke="#d4cbbf" stroke-width="2"/>
-      <circle cx="120" cy="50" r="8" fill="#c0392b"/><text x="120" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#2a2520">1920er</text><text x="120" y="75" text-anchor="middle" font-size="10" fill="#6b5e52">Logischer</text><text x="120" y="87" text-anchor="middle" font-size="10" fill="#6b5e52">Empirismus</text>
-      <circle cx="310" cy="50" r="8" fill="#c0392b"/><text x="310" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#2a2520">1934</text><text x="310" y="75" text-anchor="middle" font-size="10" fill="#6b5e52">Popper:</text><text x="310" y="87" text-anchor="middle" font-size="10" fill="#6b5e52">Falsifikationismus</text>
-      <circle cx="500" cy="50" r="8" fill="#c0392b"/><text x="500" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#2a2520">1962</text><text x="500" y="75" text-anchor="middle" font-size="10" fill="#6b5e52">Kuhn:</text><text x="500" y="87" text-anchor="middle" font-size="10" fill="#6b5e52">Paradigmenwechsel</text>
-    </svg>
-    <div class="diagram-caption">Zeitstrahl der wissenschaftstheoretischen Hauptströmungen</div>
-  </div>
-
-  <div class="card-grid">
-    <div class="card"><h3><span class="icon">🔬</span> Logischer Empirismus</h3><p>Nur <strong>empirisch überprüfbare</strong> Aussagen sind wissenschaftlich. Wiener Kreis (Carnap, Schlick): Theorie + Beobachtung = Erkenntnis.</p></div>
-    <div class="card"><h3><span class="icon">❌</span> Kritischer Rationalismus</h3><p><strong>Popper (Falsifikationismus):</strong> Theorien können nie bewiesen, nur <strong>widerlegt</strong> werden. Wissenschaftlich = prinzipiell falsifizierbar.</p></div>
-    <div class="card"><h3><span class="icon">🔄</span> Paradigmenwechsel</h3><p><strong>Kuhn:</strong> Wissenschaft verläuft in Revolutionen. Ein Paradigma dominiert, bis Anomalien einen Umsturz erzwingen.</p></div>
-  </div>
-
-  <div class="example"><p><strong>„Alle Schwäne sind weiß"</strong> — falsifizierbar (ein schwarzer Schwan reicht). <strong>„Irgendwo gibt es Geister"</strong> — nicht falsifizierbar → nicht wissenschaftlich nach Popper.</p></div>
-
-  <div class="merksatz"><p><strong>Induktion vs. Deduktion:</strong> Induktion: Einzelfall → Allgemeines (unsicher!). Deduktion: Allgemeines → Einzelfall (gültig). Popper: <strong>hypothetisch-deduktive Methode</strong> — Hypothese → Vorhersage → empirisch prüfen.</p></div>
-
-  <div class="deep-dive" id="dd-wiss">
-    <button class="deep-dive-toggle" onclick="toggleDD('dd-wiss')"><span class="dd-icon">▼</span>Vertiefung: Wissenschaftstheorie im Detail<span class="dd-badge">Erweitert</span></button>
-    <div class="deep-dive-content">
-      <h4>Theorie-Beladenheit der Beobachtung</h4>
-      <p>Es gibt keine „reine" Beobachtung. Ein Radiologe sieht auf einem Röntgenbild etwas anderes als ein Laie. Heller: Experiment und Theorie sind <strong>wechselseitig bedingt</strong>.</p>
-
-      <h4>Das Asymmetrie-Argument</h4>
-      <p>Eine Theorie lässt sich nie endgültig verifizieren (egal wie viele weiße Schwäne). Aber mit <strong>einem einzigen Gegenbeispiel</strong> falsifizieren.</p>
-      <div class="analogie"><p><strong>Gerichtsprozess:</strong> Unschuld nie beweisbar, Schuld schon — durch ein belastendes Beweisstück. So auch bei Theorien.</p></div>
-
-      <h4>Kuhns Phasenmodell</h4>
-      <div class="flow" style="flex-wrap:wrap;">
-        <div class="flow-step">Vorparadigmatisch<small>Viele Ansätze</small></div><span class="flow-arrow">→</span>
-        <div class="flow-step">Normalwissenschaft<small>Ein Paradigma</small></div><span class="flow-arrow">→</span>
-        <div class="flow-step">Anomalien<small>Unerklärliches</small></div><span class="flow-arrow">→</span>
-        <div class="flow-step">Krise<small>Vertrauen ↓</small></div><span class="flow-arrow">→</span>
-        <div class="flow-step">Revolution<small>Neues Paradigma</small></div>
+    <div class="topic-card">
+      <div class="semester">Bachelorstudium</div>
+      <h3>Experimentelle Psychologie</h3>
+      <p>Wissenschaftstheorie, Logik, Messtheorie, Psychophysik, Versuchsplanung, Statistik &mdash; basierend auf Heller (2012).</p>
+      <div class="meta">
+        <span>8 Kapitel</span>
+        <span>196 Quizfragen</span>
+        <span>52 Lernkarten</span>
       </div>
-      <p><strong>Psychologie:</strong> Behaviorismus → Chomsky (Sprache ≠ nur Verstärkung) + Tolman (kognitive Karten) → Kognitive Wende.</p>
-
-      <h4>Duhem-Quine-Problem</h4>
-      <p>Hypothesen werden <em>nie isoliert</em> getestet, sondern mit Hilfsannahmen. Wenn widerlegt — welcher Teil falsch? Falsifikation ist weniger eindeutig als Popper suggeriert.</p>
-
-      <h4>Lakatos: Forschungsprogramme</h4>
-      <p><strong>Harter Kern</strong> (unveränderbar) + <strong>Schutzgürtel</strong> (anpassbar). Anomalien treffen erst den Schutzgürtel. Erst wenn das Programm „degenerativ" wird → Ablösung.</p>
-    </div>
-  </div>
-
-  <h3 class="sub">Statement View vs. Non-Statement View</h3>
-  <p>In der Klausur ein Dauerbrenner: Wie unterscheiden sich die beiden Auffassungen von Theorien?</p>
-  <div class="vergleich">
-    <div class="vergleich-seite"><h4>Statement View</h4><ul><li>Theorien = <strong>Menge von Aussagen</strong> (Sätze)</li><li>Logischer Empirismus, Popper</li><li>Theorie ist sprachliches Gebilde</li><li>Verifikation/Falsifikation von Sätzen</li></ul></div>
-    <div class="vergleich-seite"><h4>Non-Statement View</h4><ul><li>Theorien = <strong>Mengen von Modellen</strong></li><li>Sneed/Stegmüller: Strukturalismus</li><li>Formale Rekonstruktion: <code>T = (K, I)</code></li><li>K = math. Kern, I = intendierte Anwendungen</li></ul></div>
-  </div>
-  <div class="def-box purple">
-    <div class="label">Strukturalismus (Sneed/Stegmüller)</div>
-    <p>Theorie = <strong>geordnetes Paar T = (K, I)</strong>. Der <strong>Kern K</strong> enthält die formale Struktur (Axiome, Modelle). <strong>I</strong> sind die intendierten Anwendungen — reale Systeme, die der Theorie genügen sollen. Vorteil: Theorien können sich entwickeln, ohne völlig aufgegeben zu werden (Kern bleibt, I ändert sich).</p>
-  </div>
-
-  <h3 class="sub">Erkenntnistheoretische Grundpositionen</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Position</th><th>Kernaussage</th><th>Vertreter</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Empirismus</strong></td><td>Erkenntnis durch <strong>Sinneserfahrung</strong></td><td>Locke, Hume, Wiener Kreis</td></tr>
-      <tr><td><strong>Rationalismus</strong></td><td>Erkenntnis durch <strong>Vernunft/Denken</strong></td><td>Descartes, Leibniz</td></tr>
-      <tr><td><strong>Realismus</strong></td><td>Welt existiert <strong>unabhängig</strong> vom Beobachter</td><td>Popper</td></tr>
-      <tr><td><strong>Idealismus</strong></td><td>Realität ist <strong>geistabhängig</strong></td><td>Berkeley, Kant (teilw.)</td></tr>
-      <tr><td><strong>Skeptizismus</strong></td><td><strong>Sichere</strong> Erkenntnis ist unmöglich</td><td>Hume (Induktionsproblem)</td></tr>
-    </tbody>
-  </table></div>
-
-  <h3 class="sub">Theorienbildung: Gütekriterien</h3>
-  <div class="card-grid">
-    <div class="card"><h3><span class="icon">🎯</span> Terminol. Exaktheit</h3><p><strong>Klassifikatorisch</strong> (=/ ≠), <strong>komparativ</strong> (>, <), <strong>quantitativ</strong> (Zahlen). Je quantitativer, desto präziser.</p></div>
-    <div class="card"><h3><span class="icon">🪒</span> Sparsamkeit</h3><p><strong>Ockhams Rasiermesser:</strong> Die einfachste Erklärung gewinnt. Weniger Parameter = besser.</p></div>
-    <div class="card"><h3><span class="icon">⚖️</span> Anpassung vs. Generalisierung</h3><p><strong>Overfitting:</strong> Theorie passt perfekt auf Daten, versagt bei neuen. Gute Theorie = robust generalisierbar.</p></div>
-  </div>
-  <div class="achtung"><p><strong>Klausurfalle:</strong> Eine Theorie mit perfekter Anpassungsgüte ist nicht automatisch gut — sie kann <strong>overfitted</strong> sein! Prüfbarkeit und Sparsamkeit sind mindestens ebenso wichtig.</p></div>
-
-  <h3 class="sub">Paradigmen in der Psychologie</h3>
-  <div class="flow" style="flex-wrap:wrap;">
-    <div class="flow-step">Behaviorismus<small>Watson, Skinner</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Anomalien<small>Chomsky, Tolman</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Kognitive Wende<small>~1960</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Neuropsychologie<small>EEG, fMRI</small></div>
-  </div>
-  <div class="example"><p><strong>Behaviorismus:</strong> Watson (S→R), Skinner-Box (Verstärkung). <strong>Anomalien:</strong> Chomsky (Sprache ≠ nur Verstärkung), Tolman (kognitive Karten bei Ratten). <strong>Kritik Neuroimaging:</strong> Lachs-fMRI-Studie — selbst bei totem Lachs „Aktivierung" ohne Korrektur für multiples Testen!</p></div>
-
-  <div class="quiz" id="quiz-wiss">
-    <h4>🧠 Schnellcheck</h4>
-    <p style="margin-bottom:1rem; font-size:0.9rem;">Welche Aussage ist nach Popper <strong>nicht</strong> wissenschaftlich?</p>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz-wiss',this,false)">„Licht wird durch Gravitation abgelenkt."</button>
-    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz-wiss',this,true)">„Das Unterbewusste beeinflusst alles — auch wenn man es nicht nachweisen kann."</button>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz-wiss',this,false)">„Koffein verkürzt die Reaktionszeit um mindestens 10 ms."</button>
-    <div class="quiz-feedback correct-fb">Richtig! Nicht falsifizierbar — jeder Gegenbeleg wird absorbiert.</div>
-    <div class="quiz-feedback wrong-fb">Unwissenschaftlich nach Popper = kein denkbares Experiment könnte sie falsifizieren.</div>
-  </div>
-</section>
-<div class="sep">· · ·</div>
-
-<!-- ══════════════ 2. LOGIK ══════════════ -->
-<section id="logik">
-  <div class="section-number">02</div>
-  <h2>Formale Logik</h2>
-  <p class="section-subtitle">Das Fundament korrekten Schließens</p>
-  <p>Logik prüft, ob die Schlussfolgerung <strong>zwingend aus den Prämissen folgt</strong>.</p>
-
-  <h3 class="sub">Aussagenlogik</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Junktor</th><th>Symbol</th><th>Bedeutung</th><th>Wahr, wenn…</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Negation</strong></td><td><code>¬A</code></td><td>„nicht A"</td><td>A falsch</td></tr>
-      <tr><td><strong>Konjunktion</strong></td><td><code>A ∧ B</code></td><td>„A und B"</td><td>beide wahr</td></tr>
-      <tr><td><strong>Disjunktion</strong></td><td><code>A ∨ B</code></td><td>„A oder B"</td><td>mind. eines wahr</td></tr>
-      <tr><td><strong>Konditional</strong></td><td><code>A → B</code></td><td>„wenn A, dann B"</td><td>nicht (A wahr ∧ B falsch)</td></tr>
-      <tr><td><strong>Bikonditional</strong></td><td><code>A ↔ B</code></td><td>„genau dann, wenn"</td><td>gleicher Wahrheitswert</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="achtung"><p><strong>Konditional ist kontraintuitiv!</strong> <code>A → B</code> ist nur falsch, wenn A wahr und B falsch. Bei falschem A ist es <em>immer</em> wahr (ex falso quodlibet).</p></div>
-
-  <h3 class="sub">Schlussregeln</h3>
-  <div class="diagram">
-    <svg viewBox="0 0 660 160" xmlns="http://www.w3.org/2000/svg" style="max-width:660px">
-      <rect x="10" y="10" width="150" height="140" rx="6" fill="#eaf5ee" stroke="#a9dfbf" stroke-width="1.5"/>
-      <text x="85" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49">MODUS PONENS ✓</text>
-      <text x="85" y="55" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">A → B</text>
-      <text x="85" y="75" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">A</text>
-      <line x1="40" y1="83" x2="130" y2="83" stroke="#2c6e49" stroke-width="1.5"/>
-      <text x="85" y="103" text-anchor="middle" font-size="12" fill="#2c6e49" font-weight="700" font-family="monospace">∴ B</text>
-      <text x="85" y="140" text-anchor="middle" font-size="9" fill="#6b5e52" font-style="italic">„Vorwärts"</text>
-
-      <rect x="175" y="10" width="150" height="140" rx="6" fill="#eaf5ee" stroke="#a9dfbf" stroke-width="1.5"/>
-      <text x="250" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49">MODUS TOLLENS ✓</text>
-      <text x="250" y="55" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">A → B</text>
-      <text x="250" y="75" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">¬B</text>
-      <line x1="205" y1="83" x2="295" y2="83" stroke="#2c6e49" stroke-width="1.5"/>
-      <text x="250" y="103" text-anchor="middle" font-size="12" fill="#2c6e49" font-weight="700" font-family="monospace">∴ ¬A</text>
-      <text x="250" y="140" text-anchor="middle" font-size="9" fill="#6b5e52" font-style="italic">= Falsifikation!</text>
-
-      <rect x="345" y="10" width="150" height="140" rx="6" fill="#fdf2f2" stroke="#f1948a" stroke-width="1.5"/>
-      <text x="420" y="24" text-anchor="middle" font-size="9" font-weight="700" fill="#c0392b">BEJ. KONSEQUENS ✗</text>
-      <text x="420" y="55" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">A → B</text>
-      <text x="420" y="75" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">B</text>
-      <line x1="375" y1="83" x2="465" y2="83" stroke="#c0392b" stroke-width="1.5"/>
-      <text x="420" y="103" text-anchor="middle" font-size="12" fill="#c0392b" font-weight="700" font-family="monospace">∴ A ???</text>
-      <text x="420" y="140" text-anchor="middle" font-size="9" fill="#c0392b" font-style="italic">FEHLSCHLUSS!</text>
-
-      <rect x="510" y="10" width="140" height="140" rx="6" fill="#fdf2f2" stroke="#f1948a" stroke-width="1.5"/>
-      <text x="580" y="24" text-anchor="middle" font-size="9" font-weight="700" fill="#c0392b">VERN. ANTEZEDENS ✗</text>
-      <text x="580" y="55" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">A → B</text>
-      <text x="580" y="75" text-anchor="middle" font-size="12" fill="#2a2520" font-family="monospace">¬A</text>
-      <line x1="535" y1="83" x2="625" y2="83" stroke="#c0392b" stroke-width="1.5"/>
-      <text x="580" y="103" text-anchor="middle" font-size="12" fill="#c0392b" font-weight="700" font-family="monospace">∴ ¬B ???</text>
-      <text x="580" y="140" text-anchor="middle" font-size="9" fill="#c0392b" font-style="italic">FEHLSCHLUSS!</text>
-    </svg>
-    <div class="diagram-caption">Nur Modus Ponens und Modus Tollens sind gültig — die rechten zwei sind typische Denkfallen</div>
-  </div>
-
-  <div class="example"><p><strong>Psychologie:</strong> „Wenn depressiv (A), dann niedrige Serotoninaktivität (B)." ✓ Person depressiv → niedrige Serotonin (Ponens). ✗ Niedrige Serotonin → depressiv? Fehlschluss! (Andere Ursachen möglich.)</p></div>
-
-  <h3 class="sub">Prädikatenlogik</h3>
-  <div class="def-box purple">
-    <div class="label">Quantoren</div>
-    <p><code>∀x: P(x)</code> — „Für alle x gilt P." <code>∃x: P(x)</code> — „Es gibt mind. ein x mit P."</p>
-  </div>
-  <div class="merksatz"><p><strong>Negation:</strong> <code>¬(∀x: P(x)) ≡ ∃x: ¬P(x)</code> — Ein Gegenbeispiel widerlegt die Allaussage → Basis der <strong>Falsifikation</strong>!</p></div>
-
-  <h3 class="sub">Mengenlehre & Relationen</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Abbildungstyp</th><th>Eigenschaft</th><th>Beispiel</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Injektiv</strong></td><td>Verschiedene Urbilder → verschiedene Bilder</td><td>Matrikelnummer → Student</td></tr>
-      <tr><td><strong>Surjektiv</strong></td><td>Jedes Element der Zielmenge wird getroffen</td><td>Noten → {1,2,3,4,5}</td></tr>
-      <tr><td><strong>Bijektiv</strong></td><td>Injektiv + Surjektiv → umkehrbar</td><td>Nominalskala-Transformation</td></tr>
-    </tbody>
-  </table></div>
-  <div class="def-box blue">
-    <div class="label">Relationen</div>
-    <p>Eine <strong>n-stellige Relation</strong> R ⊆ A₁ × A₂ × … × Aₙ ist eine Teilmenge des kartesischen Produkts. Wichtig für Messtheorie: Empirisches Relativ = (M, R) mit einer Relation R auf M.</p>
-  </div>
-
-  <h3 class="sub">Wahrheitstabellen konstruieren</h3>
-  <p>Klausuraufgabe: Welcher Operator macht <code>(A ∧ B) ? (A → B)</code> zur <strong>Tautologie</strong>?</p>
-  <div class="table-wrap"><table style="text-align:center; font-family:monospace;">
-    <thead><tr><th>A</th><th>B</th><th>A∧B</th><th>A→B</th><th>∧B ? A→B</th></tr></thead>
-    <tbody>
-      <tr><td>w</td><td>w</td><td>w</td><td>w</td><td>? = →: w</td></tr>
-      <tr><td>w</td><td>f</td><td>f</td><td>f</td><td>? = →: w</td></tr>
-      <tr><td>f</td><td>w</td><td>f</td><td>w</td><td>? = →: w</td></tr>
-      <tr><td>f</td><td>f</td><td>f</td><td>w</td><td>? = →: w</td></tr>
-    </tbody>
-  </table></div>
-  <div class="merksatz"><p><strong>Antwort:</strong> <code>→</code> (Konditional) macht es zur Tautologie! <code>(A ∧ B) → (A → B)</code> ist immer wahr. Trick: Bei falschem Antezedens (A∧B = f) ist das Konditional automatisch wahr.</p></div>
-
-  <h3 class="sub">Kontraposition bilden</h3>
-  <div class="example"><p><strong>Klausurbeispiel:</strong> „Wenn jemand neurotisch ist, dann hat er Angst." Kontraposition: <strong>„Wenn jemand keine Angst hat, dann ist er nicht neurotisch."</strong> Formal: (A → B) ≡ (¬B → ¬A).</p></div>
-
-  <div class="deep-dive" id="dd-logik">
-    <button class="deep-dive-toggle" onclick="toggleDD('dd-logik')"><span class="dd-icon">▼</span>Vertiefung: Tautologien, De Morgan & Hypothesenlogik<span class="dd-badge">Erweitert</span></button>
-    <div class="deep-dive-content">
-      <h4>Tautologien (immer wahr)</h4>
-      <div class="formula">
-<span class="keyword">Widerspruch:</span>       ¬(A ∧ ¬A)            <span class="comment">// nie gleichzeitig</span>
-<span class="keyword">Ausgeschl. Drittes:</span> A ∨ ¬A               <span class="comment">// eines muss gelten</span>
-<span class="keyword">Kontraposition:</span>     (A→B) ↔ (¬B→¬A)      <span class="comment">// Basis Modus Tollens</span>
-      </div>
-
-      <h4>De Morgan</h4>
-      <div class="formula">
-<span class="keyword">¬(A ∧ B)</span> <span class="symbol">≡</span> <span class="result">¬A ∨ ¬B</span>
-<span class="keyword">¬(A ∨ B)</span> <span class="symbol">≡</span> <span class="result">¬A ∧ ¬B</span>
-      </div>
-      <div class="analogie"><p>„Nicht (hungrig UND müde)" = „Nicht hungrig ODER nicht müde." Das „und" wird zum „oder"!</p></div>
-
-      <h4>Wissenschaftliches Schließen = Modus Tollens</h4>
-      <div class="formula">
-<span class="keyword">P1:</span> Wenn Theorie T → Effekt E        <span class="comment">(T → E)</span>
-<span class="keyword">P2:</span> Effekt E tritt NICHT auf           <span class="comment">(¬E)</span>
-<span class="result">→</span>  Theorie T stimmt nicht               <span class="comment">(¬T) ✓</span>
-<span class="comment">// ABER: Wenn E eintritt → T bestätigt? NEIN! (Bej. d. Konsequens)</span>
+      <div class="links">
+        <a href="topics/experimentelle-psychologie/index.html">Lernhilfe</a>
+        <a href="topics/experimentelle-psychologie/test.html">Wissenstest</a>
+        <a href="topics/experimentelle-psychologie/crash-course.html">4h Crash Course</a>
       </div>
     </div>
-  </div>
 
-  <div class="quiz" id="quiz1">
-    <h4>🧠 Schnellcheck</h4>
-    <p style="margin-bottom:1rem; font-size:0.9rem;">„Wenn Regen (A), dann Straße nass (B)." Straße trocken (¬B). Was folgt?</p>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz1',this,false)">Es regnet</button>
-    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz1',this,true)">¬A (kein Regen) — Modus Tollens</button>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz1',this,false)">Man kann nichts folgern</button>
-    <div class="quiz-feedback correct-fb">Richtig! Modus Tollens: A→B und ¬B → ¬A.</div>
-    <div class="quiz-feedback wrong-fb">Modus Tollens: A→B und ¬B → also ¬A.</div>
-  </div>
-</section>
-<div class="sep">· · ·</div>
-
-<!-- ══════════════ 3. MESSUNG ══════════════ -->
-<section id="messung">
-  <div class="section-number">03</div>
-  <h2>Messtheorie</h2>
-  <p class="section-subtitle">Psychologische Phänomene in Zahlen fassen</p>
-  <p>Messen = <strong>Homomorphismus</strong> vom empirischen (Lautstärken, Schmerz…) ins numerische Relativ (Zahlen), der Beziehungen erhält.</p>
-  <div class="def-box red">
-    <div class="label">Homomorphismus (formal)</div>
-    <p>Eine Abbildung φ: M → ℝ heißt Homomorphismus, wenn gilt:</p>
-    <div class="formula"><span class="keyword">a ≿ b</span>  <span class="symbol">⇔</span>  <span class="result">φ(a) ≥ φ(b)</span>   <span class="comment">// "genau dann, wenn"!</span></div>
-    <p>Die Richtung der Äquivalenz (⇔, nicht nur →) ist klausurrelevant: Die Zuordnung muss in <strong>beiden Richtungen</strong> gelten.</p>
-  </div>
-
-  <div class="diagram">
-    <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="max-width:560px">
-      <rect x="20" y="10" width="200" height="135" rx="8" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,3"/>
-      <text x="120" y="6" text-anchor="middle" font-size="11" font-weight="700" fill="#c0392b">EMPIRISCH</text>
-      <text x="60" y="48" font-size="13" fill="#2a2520">🔊 leise</text>
-      <text x="60" y="78" font-size="13" fill="#2a2520">🔊🔊 mittel</text>
-      <text x="60" y="108" font-size="13" fill="#2a2520">🔊🔊🔊 laut</text>
-      <line x1="235" y1="78" x2="325" y2="78" stroke="#2c6e49" stroke-width="2" marker-end="url(#ar)"/>
-      <text x="280" y="68" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49">Homomorphismus</text>
-      <defs><marker id="ar" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2c6e49"/></marker></defs>
-      <rect x="340" y="10" width="200" height="135" rx="8" fill="none" stroke="#1a5276" stroke-width="2" stroke-dasharray="6,3"/>
-      <text x="440" y="6" text-anchor="middle" font-size="11" font-weight="700" fill="#1a5276">NUMERISCH</text>
-      <text x="385" y="48" font-size="14" fill="#2a2520" font-family="monospace">30 dB</text>
-      <text x="385" y="78" font-size="14" fill="#2a2520" font-family="monospace">60 dB</text>
-      <text x="385" y="108" font-size="14" fill="#2a2520" font-family="monospace">90 dB</text>
-    </svg>
-    <div class="diagram-caption">Strukturerhaltende Zuordnung: leiser-als → kleiner-als</div>
-  </div>
-
-  <h3 class="sub">Skalenniveaus</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Skala</th><th>Eigenschaft</th><th>Transformation</th><th>Beispiel</th><th>Statistik</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Nominal</strong></td><td>= / ≠</td><td>Bijektive Abb.</td><td>Geschlecht</td><td>Modus, χ²</td></tr>
-      <tr><td><strong>Ordinal</strong></td><td>+ Rangfolge</td><td>Monotone Abb.</td><td>Schulnoten</td><td>+ Median</td></tr>
-      <tr><td><strong>Intervall</strong></td><td>+ Abstände</td><td>y = ax+b</td><td>°C, IQ</td><td>+ Mittelwert</td></tr>
-      <tr><td><strong>Verhältnis</strong></td><td>+ Nullpunkt</td><td>y = ax</td><td>Reaktionszeit</td><td>+ Verhältnisse</td></tr>
-      <tr><td><strong>Absolut</strong></td><td>+ Einheit</td><td>Identität</td><td>Anzahl</td><td>Alles</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="achtung"><p><strong>„Doppelt so viel Schmerz"</strong> — nur bei Verhältnisskala! Bei Ordinalskala (1–10) sind Verhältnisaussagen unzulässig.</p></div>
-
-  <h3 class="sub">Ordinale Messung & Matrix-Aufgaben</h3>
-  <p>In <strong>jeder Klausur</strong> kommt eine Matrix-Aufgabe: Gegeben eine Vergleichsmatrix, prüfe ob eine ordinale Messung möglich ist.</p>
-
-  <div class="def-box red">
-    <div class="label">Schwache Ordnung (M, ≥)</div>
-    <p>Ein empirisches Relativ <strong>(M, ≥)</strong> ist eine schwache Ordnung, wenn für alle x, y, z ∈ M gilt:</p>
-    <div class="formula">
-<span class="keyword">Transitivität:</span>  x ≥ y ∧ y ≥ z  →  x ≥ z
-<span class="keyword">Konnexität:</span>     x ≥ y  ∨  y ≥ x     <span class="comment">// alle Paare vergleichbar</span>
-    </div>
-    <p>Wenn zusätzlich <strong>Antisymmetrie</strong> gilt (x ≥ y ∧ y ≥ x → x = y), ist es eine <strong>totale Ordnung</strong>.</p>
-  </div>
-
-  <div class="example">
-    <p><strong>Klausurbeispiel:</strong> 5 Personen (a–e) vergleichen Attraktivität paarweise. Matrix zeigt „≥" (mindestens so attraktiv wie):</p>
-    <div class="table-wrap"><table style="text-align:center; font-family:monospace;">
-      <thead><tr><th></th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th></tr></thead>
-      <tbody>
-        <tr><td><strong>a</strong></td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
-        <tr><td><strong>b</strong></td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
-        <tr><td><strong>c</strong></td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
-        <tr><td><strong>d</strong></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
-        <tr><td><strong>e</strong></td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
-      </tbody>
-    </table></div>
-    <p><strong>Prüfung Konnexität:</strong> Für jedes Paar (i,j): mindestens eine 1 in Zelle (i,j) oder (j,i)? Ja → Konnex.</p>
-    <p><strong>Prüfung Transitivität:</strong> Wenn Zeile i hat 1 bei j, und Zeile j hat 1 bei k → muss Zeile i auch 1 bei k haben. Systematisch alle Tripel prüfen!</p>
-    <p><strong>Homomorphismus:</strong> Zeilensummen → Rangzahlen: d=5, a=e=4, b=3, c=1. Wenn schwache Ordnung gilt, sind die Zeilensummen ein gültiger Homomorphismus.</p>
-  </div>
-
-  <div class="merksatz"><p><strong>Klausurtipp:</strong> Immer <strong>konkrete Gegenbeispiele</strong> mit Zeilen-/Spaltenangabe nennen! „Transitivität verletzt bei a≥b, b≥c, aber NICHT a≥c" — mit konkreten Matrixzellen.</p></div>
-
-  <div class="achtung"><p><strong>Zyklische Triaden erkennen:</strong> Suche nach Kreisbeziehungen: A schlägt B, B schlägt C, C schlägt A. Sobald ein solcher <strong>Kreis</strong> existiert, ist die Transitivität verletzt! Das ist der schnellste Weg in der Klausur.</p></div>
-
-  <div class="deep-dive" id="dd-messung">
-    <button class="deep-dive-toggle" onclick="toggleDD('dd-messung')"><span class="dd-icon">▼</span>Vertiefung: Repräsentationssatz & Likert-Problem<span class="dd-badge">Erweitert</span></button>
-    <div class="deep-dive-content">
-      <h4>Repräsentations- & Eindeutigkeitssatz</h4>
-      <p><strong>Repräsentationssatz:</strong> Unter welchen Axiomen existiert ein Homomorphismus?</p>
-      <p><strong>Eindeutigkeitssatz:</strong> Wie viele gibt es? → Bestimmt Skalenniveau! Eindeutig bis auf lineare Transformation → Intervallskala.</p>
-
-      <h4>Das Likert-Dilemma</h4>
-      <p>Likert-Skalen sind streng genommen ordinal. Mittelwerte? <strong>Pragmatisch OK</strong> bei symmetrischer Verteilung, genug Items (5+), und Annahme ~gleicher Abstände. Aber: Vorsicht bei einzelnen Items!</p>
-
-      <h4>Permissible Statistics</h4>
-      <p>Die erlaubten statistischen Operationen hängen vom Skalenniveau ab. Mittelwerte auf Nominalskalen sind sinnlos (mittleres Geschlecht?). Nur invariante Aussagen unter den erlaubten Transformationen sind sinnvoll.</p>
-    </div>
-  </div>
-</section>
-<div class="sep">· · ·</div>
-
-<!-- ══════════════ 4. PSYCHOPHYSIK ══════════════ -->
-<section id="psychophysik">
-  <div class="section-number">04</div>
-  <h2>Psychophysik</h2>
-  <p class="section-subtitle">Reiz → Empfindung</p>
-  <p>Wie hängt <strong>subjektives Erleben</strong> mit <strong>physikalischer Reizintensität</strong> zusammen?</p>
-
-  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-    <div class="card"><h3><span class="icon">📏</span> Weber</h3><div class="formula" style="font-size:0.8rem; padding:0.7rem;"><span class="keyword">ΔI</span>/<span class="keyword">I</span> = <span class="symbol">k</span></div><p>JND proportional zur Reizstärke.</p></div>
-    <div class="card"><h3><span class="icon">📐</span> Fechner</h3><div class="formula" style="font-size:0.8rem; padding:0.7rem;"><span class="keyword">E</span> = <span class="symbol">c</span>·log(<span class="keyword">I/I₀</span>)</div><p>Empfindung wächst <strong>logarithmisch</strong>.</p></div>
-    <div class="card"><h3><span class="icon">⚡</span> Stevens</h3><div class="formula" style="font-size:0.8rem; padding:0.7rem;"><span class="keyword">E</span> = <span class="symbol">a</span>·<span class="keyword">I</span><sup style="color:#e8a87c">n</sup></div><p>n&lt;1 Kompression, n&gt;1 Expansion.</p></div>
-  </div>
-
-  <div class="diagram">
-    <svg viewBox="0 0 480 250" xmlns="http://www.w3.org/2000/svg" style="max-width:480px">
-      <line x1="60" y1="215" x2="440" y2="215" stroke="#2a2520" stroke-width="1.5"/>
-      <line x1="60" y1="215" x2="60" y2="30" stroke="#2a2520" stroke-width="1.5"/>
-      <text x="250" y="246" text-anchor="middle" font-size="11" fill="#2a2520">Reizintensität I →</text>
-      <text x="20" y="122" text-anchor="middle" font-size="11" fill="#2a2520" transform="rotate(-90,20,122)">Empfindung E →</text>
-      <path d="M60,215 Q120,115 180,85 Q260,55 360,42 L440,36" fill="none" stroke="#c0392b" stroke-width="2.5"/>
-      <text x="442" y="36" font-size="10" font-weight="600" fill="#c0392b">Fechner</text>
-      <path d="M60,215 Q130,138 200,100 Q300,68 400,53 L440,48" fill="none" stroke="#2c6e49" stroke-width="2.5" stroke-dasharray="6,3"/>
-      <text x="442" y="52" font-size="10" font-weight="600" fill="#2c6e49">Stevens n&lt;1</text>
-      <path d="M60,215 Q150,208 240,190 Q320,150 380,88 L440,26" fill="none" stroke="#1a5276" stroke-width="2.5" stroke-dasharray="3,3"/>
-      <text x="442" y="26" font-size="10" font-weight="600" fill="#1a5276">Stevens n&gt;1</text>
-      <line x1="60" y1="215" x2="440" y2="36" stroke="#d4cbbf" stroke-width="1" stroke-dasharray="4,4"/>
-      <text x="385" y="82" font-size="9" fill="#d4cbbf">linear</text>
-    </svg>
-    <div class="diagram-caption">Fechner (log) vs. Stevens (Potenz) — n&lt;1: Helligkeit, n&gt;1: Stromschlag</div>
-  </div>
-
-  <div class="example"><p><strong>Weber:</strong> 1 kg → 50 g extra merkbar. 20 kg → ~400 g nötig. Weber-Bruch Gewicht: k ≈ 1/50. Tonhöhe: k ≈ 1/333!</p></div>
-
-  <h3 class="sub">Formale Psychophysik (Klausurrelevant!)</h3>
-  <div class="def-box red">
-    <div class="label">Punkt der subjektiven Gleichheit (PSE)</div>
-    <p>Derjenige Vergleichsreiz x, bei dem die Wahrscheinlichkeit einer „größer"-Antwort genau <strong>50 %</strong> beträgt:</p>
-    <div class="formula"><span class="keyword">p(x₀.₅, s)</span> = <span class="result">0.5</span>   <span class="comment">// s = Standardreiz</span></div>
-  </div>
-
-  <div class="def-box red">
-    <div class="label">Ebenmerklicher Unterschied (jnd / π-Unterschied)</div>
-    <p>Der Abstand vom PSE zu dem Reiz, bei dem die Wahrscheinlichkeit π (z.B. 0.75) beträgt:</p>
-    <div class="formula"><span class="keyword">Δπ</span> = x<sub>π</sub> − x<sub>0.5</sub>   <span class="comment">// π-Vergleichsreiz minus PSE</span></div>
-  </div>
-
-  <h3 class="sub">Webersches Gesetz — Formale Varianten</h3>
-  <p>In der Klausur kommen <strong>6 Formelvarianten</strong> zum Ankreuzen. Nur einige sind korrekt!</p>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Formel</th><th>Korrekt?</th><th>Erklärung</th></tr></thead>
-    <tbody>
-      <tr><td><code>p(x, s) = p(λx, λs)</code></td><td><strong>Ja</strong></td><td>Webersches Gesetz: Verhältnisse bleiben gleich bei Skalierung</td></tr>
-      <tr><td><code>λ·p(x, s) = p(λx, λs)</code></td><td>Nein</td><td>Wahrscheinlichkeit wird nicht mit λ skaliert</td></tr>
-      <tr><td><code>Δπ(λs) = λ·Δπ(s)</code></td><td><strong>Ja</strong></td><td>jnd skaliert proportional mit Standardreiz</td></tr>
-      <tr><td><code>Δπ(λs) = Δπ(s)</code></td><td>Nein</td><td>jnd ist NICHT konstant über verschiedene s</td></tr>
-      <tr><td><code>x₀.₅(λs) = λ·x₀.₅(s)</code></td><td><strong>Ja</strong></td><td>PSE skaliert mit</td></tr>
-      <tr><td><code>p(x+a, s+a) = p(x, s)</code></td><td>Nein</td><td>Additive Invarianz gilt NICHT (nur multiplikative)</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="merksatz"><p><strong>Eselsbrücke:</strong> Weber = <strong>multiplikative</strong> Invarianz (Verhältnisse!). Wenn man Standard und Vergleichsreiz mit dem <strong>gleichen Faktor</strong> multipliziert, ändert sich die Antwortwahrscheinlichkeit nicht.</p></div>
-
-  <h3 class="sub">Psychophysische Methoden</h3>
-  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-    <div class="card"><h3><span class="icon">📈</span> Grenzmethode</h3><p>Reiz wird systematisch <strong>auf-/absteigend</strong> variiert bis VP „ja"/„nein" sagt. Schwelle = Umschlagpunkt. ⚠️ <strong>Erwartungsfehler</strong> und <strong>Gewöhnungsfehler</strong>.</p></div>
-    <div class="card"><h3><span class="icon">🎲</span> Konstante Reize</h3><p>Reize in <strong>zufälliger Reihenfolge</strong>. Ergibt psychometrische Funktion (S-Kurve). Schwelle = 50%-Punkt. <strong>Genaueste</strong> Methode.</p></div>
-    <div class="card"><h3><span class="icon">🎛️</span> Herstellungsmethode</h3><p>VP stellt Reiz <strong>selbst ein</strong> bis subjektiv gleich. Schnell, aber: <strong>systematische Verzerrungen</strong> (Zentraltendenz).</p></div>
-  </div>
-
-  <div class="deep-dive" id="dd-psycho">
-    <button class="deep-dive-toggle" onclick="toggleDD('dd-psycho')"><span class="dd-icon">▼</span>Vertiefung: Methoden & Signalentdeckungstheorie<span class="dd-badge">Erweitert</span></button>
-    <div class="deep-dive-content">
-      <h4>Fechners drei Methoden</h4>
-      <p><strong>1. Grenzen:</strong> Reiz ↑/↓ bis Umschlag. ⚠️ Erwartungsfehler.</p>
-      <p><strong>2. Konstante Reize:</strong> Zufällige Reihenfolge → S-Kurve. Schwelle = 50 %-Punkt.</p>
-      <p><strong>3. Herstellung:</strong> VP stellt selbst ein. Schnell, aber systematisch verzerrt.</p>
-
-      <h4>Signalentdeckungstheorie (SDT)</h4>
-      <p>Keine feste Schwelle! SDT trennt <strong>Sensitivität</strong> (d') und <strong>Antwortneigung</strong> (β).</p>
-      <div class="formula"><span class="keyword">d'</span> = z(Hit-Rate) − z(False-Alarm-Rate)</div>
-      <div class="analogie"><p><strong>Rauchmelder:</strong> d' = Unterscheidung Rauch vs. Kochdampf. β = Auslöseschwelle. Liberal → viele Fehlalarme, konservativ → verpasst echte Brände.</p></div>
-    </div>
-  </div>
-
-  <div class="quiz" id="quiz-psphy">
-    <h4>🧠 Schnellcheck</h4>
-    <p style="margin-bottom:1rem; font-size:0.9rem;">Weber-Bruch Gewicht: k=1/50. Du hältst 10 kg. Mindest-Unterschied?</p>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz-psphy',this,false)">50 g</button>
-    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz-psphy',this,true)">200 g</button>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz-psphy',this,false)">500 g</button>
-    <div class="quiz-feedback correct-fb">Richtig! ΔI = (1/50)·10.000 g = 200 g.</div>
-    <div class="quiz-feedback wrong-fb">ΔI = k·I = (1/50)·10.000 g = 200 g.</div>
-  </div>
-</section>
-<div class="sep">· · ·</div>
-
-<!-- ══════════════ 5. WAHRSCHEINLICHKEIT ══════════════ -->
-<section id="wahrscheinlichkeit">
-  <div class="section-number">05</div>
-  <h2>Wahrscheinlichkeitstheorie</h2>
-  <p class="section-subtitle">Zufall ist berechenbar</p>
-
-  <div class="def-box">
-    <div class="label">Grundbegriffe</div>
-    <p><strong>Ω</strong> = Ergebnismenge. <strong>A ⊆ Ω</strong> = Ereignis. <strong>P(A)</strong> ∈ [0, 1].</p>
-  </div>
-
-  <div class="formula">
-<span class="comment">/* Kolmogorov-Axiome */</span>
-<span class="keyword">1.</span> P(A) ≥ 0    <span class="keyword">2.</span> P(Ω) = 1    <span class="keyword">3.</span> A∩B=∅ ⇒ P(A∪B)=P(A)+P(B)
-  </div>
-
-  <div class="card-grid">
-    <div class="card"><h3><span class="icon">🎲</span> Bedingte W.</h3><div class="formula" style="font-size:0.82rem; padding:0.7rem;">P(A|B) = P(A∩B)/P(B)</div><p>P(A) gegeben B eingetreten.</p></div>
-    <div class="card"><h3><span class="icon">🔁</span> Bayes</h3><div class="formula" style="font-size:0.82rem; padding:0.7rem;">P(A|B) = P(B|A)·P(A)/P(B)</div><p>Prior → Posterior.</p></div>
-  </div>
-
-  <div class="example">
-    <p><strong>Bayes-Falle:</strong> Test 90 % sensitiv, 5 % Grundrate, 10 % Falsch-Positiv. P(krank|+) = (0.9×0.05)/(0.9×0.05+0.1×0.95) ≈ <strong>32 %!</strong> → Basisraten-Vernachlässigung.</p>
-  </div>
-
-  <div class="deep-dive" id="dd-wahr">
-    <button class="deep-dive-toggle" onclick="toggleDD('dd-wahr')"><span class="dd-icon">▼</span>Vertiefung: Verteilungen, Normalverteilung & ZGS<span class="dd-badge">Erweitert</span></button>
-    <div class="deep-dive-content">
-      <h4>Zufallsvariable X: Ω → ℝ</h4>
-      <div class="formula">
-<span class="keyword">E(X)</span> = Σ xᵢ·P(xᵢ)   <span class="keyword">Var(X)</span> = E[(X−μ)²]   <span class="keyword">SD</span> = √Var
+    <div class="topic-card">
+      <div class="semester">Bachelorstudium</div>
+      <h3>Statistik I</h3>
+      <p>Deskriptive Statistik, Korrelation, Regression, Wahrscheinlichkeitstheorie, Verteilungen &mdash; basierend auf Fahrmeir et al. (2023).</p>
+      <div class="meta">
+        <span>8 Kapitel</span>
+        <span>160 Quizfragen</span>
+        <span>52 Lernkarten</span>
       </div>
-      <h4>Normalverteilung</h4>
-      <p><strong>Zentraler Grenzwertsatz:</strong> Summe vieler kleiner unabhängiger Einflüsse → ~normalverteilt.</p>
-      <div class="merksatz"><p><strong>68-95-99.7:</strong> ~68 % in μ±1σ, ~95 % in μ±2σ, ~99.7 % in μ±3σ.</p></div>
-      <h4>Unabhängigkeit</h4>
-      <p>A⊥B ⟺ P(A∩B) = P(A)·P(B). Zentrale Annahme vieler Tests!</p>
-    </div>
-  </div>
-</section>
-<div class="sep">· · ·</div>
-
-<!-- ══════════════ 6. VERSUCHSPLANUNG ══════════════ -->
-<section id="versuchsplanung">
-  <div class="section-number">06</div>
-  <h2>Versuchsplanung</h2>
-  <p class="section-subtitle">Das Herzstück der experimentellen Methode</p>
-
-  <div class="flow">
-    <div class="flow-step">Theorie<small>Modell</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Hypothese<small>Vorhersage</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Operationali-<br>sierung<small>Messbar</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Experiment<small>Durchführung</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Auswertung<small>Statistik</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Interpretation<small>→ Theorie</small></div>
-  </div>
-
-  <div class="table-wrap"><table>
-    <thead><tr><th>Variable</th><th>Was?</th><th>Beispiel</th></tr></thead>
-    <tbody>
-      <tr><td><strong>UV</strong></td><td>Manipuliert</td><td>Koffein-Dosis</td></tr>
-      <tr><td><strong>AV</strong></td><td>Gemessen</td><td>Reaktionszeit</td></tr>
-      <tr><td><strong>Störvariable</strong></td><td>Beeinflusst AV, nicht untersucht</td><td>Müdigkeit</td></tr>
-      <tr><td><strong>Konfundierung</strong></td><td>SV kovariiert mit UV</td><td>→ Int. Validität ↓</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="analogie"><p><strong>Kochen:</strong> UV = Zutat. AV = Geschmack. Störvar. = Ofentemp. Konfundierung = Salz UND Pfeffer gleichzeitig ändern.</p></div>
-
-  <div class="merksatz"><p><strong>Max-Kon-Min-Prinzip (Kerlinger):</strong> <strong>Max</strong>imiere Primärvarianz (starke UV-Manipulation). <strong>Kon</strong>trolliere Sekundärvarianz (Störvariablen ausschalten). <strong>Min</strong>imiere Fehlervarianz (präzise Messung, große Stichprobe).</p></div>
-
-  <h3 class="sub">Designs</h3>
-  <div class="vergleich">
-    <div class="vergleich-seite"><h4>Between-Subjects 👤👤</h4><ul><li>Verschiedene Gruppen</li><li>Keine Übertragung</li><li>Mehr VPn nötig</li><li>Individuelle Unterschiede = Fehler</li></ul></div>
-    <div class="vergleich-seite"><h4>Within-Subjects 🔄</h4><ul><li>Jede VP alle Bedingungen</li><li>Ind. Unterschiede kontrolliert</li><li>Reihenfolgeeffekte!</li><li>Counterbalancing nötig</li></ul></div>
-  </div>
-
-  <div class="def-box blue">
-    <div class="label">Validität</div>
-    <p><strong>Intern:</strong> UV→AV eindeutig? <strong>Extern:</strong> Generalisierbar? <strong>Konstrukt:</strong> Misst es das Konstrukt? <strong>Statistisch:</strong> Effekt korrekt?</p>
-  </div>
-
-  <h3 class="sub">Randomisierung vs. Parallelisierung</h3>
-  <p>In <strong>jeder Klausur</strong> gefragt: „Nennen Sie zwei Vorteile der Randomisierung gegenüber der Parallelisierung!"</p>
-  <div class="vergleich">
-    <div class="vergleich-seite"><h4>Randomisierung</h4><ul><li>Kontrolliert <strong>alle</strong> SVs (auch unbekannte!)</li><li>Einfach durchführbar</li><li>Keine Vorabmessung nötig</li><li>Benötigt große Stichproben</li></ul></div>
-    <div class="vergleich-seite"><h4>Parallelisierung</h4><ul><li>Kontrolliert nur <strong>bekannte</strong> SVs</li><li>Unbekannte SVs bleiben unkontrolliert</li><li>Vorabmessung der Parallelisierungsvariable nötig</li><li>Funktioniert auch bei kleinen Stichproben</li></ul></div>
-  </div>
-
-  <div class="def-box red">
-    <div class="label">Ceteris-paribus-Klausel</div>
-    <p>„Unter sonst gleichen Bedingungen." Kernprinzip: Zwischen den Gruppen darf sich <strong>nur die UV</strong> unterscheiden — alles andere wird konstant gehalten. Verletzung → Konfundierung → keine Kausalaussage.</p>
-  </div>
-
-  <h3 class="sub">Messwiederholung</h3>
-  <div class="merksatz"><p><strong>Klausurliebling:</strong> Unterschied between/within? Within = Messwiederholung = jede VP durchläuft alle Bedingungen. Vorteil: weniger VPn, Kontrolle individueller Unterschiede. Problem: <strong>zeitgebundene Störvariablen</strong> (Übung, Ermüdung, Reihenfolgeeffekte). Lösung: <strong>Counterbalancing</strong> (Lateinisches Quadrat).</p></div>
-
-  <h3 class="sub">Versuchsleitereffekte & Verblindung</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Technik</th><th>Was wird verblindet?</th><th>Gegen was?</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Einfach</strong></td><td>VP weiß nicht, in welcher Bedingung</td><td>Placebo-Effekt, Demand Characteristics</td></tr>
-      <tr><td><strong>Doppelt</strong></td><td>VP + VL wissen es nicht</td><td>+ Rosenthal-Effekt (VL-Erwartung)</td></tr>
-      <tr><td><strong>Dreifach</strong></td><td>VP + VL + Auswerter</td><td>+ Auswertungsbias</td></tr>
-    </tbody>
-  </table></div>
-  <div class="example"><p><strong>Pygmalion im Klassenzimmer (Rosenthal & Jacobson):</strong> Lehrer erfuhren, bestimmte Schüler seien „Hochbegabte" (zufällig gewählt). Diese Schüler zeigten tatsächlich bessere Leistung — <strong>self-fulfilling prophecy</strong>. → Deshalb Doppelblind!</p></div>
-
-  <h3 class="sub">Fallbeispiel: Therapiestudie (BDI)</h3>
-  <div class="def-box blue">
-    <div class="label">Typische Klausuraufgabe</div>
-    <p>Eine kognitive Verhaltenstherapie wird mit dem <strong>Beck-Depressions-Inventar (BDI)</strong> evaluiert. Versuchsplan:</p>
-    <div class="table-wrap"><table style="text-align:center;">
-      <thead><tr><th></th><th>Vortest</th><th>Treatment</th><th>Nachtest</th></tr></thead>
-      <tbody>
-        <tr><td><strong>EG</strong></td><td>O₁</td><td>X</td><td>O₂</td></tr>
-        <tr><td><strong>KG</strong></td><td>O₃</td><td>—</td><td>O₄</td></tr>
-      </tbody>
-    </table></div>
-    <p><strong>Frage:</strong> „Kann man schließen, dass die Therapie wirkt?" → Nur wenn <strong>Interaktion</strong> vorliegt: EG verbessert sich MEHR als KG. Haupteffekt allein reicht nicht (Spontanremission!).</p>
-    <p><strong>Interaktionstypen:</strong> <strong>Ordinal</strong> = beide Gruppen verbessern sich, aber EG stärker (Linien divergieren). <strong>Disordinal</strong> = Linien kreuzen sich (Therapie hilft EG, schadet KG). Die BDI-Studie testet typisch eine ordinale Interaktion.</p>
-  </div>
-
-  <h3 class="sub">Forschungsethik</h3>
-  <div class="card-grid">
-    <div class="card"><h3><span class="icon">⚡</span> Milgram (1963)</h3><p>Gehorsamsexperiment: VPn gaben vermeintliche Stromschläge. 65% gingen bis 450V. → Extremer <strong>psychischer Stress</strong>, kein informed consent, kein echtes Recht auf Abbruch.</p></div>
-    <div class="card"><h3><span class="icon">🏛️</span> Stanford Prison (1971)</h3><p>Zimbardo: Studenten als Wärter/Häftlinge. Abbruch nach 6 (statt 14) Tagen. → <strong>Kontrollverlust</strong> des Forschers, keine Sicherheitsmaßnahmen.</p></div>
-    <div class="card"><h3><span class="icon">👶</span> Little Albert (1920)</h3><p>Watson: 11 Monate altes Kind, Konditionierung von Angst. Keine Dekonditionierung. → Ethisch inakzeptabel, Kind langfristig geschädigt.</p></div>
-  </div>
-  <div class="merksatz"><p><strong>Ethische Grundsätze heute:</strong> (1) <strong>Informierte Einwilligung</strong> — freiwillig, aufgeklärt, jederzeit widerrufbar. (2) <strong>Ethik-Kommission</strong> — Vorabprüfung. (3) <strong>Debriefing</strong> — Aufklärung nach dem Experiment. (4) <strong>Datenschutz</strong> — Anonymisierung/Pseudonymisierung. (5) <strong>Schadensvermeidung</strong> — kein nachhaltiger Schaden.</p></div>
-
-  <div class="deep-dive" id="dd-vp">
-    <button class="deep-dive-toggle" onclick="toggleDD('dd-vp')"><span class="dd-icon">▼</span>Vertiefung: Kontrolltechniken, Interaktionen & Bedrohungen<span class="dd-badge">Erweitert</span></button>
-    <div class="deep-dive-content">
-      <h4>Kontrolltechniken</h4>
-      <p><strong>Randomisierung:</strong> Verteilt alle SVs (auch unbekannte) gleichmäßig. <strong>Konstanthalten:</strong> SV fixieren. <strong>Counterbalancing:</strong> Latin Square. <strong>Matching:</strong> Paarweise zuordnen. <strong>Verblindung:</strong> Einfach/doppelt → gegen Erwartungseffekte.</p>
-
-      <h4>Interaktionen</h4>
-      <p>2×2: Koffein × Schlafentzug. <strong>Keine Interaktion:</strong> parallele Linien. <strong>Interaktion:</strong> Koffein hilft nur bei Schlafentzug → Linien divergieren/kreuzen.</p>
-
-      <h4>Quasi-Experiment</h4>
-      <p>UV = bestehende Eigenschaft (Geschlecht). Keine Randomisierung → keine Kausalaussagen.</p>
-
-      <h4>Bedrohungen interner Validität</h4>
-      <p><strong>Selektion:</strong> Gruppen vorher verschieden. <strong>Reifung:</strong> Ermüdung. <strong>Regression zur Mitte:</strong> Extreme → Mittel. <strong>Demand Characteristics:</strong> VP erkennt Hypothese.</p>
-    </div>
-  </div>
-
-  <div class="quiz" id="quiz2">
-    <h4>🧠 Schnellcheck</h4>
-    <p style="margin-bottom:1rem; font-size:0.9rem;">Warum ist „Reagieren Männer schneller?" kein echtes Experiment?</p>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz2',this,false)">Stichprobe zu klein</button>
-    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz2',this,true)">Geschlecht nicht manipulierbar → Quasi-Experiment</button>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz2',this,false)">Keine Kontrollgruppe</button>
-    <div class="quiz-feedback correct-fb">Richtig! Geschlecht = nicht manipulierbar → keine Randomisierung → Quasi-Experiment.</div>
-    <div class="quiz-feedback wrong-fb">Echtes Experiment: UV aktiv manipuliert + Randomisierung. Geschlecht → beides nicht möglich.</div>
-  </div>
-</section>
-<div class="sep">· · ·</div>
-
-<!-- ══════════════ 7. STATISTIK ══════════════ -->
-<section id="statistik">
-  <div class="section-number">07</div>
-  <h2>Statistische Auswertung</h2>
-  <p class="section-subtitle">Von Daten zu Entscheidungen</p>
-
-  <h3 class="sub">NHST</h3>
-  <div class="flow">
-    <div class="flow-step">H₀<small>„Kein Effekt"</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Daten<small>Experiment</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Teststatistik<small>t, F, χ²</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">p-Wert</div><span class="flow-arrow">→</span>
-    <div class="flow-step">p &lt; α?<small>→ H₀ ablehnen</small></div>
-  </div>
-
-  <div class="def-box"><div class="label">p-Wert</div><p>P(Daten so extrem oder extremer | H₀). <strong>NICHT:</strong> P(H₀ | Daten)!</p></div>
-
-  <div class="table-wrap"><table>
-    <thead><tr><th></th><th>H₀ wahr</th><th>H₀ falsch</th></tr></thead>
-    <tbody>
-      <tr><td><strong>H₀ ablehnen</strong></td><td style="background:#fadbd8"><strong>α-Fehler</strong> (Typ I) 🚨</td><td style="background:#d5f5e3"><strong>Power</strong> = 1−β 💪</td></tr>
-      <tr><td><strong>H₀ beibehalten</strong></td><td style="background:#d5f5e3">Korrekt ✓</td><td style="background:#fadbd8"><strong>β-Fehler</strong> (Typ II) 😶</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="achtung">
-    <p>❌ „p=.03 → H₀ ist 3 % wahrscheinlich" — P(D|H₀) ≠ P(H₀|D)!</p>
-    <p>❌ „p=.06 → kein Effekt" — .05 ist willkürlich.</p>
-  </div>
-
-  <h3 class="sub">Bayes</h3>
-  <div class="def-box gold"><div class="label">Bayes-Faktor</div><p>BF₁₀ = „Wie stark stützen Daten H₁ vs. H₀?" 1 = neutral, 10 = stark für H₁, 0.1 = stark für H₀.</p></div>
-
-  <div class="deep-dive" id="dd-stat">
-    <button class="deep-dive-toggle" onclick="toggleDD('dd-stat')"><span class="dd-icon">▼</span>Vertiefung: Effektstärke, Power & Multiple Vergleiche<span class="dd-badge">Erweitert</span></button>
-    <div class="deep-dive-content">
-      <h4>Effektstärke</h4>
-      <div class="formula"><span class="keyword">Cohen's d</span> = (M₁−M₂)/SD_pooled   <span class="comment">// 0.2 klein, 0.5 mittel, 0.8 groß</span></div>
-      <p>Signifikant + d=0.05 → „echt", aber praktisch irrelevant.</p>
-
-      <h4>Power = 1−β</h4>
-      <p>Ziel: ≥ .80. Hängt ab von: Effektstärke, n, α, Streuung.</p>
-
-      <h4>NHST vs. Bayes</h4>
-      <div class="vergleich">
-        <div class="vergleich-seite"><h4>NHST</h4><ul><li>Binär (sig/nicht)</li><li>Kann H₀ nicht stützen</li><li>p kontraintuitiv</li></ul></div>
-        <div class="vergleich-seite"><h4>Bayes</h4><ul><li>Kontinuierliche Evidenz</li><li>Kann H₀ stützen</li><li>Braucht Prior</li></ul></div>
+      <div class="links">
+        <a href="topics/statistik/index.html">Lernhilfe</a>
+        <a href="topics/statistik/test.html">Wissenstest</a>
+        <a href="topics/statistik/crash-course.html">4h Crash Course</a>
       </div>
-
-      <h4>Multiple Vergleiche</h4>
-      <p>20 Tests, α=.05 → ~1 Falsch-Positiv! <strong>Bonferroni:</strong> α/k. <strong>FDR:</strong> weniger konservativ.</p>
-
-      <h4>Konfidenzintervall</h4>
-      <p>95%-KI: Bei ∞ Wiederholungen enthält 95 % den wahren Wert. <strong>Nicht:</strong> „95 % Wahrsch., dass Wert drin liegt."</p>
     </div>
-  </div>
 
-  <div class="quiz" id="quiz-stat">
-    <h4>🧠 Schnellcheck</h4>
-    <p style="margin-bottom:1rem; font-size:0.9rem;">p = .02 — korrekte Interpretation?</p>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz-stat',this,false)">H₀ ist 2 % wahrscheinlich</button>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz-stat',this,false)">Effekt zu 98 % real</button>
-    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz-stat',this,true)">Unter H₀ hätte man solche Daten nur in 2 % der Fälle erwartet</button>
-    <div class="quiz-feedback correct-fb">Richtig! p = P(Daten≥extrem | H₀). Nicht P(H₀ | Daten)!</div>
-    <div class="quiz-feedback wrong-fb">p = „Wie wahrscheinlich diese Daten unter H₀?" Nicht „Wie wahrscheinlich ist H₀?"</div>
-  </div>
-</section>
-<div class="sep">· · ·</div>
-
-<!-- ══════════════ 8. LERNEN ══════════════ -->
-<section id="lernen">
-  <div class="section-number">08</div>
-  <h2>Lernexperimente</h2>
-  <p class="section-subtitle">Klassische Paradigmen</p>
-
-  <div class="card-grid">
-    <div class="card"><h3><span class="icon">🔗</span> Paarassoziationslernen</h3><p>Wort-Wort-Paare. Durchgänge zählen, schwierige Paare → Gedächtnisstrukturen.</p></div>
-    <div class="card"><h3><span class="icon">📊</span> Lernkurve</h3><p>Leistung vs. Übung. Schneller Anfang → Plateau (negativ beschleunigt).</p></div>
-    <div class="card"><h3><span class="icon">📋</span> Positionseffekte</h3><p><strong>Primacy</strong> (→LZG) + <strong>Recency</strong> (→AG) = U-Kurve.</p></div>
-  </div>
-
-  <div class="diagram">
-    <svg viewBox="0 0 520 230" xmlns="http://www.w3.org/2000/svg" style="max-width:520px">
-      <line x1="60" y1="195" x2="480" y2="195" stroke="#2a2520" stroke-width="1.5"/>
-      <line x1="60" y1="195" x2="60" y2="30" stroke="#2a2520" stroke-width="1.5"/>
-      <text x="270" y="225" text-anchor="middle" font-size="11" fill="#2a2520">Position →</text>
-      <text x="18" y="112" text-anchor="middle" font-size="11" fill="#2a2520" transform="rotate(-90,18,112)">Erinnerung →</text>
-      <path d="M70,48 Q100,55 130,72 Q170,100 210,140 Q250,160 290,165 Q330,163 370,152 Q400,135 430,90 Q450,65 470,45" fill="none" stroke="#c0392b" stroke-width="2.5"/>
-      <rect x="65" y="32" width="72" height="18" rx="3" fill="#2c6e49" opacity="0.15"/>
-      <text x="101" y="45" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49">Primacy</text>
-      <rect x="220" y="155" width="100" height="18" rx="3" fill="#6b5e52" opacity="0.1"/>
-      <text x="270" y="168" text-anchor="middle" font-size="10" fill="#6b5e52">Asymptote</text>
-      <rect x="418" y="30" width="72" height="18" rx="3" fill="#1a5276" opacity="0.15"/>
-      <text x="454" y="43" text-anchor="middle" font-size="10" font-weight="700" fill="#1a5276">Recency</text>
-    </svg>
-    <div class="diagram-caption">Serielle Positionskurve: Anfang + Ende besser als Mitte</div>
-  </div>
-
-  <div class="example"><p><strong>Warum U-Form?</strong> Anfang: innerlich wiederholt → <strong>LZG</strong>. Ende: noch im <strong>Arbeitsgedächtnis</strong>. Mitte: verdrängt, nicht genug wiederholt.</p></div>
-
-  <h3 class="sub">Rock: Paarassoziationslernen im Detail</h3>
-  <p>Irving Rock (1957) stellte die <strong>inkrementelle Lerntheorie</strong> in Frage — ein Klausur-Dauerbrenner!</p>
-
-  <div class="def-box red">
-    <div class="label">Substitutionsmethode (Rock, 1957)</div>
-    <p><strong>Experimentalgruppe:</strong> Nicht-gelernte Paare werden in jedem Durchgang durch <strong>neue Paare</strong> ersetzt. <strong>Kontrollgruppe:</strong> Alle Paare bleiben über Durchgänge gleich.</p>
-    <p><strong>Ergebnis:</strong> Kein Unterschied in der Lerngeschwindigkeit! → Rocks Schluss: Lernen ist <strong>All-or-None</strong> (ganz oder gar nicht), nicht inkrementell (Stück für Stück).</p>
-  </div>
-
-  <div class="vergleich">
-    <div class="vergleich-seite"><h4>All-or-None (Rock)</h4><ul><li>Item wird in <strong>einem</strong> Durchgang gelernt oder nicht</li><li>Lernkurve = Artefakt der Mittelung</li><li>Substitution hat keinen Effekt</li></ul></div>
-    <div class="vergleich-seite"><h4>Inkrementell (klassisch)</h4><ul><li>Jeder Durchgang <strong>stärkt die Verbindung</strong></li><li>Lernkurve = echte Stärkungsfunktion</li><li>Substitution sollte Lernen verlangsamen</li></ul></div>
-  </div>
-
-  <div class="achtung"><p><strong>Postman-Kritik:</strong> Rocks Ergebnis könnte ein Artefakt sein: Substituierte Paare waren zufällig <strong>leichter</strong> als die schwierigen ursprünglichen Paare (Item-Selection-Artifact). Schwierige Paare → raus, leichte → rein = unfairer Vergleich!</p></div>
-
-  <h3 class="sub">Mehrspeichermodell (Atkinson & Shiffrin, 1968)</h3>
-  <div class="flow">
-    <div class="flow-step">Sensorischer Speicher<small>~250ms</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Kurzzeitspeicher<small>~20s, 7±2</small></div><span class="flow-arrow">→</span>
-    <div class="flow-step">Langzeitspeicher<small>∞ Kapazität</small></div>
-  </div>
-  <div class="merksatz"><p><strong>Glanzer & Cunitz (1966)</strong> lieferten experimentelle Evidenz: Ablenkung nach Lernen löscht Recency (KZG), nicht Primacy (LZG). → <strong>Experimentelle Dissoziation</strong> = starkes Argument für zwei getrennte Speicher!</p></div>
-
-  <div class="deep-dive" id="dd-lernen">
-    <button class="deep-dive-toggle" onclick="toggleDD('dd-lernen')"><span class="dd-icon">▼</span>Vertiefung: Behaviorismus, Kognitive Wende & Dissoziation<span class="dd-badge">Erweitert</span></button>
-    <div class="deep-dive-content">
-      <h4>Behaviorismus</h4>
-      <p>Watson: Nur Beobachtbares zählt. S→R. Skinner: operante Konditionierung (Verstärkung/Bestrafung).</p>
-
-      <h4>Kognitive Wende (~1960)</h4>
-      <p><strong>Chomsky:</strong> Sprache ≠ nur Verstärkung. <strong>Tolman:</strong> Kognitive Karten. <strong>Miller:</strong> 7±2 Chunks → interne Kapazität.</p>
-
-      <h4>Glanzer & Cunitz (1966)</h4>
-      <p>30 Sek. Ablenkung nach Lernen: <strong>Recency weg</strong> (AG gelöscht), <strong>Primacy bleibt</strong> (im LZG). → Experimentelle Dissoziation = Zwei-Speicher-Theorie.</p>
-
-      <h4>Lernkurve mathematisch</h4>
-      <div class="formula"><span class="keyword">P(n)</span> = 1 − (1−α)<sup>n</sup>   <span class="comment">// α = Lernrate</span></div>
-
-      <h4>Positiv-/Negativliste</h4>
-      <p><strong>Positiv:</strong> gelernte Paare (kommen raus). <strong>Negativ:</strong> noch nicht gelernt (weiter üben). → Itemspezifische Analyse.</p>
+    <!-- Platzhalter fur zukunftige Themen:
+    <div class="topic-card">
+      <div class="semester">Bachelorstudium</div>
+      <h3>Neues Thema</h3>
+      <p>Beschreibung hier.</p>
+      <div class="meta">
+        <span>X Kapitel</span>
+        <span>Y Quizfragen</span>
+      </div>
+      <div class="links">
+        <a href="topics/neues-thema/index.html">Lernhilfe</a>
+        <a href="topics/neues-thema/test.html">Wissenstest</a>
+      </div>
     </div>
+    -->
+
   </div>
-
-  <div class="quiz" id="quiz3">
-    <h4>🧠 Schnellcheck</h4>
-    <p style="margin-bottom:1rem; font-size:0.9rem;">30 Sek. Ablenkung nach Lernen. Welcher Effekt verschwindet?</p>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz3',this,false)">Primacy</button>
-    <button class="quiz-option" data-correct="true" onclick="checkQuiz('quiz3',this,true)">Recency</button>
-    <button class="quiz-option" data-correct="false" onclick="checkQuiz('quiz3',this,false)">Beide</button>
-    <div class="quiz-feedback correct-fb">Richtig! AG wird gelöscht → Recency weg. LZG intakt → Primacy bleibt.</div>
-    <div class="quiz-feedback wrong-fb">Ablenkung löscht das AG → Recency (letzte Items) verschwindet.</div>
-  </div>
-</section>
-<div class="sep">· · · · ·</div>
-
-<!-- ZUSAMMENFASSUNG -->
-<section id="zusammenfassung" style="background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:2rem;">
-  <h2 style="border-bottom-color:var(--accent2);">Gesamtüberblick</h2>
-  <p class="section-subtitle">Der rote Faden durch den Heller</p>
-
-  <div class="diagram">
-    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="max-width:700px">
-      <rect x="30" y="138" width="640" height="50" rx="6" fill="#ece5d8" stroke="#d4cbbf"/>
-      <text x="350" y="158" text-anchor="middle" font-size="10" font-weight="700" fill="#6b5e52" letter-spacing="0.1em">GRUNDLAGEN</text>
-      <text x="350" y="178" text-anchor="middle" font-size="11" fill="#2a2520">Wissenschaftstheorie → Logik → Messung → Wahrscheinlichkeit</text>
-      <rect x="120" y="74" width="460" height="50" rx="6" fill="#d6eaf8" stroke="#aed6f1"/>
-      <text x="350" y="94" text-anchor="middle" font-size="10" font-weight="700" fill="#1a5276" letter-spacing="0.1em">METHODIK</text>
-      <text x="350" y="114" text-anchor="middle" font-size="11" fill="#2a2520">Versuchsplanung → Durchführung → Statistik</text>
-      <rect x="200" y="10" width="300" height="50" rx="6" fill="#d5f5e3" stroke="#a9dfbf"/>
-      <text x="350" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49" letter-spacing="0.1em">ANWENDUNG</text>
-      <text x="350" y="48" text-anchor="middle" font-size="11" fill="#2a2520">Psychophysik · Lernexperimente · …</text>
-      <path d="M350,136 L350,126" stroke="#6b5e52" stroke-width="1.5" marker-end="url(#aG)"/>
-      <path d="M350,72 L350,62" stroke="#1a5276" stroke-width="1.5" marker-end="url(#aB)"/>
-      <defs><marker id="aG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#6b5e52"/></marker><marker id="aB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#1a5276"/></marker></defs>
-    </svg>
-    <div class="diagram-caption">Grundlagen → Methodik → Anwendung</div>
-  </div>
-
-  <div class="merksatz" style="margin-top:1.5rem;"><p><strong>Take-Away:</strong> Experimentelle Psychologie = <strong>Theorie + Empirie</strong>. Gutes Experiment: theoretische Frage → logische Hypothese → saubere Operationalisierung → durchdachtes Design → angemessene Statistik.</p></div>
-</section>
-
 </main>
 
 <footer>
-  <p>Lernhilfe · Fachbereich Psychologie · Universität Tübingen</p>
-  <p style="margin-top:0.5rem">Basierend auf: Heller, J. (2012). <em>Experimentelle Psychologie.</em> Oldenbourg. · Keine offizielle Uni-Seite.</p>
+  <p>Lernplattform &middot; Fachbereich Psychologie &middot; Universitat Tubingen</p>
+  <p style="margin-top:0.5rem">Keine offizielle Universitatsseite.</p>
 </footer>
 
-<button id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-
-<script>
-function toggleDD(id){document.getElementById(id).classList.toggle('open')}
-function checkQuiz(id,btn,ok){
-  const q=document.getElementById(id),os=q.querySelectorAll('.quiz-option'),fc=q.querySelector('.correct-fb'),fw=q.querySelector('.wrong-fb');
-  os.forEach(o=>{o.disabled=true;o.classList.remove('correct','wrong')});
-  if(ok){btn.classList.add('correct');fc.classList.add('show');fw.classList.remove('show')}
-  else{btn.classList.add('wrong');fw.classList.add('show');fc.classList.remove('show');os.forEach(o=>{if(o.dataset.correct==='true')o.classList.add('correct')})}
-}
-const secs=document.querySelectorAll('section[id]'),navs=document.querySelectorAll('nav a');
-function upNav(){const y=window.scrollY+100;secs.forEach(s=>{if(y>=s.offsetTop&&y<s.offsetTop+s.offsetHeight)navs.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+s.id))})}
-function upProg(){document.getElementById('progressBar').style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100+'%'}
-function upTop(){document.getElementById('topBtn').classList.toggle('visible',window.scrollY>500)}
-window.addEventListener('scroll',()=>{upNav();upProg();upTop()});upNav();
-navs.forEach(l=>l.addEventListener('click',e=>{e.preventDefault();document.querySelector(l.getAttribute('href'))?.scrollIntoView({behavior:'smooth'})}));
-</script>
 </body>
 </html>

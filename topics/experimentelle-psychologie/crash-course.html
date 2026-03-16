@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4h Crash Course — Experimentelle Psychologie | Uni Tübingen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8; --bg-card: #fffdf8; --text: #2a2520; --text-secondary: #6b5e52;
+  --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a5276; --accent4: #7d3c98; --accent5: #b7950b;
+  --border: #d4cbbf; --highlight: #fef3c7; --shadow: rgba(42,37,32,0.08);
+  --triage-red: #e74c3c; --triage-yellow: #f39c12; --triage-green: #27ae60;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Source Sans 3',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:18px;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+::selection{background:var(--accent);color:#fff}
+
+/* ── TOP BAR ── */
+#topBar{position:sticky;top:0;z-index:100;background:rgba(245,240,232,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0.5rem 1rem;display:none;align-items:center;gap:1rem;flex-wrap:wrap}
+#topBar.active{display:flex}
+.tb-timer{font-family:'JetBrains Mono',monospace;font-size:0.95rem;font-weight:500;color:var(--accent);background:rgba(192,57,43,0.08);padding:0.3em 0.8em;border-radius:4px;min-width:80px;text-align:center;cursor:pointer}
+.tb-timer.paused{opacity:0.5;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.tb-session{font-size:0.82rem;font-weight:600;color:var(--accent3)}
+.tb-xp{font-size:0.82rem;font-weight:700;color:var(--accent5);display:flex;align-items:center;gap:0.3rem}
+.tb-streak{font-size:0.82rem;font-weight:600;color:var(--accent2)}
+.tb-progress-wrap{flex:1;min-width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.tb-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent3));border-radius:3px;transition:width 0.3s}
+.tb-focus{background:none;border:1.5px solid var(--accent4);color:var(--accent4);font-family:inherit;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.3em 0.7em;border-radius:3px;cursor:pointer}
+.tb-focus.on{background:var(--accent4);color:#fff}
+.tb-home{background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-secondary)}
+
+/* ── DASHBOARD ── */
+#dashboard{max-width:720px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.dash-header{text-align:center;padding:3rem 0 2rem}
+.dash-header h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,2.6rem);font-weight:700;line-height:1.2;margin-bottom:0.3rem}
+.dash-header h1 em{color:var(--accent);font-style:italic}
+.dash-header .sub{font-size:1rem;color:var(--text-secondary);max-width:520px;margin:0 auto}
+.dash-resume{background:linear-gradient(135deg,#eaf5ee,#d5f5e3);border:1.5px solid #a9dfbf;border-radius:6px;padding:1rem 1.3rem;margin:1.5rem 0;display:none;cursor:pointer;transition:transform 0.2s}
+.dash-resume:hover{transform:translateY(-2px)}
+.dash-resume h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--accent2);margin-bottom:0.2rem}
+.dash-resume p{font-size:0.88rem;color:var(--text-secondary)}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+.sess-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:8px;padding:1.3rem;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.sess-card:hover{border-color:var(--accent3);transform:translateY(-2px);box-shadow:0 6px 20px var(--shadow)}
+.sess-card.locked{opacity:0.5;cursor:default}
+.sess-card.locked:hover{transform:none;box-shadow:none;border-color:var(--border)}
+.sess-card.completed{border-color:var(--accent2)}
+.sess-card .sc-num{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent3);margin-bottom:0.3rem}
+.sess-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:0.3rem}
+.sess-card p{font-size:0.82rem;color:var(--text-secondary);line-height:1.5}
+.sess-card .sc-meta{display:flex;gap:0.8rem;margin-top:0.6rem;font-size:0.75rem;color:var(--text-secondary)}
+.sess-card .sc-bar{height:4px;background:var(--border);border-radius:2px;margin-top:0.6rem;overflow:hidden}
+.sess-card .sc-bar-fill{height:100%;background:var(--accent2);border-radius:2px;transition:width 0.3s}
+.dash-settings{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:1rem 1.3rem;margin-top:1.5rem}
+.dash-settings h4{font-family:'Playfair Display',serif;font-size:0.92rem;margin-bottom:0.6rem}
+.dash-settings label{display:flex;align-items:center;gap:0.5rem;font-size:0.88rem;margin:0.4rem 0;cursor:pointer}
+.dash-settings input[type=range]{flex:1;accent-color:var(--accent3)}
+.dash-settings input[type=checkbox]{accent-color:var(--accent3)}
+.dash-hint{margin-top:1.5rem;text-align:center;font-size:0.82rem;color:var(--text-secondary)}
+.dash-link{margin-top:0.8rem;text-align:center;font-size:0.85rem}
+.dash-link a{color:var(--accent3);text-decoration:none}
+.dash-link a:hover{text-decoration:underline}
+.btn-reset{background:none;border:1px solid var(--accent);color:var(--accent);font-family:inherit;font-size:0.78rem;padding:0.3em 0.8em;border-radius:3px;cursor:pointer;margin-top:0.8rem}
+.btn-reset:hover{background:var(--accent);color:#fff}
+
+/* ── SESSION VIEW ── */
+#sessionView{display:none;max-width:720px;margin:0 auto;padding:1rem 1.5rem 4rem}
+.sv-breadcrumb{font-size:0.78rem;color:var(--text-secondary);margin-bottom:1rem}
+.sv-breadcrumb span{color:var(--accent3);font-weight:600}
+
+/* ── CONCEPT CARD ── */
+.concept-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:8px;padding:1.8rem;margin-bottom:1rem;animation:slideIn 0.3s ease-out}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.concept-card .cc-tier{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.2em 0.6em;border-radius:3px;display:inline-block;margin-bottom:0.5rem}
+.cc-tier.a{background:rgba(192,57,43,0.1);color:var(--accent)}
+.cc-tier.b{background:rgba(26,82,118,0.1);color:var(--accent3)}
+.cc-tier.c{background:rgba(125,60,152,0.1);color:var(--accent4)}
+.concept-card h2{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:0.8rem}
+.concept-card .cc-body{font-size:0.95rem;line-height:1.8}
+.concept-card .cc-body p{margin-bottom:0.8rem}
+.formula{font-family:'JetBrains Mono',monospace;background:#2a2520;color:#f0e6d3;padding:1rem 1.2rem;border-radius:4px;margin:0.8rem 0;overflow-x:auto;font-size:0.85rem;line-height:1.8}
+.formula .comment{color:#8b7d6b}.formula .keyword{color:#e8a87c}
+.formula .symbol{color:#c0392b}.formula .result{color:#58d68d}
+.def-box{background:var(--bg-card);border-left:4px solid var(--accent);padding:1rem 1.2rem;margin:0.8rem 0;border-radius:0 4px 4px 0;font-size:0.92rem}
+.def-box.green{border-left-color:var(--accent2)}.def-box.blue{border-left-color:var(--accent3)}
+.def-box.purple{border-left-color:var(--accent4)}.def-box.gold{border-left-color:var(--accent5)}
+.merksatz{background:linear-gradient(135deg,#eaf5ee,#d5f5e3);border:1px solid #a9dfbf;border-radius:4px;padding:1rem 1.2rem;margin:0.8rem 0;font-size:0.92rem}
+.achtung{background:linear-gradient(135deg,#fdf2f2,#fadbd8);border:1px solid #f1948a;border-radius:4px;padding:1rem 1.2rem;margin:0.8rem 0;font-size:0.92rem}
+.example-box{background:linear-gradient(135deg,#fef9f0,#fef3c7);border:1px solid #e8d9a0;border-radius:4px;padding:1rem 1.2rem;margin:0.8rem 0;font-size:0.92rem}
+
+/* ── CARD DEEP-DIVE & REF LINK ── */
+.cc-deep-dive{margin-top:0.8rem;border:1.5px solid var(--accent3);border-radius:6px;overflow:hidden}
+.cc-dd-toggle{width:100%;display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;background:linear-gradient(135deg,#eaf2f8,#d6eaf8);border:none;cursor:pointer;font-family:inherit;font-size:0.88rem;font-weight:600;color:var(--accent3);text-align:left;transition:background 0.2s}
+.cc-dd-toggle:hover{background:linear-gradient(135deg,#d6eaf8,#aed6f1)}
+.cc-dd-toggle .dd-arrow{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent3);color:#fff;font-size:0.7rem;font-weight:700;flex-shrink:0;transition:transform 0.3s}
+.cc-dd-toggle.open .dd-arrow{transform:rotate(180deg)}
+.cc-dd-content{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1),padding 0.3s;padding:0 1rem}
+.cc-dd-content.open{max-height:5000px;padding:1rem;border-top:1px solid #aed6f1}
+.cc-dd-content p{margin-bottom:0.6rem;font-size:0.92rem}
+.cc-ref-link{display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.8rem;font-size:0.82rem;color:var(--accent3);text-decoration:none;font-weight:600;padding:0.3em 0.7em;border:1px solid rgba(26,82,118,0.2);border-radius:3px;transition:all 0.15s}
+.cc-ref-link:hover{background:var(--accent3);color:#fff;border-color:var(--accent3);text-decoration:none}
+
+/* ── TRIAGE ── */
+.triage-row{display:flex;gap:0.5rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
+.triage-btn{flex:1;padding:0.5rem;border:2px solid var(--border);border-radius:4px;background:none;font-family:inherit;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.15s;text-align:center}
+.triage-btn.red{color:var(--triage-red)}.triage-btn.red:hover,.triage-btn.red.active{background:var(--triage-red);color:#fff;border-color:var(--triage-red)}
+.triage-btn.yellow{color:var(--triage-yellow)}.triage-btn.yellow:hover,.triage-btn.yellow.active{background:var(--triage-yellow);color:#fff;border-color:var(--triage-yellow)}
+.triage-btn.green{color:var(--triage-green)}.triage-btn.green:hover,.triage-btn.green.active{background:var(--triage-green);color:#fff;border-color:var(--triage-green)}
+
+/* ── CARD NAV ── */
+.card-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.card-nav button{padding:0.5rem 1.2rem;border:1.5px solid var(--accent3);background:none;color:var(--accent3);font-family:inherit;font-size:0.88rem;font-weight:600;border-radius:4px;cursor:pointer;transition:all 0.15s}
+.card-nav button:hover{background:var(--accent3);color:#fff}
+.card-nav button:disabled{opacity:0.3;cursor:default}
+.card-nav button:disabled:hover{background:none;color:var(--accent3)}
+.card-nav .cn-count{font-size:0.82rem;color:var(--text-secondary)}
+.cn-gaps{font-size:0.72rem!important;padding:0.3rem 0.6rem!important;border-color:var(--triage-red)!important;color:var(--triage-red)!important;letter-spacing:0.03em}
+.cn-gaps:hover,.cn-gaps.active{background:var(--triage-red)!important;color:#fff!important;border-color:var(--triage-red)!important}
+
+/* ── QUIZ VIEW ── */
+#quizView{display:none;max-width:720px;margin:0 auto;padding:1rem 1.5rem 4rem}
+.quiz-card{background:var(--bg-card);border:1.5px solid var(--accent3);border-radius:8px;padding:1.8rem;margin-bottom:1rem;animation:slideIn 0.3s ease-out}
+.quiz-card .qc-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.quiz-card .qc-section{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent3);background:rgba(26,82,118,0.08);padding:0.2em 0.7em;border-radius:3px}
+.quiz-card .qc-speed{font-family:'JetBrains Mono',monospace;font-size:0.92rem;font-weight:700;color:var(--accent);padding:0.2em 0.6em;background:rgba(192,57,43,0.08);border-radius:4px}
+.quiz-card .qc-text{font-family:'Playfair Display',serif;font-size:1.1rem;line-height:1.5;margin-bottom:1rem}
+.quiz-card .qc-text code{font-family:'JetBrains Mono',monospace;background:rgba(42,37,32,0.06);padding:0.1em 0.35em;border-radius:3px;font-size:0.88em}
+.opt-btn{display:block;width:100%;text-align:left;padding:0.7rem 1rem;margin:0.4rem 0;background:transparent;border:1.5px solid var(--border);border-radius:4px;cursor:pointer;font-family:inherit;font-size:0.92rem;color:var(--text);transition:all 0.15s;line-height:1.5}
+.opt-btn:hover:not(:disabled){border-color:var(--accent3);background:rgba(26,82,118,0.03)}
+.opt-btn.correct{border-color:var(--accent2)!important;background:#d5f5e3!important;color:var(--accent2);font-weight:600}
+.opt-btn.wrong{border-color:var(--accent)!important;background:#fadbd8!important;color:var(--accent);opacity:0.75}
+.opt-btn:disabled{cursor:default}
+.quiz-feedback{margin-top:0.8rem;padding:0.8rem 1rem;border-radius:4px;font-size:0.88rem;line-height:1.6;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.ok{background:#d5f5e3;color:#1e7e34;border:1px solid #a9dfbf}
+.quiz-feedback.nok{background:#fadbd8;color:var(--accent);border:1px solid #f1948a}
+.quiz-retry{margin-top:0.6rem;background:none;border:1px solid var(--accent3);color:var(--accent3);font-family:inherit;font-size:0.82rem;padding:0.3em 0.8em;border-radius:3px;cursor:pointer;display:none}
+.quiz-retry.show{display:inline-block}
+
+/* ── FEYNMAN VIEW ── */
+#feynmanView{display:none;max-width:720px;margin:0 auto;padding:1rem 1.5rem 4rem}
+.feynman-card{background:var(--bg-card);border:1.5px solid var(--accent4);border-radius:8px;padding:1.8rem;animation:slideIn 0.3s ease-out}
+.feynman-card h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--accent4);margin-bottom:0.8rem}
+.feynman-card .fc-prompt{font-size:0.95rem;margin-bottom:1rem;color:var(--text-secondary)}
+.feynman-card textarea{width:100%;min-height:120px;border:1.5px solid var(--border);border-radius:4px;padding:0.8rem;font-family:inherit;font-size:0.95rem;line-height:1.6;resize:vertical;background:var(--bg)}
+.feynman-card textarea:focus{outline:none;border-color:var(--accent4)}
+.feynman-card .fc-reveal{margin-top:1rem;padding:1rem;background:linear-gradient(135deg,#f4ecf7,#e8daef);border:1px solid #c39bd3;border-radius:4px;display:none;font-size:0.92rem}
+.feynman-card .fc-reveal.show{display:block}
+.feynman-rate{display:flex;gap:0.5rem;margin-top:1rem;display:none}
+.feynman-rate.show{display:flex}
+.feynman-rate button{flex:1;padding:0.5rem;border:2px solid var(--border);border-radius:4px;background:none;font-family:inherit;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.15s}
+.feynman-rate button:hover{transform:translateY(-1px)}
+.feynman-rate .fr-good{color:var(--accent2)}.feynman-rate .fr-good:hover{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.feynman-rate .fr-partial{color:var(--accent5)}.feynman-rate .fr-partial:hover{background:var(--accent5);color:#fff;border-color:var(--accent5)}
+.feynman-rate .fr-again{color:var(--accent)}.feynman-rate .fr-again:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.fc-btn{margin-top:1rem;padding:0.5rem 1.2rem;border:1.5px solid var(--accent4);background:none;color:var(--accent4);font-family:inherit;font-size:0.88rem;font-weight:600;border-radius:4px;cursor:pointer}
+.fc-btn:hover{background:var(--accent4);color:#fff}
+.fc-actions{display:flex;gap:0.5rem;margin-top:1rem;flex-wrap:wrap}
+.fc-btn-ai{border-color:var(--accent2)!important;color:var(--accent2)!important}
+.fc-btn-ai:hover{background:var(--accent2)!important;color:#fff!important}
+.fc-btn-ai:disabled{opacity:0.5;cursor:default}
+.fc-feedback{margin-top:1rem;padding:1rem 1.2rem;background:linear-gradient(135deg,#eaf5ee,#d5f5e3);border:1px solid #a9dfbf;border-radius:6px;font-size:0.92rem;line-height:1.7;display:none}
+.fc-feedback.show{display:block}
+.fc-feedback strong{color:var(--accent2)}
+.fc-feedback .fc-rating{margin-top:0.6rem;font-weight:700;padding:0.3em 0.7em;border-radius:3px;display:inline-block;font-size:0.82rem}
+.fc-feedback .fc-rating.good{background:rgba(39,174,96,0.15);color:var(--triage-green)}
+.fc-feedback .fc-rating.partial{background:rgba(243,156,18,0.15);color:var(--triage-yellow)}
+.fc-feedback .fc-rating.again{background:rgba(231,76,60,0.15);color:var(--triage-red)}
+
+/* ── MOVEMENT OVERLAY ── */
+.movement-overlay{position:fixed;inset:0;background:rgba(245,240,232,0.97);z-index:500;display:none;align-items:center;justify-content:center;text-align:center;padding:2rem}
+.movement-overlay.show{display:flex}
+.movement-overlay .mo-inner{max-width:400px}
+.movement-overlay h2{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:1rem}
+.movement-overlay p{font-size:1rem;color:var(--text-secondary);margin-bottom:1.5rem}
+.movement-overlay .mo-timer{font-family:'JetBrains Mono',monospace;font-size:2.5rem;font-weight:700;color:var(--accent2);margin-bottom:1.5rem}
+.movement-overlay button{padding:0.6rem 1.5rem;border:1.5px solid var(--accent2);background:var(--accent2);color:#fff;font-family:inherit;font-size:1rem;font-weight:600;border-radius:4px;cursor:pointer}
+
+/* ── XP FLOAT ── */
+.xp-float{position:fixed;right:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.88rem;font-weight:700;color:var(--accent5);pointer-events:none;animation:floatUp 1.2s ease-out forwards;z-index:200}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-60px)}}
+
+/* ── FOCUS MODE ── */
+body.focus-mode #topBar .tb-session,body.focus-mode #topBar .tb-xp,body.focus-mode #topBar .tb-streak,body.focus-mode .sv-breadcrumb,body.focus-mode .dash-settings,body.focus-mode .dash-hint{display:none!important}
+body.focus-mode .concept-card,body.focus-mode .quiz-card,body.focus-mode .feynman-card{border-width:2px;box-shadow:0 8px 32px var(--shadow)}
+
+/* ── RESPONSIVE ── */
+/* ── CHAT PANEL ── */
+.chat-panel{position:fixed;right:0;top:0;width:380px;height:100vh;transform:translateX(100%);transition:transform 0.3s ease;z-index:200;background:var(--bg-card);border-left:1.5px solid var(--border);display:flex;flex-direction:column}
+.chat-panel.open{transform:translateX(0);box-shadow:-8px 0 30px var(--shadow)}
+.chat-header{display:flex;align-items:center;gap:0.6rem;padding:0.8rem 1rem;border-bottom:1px solid var(--border);flex-shrink:0}
+.chat-title{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;flex:1}
+.chat-mode{font-size:0.65rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:0.15em 0.5em;border-radius:3px}
+.chat-mode.green{background:rgba(44,110,73,0.12);color:var(--accent2)}
+.chat-mode.blue{background:rgba(26,82,118,0.12);color:var(--accent3)}
+.chat-mode.gray{background:rgba(107,94,82,0.12);color:var(--text-secondary)}
+.chat-close{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-secondary);padding:0.2rem 0.4rem;line-height:1}
+.chat-close:hover{color:var(--accent)}
+.chat-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:0.6rem}
+.chat-msg{max-width:88%;padding:0.6rem 0.9rem;border-radius:8px;font-size:0.88rem;line-height:1.6;word-wrap:break-word}
+.chat-msg.user{align-self:flex-end;background:var(--accent3);color:#fff;border-bottom-right-radius:2px}
+.chat-msg.bot{align-self:flex-start;background:linear-gradient(135deg,#f5f0e8,#ece4d8);color:var(--text);border-bottom-left-radius:2px}
+.chat-msg.bot strong{color:var(--accent)}
+.chat-msg.bot code{font-family:'JetBrains Mono',monospace;background:rgba(42,37,32,0.08);padding:0.1em 0.3em;border-radius:3px;font-size:0.85em}
+.chat-msg.bot .typing{display:inline-flex;gap:3px}
+.chat-msg.bot .typing span{width:6px;height:6px;border-radius:50%;background:var(--text-secondary);animation:typeDot 1.2s infinite}
+.chat-msg.bot .typing span:nth-child(2){animation-delay:0.2s}
+.chat-msg.bot .typing span:nth-child(3){animation-delay:0.4s}
+@keyframes typeDot{0%,60%,100%{opacity:0.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.chat-suggestions{display:flex;gap:0.4rem;padding:0.5rem 1rem 0;flex-wrap:wrap;flex-shrink:0}
+.chat-chip{background:none;border:1px solid var(--border);border-radius:20px;padding:0.3em 0.7em;font-family:inherit;font-size:0.78rem;color:var(--accent3);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.chat-chip:hover{background:var(--accent3);color:#fff;border-color:var(--accent3)}
+.chat-input-row{display:flex;gap:0.5rem;padding:0.8rem 1rem;border-top:1px solid var(--border);align-items:flex-end;flex-shrink:0}
+.chat-input-row textarea{flex:1;border:1.5px solid var(--border);border-radius:6px;padding:0.5rem 0.7rem;font-family:inherit;font-size:0.88rem;line-height:1.5;resize:none;background:var(--bg);max-height:120px}
+.chat-input-row textarea:focus{outline:none;border-color:var(--accent3)}
+.chat-send{width:36px;height:36px;border:none;background:var(--accent3);color:#fff;border-radius:6px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s}
+.chat-send:hover{background:var(--accent)}
+body.chat-open #sessionView{margin-right:380px;transition:margin 0.3s ease}
+.cc-chat-btn{display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.8rem;margin-right:0.5rem;font-family:inherit;font-size:0.82rem;font-weight:600;color:var(--accent4);background:none;border:1px solid rgba(125,60,152,0.25);padding:0.3em 0.7em;border-radius:3px;cursor:pointer;transition:all 0.15s}
+.cc-chat-btn:hover{background:var(--accent4);color:#fff;border-color:var(--accent4)}
+.cc-chat-hint{display:inline-block;margin-top:0.8rem;font-size:0.78rem;color:var(--text-secondary)}
+.cc-chat-hint a{color:var(--accent4);text-decoration:none;font-weight:600}
+.cc-chat-hint a:hover{text-decoration:underline}
+.chat-settings{margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border)}
+.chat-settings h5{font-family:'Playfair Display',serif;font-size:0.88rem;margin-bottom:0.5rem}
+.chat-status{font-size:0.82rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.4rem}
+.chat-status::before{content:'';width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.chat-status.green::before{background:var(--accent2)}.chat-status.blue::before{background:var(--accent3)}.chat-status.gray::before{background:var(--text-secondary)}
+.chat-settings label{display:block;font-size:0.85rem;margin:0.4rem 0}
+.chat-settings input[type=password]{width:100%;padding:0.3em 0.5em;border:1px solid var(--border);border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:0.8rem;margin-top:0.2rem;background:var(--bg)}
+.chat-settings small{display:block;font-size:0.75rem;color:var(--text-secondary);margin-top:0.2rem}
+.chat-settings small a{color:var(--accent3)}
+
+@media(max-width:640px){
+  #topBar{padding:0.4rem 0.8rem;gap:0.5rem}
+  #dashboard{padding:1rem 1rem 3rem}
+  .dash-header{padding:2rem 0 1.5rem}
+  .dash-grid{grid-template-columns:1fr}
+  #sessionView,#quizView,#feynmanView{padding:0.8rem 1rem 3rem}
+  .concept-card,.quiz-card,.feynman-card{padding:1.2rem}
+  .triage-row{flex-wrap:wrap}
+  .chat-panel{width:100vw}
+  body.chat-open #sessionView{margin-right:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOP BAR ═══ -->
+<div id="topBar">
+  <button class="tb-home" onclick="goHome()" title="Dashboard">&#8962;</button>
+  <div class="tb-timer" id="tbTimer" onclick="toggleTimer()">60:00</div>
+  <span class="tb-session" id="tbSession">Session 1 von 4</span>
+  <span class="tb-xp" id="tbXp">&#9733; 0 XP</span>
+  <span class="tb-streak" id="tbStreak"></span>
+  <div class="tb-progress-wrap"><div class="tb-progress-fill" id="tbProgress" style="width:0%"></div></div>
+  <button class="tb-focus" id="tbFocus" onclick="toggleFocus()">Fokus</button>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="dashboard">
+  <div class="dash-header">
+    <h1>4h Crash <em>Course</em></h1>
+    <p class="sub">Alle Prüfungsthemen in 4 Sessions. Karteikarten, Quizze, Feynman-Technik. Optimiert für fokussiertes Lernen.</p>
+  </div>
+  <div class="dash-resume" id="dashResume" onclick="resumeSession()">
+    <h3>&#9654; Weitermachen</h3>
+    <p id="dashResumeText"></p>
+  </div>
+  <div class="dash-grid" id="dashGrid"></div>
+  <div class="dash-settings">
+    <h4>Einstellungen</h4>
+    <label>Schriftgröße: <span id="fontVal">18px</span><input type="range" min="14" max="24" value="18" oninput="setFont(this.value)"></label>
+    <label><input type="checkbox" id="cfgNoise" onchange="toggleNoise()"> Brown Noise</label>
+    <label><input type="checkbox" id="cfgAutoTimer" checked> Session-Timer automatisch starten</label>
+    <button class="btn-reset" onclick="resetAll()">Fortschritt zurücksetzen</button>
+    <div class="chat-settings">
+      <h5>Chat-Tutorin</h5>
+      <div class="chat-status gray" id="chatStatus">Prüfe Verbindung...</div>
+      <label>Server-URL:
+        <input type="text" id="cfgServerUrl" placeholder="http://localhost:3456"
+               onchange="saveServerUrl(this.value)" style="width:100%;padding:0.3em 0.5em;border:1px solid var(--border);border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:0.8rem;margin-top:0.2rem;background:var(--bg)">
+        <small>Standard: localhost:3456. Bei Tunnel z.B. https://abc.ngrok.io</small>
+      </label>
+      <label>API-Schlüssel (Fallback):
+        <input type="password" id="cfgApiKey" placeholder="sk-ant-..."
+               onchange="saveApiKey(this.value)">
+        <small>Nur nötig wenn kein Server läuft.
+          <a href="https://console.anthropic.com/" target="_blank">Key holen</a></small>
+      </label>
+    </div>
+  </div>
+  <p class="dash-hint">Tipp: Markiere Konzepte mit Rot/Gelb/Grün — Sessions 3+4 fokussieren automatisch auf deine Lücken.</p>
+  <p class="dash-link"><a href="index.html">Zurück zur Lernseite</a> · <a href="test.html">Wissenstest</a></p>
+</div>
+
+<!-- ═══ SESSION VIEW (Cards) ═══ -->
+<div id="sessionView">
+  <div class="sv-breadcrumb" id="svBreadcrumb"></div>
+  <div id="cardArea"></div>
+  <div class="card-nav" id="cardNav">
+    <button onclick="prevCard()">&#8592; Zurück</button>
+    <span class="cn-count" id="cnCount"></span>
+    <button class="cn-gaps" id="cnGaps" onclick="toggleGapsOnly()">Nur Lücken</button>
+    <button onclick="nextCard()">Weiter &#8594;</button>
+  </div>
+</div>
+
+<!-- ═══ QUIZ VIEW ═══ -->
+<div id="quizView">
+  <div class="sv-breadcrumb" id="qvBreadcrumb"></div>
+  <div id="quizArea"></div>
+  <div class="card-nav" id="quizNav">
+    <button onclick="prevQuiz()">&#8592; Zurück</button>
+    <span class="cn-count" id="qnCount"></span>
+    <button onclick="nextQuiz()">Weiter &#8594;</button>
+  </div>
+</div>
+
+<!-- ═══ FEYNMAN VIEW ═══ -->
+<div id="feynmanView">
+  <div class="sv-breadcrumb" id="fvBreadcrumb"></div>
+  <div id="feynmanArea"></div>
+  <div class="card-nav" id="feynmanNav">
+    <button onclick="prevFeynman()">&#8592; Zurück</button>
+    <span class="cn-count" id="fnCount"></span>
+    <button onclick="nextFeynman()">Weiter &#8594;</button>
+  </div>
+</div>
+
+<!-- ═══ MOVEMENT OVERLAY ═══ -->
+<div class="movement-overlay" id="moveOverlay">
+  <div class="mo-inner">
+    <h2>Bewegungspause!</h2>
+    <p>Steh auf, streck dich, hol dir Wasser. Dein Gehirn braucht die Pause zum Konsolidieren.</p>
+    <div class="mo-timer" id="moveTimer">5:00</div>
+    <button onclick="endBreak()">Weiter zur nächsten Session</button>
+  </div>
+</div>
+
+<!-- ═══ CHAT PANEL ═══ -->
+<div id="chatPanel" class="chat-panel">
+  <div class="chat-header">
+    <span class="chat-title">Tutorin</span>
+    <span class="chat-mode gray" id="chatModeLabel">offline</span>
+    <button class="chat-close" onclick="closeChat()">&#10005;</button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-suggestions" id="chatSuggestions"></div>
+  <div class="chat-input-row">
+    <textarea id="chatInput" placeholder="Deine Frage..." rows="1"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
+              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+    <button class="chat-send" onclick="sendChat()">&#8629;</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   PLACEHOLDER — DATA + LOGIC added in next steps
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── STATE ── */
+const STATE_KEY = 'epv3_state';
+let S = loadState();
+
+function defaultState(){return{
+  currentSession:0,currentCard:0,currentQuiz:0,currentFeynman:0,
+  triage:{},quizHistory:{},feynmanRatings:{},
+  xp:0,streak:0,bestStreak:0,
+  sessionProgress:[0,0,0,0],
+  timerRunning:false,timerSeconds:3600,
+  fontSize:18,noiseOn:false,focusOn:false,
+  phase:'dashboard',subPhase:'cards'
+}}
+function loadState(){try{const s=localStorage.getItem(STATE_KEY);return s?{...defaultState(),...JSON.parse(s)}:defaultState()}catch(e){return defaultState()}}
+function saveState(){localStorage.setItem(STATE_KEY,JSON.stringify(S))}
+
+/* ── CARDS DATA ── */
+const CARDS=[
+// ═══ WISSENSCHAFTSTHEORIE (Session 1) ═══
+{id:'wt1',title:'Logischer Empirismus',tier:'a',topic:'Wissenschaftstheorie',ref:'wisstheorie',body:'<p>Wiener Kreis (Carnap, Schlick, 1920er): Nur <strong>empirisch überprüfbare</strong> Aussagen sind wissenschaftlich. Theorie + Beobachtung = Erkenntnis.</p><div class="merksatz">Sinnkriterium: Nicht-empirische Aussagen gelten als sinnlos.</div>'},
+{id:'wt2',title:'Kritischer Rationalismus (Popper)',tier:'a',topic:'Wissenschaftstheorie',ref:'wisstheorie',body:'<p><strong>Falsifikationismus:</strong> Theorien können nie bewiesen, nur <strong>widerlegt</strong> werden. Wissenschaftlich = prinzipiell falsifizierbar.</p><div class="formula"><span class="keyword">Asymmetrie:</span> Verifikation unmöglich, Falsifikation mit <span class="result">einem</span> Gegenbeispiel</div><div class="example-box">„Alle Schwäne sind weiß" — falsifizierbar. „Irgendwo gibt es Geister" — nicht falsifizierbar.</div>',deepDive:'<p><strong>Asymmetrie-Argument:</strong> Egal wie viele weiße Schwäne man findet — die Allaussage ist nie bewiesen. Aber ein einziger schwarzer Schwan widerlegt sie.</p><p><strong>Gerichtsprozess-Analogie:</strong> Unschuld nie beweisbar, Schuld schon — durch ein belastendes Beweisstück. So auch bei Theorien.</p><p>Popper fordert: Wissenschaftler sollen aktiv versuchen, ihre Theorien zu <strong>falsifizieren</strong> — nicht zu bestätigen.</p>'},
+{id:'wt3',title:'Paradigmenwechsel (Kuhn)',tier:'a',topic:'Wissenschaftstheorie',ref:'wisstheorie',body:'<p>Wissenschaft verläuft in <strong>Revolutionen</strong>: Vorparadigmatisch → Normalwissenschaft → Anomalien → Krise → Revolution → Neues Paradigma.</p><div class="achtung">Kuhns Modell: Fortschritt ist NICHT linear/kumulativ!</div>',deepDive:'<p><strong>Kuhns 5 Phasen:</strong></p><p>1. <strong>Vorparadigmatisch</strong> — viele konkurrierende Ansätze, keine Einigung.</p><p>2. <strong>Normalwissenschaft</strong> — ein Paradigma dominiert, „Puzzle-Lösen".</p><p>3. <strong>Anomalien</strong> — Befunde, die das Paradigma nicht erklären kann.</p><p>4. <strong>Krise</strong> — Vertrauen sinkt, alternative Ansätze entstehen.</p><p>5. <strong>Revolution</strong> — neues Paradigma löst das alte ab.</p><p><strong>Psychologie-Beispiel:</strong> Behaviorismus (Watson, Skinner) → Anomalien (Chomsky: Sprache ≠ nur Verstärkung, Tolman: kognitive Karten) → Kognitive Wende (~1960).</p>'},
+{id:'wt4',title:'Induktion vs. Deduktion',tier:'a',topic:'Wissenschaftstheorie',ref:'wisstheorie',body:'<p><strong>Induktion:</strong> Einzelfall → Allgemeines (unsicher!). <strong>Deduktion:</strong> Allgemeines → Einzelfall (gültig).</p><div class="merksatz">Popper: <strong>Hypothetisch-deduktive Methode</strong> — Hypothese → Vorhersage → empirisch prüfen (falsifizieren!).</div>'},
+{id:'wt5',title:'Statement vs. Non-Statement View',tier:'a',topic:'Wissenschaftstheorie',ref:'wisstheorie',body:'<p><strong>Statement View</strong> (Popper, Log. Empirismus): Theorien = Menge von <em>Aussagen/Sätzen</em>.</p><p><strong>Non-Statement View</strong> (Sneed/Stegmüller): Theorien = Menge von <em>Modellen</em>.</p><div class="def-box purple">Strukturalismus: <strong>T = (K, I)</strong>. K = mathematischer Kern, I = intendierte Anwendungen.</div>',deepDive:'<p><strong>Warum ist das wichtig?</strong></p><p>Im Statement View ist eine Theorie ein sprachliches Gebilde — Sätze, die man verifizieren oder falsifizieren kann.</p><p>Im Non-Statement View (Strukturalismus) ist eine Theorie eine <strong>formale Struktur</strong>: T = (K, I). K enthält Axiome und Modelle, I sind die realen Systeme, auf die die Theorie angewendet werden soll.</p><p><strong>Vorteil Non-Statement:</strong> Theorien können sich weiterentwickeln (I ändert sich), ohne den Kern aufzugeben.</p>'},
+{id:'wt6',title:'Erkenntnistheoretische Positionen',tier:'a',topic:'Wissenschaftstheorie',ref:'wisstheorie',body:'<p><strong>Empirismus:</strong> Erkenntnis durch Sinneserfahrung (Locke, Hume).</p><p><strong>Rationalismus:</strong> Erkenntnis durch Vernunft (Descartes).</p><p><strong>Realismus:</strong> Welt existiert unabhängig (Popper).</p><p><strong>Skeptizismus:</strong> Sichere Erkenntnis unmöglich (Hume).</p>'},
+{id:'wt7',title:'Gütekriterien von Theorien',tier:'a',topic:'Wissenschaftstheorie',ref:'wisstheorie',body:'<p><strong>Terminologische Exaktheit:</strong> Klassifikatorisch (=≠) → Komparativ (><) → Quantitativ (Zahlen).</p><p><strong>Sparsamkeit:</strong> Ockhams Rasiermesser — einfachste Erklärung gewinnt.</p><div class="achtung">Overfitting: Perfekte Anpassung ≠ gute Theorie! Generalisierbarkeit zählt.</div>',deepDive:'<p><strong>Terminologische Exaktheit</strong> — 3 Stufen:</p><p>1. <strong>Klassifikatorisch:</strong> Unterscheidet nur gleich/verschieden (= / ≠). Bsp: „depressiv / nicht depressiv".</p><p>2. <strong>Komparativ:</strong> Ordnet Objekte (>, <). Bsp: „Person A ist ängstlicher als B".</p><p>3. <strong>Quantitativ:</strong> Weist Zahlen zu. Bsp: „IQ von 115". Je quantitativer, desto präziser die Theorie.</p><p><strong>Overfitting-Problem:</strong> Eine Theorie mit zu vielen freien Parametern kann JEDES Datenmuster perfekt abbilden — aber versagt bei neuen Daten. Gute Theorien sind sparsam UND generalisierbar.</p>'},
+{id:'wt8',title:'Kognitive Wende',tier:'a',topic:'Wissenschaftstheorie',ref:'wisstheorie',body:'<p>Paradigmenwechsel: Behaviorismus → Kognitivismus (~1960).</p><p><strong>Anomalien:</strong> Chomsky (Sprache ≠ nur Verstärkung), Tolman (kognitive Karten bei Ratten).</p><div class="example-box">Lachs-fMRI-Studie: Ohne Korrektur für multiples Testen „Aktivierung" bei totem Lachs!</div>'},
+{id:'wt9',title:'Duhem-Quine & Lakatos',tier:'a',topic:'Wissenschaftstheorie',ref:'wisstheorie',body:'<p><strong>Duhem-Quine:</strong> Hypothesen werden nie isoliert getestet — immer mit Hilfsannahmen. Bei Widerlegung: welcher Teil falsch?</p><p><strong>Lakatos:</strong> Forschungsprogramme mit <strong>hartem Kern</strong> (unveränderbar) + <strong>Schutzgürtel</strong> (anpassbar). Ablösung erst wenn Programm „degenerativ" wird.</p>',deepDive:'<p><strong>Duhem-Quine im Detail:</strong> Wenn ein Experiment eine Vorhersage widerlegt, weißt du nicht, ob die Haupthypothese falsch ist oder eine der vielen Hilfsannahmen (Messgeräte funktionieren, VP hat Anweisung verstanden, etc.).</p><p><strong>Lakatos\' Lösung:</strong> Forschungsprogramme haben einen <strong>harten Kern</strong> (Grundannahmen, die nicht aufgegeben werden) und einen <strong>Schutzgürtel</strong> (Hilfsannahmen, die bei Anomalien angepasst werden). Erst wenn das Programm nur noch Ad-hoc-Anpassungen macht → „degenerativ" → wird es abgelöst.</p>'},
+
+// ═══ MESSTHEORIE (Session 1) ═══
+{id:'mt1',title:'Homomorphismus (formal)',tier:'a',topic:'Messtheorie',ref:'messung',body:'<p>Messen = <strong>strukturerhaltende Abbildung</strong> φ: M → ℝ vom empirischen ins numerische Relativ.</p><div class="formula"><span class="keyword">a ≿ b</span>  <span class="symbol">⇔</span>  <span class="result">φ(a) ≥ φ(b)</span>   <span class="comment">// Äquivalenz in BEIDEN Richtungen!</span></div><div class="achtung">Die Bi-Implikation (⇔) ist klausurrelevant — nicht nur →!</div>',deepDive:'<p><strong>Was heißt „strukturerhaltend"?</strong> Wenn Person A im echten Leben lauter spricht als Person B, dann muss die Zahl für A auch größer sein als für B. UND umgekehrt: Wenn die Zahl größer ist, muss auch die reale Eigenschaft größer sein.</p><p><strong>Beispiel:</strong> Lautstärke: leise (30dB) < mittel (60dB) < laut (90dB). Die Zahlen erhalten die Ordnung der Empfindung.</p><p><strong>Repräsentationssatz:</strong> Unter welchen Axiomen existiert ein solcher Homomorphismus? <strong>Eindeutigkeitssatz:</strong> Wie viele gibt es? → Bestimmt das Skalenniveau!</p>'},
+{id:'mt2',title:'Skalenniveaus',tier:'a',topic:'Messtheorie',ref:'messung',body:'<p><strong>Nominal:</strong> = / ≠ (Geschlecht) → Modus, χ²</p><p><strong>Ordinal:</strong> + Rangfolge (Schulnoten) → + Median</p><p><strong>Intervall:</strong> + Abstände, y=ax+b (°C, IQ) → + Mittelwert</p><p><strong>Verhältnis:</strong> + Nullpunkt, y=ax (Reaktionszeit) → + Verhältnisse</p><p><strong>Absolut:</strong> + Einheit, Identität (Anzahl) → Alles</p><div class="achtung">„Doppelt so viel Schmerz" — nur bei Verhältnisskala! Ordinal reicht nicht.</div>',deepDive:'<p><strong>Merkhilfe — was darf man wann?</strong></p><p><strong>Nominal:</strong> Nur zählen und Gruppen bilden. „Wie viele Frauen vs. Männer?" → χ²-Test.</p><p><strong>Ordinal:</strong> Sortieren erlaubt. „Wer ist Erster?" → Median. ABER: Abstände nicht interpretierbar (Note 2 ist nicht „doppelt so gut" wie 4).</p><p><strong>Intervall:</strong> Abstände sind gleich. 20°C→30°C = gleicher Sprung wie 30°C→40°C. ABER: 0°C ist nicht „kein Wärme" → keine Verhältnisse.</p><p><strong>Verhältnis:</strong> Echter Nullpunkt. 0 kg = kein Gewicht. „Doppelt so schwer" ist sinnvoll.</p><p><strong>Likert-Dilemma:</strong> Likert-Skalen (1-5) sind streng ordinal. Mittelwerte pragmatisch OK bei: symmetrischer Verteilung, 5+ Items, ~gleichen Abständen.</p>'},
+{id:'mt3',title:'Schwache Ordnung',tier:'a',topic:'Messtheorie',ref:'messung',body:'<p>Empirisches Relativ <strong>(M, ≥)</strong> ist schwache Ordnung wenn:</p><div class="formula"><span class="keyword">Transitivität:</span>  x ≥ y ∧ y ≥ z  →  x ≥ z\n<span class="keyword">Konnexität:</span>     x ≥ y  ∨  y ≥ x     <span class="comment">// alle Paare vergleichbar</span></div><p>+ Antisymmetrie → totale Ordnung.</p>'},
+{id:'mt4',title:'Matrix: Konnexität prüfen',tier:'a',topic:'Messtheorie',ref:'messung',body:'<p>Für jedes Paar (i,j): mindestens eine 1 in Zelle (i,j) ODER (j,i)?</p><div class="merksatz">Systematisch: Alle Paare oberhalb der Diagonale durchgehen. Wenn irgendwo (i,j)=0 UND (j,i)=0 → Konnexität verletzt.</div>',deepDive:'<p><strong>Schritt-für-Schritt in der Klausur:</strong></p><p>1. Nimm jedes Paar (i,j) mit i≠j.</p><p>2. Schau in die Matrix: Ist Zelle (i,j)=1? Falls ja → OK für dieses Paar.</p><p>3. Falls nein: Ist Zelle (j,i)=1? Falls ja → OK.</p><p>4. Falls beide 0 → <strong>Konnexität verletzt!</strong> Nenne das Paar konkret: „Für a und c gilt weder a≥c noch c≥a."</p><p>5. Die Diagonale (i,i) ist immer 1 (jeder ist mindestens so gut wie er selbst = Reflexivität).</p>'},
+{id:'mt5',title:'Matrix: Transitivität & Zyklische Triaden',tier:'a',topic:'Messtheorie',ref:'messung',body:'<p><strong>Transitivität:</strong> Wenn Zeile i hat 1 bei j, und Zeile j hat 1 bei k → Zeile i muss auch 1 bei k haben.</p><div class="achtung"><strong>Zyklische Triaden</strong> = schnellster Weg: A≥B, B≥C, C≥A → Kreis → Transitivität verletzt!</div>',deepDive:'<p><strong>Effiziente Prüfstrategie:</strong></p><p>1. Suche nach Triaden (Dreiergruppen) wo A schlägt B, B schlägt C, aber C schlägt A.</p><p>2. In der Matrix: Zeile A hat 1 bei B, Zeile B hat 1 bei C → prüfe ob Zeile A auch 1 bei C hat.</p><p>3. Wenn Zeile A dort 0 hat → <strong>Transitivitätsverletzung!</strong></p><p><strong>Klausurtipp:</strong> Schreibe den konkreten Beweis: „a≥b (Zeile a, Spalte b = 1) und b≥c (Zeile b, Spalte c = 1), aber a≱c (Zeile a, Spalte c = 0). → Transitivität verletzt."</p>'},
+{id:'mt6',title:'Zeilensummen als Homomorphismus',tier:'a',topic:'Messtheorie',ref:'messung',body:'<p>Wenn schwache Ordnung gilt → <strong>Zeilensummen = Rangzahlen</strong> = gültiger ordinaler Homomorphismus.</p><div class="merksatz">Klausurtipp: Immer konkrete Gegenbeispiele mit Zeilen-/Spaltenangabe nennen!</div>'},
+
+// ═══ VERSUCHSPLANUNG (Session 1) ═══
+{id:'vp1',title:'UV / AV / Störvariable',tier:'a',topic:'Versuchsplanung',ref:'versuchsplanung',body:'<p><strong>UV:</strong> Manipuliert (Koffein-Dosis). <strong>AV:</strong> Gemessen (Reaktionszeit). <strong>Störvariable:</strong> Beeinflusst AV, nicht untersucht (Müdigkeit).</p><p><strong>Konfundierung:</strong> SV kovariiert mit UV → Interne Validität ↓.</p><div class="example-box">Kochen: UV=Zutat, AV=Geschmack, SV=Ofentemp., Konfundierung=Salz UND Pfeffer gleichzeitig ändern.</div>'},
+{id:'vp2',title:'Max-Kon-Min (Kerlinger)',tier:'a',topic:'Versuchsplanung',ref:'versuchsplanung',body:'<div class="merksatz"><strong>Max</strong>imiere Primärvarianz (starke UV-Manipulation). <strong>Kon</strong>trolliere Sekundärvarianz (Störvariablen ausschalten). <strong>Min</strong>imiere Fehlervarianz (präzise Messung, große Stichprobe).</div>',deepDive:'<p><strong>Was sind die drei Varianzquellen?</strong></p><p><strong>Primärvarianz:</strong> Der Effekt der UV — genau das, was du messen willst. Maximiere ihn durch starke, deutliche UV-Stufen (z.B. 0mg vs. 200mg Koffein, nicht 100mg vs. 110mg).</p><p><strong>Sekundärvarianz:</strong> Systematische Fehler durch Störvariablen. Kontrolliere sie: Randomisierung, Konstanthalten, Counterbalancing, Matching, Verblindung.</p><p><strong>Fehlervarianz:</strong> Zufällige, unsystematische Schwankungen. Minimiere sie: Präzise Instrumente, standardisierte Bedingungen, große Stichproben.</p>'},
+{id:'vp3',title:'Between vs. Within',tier:'a',topic:'Versuchsplanung',ref:'versuchsplanung',body:'<p><strong>Between-Subjects:</strong> Verschiedene Gruppen. Keine Übertragung. Mehr VPn nötig. Individuelle Unterschiede = Fehler.</p><p><strong>Within-Subjects:</strong> Jede VP alle Bedingungen. Ind. Unterschiede kontrolliert. ABER: Reihenfolgeeffekte! → <strong>Counterbalancing</strong> (Latin Square).</p>',deepDive:'<p><strong>Wann welches Design?</strong></p><p><strong>Between</strong> wählen wenn: UV nicht wiederholbar (Lerneffekt), Übertragungseffekte wahrscheinlich, genug VPn verfügbar.</p><p><strong>Within</strong> wählen wenn: Wenige VPn, individuelle Unterschiede groß, UV wiederholbar. Immer mit Counterbalancing!</p><p><strong>Counterbalancing (Latin Square):</strong> Bei 3 Bedingungen A,B,C: Gruppe 1 = ABC, Gruppe 2 = BCA, Gruppe 3 = CAB. Jede Bedingung kommt auf jeder Position gleich oft vor.</p>'},
+{id:'vp4',title:'Validitätsarten',tier:'a',topic:'Versuchsplanung',ref:'versuchsplanung',body:'<div class="def-box blue"><strong>Intern:</strong> UV→AV eindeutig? <strong>Extern:</strong> Generalisierbar? <strong>Konstrukt:</strong> Misst es das Konstrukt? <strong>Statistisch:</strong> Effekt korrekt?</div>',deepDive:'<p><strong>Interne Validität:</strong> Kann der Effekt eindeutig auf die UV zurückgeführt werden? Bedrohungen: Konfundierung, Selektion, Reifung, Regression zur Mitte, Demand Characteristics.</p><p><strong>Externe Validität:</strong> Gelten die Ergebnisse auch für andere Personen, Situationen, Zeitpunkte? Oft im Spannungsfeld mit interner Validität (Labor vs. Feld).</p><p><strong>Konstruktvalidität:</strong> Misst der Test wirklich das, was er messen soll? Bsp: Misst ein „Intelligenztest" Intelligenz oder nur Schulwissen?</p><p><strong>Statistische Validität:</strong> Sind die statistischen Schlüsse korrekt? Power ausreichend? Voraussetzungen erfüllt?</p>'},
+{id:'vp5',title:'Randomisierung vs. Parallelisierung',tier:'a',topic:'Versuchsplanung',ref:'versuchsplanung',body:'<p><strong>Randomisierung:</strong> Kontrolliert ALLE SVs (auch unbekannte!), einfach, keine Vorabmessung. Braucht große Stichproben.</p><p><strong>Parallelisierung:</strong> Nur bekannte SVs, Vorabmessung nötig. Funktioniert auch bei kleinen N.</p><div class="merksatz">Klausur-Dauerbrenner: „Nennen Sie zwei Vorteile der Randomisierung gegenüber der Parallelisierung!"</div>'},
+{id:'vp6',title:'Ceteris-paribus-Klausel',tier:'a',topic:'Versuchsplanung',ref:'versuchsplanung',body:'<div class="def-box">„Unter sonst gleichen Bedingungen." Zwischen den Gruppen darf sich <strong>nur die UV</strong> unterscheiden. Verletzung → Konfundierung → keine Kausalaussage.</div>'},
+{id:'vp7',title:'Verblindung',tier:'a',topic:'Versuchsplanung',ref:'versuchsplanung',body:'<p><strong>Einfach:</strong> VP weiß nicht → gegen Placebo, Demand Characteristics.</p><p><strong>Doppelt:</strong> + VL weiß nicht → + gegen Rosenthal-Effekt.</p><p><strong>Dreifach:</strong> + Auswerter weiß nicht → + gegen Auswertungsbias.</p><div class="example-box">Pygmalion (Rosenthal & Jacobson): Lehrer-Erwartung beeinflusst Schülerleistung → self-fulfilling prophecy.</div>'},
+{id:'vp8',title:'BDI-Therapiestudie',tier:'a',topic:'Versuchsplanung',ref:'versuchsplanung',body:'<p>EG vs. KG, Vor-/Nachtest mit BDI. Nur wenn <strong>Interaktion</strong> vorliegt: EG verbessert sich MEHR als KG. Haupteffekt allein reicht nicht (Spontanremission!).</p><p><strong>Ordinal:</strong> Beide besser, EG stärker (divergieren). <strong>Disordinal:</strong> Linien kreuzen sich.</p>',deepDive:'<p><strong>Warum reicht ein Haupteffekt nicht?</strong></p><p>Wenn sich BEIDE Gruppen verbessern (EG: 30→20 BDI, KG: 30→22 BDI), könnte die Verbesserung auch Spontanremission sein. Du brauchst die <strong>Interaktion</strong>: EG verbessert sich signifikant MEHR als KG.</p><p><strong>Interaktionstypen:</strong></p><p>• <strong>Ordinal:</strong> Beide Linien gehen in die gleiche Richtung, aber EG-Linie fällt steiler → Therapie hilft zusätzlich zur Spontanremission.</p><p>• <strong>Disordinal:</strong> Linien kreuzen sich → z.B. Therapie hilft EG, schadet aber KG (seltener).</p>'},
+{id:'vp9',title:'Forschungsethik',tier:'a',topic:'Versuchsplanung',ref:'versuchsplanung',body:'<p><strong>Milgram:</strong> 65% bis 450V, kein informed consent. <strong>Stanford Prison:</strong> Abbruch nach 6 Tagen. <strong>Little Albert:</strong> Keine Dekonditionierung.</p><div class="merksatz">Heute: (1) Informierte Einwilligung (2) Ethik-Kommission (3) Debriefing (4) Datenschutz (5) Schadensvermeidung.</div>'},
+
+// ═══ LOGIK (Session 2) ═══
+{id:'lo1',title:'Aussagenlogik: Junktoren',tier:'b',topic:'Logik',ref:'logik',body:'<p><strong>¬A</strong> Negation, <strong>A∧B</strong> Konjunktion (beide wahr), <strong>A∨B</strong> Disjunktion (mind. eins), <strong>A→B</strong> Konditional, <strong>A↔B</strong> Bikonditional.</p><div class="achtung">A→B ist nur falsch wenn A wahr UND B falsch! Bei falschem A IMMER wahr (ex falso quodlibet).</div>',deepDive:'<p><strong>„Ex falso quodlibet" — warum ist das so?</strong></p><p>Das Konditional A→B modelliert: „A ist hinreichend für B." Es sagt: „Wenn A, dann sicher B." Es sagt NICHT: „Nur wenn A, dann B."</p><p>Wenn A gar nicht eintritt (A=falsch), ist die Bedingung nicht verletzt — egal was B macht. Daher: A→B ist bei falschem A immer wahr.</p><p><strong>Eselsbrücke:</strong> „Wenn es regnet, wird die Straße nass." An einem sonnigen Tag ist diese Aussage nicht falsch — sie wurde einfach nicht getestet.</p>'},
+{id:'lo2',title:'Modus Ponens & Tollens',tier:'b',topic:'Logik',ref:'logik',body:'<div class="merksatz"><strong>Ponens (✓):</strong> A→B, A ∴ B (vorwärts).<br><strong>Tollens (✓):</strong> A→B, ¬B ∴ ¬A (= Falsifikation!).</div><div class="achtung"><strong>Fehlschlüsse:</strong> Bejahung d. Konsequens (A→B, B ∴ A?) und Verneinung d. Antezedens (A→B, ¬A ∴ ¬B?).</div>',deepDive:'<p><strong>Warum sind die Fehlschlüsse falsch?</strong></p><p><strong>Bejahung d. Konsequens:</strong> „Wenn depressiv, dann niedrige Serotonin." Person hat niedrige Serotonin → depressiv? NEIN! Andere Ursachen möglich (Medikamente, Ernährung, etc.).</p><p><strong>Verneinung d. Antezedens:</strong> „Wenn Regen, dann Straße nass." Kein Regen → Straße trocken? NEIN! Sprinkler, Wasserrohrbruch, etc.</p><p><strong>Wissenschaft = Modus Tollens:</strong> Wenn Theorie T → Effekt E. Effekt tritt NICHT auf → Theorie stimmt nicht. Das ist Falsifikation!</p>'},
+{id:'lo3',title:'Kontraposition',tier:'b',topic:'Logik',ref:'logik',body:'<div class="formula"><span class="keyword">(A → B)</span> <span class="symbol">≡</span> <span class="result">(¬B → ¬A)</span></div><div class="example-box">„Wenn neurotisch (A), dann Angst (B)." Kontraposition: „Keine Angst → nicht neurotisch."</div>'},
+{id:'lo4',title:'Quantoren & Negation',tier:'b',topic:'Logik',ref:'logik',body:'<div class="formula"><span class="keyword">∀x: P(x)</span> — „Für alle x gilt P"\n<span class="keyword">∃x: P(x)</span> — „Es gibt mind. ein x mit P"\n<span class="keyword">¬(∀x: P(x))</span> <span class="symbol">≡</span> <span class="result">∃x: ¬P(x)</span> <span class="comment">// Ein Gegenbeispiel reicht!</span></div>'},
+{id:'lo5',title:'De Morgan',tier:'b',topic:'Logik',ref:'logik',body:'<div class="formula"><span class="keyword">¬(A ∧ B)</span> <span class="symbol">≡</span> <span class="result">¬A ∨ ¬B</span>\n<span class="keyword">¬(A ∨ B)</span> <span class="symbol">≡</span> <span class="result">¬A ∧ ¬B</span></div><div class="example-box">„Nicht (hungrig UND müde)" = „Nicht hungrig ODER nicht müde."</div>'},
+{id:'lo6',title:'Wahrheitstabellen & Tautologien',tier:'b',topic:'Logik',ref:'logik',body:'<p><strong>Tautologie:</strong> Immer wahr. Bsp: A∨¬A, ¬(A∧¬A), (A→B)↔(¬B→¬A).</p><div class="merksatz">Klausur: (A∧B) → (A→B) ist Tautologie! Bei falschem Antezedens ist Konditional automatisch wahr.</div>'},
+{id:'lo7',title:'Abbildungstypen',tier:'b',topic:'Logik',ref:'logik',body:'<p><strong>Injektiv:</strong> Verschiedene Urbilder → verschiedene Bilder. <strong>Surjektiv:</strong> Jedes Bild wird getroffen. <strong>Bijektiv:</strong> Beides → umkehrbar.</p><div class="merksatz">Messtheorie: Bijektive Abb. → Nominalskala. Monotone → Ordinal. Lineare (ax+b) → Intervall.</div>'},
+
+// ═══ STATISTIK (Session 2) ═══
+{id:'st1',title:'NHST & p-Wert',tier:'b',topic:'Statistik',ref:'statistik',body:'<p>H₀ → Daten → Teststatistik → p-Wert → p < α? → H₀ ablehnen.</p><div class="def-box"><strong>p-Wert:</strong> P(Daten so extrem oder extremer | H₀). NICHT: P(H₀ | Daten)!</div><div class="achtung">❌ „p=.03 → H₀ ist 3% wahrscheinlich" — FALSCH!<br>❌ „p=.06 → kein Effekt" — .05 ist willkürlich.</div>'},
+{id:'st2',title:'Fehlerarten & Power',tier:'b',topic:'Statistik',ref:'statistik',body:'<p><strong>α-Fehler (Typ I):</strong> H₀ fälschlich ablehnen (Fehlalarm). <strong>β-Fehler (Typ II):</strong> H₀ beibehalten obwohl falsch (Übersehen).</p><div class="merksatz"><strong>Power = 1−β ≥ .80.</strong> Steigt mit: Effektstärke ↑, n ↑, α ↑, Streuung ↓.</div>'},
+{id:'st3',title:'Effektstärke & Bayes-Faktor',tier:'b',topic:'Statistik',ref:'statistik',body:'<div class="formula"><span class="keyword">Cohen\'s d</span> = (M₁−M₂)/SD_pooled   <span class="comment">// 0.2 klein, 0.5 mittel, 0.8 groß</span></div><p><strong>BF₁₀:</strong> Wie stark stützen Daten H₁ vs. H₀? 1=neutral, 10=stark H₁, 0.1=stark H₀.</p><div class="merksatz">Vorteil Bayes: Kann H₀ aktiv stützen! NHST kann das nicht.</div>',deepDive:'<p><strong>NHST vs. Bayes im Vergleich:</strong></p><p><strong>NHST:</strong> Binär (signifikant oder nicht). Kann H₀ NIE aktiv stützen (nur „nicht ablehnen"). p ist kontraintuitiv.</p><p><strong>Bayes:</strong> Kontinuierliche Evidenz (BF₁₀). Kann H₀ aktiv stützen (BF₁₀ < 1/3 → Evidenz FÜR H₀). Braucht aber einen Prior.</p><p><strong>BF₁₀ Interpretation:</strong> 1-3 = anekdotisch, 3-10 = moderat, 10-30 = stark, 30-100 = sehr stark, >100 = extrem.</p>'},
+{id:'st4',title:'Multiple Vergleiche & KI',tier:'b',topic:'Statistik',ref:'statistik',body:'<p>20 Tests, α=.05 → ~1 Falsch-Positiv! <strong>Bonferroni:</strong> α/k. <strong>FDR:</strong> weniger konservativ.</p><p><strong>95%-KI:</strong> Bei ∞ Wiederholungen enthält 95% den wahren Wert. NICHT: „95% Wahrsch., dass Wert drin liegt."</p>'},
+
+// ═══ PSYCHOPHYSIK (Session 2) ═══
+{id:'pp1',title:'Weber, Fechner, Stevens',tier:'b',topic:'Psychophysik',ref:'psychophysik',body:'<div class="formula"><span class="keyword">Weber:</span>   ΔI/I = k          <span class="comment">// JND proportional zur Reizstärke</span>\n<span class="keyword">Fechner:</span> E = c·log(I/I₀)   <span class="comment">// logarithmisch</span>\n<span class="keyword">Stevens:</span> E = a·I^n         <span class="comment">// n<1 Kompression, n>1 Expansion</span></div><div class="example-box">n&lt;1: Helligkeit. n&gt;1: Stromschlag. Fechner baute auf Weber auf (JNDs = gleiche Empfindungsschritte).</div>'},
+{id:'pp2',title:'PSE & JND (formal)',tier:'b',topic:'Psychophysik',ref:'psychophysik',body:'<div class="formula"><span class="keyword">PSE:</span> p(x₀.₅, s) = <span class="result">0.5</span>   <span class="comment">// 50% „größer"-Antworten</span>\n<span class="keyword">JND:</span> Δπ = xπ − x₀.₅     <span class="comment">// Abstand PSE → π-Punkt</span></div>',deepDive:'<p><strong>PSE = Punkt der subjektiven Gleichheit:</strong> Der Vergleichsreiz, bei dem die VP in 50% der Fälle „größer" sagt. Hier kann sie Standard und Vergleich nicht unterscheiden.</p><p><strong>JND = Just Noticeable Difference:</strong> Der Abstand vom PSE zum Reiz, bei dem die VP z.B. in 75% der Fälle „größer" sagt. Maß für die Diskriminationsfähigkeit.</p><p><strong>Psychometrische Funktion:</strong> S-Kurve (Ogive) — steigt von 0% auf 100%. PSE liegt bei 50%, JND = Abstand 50%→75%.</p>'},
+{id:'pp3',title:'Weber: Formelvarianten (Klausur!)',tier:'b',topic:'Psychophysik',ref:'psychophysik',body:'<p><strong>Korrekt:</strong></p><div class="formula"><span class="result">✓</span> p(x, s) = p(λx, λs)       <span class="comment">// multiplikative Invarianz</span>\n<span class="result">✓</span> Δπ(λs) = λ·Δπ(s)          <span class="comment">// JND skaliert proportional</span>\n<span class="result">✓</span> x₀.₅(λs) = λ·x₀.₅(s)      <span class="comment">// PSE skaliert mit</span></div><p><strong>FALSCH:</strong> λ·p(x,s) = p(λx,λs) ✗ | Δπ(λs) = Δπ(s) ✗ | p(x+a,s+a) = p(x,s) ✗</p><div class="merksatz">Weber = <strong>multiplikative</strong> Invarianz. NICHT additiv!</div>'},
+{id:'pp4',title:'Psychophysische Methoden',tier:'b',topic:'Psychophysik',ref:'psychophysik',body:'<p><strong>Grenzmethode:</strong> Reiz auf/ab bis Umschlag. ⚠ Erwartungsfehler.</p><p><strong>Konstante Reize:</strong> Zufällige Reihenfolge → S-Kurve. Schwelle = 50%. <strong>Genaueste!</strong></p><p><strong>Herstellung:</strong> VP stellt selbst ein. Schnell, aber systematisch verzerrt.</p>'},
+{id:'pp5',title:'Signalentdeckungstheorie (SDT)',tier:'b',topic:'Psychophysik',ref:'psychophysik',body:'<p>Keine feste Schwelle! Trennt <strong>Sensitivität</strong> (d\') und <strong>Antwortneigung</strong> (β).</p><div class="formula"><span class="keyword">d\'</span> = z(Hit-Rate) − z(False-Alarm-Rate)</div><div class="example-box">Rauchmelder: d\' = Rauch vs. Kochdampf unterscheiden. β = Auslöseschwelle (liberal → Fehlalarme, konservativ → verpasst Brände).</div>'},
+{id:'pp6',title:'Weber-Bruch Rechnung',tier:'b',topic:'Psychophysik',ref:'psychophysik',body:'<div class="example-box">k=1/50 (Gewicht). 1 kg → JND=20g. 10 kg → JND=200g. 20 kg → JND=400g.<br>k=1/333 (Tonhöhe) → viel feiner als Gewicht!</div>'},
+{id:'pp7',title:'Fechner vs. Stevens',tier:'b',topic:'Psychophysik',ref:'psychophysik',body:'<p>Fechner: logarithmisch (baut auf Weber). Stevens: Potenzfunktion (empirisch oft besser).</p><div class="merksatz">Für n=1 wäre Stevens linear, Fechner nie. Die Gesetze machen unterschiedliche Vorhersagen.</div>'},
+
+// ═══ WAHRSCHEINLICHKEIT (Session 3) ═══
+{id:'ws1',title:'Kolmogorov-Axiome',tier:'c',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<p><strong>Ω</strong> = Ergebnismenge. <strong>A ⊆ Ω</strong> = Ereignis. <strong>P(A)</strong> ∈ [0,1].</p><div class="formula"><span class="keyword">1.</span> P(A) ≥ 0    <span class="keyword">2.</span> P(Ω) = 1    <span class="keyword">3.</span> A∩B=∅ ⇒ P(A∪B)=P(A)+P(B)</div>'},
+{id:'ws2',title:'Bedingte Wahrscheinlichkeit & Bayes',tier:'c',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">P(A|B)</span> = P(A∩B)/P(B)\n<span class="keyword">Bayes:</span> P(A|B) = P(B|A)·P(A)/P(B)</div><div class="example-box"><strong>Bayes-Falle:</strong> 90% sensitiv, 5% Grundrate, 10% Falsch-Positiv. P(krank|+) ≈ <strong>32%!</strong> Basisraten-Vernachlässigung.</div>',deepDive:'<p><strong>Bayes-Rechnung Schritt für Schritt:</strong></p><p>Gegeben: Sensitivität P(+|krank) = 0.90, Grundrate P(krank) = 0.05, Falsch-Positiv P(+|gesund) = 0.10.</p><p>Gesucht: P(krank|+) = ?</p><p>P(+) = P(+|krank)·P(krank) + P(+|gesund)·P(gesund)</p><p>P(+) = 0.90 × 0.05 + 0.10 × 0.95 = 0.045 + 0.095 = 0.14</p><p>P(krank|+) = (0.90 × 0.05) / 0.14 = 0.045/0.14 ≈ <strong>0.32 = 32%</strong></p><p><strong>Warum so niedrig?</strong> Es gibt viel mehr Gesunde (95%) als Kranke (5%). Selbst mit 10% Falsch-Positiv-Rate produzieren die vielen Gesunden mehr positive Tests als die wenigen echten Kranken.</p>'},
+{id:'ws3',title:'Normalverteilung & ZGS',tier:'c',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<p><strong>Zentraler Grenzwertsatz:</strong> Summe vieler unabhängiger Einflüsse → ~normalverteilt.</p><div class="merksatz"><strong>68-95-99.7:</strong> ~68% in μ±1σ, ~95% in μ±2σ, ~99.7% in μ±3σ.</div>'},
+{id:'ws4',title:'Erwartungswert & Varianz',tier:'c',topic:'Wahrscheinlichkeit',ref:'wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">E(X)</span> = Σ xᵢ·P(xᵢ)   <span class="keyword">Var(X)</span> = E[(X−μ)²]   <span class="keyword">SD</span> = √Var</div><p><strong>Unabhängigkeit:</strong> A⊥B ⟺ P(A∩B) = P(A)·P(B). Unabhängig ≠ disjunkt!</p>'},
+
+// ═══ LERNEN (Session 3) ═══
+{id:'le1',title:'Paarassoziationslernen & Lernkurve',tier:'c',topic:'Lernen',ref:'lernen',body:'<p>Wort-Wort-Paare lernen. Lernkurve: Schneller Anfang → Plateau (negativ beschleunigt).</p><div class="formula"><span class="keyword">P(n)</span> = 1 − (1−α)<sup>n</sup>   <span class="comment">// α = Lernrate</span></div>'},
+{id:'le2',title:'Serielle Positionskurve',tier:'c',topic:'Lernen',ref:'lernen',body:'<p><strong>Primacy</strong> (Anfang → LZG) + <strong>Recency</strong> (Ende → AG) = <strong>U-Kurve</strong>. Mitte am schlechtesten.</p><div class="merksatz">Warum U? Anfang: oft wiederholt → LZG. Ende: noch im AG. Mitte: verdrängt, nicht genug wiederholt.</div>'},
+{id:'le3',title:'Rock: Substitutionsmethode',tier:'c',topic:'Lernen',ref:'lernen',body:'<p><strong>EG:</strong> Nicht-gelernte Paare → neue Paare. <strong>KG:</strong> Alle bleiben gleich. Ergebnis: Kein Unterschied!</p><div class="merksatz">Rocks Schluss: Lernen ist <strong>All-or-None</strong>, nicht inkrementell.</div><div class="achtung"><strong>Postman-Kritik:</strong> Item-Selection-Artifact — schwierige Paare raus, leichtere rein = unfairer Vergleich!</div>',deepDive:'<p><strong>Was genau macht Rock?</strong></p><p><strong>Experimentalgruppe:</strong> In jedem Lerndurchgang werden alle Paare, die die VP NICHT korrekt erinnert hat, durch komplett neue Paare ersetzt.</p><p><strong>Kontrollgruppe:</strong> Alle Paare bleiben über alle Durchgänge gleich (klassisches Lernen).</p><p><strong>Logik:</strong> Wenn Lernen inkrementell wäre (jeder Durchgang stärkt die Verbindung ein wenig), sollte die EG viel langsamer lernen — weil die teilweise gelernten Paare ständig ersetzt werden.</p><p><strong>Ergebnis:</strong> Kein Unterschied! → Rocks Schluss: Items werden in EINEM Durchgang komplett gelernt oder gar nicht.</p><p><strong>Postmans Kritik:</strong> Die schwierigen Paare (die ersetzt werden) sind systematisch schwieriger als die neuen zufälligen Paare. Die EG bekommt also durchschnittlich leichtere Paare → unfairer Vergleich.</p>'},
+{id:'le4',title:'Mehrspeichermodell',tier:'c',topic:'Lernen',ref:'lernen',body:'<p><strong>Sensorisch</strong> (~250ms) → <strong>Kurzzeitspeicher</strong> (~20s, 7±2 Chunks) → <strong>Langzeitspeicher</strong> (∞).</p><div class="merksatz"><strong>Glanzer & Cunitz (1966):</strong> 30s Ablenkung → Recency weg (AG gelöscht), Primacy bleibt (LZG). = Experimentelle Dissoziation → Zwei-Speicher-Theorie!</div>'},
+{id:'le5',title:'Behaviorismus → Kognitive Wende',tier:'c',topic:'Lernen',ref:'lernen',body:'<p><strong>Watson:</strong> S→R. <strong>Skinner:</strong> Operante Konditionierung (Verstärkung/Bestrafung).</p><p><strong>Chomsky:</strong> Sprache ≠ nur Verstärkung. <strong>Tolman:</strong> Kognitive Karten. <strong>Miller:</strong> 7±2 Chunks.</p>'},
+{id:'le6',title:'Experimentelle Dissoziation',tier:'c',topic:'Lernen',ref:'lernen',body:'<p>Eine Manipulation beeinflusst Prozess A, aber nicht B → beide müssen <strong>getrennte Systeme</strong> sein.</p><div class="example-box">Glanzer & Cunitz: Ablenkung löscht Recency (AG) aber nicht Primacy (LZG) → Zwei separate Speicher.</div>'},
+];
+/* ── POOL DATA — verbatim from test.html ── */
+const POOL={
+wisstheorie:[
+{type:'mc',q:'Was ist das zentrale Kriterium für Wissenschaftlichkeit nach Karl Popper?',options:['Verifizierbarkeit','Falsifizierbarkeit','Reproduzierbarkeit','Objektivität'],correct:1,explanation:'Popper: Eine Theorie ist wissenschaftlich, wenn sie prinzipiell falsifizierbar ist.'},
+{type:'mc',q:'Welcher wissenschaftstheoretische Ansatz wurde vom Wiener Kreis vertreten?',options:['Falsifikationismus','Kritischer Rationalismus','Logischer Empirismus','Konstruktivismus'],correct:2,explanation:'Der Wiener Kreis (Carnap, Schlick) vertrat den Logischen Empirismus.'},
+{type:'mc',q:'Was beschreibt Thomas Kuhns Konzept des Paradigmenwechsels?',options:['Schrittweise Verbesserung','Revolutionäre Ablösung eines Paradigmas','Falsifikation einzelner Hypothesen','Induktive Ableitung'],correct:1,explanation:'Kuhn: Wissenschaft verläuft in Revolutionen.'},
+{type:'tf',q:'Nach Popper können wissenschaftliche Theorien endgültig verifiziert werden.',correct:false,explanation:'Asymmetrie-Argument: Nie verifizierbar, aber falsifizierbar.'},
+{type:'mc',q:'Welche Methode propagiert Popper?',options:['Induktive','Hermeneutische','Hypothetisch-deduktive','Phänomenologische'],correct:2,explanation:'Hypothetisch-deduktive Methode: Hypothese → Vorhersage → prüfen.'},
+{type:'mc',q:'Unterschied Induktion vs. Deduktion?',options:['Induktion: Allg.→Einzel; Deduktion: Einzel→Allg.','Induktion: Einzel→Allg.; Deduktion: Allg.→Einzel','Induktion sicher, Deduktion unsicher','Beide dasselbe'],correct:1,explanation:'Induktion: Einzelfall→Allgemeines (unsicher!). Deduktion: Allgemeines→Einzelfall (gültig).'},
+{type:'tf',q:'„Irgendwo im Universum gibt es Geister" ist nach Popper wissenschaftlich.',correct:false,explanation:'Nicht falsifizierbar → nicht wissenschaftlich.'},
+{type:'mc',q:'Welches Beispiel zeigt die kognitive Wende?',options:['Freud verdrängt Phrenologie','Behaviorismus durch kognitive Ansätze abgelöst','Wundt gründet Labor','Gestaltpsychologie entsteht'],correct:1,explanation:'Behaviorismus → Chomsky, Tolman → Kognitive Wende.'},
+{type:'mc',q:'Was besagt das Duhem-Quine-Problem?',options:['Theorien nie falsifizierbar','Hypothesen nie isoliert getestet','Paradigmen inkommensurabel','Induktion ungültig'],correct:1,explanation:'Hypothesen + Hilfsannahmen: Bei Widerlegung unklar welcher Teil falsch.'},
+{type:'mc',q:'Was ist der „harte Kern" bei Lakatos?',options:['Alle empirischen Befunde','Unveränderbare Grundannahmen','Statistische Methoden','Experimentelle Geräte'],correct:1,explanation:'Harter Kern (unveränderbar) + Schutzgürtel (anpassbar).'},
+{type:'tf',q:'Laut Kuhn verläuft wissenschaftlicher Fortschritt kumulativ und linear.',correct:false,explanation:'Kuhn: Revolutionär, nicht linear.'},
+{type:'mc',q:'Was bedeutet „Theorie-Beladenheit der Beobachtung"?',options:['Theorien belasten Forschung','Keine theoriefreie Beobachtung','Beobachtungen immer fehlerhaft','Theorien durch Beobachtungen belastet'],correct:1,explanation:'Experiment und Theorie sind wechselseitig bedingt.'},
+{type:'mc',q:'Phase NACH Normalwissenschaft bei Kuhn?',options:['Vorparadigmatisch','Anomalien und Krise','Revolution','Paradigmenbildung'],correct:1,explanation:'Normalwissenschaft → Anomalien/Krise → Revolution.'},
+{type:'tf',q:'Asymmetrie-Argument: Ein Gegenbeispiel falsifiziert, aber Verifikation ist unmöglich.',correct:true,explanation:'Genau. Nie bewiesen, aber ein schwarzer Schwan reicht.'},
+{type:'mc',q:'Wann wird Forschungsprogramm nach Lakatos abgelöst?',options:['Bei einer Anomalie','Kern widerlegt','Programm degenerativ','Popper falsifiziert es'],correct:2,explanation:'Wenn degenerativ: keine neuen Vorhersagen, nur Ad-hoc.'},
+{type:'mc',q:'Welche Aussage ist nach Popper NICHT wissenschaftlich?',options:['Koffein verkürzt RT um 10ms','Licht durch Gravitation abgelenkt','Unterbewusstes beeinflusst alles','Erde älter als 4 Mrd Jahre'],correct:2,explanation:'Nicht falsifizierbar: jeder Gegenbeleg wird absorbiert.'},
+{type:'tf',q:'Der Wiener Kreis: Nur empirisch überprüfbare Aussagen sind wissenschaftlich.',correct:true,explanation:'Logischer Empirismus.'},
+{type:'mc',q:'Was ist eine Anomalie bei Kuhn?',options:['Statistischer Fehler','Befund den Paradigma nicht erklären kann','Neue Theorie','Methodenfehler'],correct:1,explanation:'Anomalien → Krise → Paradigmenwechsel.'},
+{type:'mc',q:'Statement View vs. Non-Statement View?',options:['Statement=Modelle; Non-St.=Sätze','Statement=Sätze; Non-St.=Modelle','Identisch','Statement moderner'],correct:1,explanation:'Statement: Sätze. Non-Statement: Modelle, T=(K,I).'},
+{type:'mc',q:'T=(K,I) — was bedeutet das?',options:['Korrelation+Induktion','Kern+intendierte Anwendungen','Konstrukt+Interpretation','Koeffizient+Intervall'],correct:1,explanation:'K=math.Kern, I=intendierte Anwendungen.'},
+{type:'mc',q:'Welche Position: Erkenntnis durch Sinneserfahrung?',options:['Rationalismus','Empirismus','Idealismus','Skeptizismus'],correct:1,explanation:'Empirismus (Locke, Hume, Wiener Kreis).'},
+{type:'mc',q:'Was ist Overfitting bei Theorien?',options:['Zu einfach','Passt perfekt, versagt bei neuen Daten','Nicht geprüft','Widersprüchlich'],correct:1,explanation:'Zu viele Parameter → keine Generalisierung.'},
+{type:'mc',q:'Was fordert Ockhams Rasiermesser?',options:['Empirisch prüfbar','Einfachste Erklärung','Falsifizierbar','Operationalisiert'],correct:1,explanation:'Sparsamkeitsprinzip: wenigste Annahmen.'},
+{type:'tf',q:'Im Non-Statement View können Theorien sich weiterentwickeln ohne aufgegeben zu werden.',correct:true,explanation:'Kern bleibt, I ändert sich.'},
+{type:'mc',q:'Kognitive Wende = welcher Paradigmenwechsel?',options:['Psychoanalyse→Behaviorismus','Behaviorismus→Kognitivismus','Gestalt→Neurowiss.','Phrenologie→Experiment'],correct:1,explanation:'Behaviorismus → Kognitive Ansätze (~1960).'},
+{type:'mc',q:'Was zeigt die Lachs-fMRI-Studie?',options:['fMRI zuverlässig','Ohne Korrektur: Aktivierung bei totem Lachs','Lachse erkennen Emotionen','Behaviorismus widerlegt'],correct:1,explanation:'Kritik an unreflektierter Neuroimaging-Statistik.'},
+{type:'mc',q:'Drei Genauigkeitsstufen von Begriffen?',options:['Reliabilität/Validität/Objektivität','Nominal/ordinal/metrisch','Klassifikatorisch/komparativ/quantitativ','Induktiv/deduktiv/abduktiv'],correct:2,explanation:'Je quantitativer, desto präziser.'},
+],
+logik:[
+{type:'mc',q:'Was ist Modus Ponens?',options:['A→B, ¬B ∴ ¬A','A→B, A ∴ B','A→B, B ∴ A','A→B, ¬A ∴ ¬B'],correct:1,explanation:'Modus Ponens: A→B und A → B.'},
+{type:'mc',q:'Was ist Modus Tollens?',options:['A→B, A ∴ B','A→B, B ∴ A','A→B, ¬B ∴ ¬A','A→B, ¬A ∴ ¬B'],correct:2,explanation:'Modus Tollens: A→B und ¬B → ¬A. Basis der Falsifikation!'},
+{type:'mc',q:'Welcher Schluss ist ein Fehlschluss?',options:['Modus Ponens','Modus Tollens','A→B, B → A (Bejahung d. Konsequens)','De Morgan'],correct:2,explanation:'Bejahung der Konsequens: Aus B folgt nicht A.'},
+{type:'tf',q:'A→B ist nur falsch wenn A wahr und B falsch.',correct:true,explanation:'Definition des Konditionals.'},
+{type:'mc',q:'Was bedeutet ¬(∀x: P(x))?',options:['Für alle x gilt nicht P','Es gibt ein x mit ¬P','Kein x mit P','P gilt für kein x'],correct:1,explanation:'¬∀x:P(x) ≡ ∃x:¬P(x). Basis der Falsifikation!'},
+{type:'mc',q:'De Morgans erstes Gesetz?',options:['¬(A∧B)≡¬A∧¬B','¬(A∧B)≡¬A∨¬B','¬(A∨B)≡¬A∨¬B','¬(A∧B)≡A∨B'],correct:1,explanation:'¬(A∧B) ≡ ¬A∨¬B.'},
+{type:'mc',q:'Welcher Junktor = „genau dann wenn"?',options:['→','∧','↔','∨'],correct:2,explanation:'Bikonditional: gleicher Wahrheitswert.'},
+{type:'tf',q:'Verneinung des Antezedens (A→B, ¬A ∴ ¬B) ist gültig.',correct:false,explanation:'Fehlschluss! Kein Regen → Straße kann trotzdem nass sein.'},
+{type:'mc',q:'Depressiv→niedrige Serotonin. Niedrige Serotonin beobachtet. Was folgt?',options:['Person depressiv (Ponens)','Nicht depressiv (Tollens)','Nichts — Bej. d. Konsequens','Depressiv (Tollens)'],correct:2,explanation:'Bejahung der Konsequens = Fehlschluss.'},
+{type:'mc',q:'Welche Schlussregel = Falsifikation?',options:['Modus Ponens','Modus Tollens','Bej. d. Konsequens','Disj. Syllogismus'],correct:1,explanation:'Tollens: T→E, ¬E → ¬T.'},
+{type:'tf',q:'A→B ist bei falschem A immer wahr.',correct:true,explanation:'Ex falso quodlibet.'},
+{type:'mc',q:'Was ist eine Tautologie?',options:['Immer falsch','Immer wahr','Manchmal wahr','Widersprüchlich'],correct:1,explanation:'Unter allen Belegungen wahr.'},
+{type:'mc',q:'Kontraposition von A→B?',options:['B→A','¬A→¬B','¬B→¬A','A→¬B'],correct:2,explanation:'(A→B) ↔ (¬B→¬A).'},
+{type:'mc',q:'Was bedeutet ∃x: P(x)?',options:['Für alle x gilt P','Mind. ein x mit P','Kein x mit P','Genau ein x'],correct:1,explanation:'Existenzquantor: mindestens ein x.'},
+{type:'tf',q:'¬(A∨B) ≡ ¬A∧¬B.',correct:true,explanation:'De Morgans zweites Gesetz.'},
+{type:'mc',q:'T→E und E tritt ein — Folgerung?',options:['T bewiesen','T wahrscheinlicher (nicht bewiesen)','T definitiv wahr','T falsifiziert'],correct:1,explanation:'Bej. d. Konsequens = Fehlschluss. T nur wahrscheinlicher.'},
+{type:'tf',q:'∀ kann durch ein einziges Gegenbeispiel widerlegt werden.',correct:true,explanation:'¬(∀x:P(x)) ≡ ∃x:¬P(x).'},
+{type:'mc',q:'Fehlschluss A→B, ¬A ∴ ¬B heißt?',options:['Bej. d. Konsequens','Verneinung d. Antezedens','Modus Tollens','Disj. Syllogismus'],correct:1,explanation:'Verneinung des Antezedens.'},
+{type:'mc',q:'Welcher Operator macht (A∧B) ? (A→B) zur Tautologie?',options:['∧','∨','→','↔'],correct:2,explanation:'(A∧B)→(A→B) ist immer wahr.'},
+{type:'mc',q:'Kontraposition: „Neurotisch→Angst"?',options:['Angst→neurotisch','Nicht neurotisch→keine Angst','Keine Angst→nicht neurotisch','Neurotisch→keine Angst'],correct:2,explanation:'¬B→¬A.'},
+{type:'mc',q:'Was ist eine injektive Abbildung?',options:['Jedes Bild getroffen','Versch. Urbilder→versch. Bilder','Umkehrbar','Alles auf dasselbe'],correct:1,explanation:'Injektiv: verschiedene Urbilder → verschiedene Bilder.'},
+{type:'mc',q:'Was kennzeichnet bijektive Abbildung?',options:['Nur injektiv','Nur surjektiv','Injektiv + surjektiv = umkehrbar','Alles auf 0'],correct:2,explanation:'Bijektiv = umkehrbar.'},
+{type:'mc',q:'n-stellige Relation?',options:['Abb. von n Mengen','Teilmenge des kart. Produkts','Funktion mit n Param.','Vektor mit n Einträgen'],correct:1,explanation:'R ⊆ A₁ × A₂ × … × Aₙ.'},
+{type:'tf',q:'Surjektive Abb. trifft jedes Element der Zielmenge.',correct:true,explanation:'Definition Surjektivität.'},
+],
+messung:[
+{type:'mc',q:'Was ist ein Homomorphismus in der Messtheorie?',options:['Zufällige Zuordnung','Strukturerhaltende Abbildung','Bijektive Funktion','Statistischer Test'],correct:1,explanation:'Messen = strukturerhaltende Abbildung.'},
+{type:'mc',q:'Welches Skalenniveau: nur = / ≠?',options:['Ordinal','Intervall','Nominal','Verhältnis'],correct:2,explanation:'Nominalskala: nur Gleichheit/Verschiedenheit.'},
+{type:'mc',q:'Erlaubte Transformation bei Intervallskala?',options:['Bijektive','Monotone','y=ax+b','y=ax'],correct:2,explanation:'Intervall: lineare Transformation y=ax+b.'},
+{type:'tf',q:'Auf Ordinalskala sind „doppelt so viel"-Aussagen zulässig.',correct:false,explanation:'Nur bei Verhältnisskala!'},
+{type:'mc',q:'Was bestimmt der Eindeutigkeitssatz?',options:['Ob Homomorphismus existiert','Wie viele es gibt → Skalenniveau','Signifikanz','Messgenauigkeit'],correct:1,explanation:'Wie viele Homomorphismen → Skalenniveau.'},
+{type:'mc',q:'Welche Skala hat echten Nullpunkt?',options:['Nominal','Ordinal','Intervall','Verhältnis'],correct:3,explanation:'Verhältnisskala: absoluter Nullpunkt.'},
+{type:'mc',q:'Beispiel für Intervallskala?',options:['Reaktionszeit','Schulnoten','°C','Anzahl'],correct:2,explanation:'°C: Abstände gleich, aber 0°C ≠ „Nichts".'},
+{type:'tf',q:'Likert-Skalen sind streng genommen ordinalskaliert.',correct:true,explanation:'Formal ordinal. Mittelwerte nur pragmatisch OK.'},
+{type:'mc',q:'Auf Nominalskala NICHT erlaubt?',options:['Modus','Chi²','Mittelwert','Häufigkeiten'],correct:2,explanation:'Mittelwert sinnlos (mittleres Geschlecht?).'},
+{type:'mc',q:'Was klärt der Repräsentationssatz?',options:['Wie viele Homomorphismen','Ob Homomorphismus existiert','Erlaubte Statistiken','Messfehlerverteilung'],correct:1,explanation:'Unter welchen Axiomen existiert ein Homomorphismus.'},
+{type:'mc',q:'Median = höchstes Lagemaß bei?',options:['Nominal','Ordinal','Intervall','Verhältnis'],correct:1,explanation:'Ordinal: + Median neben Modus.'},
+{type:'tf',q:'Absolutskala: nur Identitätstransformation.',correct:true,explanation:'Zahlen haben feste Bedeutung.'},
+{type:'mc',q:'„Doppelt so viel Schmerz" auf 1-10 Skala problematisch weil?',options:['Nicht messbar','Ordinal — Verhältnisse unzulässig','Zu wenig Stufen','Subjektiv'],correct:1,explanation:'Ordinal → keine Verhältnisaussagen.'},
+{type:'mc',q:'Was sind permissible statistics?',options:['Ethisch genehmigt','Invariant unter erlaubten Transformationen','Signifikante Ergebnisse','Parametrisch'],correct:1,explanation:'Nur invariante Aussagen sind sinnvoll.'},
+{type:'mc',q:'Transformation bei Verhältnisskala?',options:['y=ax+b','y=ax','Monoton','Identität'],correct:1,explanation:'y=ax, Nullpunkt bleibt erhalten.'},
+{type:'tf',q:'IQ ist verhältnisskaliert.',correct:false,explanation:'Intervallskaliert. 0 IQ ≠ keine Intelligenz.'},
+{type:'mc',q:'Höchstes Skalenniveau?',options:['Verhältnis','Intervall','Absolut','Ordinal'],correct:2,explanation:'Absolutskala: nur Identität, alles erlaubt.'},
+{type:'mc',q:'Likert-Mittelwerte OK wenn?',options:['Immer','Nie','Symmetrisch, 5+ Items, ~gleiche Abstände','Nur bei n>100'],correct:2,explanation:'Pragmatisch vertretbar unter diesen Bedingungen.'},
+{type:'mc',q:'a≿b ⇔ φ(a)≥φ(b) bedeutet?',options:['Surjektiv','Homomorphismus erhält Ordnung in beiden Richtungen','Intervallskala','Lineare Transformation'],correct:1,explanation:'Äquivalenz (⇔) = beide Richtungen!'},
+{type:'mc',q:'Schwache Ordnung braucht?',options:['Nur Transitivität','Nur Konnexität','Transitivität UND Konnexität','+ Antisymmetrie'],correct:2,explanation:'Trans. + Konnex. Antisymmetrie → totale Ordnung.'},
+{type:'mc',q:'Konnexität in Matrix prüfen?',options:['Diagonale=1','Für jedes Paar: (i,j) ODER (j,i) = 1','Zeilensummen gleich','Matrix symmetrisch'],correct:1,explanation:'Mind. eine 1 in (i,j) oder (j,i).'},
+{type:'mc',q:'Was ist eine zyklische Triade?',options:['Lernzyklus','A≥B, B≥C, C≥A — verletzt Transitivität','Testdesign','Latin Square'],correct:1,explanation:'Kreis → Transitivität verletzt.'},
+{type:'mc',q:'Zeilensummen-Homomorphismus liefert?',options:['Intervallwerte','Rangzahlen für ordinale Messung','Mittelwerte','Standardabweichungen'],correct:1,explanation:'Höhere Zeilensumme = höherer Rang.'},
+{type:'tf',q:'Antisymmetrie: x≥y ∧ y≥x → x=y.',correct:true,explanation:'Zusammen mit Trans.+Konnex. → totale Ordnung.'},
+{type:'mc',q:'Eindeutigkeitssatz bestimmt?',options:['Ob Hom. existiert','Wie viele Hom. existieren','Normalverteilung','Stichprobengröße'],correct:1,explanation:'Wie viele → Skalenniveau.'},
+],
+psychophysik:[
+{type:'mc',q:'Was besagt Webers Gesetz?',options:['Logarithmisch','JND proportional zur Reizstärke','Potenzfunktion','Schwelle gleich'],correct:1,explanation:'ΔI/I = k (konstant).'},
+{type:'mc',q:'Fechners Gesetz?',options:['E=a·I^n','E=c·log(I/I₀)','ΔI/I=k','E=I·k'],correct:1,explanation:'Logarithmisch: E = c·log(I/I₀).'},
+{type:'mc',q:'Stevens n<1 bedeutet?',options:['Expansion','Kompression','Linear','Kein Zusammenhang'],correct:1,explanation:'n<1: Empfindung langsamer als Reiz = Kompression.'},
+{type:'mc',q:'Weber k=1/50, 10kg. JND?',options:['50g','100g','200g','500g'],correct:2,explanation:'ΔI = (1/50)·10000g = 200g.'},
+{type:'tf',q:'SDT: Es gibt eine feste Wahrnehmungsschwelle.',correct:false,explanation:'SDT lehnt feste Schwellen ab! d\' + β.'},
+{type:'mc',q:'d\' misst?',options:['Antwortneigung','Sensitivität','Reaktionszeit','Absolute Schwelle'],correct:1,explanation:'d\' = z(Hit) − z(FA). Sensitivität.'},
+{type:'mc',q:'Stevens n>1?',options:['Kompression','Expansion','Logarithmisch','Kein Zusammenhang'],correct:1,explanation:'n>1: Empfindung schneller als Reiz.'},
+{type:'mc',q:'Zufällige Reihenfolge + S-Kurve = welche Methode?',options:['Grenzen','Konstante Reize','Herstellung','Adaptiv'],correct:1,explanation:'Konstante Reize: genaueste Methode.'},
+{type:'tf',q:'Fechner baute auf Weber auf (JNDs = gleiche Empfindungsschritte).',correct:true,explanation:'Integration des Weber-Gesetzes → logarithmisch.'},
+{type:'mc',q:'Problem der Grenzmethode?',options:['Falsch-Alarm','Erwartungsfehler','Ceiling','Basisraten'],correct:1,explanation:'VP antizipiert den Umschlagpunkt.'},
+{type:'mc',q:'β (Beta) in SDT?',options:['Sensitivität','Antwortkriterium','FA-Rate','Weber-Bruch'],correct:1,explanation:'β = Antwortneigung (liberal vs. konservativ).'},
+{type:'mc',q:'Helligkeit folgt?',options:['Stevens n>1','Stevens n<1','Linear','Umgekehrt'],correct:1,explanation:'n<1 (ca. 0.33) = Kompression.'},
+{type:'tf',q:'Herstellungsmethode ist die genaueste.',correct:false,explanation:'Konstante Reize ist am genauesten.'},
+{type:'mc',q:'Weber k=1/333 (Tonhöhe) vs k=1/50 (Gewicht)?',options:['Gewicht feiner','Tonhöhe viel feiner','Gleich','Kein Weber-Bruch'],correct:1,explanation:'Kleiner k → feiner. 1/333 < 1/50.'},
+{type:'mc',q:'JND ist?',options:['Absolute Schwelle','Kleinster wahrnehmbarer Unterschied','Maximale Reizstärke','Weber-Bruch'],correct:1,explanation:'Just Noticeable Difference.'},
+{type:'mc',q:'p(x,s)=p(λx,λs) beschreibt?',options:['Fechner','Stevens','Weber (multiplikative Invarianz)','SDT'],correct:2,explanation:'Weber: Verhältnisse bleiben bei Skalierung gleich.'},
+{type:'tf',q:'Δπ(λs)=λ·Δπ(s) folgt aus Weber.',correct:true,explanation:'JND skaliert proportional mit Standardreiz.'},
+{type:'tf',q:'p(x+a,s+a)=p(x,s) gilt bei Weber.',correct:false,explanation:'Weber = multiplikativ, NICHT additiv.'},
+{type:'mc',q:'PSE ist?',options:['Max. Empfindung','Vergleichsreiz bei p=0.5','Standardreiz','Absolute Schwelle'],correct:1,explanation:'PSE = x₀.₅ wo p=50%.'},
+{type:'mc',q:'π-Unterschied (jnd) berechnet sich?',options:['xπ + x₀.₅','xπ · x₀.₅','xπ − x₀.₅','x₀.₅ / xπ'],correct:2,explanation:'Δπ = xπ − x₀.₅.'},
+{type:'mc',q:'Hauptnachteil Grenzmethode?',options:['Zu genau','Erwartungs-/Gewöhnungsfehler','Zu viele VPn','Nur Lautstärke'],correct:1,explanation:'Systematische Reizvorgabe → vorhersagbar.'},
+{type:'mc',q:'Herstellungsmethode: Hauptvorteil?',options:['Genaueste','Schnellste','Keine Verzerrung','Keine Kalibrierung'],correct:1,explanation:'Schnell, aber systematisch verzerrt.'},
+{type:'tf',q:'λ·p(x,s) = p(λx,λs) ist korrekte Weber-Formel.',correct:false,explanation:'p wird NICHT mit λ skaliert. Korrekt: p(x,s)=p(λx,λs).'},
+{type:'mc',q:'Psychometrische Funktion bei konst. Reize?',options:['Gerade','U-Kurve','S-Kurve','Glockenkurve'],correct:2,explanation:'S-Kurve/Ogive. Schwelle bei 50%.'},
+],
+wahrscheinlichkeit:[
+{type:'mc',q:'P(Ω)=1 heißt?',options:['Nichtnegativität','Normiertheit','Additivität','Unabhängigkeit'],correct:1,explanation:'Kolmogorov-Axiom 2.'},
+{type:'mc',q:'P(A|B) definiert als?',options:['P(A)·P(B)','P(A∩B)/P(B)','P(A)+P(B)','P(B|A)/P(A)'],correct:1,explanation:'Bedingte Wahrscheinlichkeit.'},
+{type:'mc',q:'Bayes: 90% sensitiv, 5% Grundrate, 10% FA. P(krank|+)?',options:['90%','45%','32%','5%'],correct:2,explanation:'≈32%. Basisraten-Vernachlässigung!'},
+{type:'tf',q:'A⊥B ⟹ P(A∩B)=P(A)·P(B).',correct:true,explanation:'Definition Unabhängigkeit.'},
+{type:'mc',q:'Zentraler Grenzwertsatz?',options:['Alle normalverteilt','Summe vieler unabh. Einflüsse → normalverteilt','Mittelwert=0','Große N repräsentativ'],correct:1,explanation:'ZGS: egal welche Ausgangsverteilung.'},
+{type:'mc',q:'68-95-99.7: μ±2σ?',options:['68%','95%','99.7%','50%'],correct:1,explanation:'~95% in μ±2σ.'},
+{type:'tf',q:'P(A) kann negativ sein.',correct:false,explanation:'Axiom 1: P(A) ≥ 0.'},
+{type:'mc',q:'Basisraten-Vernachlässigung?',options:['Testgenauigkeit ignoriert','A-priori-Wahrscheinlichkeit ignoriert','Stichprobengröße vergessen','Korrelation≠Kausalität'],correct:1,explanation:'Prior wird ignoriert bei Testbewertung.'},
+{type:'mc',q:'Var(X)?',options:['E(X)','E[(X−μ)²]','√E[(X−μ)²]','P(X>μ)'],correct:1,explanation:'Erwarteter quadratischer Abstand vom Mittelwert.'},
+{type:'mc',q:'A∩B=∅ → was gilt?',options:['P(A∪B)=P(A)·P(B)','P(A∪B)=P(A)+P(B)','P(A|B)=P(A)','P(A∩B)=P(A)+P(B)'],correct:1,explanation:'Kolmogorov-Axiom 3 (Additivität).'},
+{type:'tf',q:'Normalverteilung symmetrisch um μ.',correct:true,explanation:'Mittelwert=Median=Modus.'},
+{type:'mc',q:'E(X) diskret?',options:['Häufigster Wert','Σxᵢ·P(xᵢ)','Median','Varianz'],correct:1,explanation:'Gewichteter Mittelwert.'},
+{type:'mc',q:'Bayes-Theorem?',options:['P(A∩B)/P(B)','P(B|A)·P(A)/P(B)','P(A)+P(B)','P(A)·P(B)'],correct:1,explanation:'Umkehrung bedingter Wahrscheinlichkeiten.'},
+{type:'tf',q:'Unabhängig = disjunkt.',correct:false,explanation:'Disjunkt → maximal abhängig!'},
+{type:'mc',q:'99.7% in welchem Bereich?',options:['μ±1σ','μ±2σ','μ±3σ','μ±4σ'],correct:2,explanation:'68-95-99.7-Regel.'},
+{type:'mc',q:'P(Ω)=1 bedeutet?',options:['Nichts sicher','Irgendein Ergebnis tritt ein','Alle gleich wahrscheinlich','Varianz=1'],correct:1,explanation:'Sicheres Ereignis.'},
+{type:'mc',q:'Warum ist 32% bei Krankheitstest überraschend niedrig?',options:['Test schlecht','Grundrate nur 5%','N zu klein','p zu hoch'],correct:1,explanation:'Viele Gesunde falsch-positiv wegen niedriger Grundrate.'},
+{type:'tf',q:'E(X) muss ein möglicher Wert von X sein.',correct:false,explanation:'Würfel: E(X)=3.5, aber 3.5 unmöglich.'},
+],
+versuchsplanung:[
+{type:'mc',q:'Was ist die UV?',options:['Gemessen','Manipuliert','Zufällig','Konfundierung'],correct:1,explanation:'UV = unabhängige Variable: manipuliert.'},
+{type:'mc',q:'Was ist Konfundierung?',options:['SV kovariiert mit UV','Statistischer Fehler','Fehlende KG','Erwartungseffekt'],correct:0,explanation:'SV + UV kovariieren → interne Validität sinkt.'},
+{type:'mc',q:'Hauptvorteil Within-Subjects?',options:['Keine Reihenfolgeeffekte','Mehr VPn','Ind. Unterschiede kontrolliert','Kein Counterbalancing'],correct:2,explanation:'Jede VP alle Bedingungen → Unterschiede kontrolliert.'},
+{type:'mc',q:'Hauptnachteil Within-Subjects?',options:['Mehr VPn','Ind. Unterschiede','Reihenfolgeeffekte','Keine Randomisierung'],correct:2,explanation:'Übung, Ermüdung, Transfer.'},
+{type:'tf',q:'Quasi-Experiment: UV aktiv manipuliert.',correct:false,explanation:'Nein! UV = bestehende Eigenschaft.'},
+{type:'mc',q:'Welche Validität: „Effekt auf UV zurückzuführen?"',options:['Extern','Konstrukt','Intern','Statistisch'],correct:2,explanation:'Interne Validität.'},
+{type:'mc',q:'Counterbalancing?',options:['Zufällige Zuweisung','Systematische Variation der Reihenfolge','Stichprobenbalance','SV-Elimination'],correct:1,explanation:'Latin Square etc.'},
+{type:'mc',q:'Regression zur Mitte?',options:['Extreme nähern sich Mittelwert','Alle gleich','Varianz kleiner','Mittelwerte gleich'],correct:0,explanation:'Statistisches Artefakt.'},
+{type:'mc',q:'Demand Characteristics?',options:['Stichprobenanforderungen','VP erkennt Hypothese','Stat. Voraussetzungen','Ethik'],correct:1,explanation:'Bedrohung interner Validität.'},
+{type:'tf',q:'Randomisierung kontrolliert nur bekannte SVs.',correct:false,explanation:'ALLE SVs, auch unbekannte!'},
+{type:'mc',q:'Interaktion im 2×2-Design?',options:['UV kein Effekt','Effekt einer UV hängt von anderer ab','Gleicher Effekt','Kein Unterschied'],correct:1,explanation:'Linien divergieren/kreuzen.'},
+{type:'mc',q:'Warum „Reagieren Männer schneller?" kein Experiment?',options:['Zu wenig VPn','Geschlecht nicht manipulierbar','Keine Hypothese','RT nicht messbar'],correct:1,explanation:'Quasi-Experiment.'},
+{type:'mc',q:'Externe Validität?',options:['Effekt kausal','Generalisierbar','Konstrukt gemessen','Test korrekt'],correct:1,explanation:'Generalisierbarkeit.'},
+{type:'mc',q:'Konstanthalten?',options:['Randomisierung','Counterbalancing','SV auf festem Wert','Matching'],correct:2,explanation:'Fixieren. Nachteil: eingeschränkte Generalisierbarkeit.'},
+{type:'mc',q:'Einfach- vs. Doppelblind?',options:['Einfach: VP blind. Doppelt: VP+VL blind','Einfach: VL. Doppelt: VP','Einfach: 1 UV. Doppelt: 2','Kein Unterschied'],correct:0,explanation:'Doppelblind: auch VL weiß nicht.'},
+{type:'tf',q:'Matching = Paare mit ähnlichen Merkmalen.',correct:true,explanation:'Kontrolliert bekannte SVs.'},
+{type:'mc',q:'Parallele Linien im Diagramm?',options:['Interaktion','KEINE Interaktion — additiv','Konfundierung','Kein Effekt'],correct:1,explanation:'Parallel = kein Interaktion.'},
+{type:'mc',q:'Größte Bedrohung int. Validität?',options:['Kleine N','Konfundierung UV+SV','Geringe ext. Val.','Niedrige Reliabilität'],correct:1,explanation:'Konfundierung = direkte Bedrohung.'},
+{type:'mc',q:'Konstruktvalidität?',options:['Effekt kausal','Operationalisierung misst Konstrukt','Generalisierbar','Test reliabel'],correct:1,explanation:'Misst der Test was er soll?'},
+{type:'mc',q:'Vorteil Randomisierung ggü. Parallelisierung?',options:['Kleine N','Auch UNBEKANNTE SVs','Präziser bei bekannten','Weniger VPn'],correct:1,explanation:'Randomisierung kontrolliert ALLES.'},
+{type:'mc',q:'Ceteris paribus?',options:['UV mind. 2 Stufen','Nur UV unterscheidet sich','Alle gleich alt','AV normalverteilt'],correct:1,explanation:'Unter sonst gleichen Bedingungen.'},
+{type:'mc',q:'Max-Kon-Min?',options:['Max N, Kon Reliab., Min Valid.','Max Primärvarianz, Kon Sekundärvar., Min Fehlervarianz','Max Effekt, Kon p, Min α','Max Generalis., Kon Ethik, Min Aufwand'],correct:1,explanation:'Kerlinger.'},
+{type:'mc',q:'Hauptnachteil Messwiederholung?',options:['Mehr VPn','Keine Kontrolle','Zeitgebundene SVs','Keine Statistik'],correct:2,explanation:'Übung, Ermüdung, Reihenfolge.'},
+{type:'mc',q:'Doppelblindung schützt zusätzlich gegen?',options:['Hawthorne','Rosenthal-Effekt','Regression z. Mitte','Selektionsbias'],correct:1,explanation:'VL-Erwartung.'},
+{type:'mc',q:'Pygmalion-Experiment zeigt?',options:['IQ unreliabel','Lehrererwartung beeinflusst Leistung','Randomis.>Parallelis.','Doppelblind geht nicht'],correct:1,explanation:'Self-fulfilling prophecy.'},
+{type:'mc',q:'Milgram: ethisches Problem?',options:['Kleine N','Extremer Stress, kein Abbruchrecht','Nur Männer','Keine KG'],correct:1,explanation:'Kein informed consent, Stress.'},
+{type:'mc',q:'BDI-Studie: Warum reicht Haupteffekt nicht?',options:['BDI nicht valide','Spontanremission — braucht INTERAKTION','N zu klein','p nicht signifikant'],correct:1,explanation:'EG muss sich MEHR verbessern als KG.'},
+{type:'mc',q:'Ordinale vs. disordinale Interaktion?',options:['Ordinal: kreuzen. Disordinal: parallel','Ordinal: divergieren. Disordinal: kreuzen','Ordinal: kein Effekt','Kein Unterschied'],correct:1,explanation:'Ordinal: gleiche Richtung. Disordinal: Linien kreuzen.'},
+{type:'mc',q:'Welches Prinzip: jederzeit abbrechen ohne Nachteile?',options:['Debriefing','Schadensvermeidung','Informierte Einwilligung','Anonymisierung'],correct:2,explanation:'Freiwillig, jederzeit widerrufbar.'},
+{type:'tf',q:'Dreifachblindung: VP+VL+Auswerter blind.',correct:true,explanation:'Verhindert auch Auswertungsbias.'},
+],
+statistik:[
+{type:'mc',q:'Was ist der p-Wert?',options:['P(H₀ wahr)','P(Daten so extrem|H₀)','P(H₁ stimmt)','Effektstärke'],correct:1,explanation:'p = P(Daten|H₀), NICHT P(H₀|Daten).'},
+{type:'tf',q:'p=.03 = „H₀ ist 3% wahrscheinlich."',correct:false,explanation:'p ≠ P(H₀|Daten).'},
+{type:'mc',q:'α-Fehler (Typ I)?',options:['H₀ fälschlich beibehalten','H₀ fälschlich abgelehnt','H₁ abgelehnt','Fehlende Power'],correct:1,explanation:'Fehlalarm.'},
+{type:'mc',q:'β-Fehler (Typ II)?',options:['H₀ fälschlich abgelehnt','H₀ beibehalten obwohl falsch','Zu viele VPn','Multiple Vergleiche'],correct:1,explanation:'Echten Effekt übersehen.'},
+{type:'mc',q:'Cohen\'s d misst?',options:['Signifikanz','Effektstärke','Power','p-Wert'],correct:1,explanation:'Standardisierte Mittelwertsdifferenz.'},
+{type:'tf',q:'Signifikant = immer praktisch bedeutsam.',correct:false,explanation:'d=0.05 kann signifikant aber irrelevant sein.'},
+{type:'mc',q:'Power = ?',options:['P(H₀ abl.|H₀ wahr)','1−β = P(H₀ abl.|H₀ falsch)','P(H₀ beib.|H₀ wahr)','p-Wert'],correct:1,explanation:'Power ≥ .80.'},
+{type:'mc',q:'Power hängt ab von?',options:['Nur α','Effektstärke, n, α, Streuung','Nur n','Nur p'],correct:1,explanation:'Alle vier Faktoren.'},
+{type:'mc',q:'BF₁₀=10 bedeutet?',options:['H₀ 10x wahrscheinlicher','Daten 10x wahrsch. unter H₁','p=.10','Effekt 10x'],correct:1,explanation:'Starke Evidenz für H₁.'},
+{type:'mc',q:'BF₁₀=0.1 bedeutet?',options:['Stark für H₁','Stark für H₀','Keine Evidenz','Unmöglich'],correct:1,explanation:'H₀ 10x stärker gestützt.'},
+{type:'tf',q:'p=.06 → kein Effekt.',correct:false,explanation:'.05 ist willkürlich. Könnte fehlende Power sein.'},
+{type:'mc',q:'Warum Bonferroni?',options:['β senken','α-Inflation bei multiplen Vergleichen','Power erhöhen','p berechnen'],correct:1,explanation:'20 Tests → ~1 Falsch-Positiv. α/k.'},
+{type:'mc',q:'95%-KI bedeutet?',options:['Wert zu 95% drin','95% der KIs enthalten wahren Wert','95% der Daten','Effekt 95% real'],correct:1,explanation:'Frequentistische Interpretation.'},
+{type:'mc',q:'NHST steht für?',options:['Null Hypothesis Significance Testing','New Hypothesis Stat. Testing','Normal Hyp. Sampling','Null Hyp. Sampling'],correct:0,explanation:'Null Hypothesis Significance Testing.'},
+{type:'mc',q:'d=0.2 gilt als?',options:['Groß','Mittel','Klein','Kein Effekt'],correct:2,explanation:'Cohen: 0.2 klein, 0.5 mittel, 0.8 groß.'},
+{type:'mc',q:'Vorteil Bayes ggü. NHST?',options:['Kein Prior','Kann H₀ aktiv stützen','Immer signifikant','Einfacher'],correct:1,explanation:'NHST kann H₀ nie stützen.'},
+{type:'tf',q:'Power sollte mind. .80 betragen.',correct:true,explanation:'Max. 20% β-Fehler.'},
+{type:'mc',q:'FDR vs. Bonferroni?',options:['Konservativer','Weniger konservativ — kontrolliert Anteil falscher Entdeckungen','Dasselbe','Veraltet'],correct:1,explanation:'Benjamini-Hochberg: mehr Power.'},
+{type:'mc',q:'Korrekte p-Wert-Aussage?',options:['P(H₀)','P(Irrtum)','Wie extrem Daten unter H₀','Effektstärke'],correct:2,explanation:'P(Daten≥extrem | H₀).'},
+{type:'mc',q:'Höchste Power bei?',options:['Klein n, klein d, α=.01','Groß n, groß d, α=.05','Klein n, groß d, α=.01','Groß n, klein d, α=.01'],correct:1,explanation:'Großes n + d + α maximiert Power.'},
+],
+lernen:[
+{type:'mc',q:'Primacy-Effekt?',options:['Letzte besser','Erste besser','Mitte am besten','Alle gleich'],correct:1,explanation:'Erste Items → oft wiederholt → LZG.'},
+{type:'mc',q:'Recency = welcher Speicher?',options:['LZG','Sensorisch','Arbeitsgedächtnis','Prozedural'],correct:2,explanation:'Letzte Items noch im AG.'},
+{type:'mc',q:'Glanzer&Cunitz 1966: 30s Ablenkung?',options:['Primacy weg','Recency weg','Beides weg','Nichts'],correct:1,explanation:'AG gelöscht → Recency weg. LZG bleibt.'},
+{type:'tf',q:'Serielle Positionskurve = U-Form.',correct:true,explanation:'Primacy + Recency = U.'},
+{type:'mc',q:'Begründer Behaviorismus?',options:['Chomsky','Skinner','Watson','Tolman'],correct:2,explanation:'Watson: S→R.'},
+{type:'mc',q:'Operante Konditionierung?',options:['Reiz-Reiz','Durch Konsequenzen','Durch Einsicht','Durch Beobachtung'],correct:1,explanation:'Skinner: Verstärkung/Bestrafung.'},
+{type:'mc',q:'Befund der kognitiven Wende?',options:['Pawlows Hund','Skinners Tauben','Chomsky: Sprache≠Verstärkung','Wundts Introspektion'],correct:2,explanation:'Chomsky: Kinder bilden neue Sätze.'},
+{type:'mc',q:'Millers „Magical Number Seven"?',options:['7 perfekt','AG-Kapazität 7±2 Chunks','7 Wiederholungen','7 Sinne'],correct:1,explanation:'7±2 Chunks im Arbeitsgedächtnis.'},
+{type:'mc',q:'Paarassoziationslernen?',options:['Zu zweit','Wort-Wort-Paare','Assoziatives Denken','Klass. Konditionierung'],correct:1,explanation:'Paare präsentieren und testen.'},
+{type:'tf',q:'Kognitive Wende ~1960.',correct:true,explanation:'Chomsky, Tolman, Miller.'},
+{type:'mc',q:'Was ist eine Lernkurve?',options:['Vergessensrate','Leistung vs. Übung','Positionskurve','Normalverteilung'],correct:1,explanation:'Leistung als Funktion der Übung.'},
+{type:'mc',q:'P(n)=1−(1−α)^n beschreibt?',options:['Linear','Negativ beschleunigt','Exponentielles Vergessen','S-förmig'],correct:1,explanation:'Schneller Anfang → Plateau.'},
+{type:'mc',q:'Positiv-Liste beim PAL?',options:['Positiv bewertet','Gelernte Paare (raus)','Kontrollgruppe','Korrekte Antworten'],correct:1,explanation:'Gelernt → raus. Negativ: weiter üben.'},
+{type:'tf',q:'Tolman: kognitive Karten ohne direkte Verstärkung.',correct:true,explanation:'Ratten lernten ohne Belohnung.'},
+{type:'mc',q:'Glanzer&Cunitz stützt?',options:['Behaviorismus','Zwei-Speicher-Theorie','Interferenztheorie','Gestalt'],correct:1,explanation:'Experimentelle Dissoziation → AG≠LZG.'},
+{type:'mc',q:'Negativ beschleunigte Lernkurve?',options:['Gleicher Zuwachs','Schnell am Anfang, dann weniger','Kein Anfang, plötzlich','Abnahme'],correct:1,explanation:'Lernzuwachs nimmt ab → Plateau.'},
+{type:'mc',q:'Wer prägte operante Konditionierung?',options:['Watson','Pawlow','Skinner','Bandura'],correct:2,explanation:'B.F. Skinner.'},
+{type:'mc',q:'Warum Mitte am schlechtesten?',options:['Langweiliger','Kein Primacy + kein Recency','Schwieriger','Proaktive Interferenz'],correct:1,explanation:'Zu spät für LZG, zu früh für AG.'},
+{type:'tf',q:'Behaviorismus erklärt Spracherwerb vollständig.',correct:false,explanation:'Chomsky: Kinder bilden nie gehörte Sätze.'},
+{type:'mc',q:'Chunk?',options:['Fehler','Bedeutungsvolle Informationseinheit','Absatz','Gedächtnistechnik'],correct:1,explanation:'FBI = 1 Chunk statt 3 Buchstaben.'},
+{type:'mc',q:'Substitutionsmethode (Rock)?',options:['Falsche→richtige','Nicht-gelernte→neue Paare','Leichte→schwere','VPn ausgetauscht'],correct:1,explanation:'EG: neue Paare. KG: gleiche Paare.'},
+{type:'mc',q:'Rocks All-or-None?',options:['Jedes Item bisschen pro Durchgang','Item in einem Durchgang komplett oder gar nicht','Ohne Wiederholung unmöglich','Alle gleichzeitig'],correct:1,explanation:'Kein gradueller Aufbau.'},
+{type:'mc',q:'Postmans Kritik an Rock?',options:['N zu klein','Substituierte Paare leichter (Item-Selection-Artifact)','Nicht verblindet','Lernkurve nicht signifikant'],correct:1,explanation:'Schwierige raus, leichtere rein.'},
+{type:'mc',q:'Sensorischer Speicher: Dauer?',options:['Unbegrenzt','~20s','~250ms','~5min'],correct:2,explanation:'Sehr kurz, große Kapazität.'},
+{type:'mc',q:'Glanzer&Cunitz Ablenkungsexperiment?',options:['Beides weg','Nur Primacy weg','Nur Recency weg','Nichts'],correct:2,explanation:'Recency weg (AG), Primacy bleibt (LZG).'},
+{type:'tf',q:'Rock folgerte inkrementelles Lernen.',correct:false,explanation:'All-or-None, nicht inkrementell.'},
+{type:'mc',q:'Experimentelle Dissoziation?',options:['Ohne KG','Verschiedene Prozesse unterschiedlich beeinflusst → getrennte Mechanismen','Ethische Verletzung','Stat. Fehler'],correct:1,explanation:'Manipulation trifft A aber nicht B → getrennt.'},
+{type:'mc',q:'KZG-Kapazität nach Miller?',options:['3±1','5±2','7±2','12±3'],correct:2,explanation:'Magische Zahl 7±2.'},
+],
+};
+/* ── SESSION DEFS ── */
+const TOPIC_CARDS={};
+CARDS.forEach(c=>{if(!TOPIC_CARDS[c.topic])TOPIC_CARDS[c.topic]=[];TOPIC_CARDS[c.topic].push(c)});
+const SESSIONS=[
+  {id:0,title:'Grundlagen',subtitle:'Tier A — 70% der Klausur',time:'60 min',phases:[
+    {type:'cards',topic:'Wissenschaftstheorie'},
+    {type:'cards',topic:'Messtheorie'},
+    {type:'cards',topic:'Versuchsplanung'},
+  ]},
+  {id:1,title:'Vertiefung + Quiz',subtitle:'Tier B + Interleaved Quiz',time:'60 min',phases:[
+    {type:'cards',topic:'Logik'},
+    {type:'cards',topic:'Statistik'},
+    {type:'cards',topic:'Psychophysik'},
+    {type:'quiz',topic:'Interleaved Quiz',pool:'all',count:30},
+  ]},
+  {id:2,title:'Feynman + Lücken',subtitle:'Tier C + Aktiver Abruf',time:'60 min',phases:[
+    {type:'cards',topic:'Wahrscheinlichkeit'},
+    {type:'cards',topic:'Lernen'},
+    {type:'feynman',topic:'Feynman-Karten'},
+  ]},
+  {id:3,title:'Speed-Quiz + Endspurt',subtitle:'Alle Themen — Countdown',time:'60 min',phases:[
+    {type:'quiz',topic:'Speed-Quiz',pool:'all',count:80,speed:true},
+    {type:'quiz',topic:'Gap Review',pool:'weak',count:20},
+  ]},
+];
+function getSessionCards(sessIdx){
+  const sess=SESSIONS[sessIdx];
+  let cards=[];
+  sess.phases.filter(p=>p.type==='cards').forEach(p=>{
+    const tc=TOPIC_CARDS[p.topic]||[];
+    cards=cards.concat(tc);
+  });
+  return cards;
+}
+function getSessionQuizPool(phase){
+  if(phase.pool==='weak'){
+    const weakIds=Object.keys(S.triage).filter(id=>S.triage[id]==='red'||S.triage[id]==='yellow');
+    const weakTopics=[...new Set(weakIds.map(id=>{const c=CARDS.find(x=>x.id===id);return c?c.topic:null}).filter(Boolean))];
+    const poolKeys=Object.keys(POOL);
+    let qs=[];
+    poolKeys.forEach(k=>{qs=qs.concat(POOL[k].map(q=>({...q,options:q.options?[...q.options]:undefined,section:k})))});
+    if(weakTopics.length>0){
+      const topicMap={'Wissenschaftstheorie':'wisstheorie','Logik':'logik','Messtheorie':'messung','Psychophysik':'psychophysik','Wahrscheinlichkeit':'wahrscheinlichkeit','Versuchsplanung':'versuchsplanung','Statistik':'statistik','Lernen':'lernen'};
+      const weakKeys=weakTopics.map(t=>topicMap[t]).filter(Boolean);
+      if(weakKeys.length>0)qs=qs.filter(q=>weakKeys.includes(q.section));
+    }
+    shuffle(qs);return qs.slice(0,phase.count||20);
+  }
+  let qs=[];Object.keys(POOL).forEach(k=>{qs=qs.concat(POOL[k].map(q=>({...q,options:q.options?[...q.options]:undefined,section:k})))});
+  shuffle(qs);return qs.slice(0,phase.count||30);
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const SEC_NAMES={wisstheorie:'Wissenschaftstheorie',logik:'Logik',messung:'Messtheorie',psychophysik:'Psychophysik',wahrscheinlichkeit:'Wahrscheinlichkeit',versuchsplanung:'Versuchsplanung',statistik:'Statistik',lernen:'Lernexperimente'};
+
+/* ── Placeholder functions (will be filled) ── */
+function goHome(){S.phase='dashboard';saveState();render()}
+function render(){
+  document.getElementById('dashboard').style.display=S.phase==='dashboard'?'block':'none';
+  document.getElementById('sessionView').style.display=S.phase==='session'&&S.subPhase==='cards'?'block':'none';
+  document.getElementById('quizView').style.display=S.phase==='session'&&S.subPhase==='quiz'?'block':'none';
+  document.getElementById('feynmanView').style.display=S.phase==='session'&&S.subPhase==='feynman'?'block':'none';
+  document.getElementById('topBar').classList.toggle('active',S.phase!=='dashboard');
+  if(S.phase==='dashboard')renderDashboard();
+  updateTopBar();
+}
+function renderDashboard(){
+  const g=document.getElementById('dashGrid');
+  g.innerHTML=SESSIONS.map((s,i)=>{
+    const pct=Math.round(S.sessionProgress[i]||0);
+    const locked=i>0&&S.sessionProgress[i-1]<50&&i!==S.currentSession;
+    return`<div class="sess-card${locked?' locked':pct>=100?' completed':''}" onclick="${locked?'':'startSession('+i+')'}">
+      <div class="sc-num">Session ${i+1}</div><h3>${s.title}</h3><p>${s.subtitle}</p>
+      <div class="sc-meta"><span>${s.time}</span><span>${pct}%</span></div>
+      <div class="sc-bar"><div class="sc-bar-fill" style="width:${pct}%"></div></div></div>`;
+  }).join('');
+  const r=document.getElementById('dashResume');
+  if(S.sessionProgress.some(p=>p>0&&p<100)){r.style.display='block';document.getElementById('dashResumeText').textContent=`Session ${S.currentSession+1} — ${Math.round(S.sessionProgress[S.currentSession]||0)}% abgeschlossen`}
+  else r.style.display='none';
+}
+function updateTopBar(){
+  document.getElementById('tbSession').textContent=`Session ${S.currentSession+1} von 4`;
+  document.getElementById('tbXp').innerHTML=`&#9733; ${S.xp} XP`;
+  document.getElementById('tbStreak').textContent=S.streak>1?`${S.streak}x Streak`:'';
+  const total=S.sessionProgress.reduce((a,b)=>a+b,0)/4;
+  document.getElementById('tbProgress').style.width=total+'%';
+}
+function startSession(i){
+  S.currentSession=i;S.currentCard=0;S.currentQuiz=0;S.currentFeynman=0;S.phase='session';
+  const sess=SESSIONS[i];
+  const firstPhase=sess.phases[0];
+  S.subPhase=firstPhase.type==='quiz'?'quiz':firstPhase.type==='feynman'?'feynman':'cards';
+  S.timerSeconds=3600;saveState();render();
+  if(S.subPhase==='cards')renderCards();
+  else if(S.subPhase==='quiz')startQuizPhase();
+  else if(S.subPhase==='feynman')startFeynmanPhase();
+  if(document.getElementById('cfgAutoTimer').checked&&!timerInterval)toggleTimer();
+}
+function resumeSession(){startSession(S.currentSession)}
+function setFont(v){S.fontSize=+v;document.body.style.fontSize=v+'px';document.getElementById('fontVal').textContent=v+'px';saveState()}
+function toggleFocus(){S.focusOn=!S.focusOn;document.body.classList.toggle('focus-mode',S.focusOn);document.getElementById('tbFocus').classList.toggle('on',S.focusOn);saveState()}
+function resetAll(){if(confirm('Fortschritt wirklich löschen?')){localStorage.removeItem(STATE_KEY);S=defaultState();render()}}
+
+/* ── TIMER ── */
+let timerInterval=null;
+function toggleTimer(){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;S.timerRunning=false;document.getElementById('tbTimer').classList.add('paused')}
+  else{S.timerRunning=true;document.getElementById('tbTimer').classList.remove('paused');timerInterval=setInterval(()=>{if(S.timerSeconds>0){S.timerSeconds--;updateTimerDisplay()}else{clearInterval(timerInterval);timerInterval=null;showBreak()}},1000)}
+  saveState();
+}
+function updateTimerDisplay(){const m=Math.floor(S.timerSeconds/60),s=S.timerSeconds%60;document.getElementById('tbTimer').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+
+/* ── BREAK ── */
+let breakInterval=null;
+function showBreak(){
+  document.getElementById('moveOverlay').classList.add('show');
+  let secs=300;
+  const el=document.getElementById('moveTimer');
+  breakInterval=setInterval(()=>{secs--;if(secs<=0){clearInterval(breakInterval);el.textContent='Los!'}else{el.textContent=Math.floor(secs/60)+':'+String(secs%60).padStart(2,'0')}},1000);
+}
+function endBreak(){clearInterval(breakInterval);document.getElementById('moveOverlay').classList.remove('show');if(S.currentSession<3){S.currentSession++;S.timerSeconds=3600;S.currentCard=0;S.currentQuiz=0;saveState();startSession(S.currentSession)}}
+
+/* ── BROWN NOISE ── */
+let noiseCtx=null,noiseNode=null;
+function toggleNoise(){
+  if(noiseCtx){noiseCtx.close();noiseCtx=null;noiseNode=null;S.noiseOn=false;saveState();return}
+  noiseCtx=new(window.AudioContext||window.webkitAudioContext)();
+  const bufSize=2*noiseCtx.sampleRate,buf=noiseCtx.createBuffer(1,bufSize,noiseCtx.sampleRate),data=buf.getChannelData(0);
+  let lastOut=0;for(let i=0;i<bufSize;i++){const white=Math.random()*2-1;data[i]=(lastOut+(0.02*white))/1.02;lastOut=data[i];data[i]*=3.5}
+  noiseNode=noiseCtx.createBufferSource();noiseNode.buffer=buf;noiseNode.loop=true;
+  const gain=noiseCtx.createGain();gain.gain.value=0.3;noiseNode.connect(gain);gain.connect(noiseCtx.destination);noiseNode.start();
+  S.noiseOn=true;saveState();
+}
+
+/* ── XP ── */
+function addXp(amount){
+  S.xp+=amount;saveState();updateTopBar();
+  const el=document.createElement('div');el.className='xp-float';el.textContent='+'+amount+' XP';el.style.top=(80+Math.random()*40)+'px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1300);
+}
+
+/* ── CARD RENDERING ── */
+let currentCards=[], currentPhaseIdx=0, allSessionCards=[], gapsOnly=false;
+function renderCards(){
+  const sess=SESSIONS[S.currentSession];
+  const cardPhases=sess.phases.filter(p=>p.type==='cards');
+  if(cardPhases.length===0){goToNextPhaseType();return}
+  allSessionCards=[];
+  cardPhases.forEach(p=>{const tc=TOPIC_CARDS[p.topic]||[];allSessionCards=allSessionCards.concat(tc)});
+  applyCardFilter();
+}
+function applyCardFilter(){
+  if(gapsOnly){
+    currentCards=allSessionCards.filter(c=>S.triage[c.id]!=='green');
+    if(!currentCards.length){currentCards=allSessionCards;gapsOnly=false}
+  }else{currentCards=[...allSessionCards]}
+  if(S.currentCard>=currentCards.length)S.currentCard=0;
+  const btn=document.getElementById('cnGaps');
+  if(btn)btn.classList.toggle('active',gapsOnly);
+  renderCurrentCard();
+}
+function toggleGapsOnly(){
+  gapsOnly=!gapsOnly;S.currentCard=0;saveState();applyCardFilter();
+}
+function renderCurrentCard(){
+  if(!currentCards.length)return;
+  const c=currentCards[S.currentCard];
+  const triage=S.triage[c.id]||'';
+  const sess=SESSIONS[S.currentSession];
+  document.getElementById('svBreadcrumb').innerHTML=`Session ${S.currentSession+1} <span>${c.topic}</span> — ${c.title}`;
+  const ddHtml=c.deepDive?`<div class="cc-deep-dive"><button class="cc-dd-toggle" onclick="toggleDeepDive(this)"><span class="dd-arrow">▼</span>Vertiefung anzeigen</button><div class="cc-dd-content">${c.deepDive}</div></div>`:'';
+  const refHtml=c.ref?`<a class="cc-ref-link" href="index.html#${c.ref}" target="_blank">📖 Ausführlich auf der Referenzseite</a>`:'';
+  document.getElementById('cardArea').innerHTML=`<div class="concept-card">
+    <span class="cc-tier ${c.tier}">${c.tier==='a'?'Tier A — Kernstoff':c.tier==='b'?'Tier B — Vertiefung':'Tier C — Ergänzung'}</span>
+    <h2>${c.title}</h2>
+    <div class="cc-body">${c.body}</div>
+    ${ddHtml}
+    ${refHtml}
+    ${chatMode!=='none'
+      ?`<button class="cc-chat-btn" onclick="openChat('${c.id}')">💬 Frag mich!</button>`
+      :`<div class="cc-chat-hint">💬 <a href="#" onclick="event.preventDefault();goHome()">Chat einrichten</a> für Rückfragen</div>`}
+    <div class="triage-row">
+      <button class="triage-btn red${triage==='red'?' active':''}" onclick="setTriage('${c.id}','red')">Nicht verstanden</button>
+      <button class="triage-btn yellow${triage==='yellow'?' active':''}" onclick="setTriage('${c.id}','yellow')">Teilweise</button>
+      <button class="triage-btn green${triage==='green'?' active':''}" onclick="setTriage('${c.id}','green')">Verstanden</button>
+    </div></div>`;
+  document.getElementById('cnCount').textContent=gapsOnly
+    ?`${S.currentCard+1} / ${currentCards.length} (${allSessionCards.length-currentCards.length} ausgeblendet)`
+    :`${S.currentCard+1} / ${currentCards.length}`;
+  document.getElementById('cardNav').querySelector('button').disabled=S.currentCard===0;
+  document.getElementById('cardNav').querySelectorAll('button')[1].disabled=false;
+  if(!S.quizHistory['card_'+c.id]){addXp(10);S.quizHistory['card_'+c.id]=true;saveState()}
+  updateSessionProgress();
+}
+function toggleDeepDive(btn){
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+function setTriage(id,level){
+  S.triage[id]=S.triage[id]===level?'':level;saveState();
+  if(gapsOnly)applyCardFilter();else renderCurrentCard();
+}
+function prevCard(){if(S.currentCard>0){S.currentCard--;saveState();renderCurrentCard()}}
+function nextCard(){
+  if(S.currentCard<currentCards.length-1){S.currentCard++;saveState();renderCurrentCard()}
+  else{goToNextPhaseType()}
+}
+function goToNextPhaseType(){
+  const sess=SESSIONS[S.currentSession];
+  const hasQuiz=sess.phases.some(p=>p.type==='quiz');
+  const hasFeynman=sess.phases.some(p=>p.type==='feynman');
+  if(S.subPhase==='cards'&&hasQuiz){S.subPhase='quiz';S.currentQuiz=0;saveState();render();startQuizPhase()}
+  else if(S.subPhase==='cards'&&hasFeynman){S.subPhase='feynman';S.currentFeynman=0;saveState();render();startFeynmanPhase()}
+  else if(S.subPhase==='quiz'&&hasFeynman){S.subPhase='feynman';S.currentFeynman=0;saveState();render();startFeynmanPhase()}
+  else{S.sessionProgress[S.currentSession]=100;saveState();if(S.currentSession<3)showBreak();else{S.phase='dashboard';saveState();render()}}
+}
+
+/* ── QUIZ RENDERING ── */
+let currentQuizPool=[], quizAnswered=false;
+function startQuizPhase(){
+  const sess=SESSIONS[S.currentSession];
+  const quizPhase=sess.phases.find(p=>p.type==='quiz');
+  if(!quizPhase){goToNextPhaseType();return}
+  currentQuizPool=getSessionQuizPool(quizPhase);
+  currentQuizPool.forEach(q=>{if(q.type==='mc'){const ct=q.options[q.correct];shuffle(q.options);q.correct=q.options.indexOf(ct)}});
+  S.currentQuiz=0;quizAnswered=false;saveState();renderCurrentQuiz();
+}
+function renderCurrentQuiz(){
+  if(!currentQuizPool.length){goToNextPhaseType();return}
+  const q=currentQuizPool[S.currentQuiz];
+  const sess=SESSIONS[S.currentSession];
+  const quizPhase=sess.phases.find(p=>p.type==='quiz');
+  const isSpeed=quizPhase&&quizPhase.speed;
+  quizAnswered=false;
+  document.getElementById('qvBreadcrumb').innerHTML=`Session ${S.currentSession+1} <span>${quizPhase?quizPhase.topic:'Quiz'}</span>`;
+  let opts='';
+  if(q.type==='mc'){opts=q.options.map((o,i)=>`<button class="opt-btn" onclick="answerQuiz(${i})">${o}</button>`).join('')}
+  else{opts=`<button class="opt-btn" onclick="answerQuiz(true)">Wahr</button><button class="opt-btn" onclick="answerQuiz(false)">Falsch</button>`}
+  document.getElementById('quizArea').innerHTML=`<div class="quiz-card">
+    <div class="qc-meta"><span class="qc-section">${SEC_NAMES[q.section]||q.section}</span>${isSpeed?'<span class="qc-speed" id="speedTimer">15</span>':''}</div>
+    <p class="qc-text">${q.q}</p>
+    <div class="options-list">${opts}</div>
+    <div class="quiz-feedback ok">${q.explanation}</div>
+    <div class="quiz-feedback nok">${q.explanation}</div>
+    <button class="quiz-retry" onclick="retryQuiz()">Nochmal versuchen</button></div>`;
+  document.getElementById('qnCount').textContent=`${S.currentQuiz+1} / ${currentQuizPool.length}`;
+  document.getElementById('quizNav').querySelector('button').disabled=S.currentQuiz===0;
+  if(isSpeed)startSpeedTimer();
+}
+let speedInterval=null;
+function startSpeedTimer(){
+  let secs=15;const el=document.getElementById('speedTimer');
+  if(speedInterval)clearInterval(speedInterval);
+  speedInterval=setInterval(()=>{secs--;if(el)el.textContent=secs;if(secs<=0){clearInterval(speedInterval);if(!quizAnswered)answerQuiz(-1)}},1000);
+}
+function answerQuiz(val){
+  if(quizAnswered)return;
+  if(speedInterval){clearInterval(speedInterval);speedInterval=null}
+  quizAnswered=true;
+  const q=currentQuizPool[S.currentQuiz];
+  const card=document.querySelector('.quiz-card');
+  const btns=card.querySelectorAll('.opt-btn');
+  const isCorrect=(val===q.correct);
+  addXp(5);
+  if(isCorrect){addXp(10);S.streak++;if(S.streak>S.bestStreak)S.bestStreak=S.streak;if(S.streak>=3)addXp(S.streak*5)}
+  else{S.streak=0}
+  saveState();updateTopBar();
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(q.type==='mc'){if(i===q.correct)b.classList.add('correct');if(i===val&&!isCorrect)b.classList.add('wrong')}
+    else{const bVal=i===0?true:false;if(bVal===q.correct)b.classList.add('correct');if(bVal===val&&!isCorrect)b.classList.add('wrong')}
+  });
+  const fb=card.querySelector(isCorrect?'.ok':'.nok');fb.classList.add('show');
+  if(!isCorrect)card.querySelector('.quiz-retry').classList.add('show');
+  updateSessionProgress();
+}
+function retryQuiz(){
+  const q=currentQuizPool[S.currentQuiz];
+  if(q.type==='mc'){const ct=q.options[q.correct];shuffle(q.options);q.correct=q.options.indexOf(ct)}
+  renderCurrentQuiz();
+}
+function prevQuiz(){if(S.currentQuiz>0){S.currentQuiz--;saveState();renderCurrentQuiz()}}
+function nextQuiz(){
+  if(S.currentQuiz<currentQuizPool.length-1){S.currentQuiz++;saveState();renderCurrentQuiz()}
+  else{goToNextPhaseType()}
+}
+
+/* ── FEYNMAN RENDERING ── */
+let feynmanCards=[];
+function startFeynmanPhase(){
+  const weakIds=Object.keys(S.triage).filter(id=>S.triage[id]==='red'||S.triage[id]==='yellow');
+  feynmanCards=weakIds.length>0?weakIds.map(id=>CARDS.find(c=>c.id===id)).filter(Boolean):CARDS.filter(c=>c.tier==='a').slice(0,12);
+  shuffle(feynmanCards);
+  S.currentFeynman=0;saveState();renderCurrentFeynman();
+}
+function renderCurrentFeynman(){
+  if(!feynmanCards.length){goToNextPhaseType();return}
+  const c=feynmanCards[S.currentFeynman];
+  document.getElementById('fvBreadcrumb').innerHTML=`Session ${S.currentSession+1} <span>Feynman-Technik</span> — ${c.title}`;
+  document.getElementById('feynmanArea').innerHTML=`<div class="feynman-card">
+    <h3>Erkläre in eigenen Worten:</h3>
+    <p class="fc-prompt"><strong>${c.title}</strong> — Was ist das? Warum ist es wichtig?</p>
+    <textarea placeholder="Schreib deine Erklärung hier..." id="feynmanText"></textarea>
+    <div class="fc-actions" id="feynmanActions">
+      ${chatMode!=='none'?`<button class="fc-btn fc-btn-ai" onclick="checkFeynman()">Tutorin prüfen lassen</button>`:''}
+      <button class="fc-btn" onclick="revealFeynman()">Antwort aufdecken</button>
+    </div>
+    <div class="fc-feedback" id="feynmanFeedback"></div>
+    <div class="fc-reveal" id="feynmanReveal">${c.body}</div>
+    <div class="feynman-rate" id="feynmanRate">
+      <button class="fr-good" onclick="rateFeynman('good')">Verstanden</button>
+      <button class="fr-partial" onclick="rateFeynman('partial')">Teilweise</button>
+      <button class="fr-again" onclick="rateFeynman('again')">Nochmal</button>
+    </div></div>`;
+  document.getElementById('fnCount').textContent=`${S.currentFeynman+1} / ${feynmanCards.length}`;
+  document.getElementById('feynmanNav').querySelector('button').disabled=S.currentFeynman===0;
+}
+async function checkFeynman(){
+  const text=document.getElementById('feynmanText').value.trim();
+  if(!text){document.getElementById('feynmanText').focus();return}
+  const c=feynmanCards[S.currentFeynman];
+  const btn=document.querySelector('.fc-btn-ai');
+  if(btn){btn.disabled=true;btn.textContent='Prüfe...'}
+  const fb=document.getElementById('feynmanFeedback');
+  fb.className='fc-feedback show';fb.innerHTML='<span class="typing"><span></span><span></span><span></span></span>';
+  const prompt=`Du bist eine Tutorin für Experimentelle Psychologie (Klausur Uni Tübingen, Heller-Lehrbuch).
+
+Eine Studentin soll das Konzept "${c.title}" in eigenen Worten erklären (Feynman-Technik).
+
+Korrekte Inhalte:
+${stripHtml(c.body)}
+${c.deepDive?'Vertiefung: '+stripHtml(c.deepDive):''}
+
+Ihre Erklärung:
+"${text}"
+
+Bewerte ihre Erklärung:
+1. Was stimmt? Was fehlt oder ist falsch? (2-4 Sätze, **Fettdruck** für Schlüsselbegriffe)
+2. Gib am Ende GENAU eine Bewertung in eckigen Klammern: [GOOD], [PARTIAL] oder [AGAIN]
+   - [GOOD] = Kernkonzept korrekt verstanden
+   - [PARTIAL] = teilweise richtig, wichtige Lücken
+   - [AGAIN] = falsch oder viel zu vage
+
+Sprache: Deutsch, du-Form, ermutigend aber ehrlich.`;
+
+  let full='';
+  try{
+    if(chatMode==='local'){
+      const res=await serverFetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+      const reader=res.body.getReader();const dec=new TextDecoder();
+      while(true){const{done,value}=await reader.read();if(done)break;full+=dec.decode(value,{stream:true});fb.innerHTML=simpleMarkdown(full)}
+    }else{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':getApiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,messages:[{role:'user',content:prompt}],stream:true})});
+      const reader=res.body.getReader();const dec=new TextDecoder();let buf='';
+      while(true){const{done,value}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});
+        const lines=buf.split('\n');buf=lines.pop();
+        for(const line of lines){if(!line.startsWith('data: '))continue;const data=line.slice(6);if(data==='[DONE]')break;
+          try{const evt=JSON.parse(data);if(evt.type==='content_block_delta'&&evt.delta&&evt.delta.text){full+=evt.delta.text;fb.innerHTML=simpleMarkdown(full)}}catch(pe){}}
+      }
+    }
+  }catch(e){full='Fehler: '+e.message}
+  // Parse rating from response
+  const ratingMatch=full.match(/\[(GOOD|PARTIAL|AGAIN)\]/i);
+  const rating=ratingMatch?ratingMatch[1].toLowerCase():'partial';
+  const ratingMap={good:'good',partial:'partial',again:'again'};
+  const r=ratingMap[rating]||'partial';
+  const ratingLabels={good:'Verstanden',partial:'Teilweise',again:'Nochmal lernen'};
+  // Strip the bracket tag from display, add styled rating badge
+  let cleanHtml=simpleMarkdown(full.replace(/\[(GOOD|PARTIAL|AGAIN)\]/gi,'').trim());
+  cleanHtml+=`<div class="fc-rating ${r}">${ratingLabels[r]}</div>`;
+  fb.innerHTML=cleanHtml;
+  // Apply rating automatically
+  const triageMap={good:'green',partial:'yellow',again:'red'};
+  S.triage[c.id]=triageMap[r];
+  S.feynmanRatings[c.id]=r==='again'?'again':r==='partial'?'partial':'good';
+  if(r==='good')addXp(20);else if(r==='partial')addXp(10);else addXp(5);
+  saveState();updateSessionProgress();
+  // Show reveal + manual override option
+  document.getElementById('feynmanReveal').classList.add('show');
+  document.getElementById('feynmanRate').classList.add('show');
+  if(btn){btn.disabled=false;btn.textContent='Tutorin prüfen lassen'}
+}
+function revealFeynman(){
+  document.getElementById('feynmanReveal').classList.add('show');
+  document.getElementById('feynmanRate').classList.add('show');
+}
+function rateFeynman(rating){
+  const c=feynmanCards[S.currentFeynman];
+  S.feynmanRatings[c.id]=rating;
+  if(rating==='good'){addXp(20);S.triage[c.id]='green'}
+  else if(rating==='partial'){addXp(10);S.triage[c.id]='yellow'}
+  else{addXp(5);S.triage[c.id]='red'}
+  saveState();updateSessionProgress();
+  if(S.currentFeynman<feynmanCards.length-1){S.currentFeynman++;saveState();renderCurrentFeynman()}
+  else{goToNextPhaseType()}
+}
+function prevFeynman(){if(S.currentFeynman>0){S.currentFeynman--;saveState();renderCurrentFeynman()}}
+function nextFeynman(){
+  if(S.currentFeynman<feynmanCards.length-1){S.currentFeynman++;saveState();renderCurrentFeynman()}
+  else{goToNextPhaseType()}
+}
+
+/* ── SESSION PROGRESS ── */
+function updateSessionProgress(){
+  const sess=SESSIONS[S.currentSession];
+  let total=0,done=0;
+  const cardPhases=sess.phases.filter(p=>p.type==='cards');
+  cardPhases.forEach(p=>{const tc=TOPIC_CARDS[p.topic]||[];total+=tc.length;tc.forEach(c=>{if(S.quizHistory['card_'+c.id])done++})});
+  const quizPhases=sess.phases.filter(p=>p.type==='quiz');
+  quizPhases.forEach(p=>{total+=p.count||30});
+  if(currentQuizPool.length)done+=Math.min(S.currentQuiz+1,currentQuizPool.length);
+  const feynmanPhases=sess.phases.filter(p=>p.type==='feynman');
+  if(feynmanPhases.length){total+=feynmanCards.length||12;done+=Object.keys(S.feynmanRatings).length}
+  S.sessionProgress[S.currentSession]=total>0?Math.min(100,Math.round(done/total*100)):0;
+  saveState();updateTopBar();
+}
+
+/* ── CHAT ── */
+let chatHistory={};
+let chatCardId=null;
+let chatMode='none';
+let chatAbort=null;
+
+const DEFAULT_SERVER='http://localhost:3456';
+function getServerUrl(){return localStorage.getItem('epv3_server')||DEFAULT_SERVER}
+function serverFetch(path,opts={}){
+  return fetch(getServerUrl()+path,opts);
+}
+function saveServerUrl(v){
+  const url=v.trim().replace(/\/+$/,'');
+  if(url){localStorage.setItem('epv3_server',url)}else{localStorage.removeItem('epv3_server')}
+  detectChatMode();
+}
+async function detectChatMode(){
+  const base=getServerUrl();
+  try{
+    const r=await serverFetch('/health',{signal:AbortSignal.timeout(2000)});
+    if(r.ok){chatMode='local';updateChatUI('Server','green');return}
+  }catch(e){}
+  if(getApiKey()){chatMode='api';updateChatUI('API-Key','blue')}
+  else{chatMode='none';updateChatUI('Offline','gray')}
+}
+function updateChatUI(label,color){
+  const s=document.getElementById('chatStatus');
+  const m=document.getElementById('chatModeLabel');
+  s.className='chat-status '+color;
+  s.textContent=color==='green'?'Lokaler Server verbunden':color==='blue'?'API-Key aktiv':'Kein Chat verfügbar';
+  m.className='chat-mode '+color;
+  m.textContent=label;
+}
+function getApiKey(){
+  try{const k=localStorage.getItem('epv3_apikey');return k?atob(k):''}catch(e){return ''}
+}
+function saveApiKey(v){
+  if(v&&v.startsWith('sk-')){localStorage.setItem('epv3_apikey',btoa(v));detectChatMode()}
+  else if(!v){localStorage.removeItem('epv3_apikey');detectChatMode()}
+}
+function openChat(cardId){
+  if(chatMode==='none'){goHome();return}
+  chatCardId=cardId;
+  document.getElementById('chatPanel').classList.add('open');
+  document.body.classList.add('chat-open');
+  if(!chatHistory[cardId]){
+    chatHistory[cardId]=[];
+    const card=CARDS.find(c=>c.id===cardId);
+    appendMsg('assistant','Hey! Ich helfe dir bei **'+card.title+'**. Was möchtest du wissen?');
+    renderSuggestions(card);
+  }
+  renderChatMessages();
+  document.getElementById('chatInput').focus();
+}
+function closeChat(){
+  if(chatAbort){chatAbort.abort();chatAbort=null}
+  document.getElementById('chatPanel').classList.remove('open');
+  document.body.classList.remove('chat-open');
+}
+function appendMsg(role,content){
+  chatHistory[chatCardId].push({role,content});
+  return chatHistory[chatCardId].length-1;
+}
+function renderChatMessages(){
+  const el=document.getElementById('chatMessages');
+  el.innerHTML=chatHistory[chatCardId].map(m=>{
+    if(m.role==='user')return`<div class="chat-msg user">${esc(m.content)}</div>`;
+    const html=m.content?simpleMarkdown(m.content):'<span class="typing"><span></span><span></span><span></span></span>';
+    return`<div class="chat-msg bot">${html}</div>`;
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function renderSuggestions(card){
+  const el=document.getElementById('chatSuggestions');
+  const suggestions=['Kannst du ein Beispiel geben?','Wie kommt das in der Klausur dran?','Erklär das nochmal einfacher'];
+  el.innerHTML=suggestions.map(s=>`<button class="chat-chip" onclick="quickChat(this,'${esc(s)}')">${s}</button>`).join('');
+}
+function quickChat(btn,text){
+  document.getElementById('chatInput').value=text;
+  document.getElementById('chatSuggestions').innerHTML='';
+  sendChat();
+}
+async function sendChat(){
+  const input=document.getElementById('chatInput');
+  const msg=input.value.trim();
+  if(!msg)return;
+  input.value='';input.style.height='auto';
+  appendMsg('user',msg);
+  renderChatMessages();
+  document.getElementById('chatSuggestions').innerHTML='';
+  const card=CARDS.find(c=>c.id===chatCardId);
+  if(chatMode==='local')await sendLocal(card,msg);
+  else await sendApi(card,msg);
+}
+async function sendLocal(card,msg){
+  const sysPrompt=buildSystemPrompt(card);
+  const hist=chatHistory[chatCardId];
+  const convStr=hist.map(m=>(m.role==='user'?'Studentin':'Tutorin')+': '+m.content).join('\n');
+  const fullPrompt=sysPrompt+'\n\nBisheriges Gespräch:\n'+convStr+'\n\nStudentin: '+msg+'\n\nTutorin:';
+  chatAbort=new AbortController();
+  const botIdx=appendMsg('assistant','');
+  renderChatMessages();
+  try{
+    const res=await serverFetch('/chat',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt:fullPrompt}),signal:chatAbort.signal
+    });
+    const reader=res.body.getReader();
+    const dec=new TextDecoder();
+    let full='';
+    while(true){
+      const{done,value}=await reader.read();
+      if(done)break;
+      full+=dec.decode(value,{stream:true});
+      chatHistory[chatCardId][botIdx].content=full;
+      renderChatMessages();
+    }
+  }catch(e){if(e.name!=='AbortError'){chatHistory[chatCardId][botIdx].content='Fehler: '+e.message}}
+  chatAbort=null;
+  renderChatMessages();
+}
+async function sendApi(card,msg){
+  const sysPrompt=buildSystemPrompt(card);
+  chatAbort=new AbortController();
+  const botIdx=appendMsg('assistant','');
+  renderChatMessages();
+  const messages=chatHistory[chatCardId].filter(m=>m.content).map(m=>({role:m.role,content:m.content}));
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':getApiKey(),
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',max_tokens:500,
+        system:sysPrompt,messages:messages,stream:true
+      }),
+      signal:chatAbort.signal
+    });
+    const reader=res.body.getReader();
+    const dec=new TextDecoder();
+    let full='',buf='';
+    while(true){
+      const{done,value}=await reader.read();
+      if(done)break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\n');
+      buf=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith('data: '))continue;
+        const data=line.slice(6);
+        if(data==='[DONE]')break;
+        try{
+          const evt=JSON.parse(data);
+          if(evt.type==='content_block_delta'&&evt.delta&&evt.delta.text){
+            full+=evt.delta.text;
+            chatHistory[chatCardId][botIdx].content=full;
+            renderChatMessages();
+          }
+        }catch(pe){}
+      }
+    }
+  }catch(e){if(e.name!=='AbortError'){chatHistory[chatCardId][botIdx].content='Fehler: '+e.message}}
+  chatAbort=null;
+  renderChatMessages();
+}
+function buildSystemPrompt(card){
+  return `Du bist eine freundliche Tutorin für Experimentelle Psychologie.
+Deine Studentin ist 20 Jahre alt und lernt für eine Klausur an der Uni Tübingen (Heller-Lehrbuch).
+
+Regeln:
+- Erkläre auf Augenhöhe, nicht herablassend — du-Form
+- Nutze Alltagsbeispiele und Analogien
+- Halte Antworten kurz (2-4 Sätze), außer sie fragt nach Details
+- Verwende **Fettdruck** für Schlüsselbegriffe
+- Sprache: Deutsch
+
+Aktuelles Thema: ${card.title}
+Karteninhalt: ${stripHtml(card.body)}
+${card.deepDive?'Vertiefung: '+stripHtml(card.deepDive):''}`;
+}
+function stripHtml(html){return html.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim()}
+function simpleMarkdown(text){
+  return esc(text)
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code>$1</code>')
+    .replace(/\n/g,'<br>');
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+/* ── INIT ── */
+document.body.style.fontSize=S.fontSize+'px';
+if(S.focusOn)document.body.classList.add('focus-mode');
+const savedKey=getApiKey();
+if(savedKey){const el=document.getElementById('cfgApiKey');if(el)el.value=savedKey.slice(0,8)+'...';}
+const savedUrl=localStorage.getItem('epv3_server');
+if(savedUrl){const el=document.getElementById('cfgServerUrl');if(el)el.value=savedUrl;}
+detectChatMode();
+render();
+</script>
+</body>
+</html>

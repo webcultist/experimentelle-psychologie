@@ -1,0 +1,125 @@
+<!-- ═══════════════ 4 · STREUUNG & TRANSFORMATION ═══════════════ -->
+<section id="streuung">
+<div class="section-number">04</div>
+<h2>Streuung und Transformationen</h2>
+<p class="section-subtitle">Varianz, Standardabweichung, z-Transformation und Schiefe</p>
+
+<p>Während Lagemaße das Zentrum beschreiben, quantifizieren <strong>Streuungsmaße</strong> die Variabilität der Daten um dieses Zentrum herum.</p>
+
+<h3 class="sub">Varianz und Standardabweichung</h3>
+
+<div class="def-box">
+  <div class="label">Definitionen</div>
+  <p><strong>Varianz:</strong> s̃² = (1/n) · Σ(xᵢ − x̄)² — mittlere quadrierte Abweichung vom Mittelwert.</p>
+  <p><strong>Standardabweichung:</strong> s̃ = √s̃² — in der Originaleinheit der Daten.</p>
+  <p>Beide setzen mindestens <strong>Intervallskalenniveau</strong> voraus.</p>
+</div>
+
+<div class="merksatz">
+  <p><strong>Verschiebungssatz:</strong> s̃² = (1/n) · Σxᵢ² − x̄² = x̄² − (x̄)². Die Varianz entspricht dem „mittleren Quadrat minus Quadrat des Mittels". Nützlich für Handrechnung.</p>
+</div>
+
+<h3 class="sub">Weitere Streuungsmaße</h3>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Maß</th><th>Formel</th><th>Skalenniveau</th></tr>
+  <tr><td><strong>Spannweite</strong></td><td>R = x<sub>(n)</sub> − x<sub>(1)</sub></td><td>Ordinal</td></tr>
+  <tr><td><strong>Interquartilsabstand</strong></td><td>IQR = Q₃ − Q₁</td><td>Ordinal</td></tr>
+  <tr><td><strong>Mittlere absolute Abw.</strong></td><td>d = (1/n) · Σ|xᵢ − x̃|</td><td>Intervall</td></tr>
+  <tr><td><strong>Varianz</strong></td><td>s̃² = (1/n) · Σ(xᵢ − x̄)²</td><td>Intervall</td></tr>
+  <tr><td><strong>Variationskoeffizient</strong></td><td>V = s̃ / x̄</td><td>Verhältnis</td></tr>
+</table>
+</div>
+
+<h3 class="sub">Lineare Transformationen</h3>
+
+<p>Werden Daten linear transformiert mit yᵢ = p · xᵢ + q, dann gilt:</p>
+
+<div class="def-box blue">
+  <div class="label">Transformationsregeln</div>
+  <p><strong>Mittelwert:</strong> ȳ = p · x̄ + q</p>
+  <p><strong>Varianz:</strong> s̃²<sub>y</sub> = p² · s̃²<sub>x</sub></p>
+  <p><strong>Standardabweichung:</strong> s̃<sub>y</sub> = |p| · s̃<sub>x</sub></p>
+</div>
+
+<h3 class="sub">z-Transformation (Standardisierung)</h3>
+
+<div class="def-box green">
+  <div class="label">Definition</div>
+  <p>Die <strong>z-Transformation</strong> (Standardisierung) transformiert Daten so, dass Mittelwert = 0 und Varianz = 1:</p>
+  <p style="text-align:center; font-size:1.1rem; margin:0.8rem 0"><strong>zᵢ = (xᵢ − x̄) / s̃<sub>x</sub></strong></p>
+  <p>Dies ist ein Spezialfall der linearen Transformation mit p = 1/s̃<sub>x</sub> und q = −x̄/s̃<sub>x</sub>.</p>
+</div>
+
+<div class="example">
+  <p><strong>Werte:</strong> 16, 4, 13, 9, 8 → x̄ = 10, s̃<sub>x</sub> = √17.2 ≈ 4.15</p>
+  <p><strong>z-Werte:</strong> z₁ = (16−10)/4.15 = 1.45, z₂ = (4−10)/4.15 = −1.45, z₃ = 0.72, z₄ = −0.24, z₅ = −0.48</p>
+  <p>Kontrolle: z̄ = 0, s̃²<sub>z</sub> = 1 ✓</p>
+</div>
+
+<div class="merksatz">
+  <p>Die z-Transformation macht Werte aus verschiedenen Verteilungen <strong>vergleichbar</strong>. Ein z-Wert von +2 bedeutet immer: „2 Standardabweichungen über dem Mittelwert" — egal ob es um Klausurergebnisse, IQ oder Reaktionszeiten geht.</p>
+</div>
+
+<h3 class="sub">Schiefe</h3>
+
+<p>Die <strong>Schiefe</strong> (skewness) beschreibt die Asymmetrie einer Verteilung. Ein erster Anhaltspunkt ist die Differenz x̄ − x̃:</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h3>Keine Schiefe</h3>
+    <p>x̄ − x̃ = 0: Symmetrische Verteilung. Modus, Median und Mittelwert fallen zusammen.</p>
+  </div>
+  <div class="card">
+    <h3>Positive Schiefe</h3>
+    <p>x̄ − x̃ &gt; 0: Rechtsschief (linkssteil). Der Mittelwert wird durch hohe Ausreißer nach rechts gezogen.</p>
+  </div>
+  <div class="card">
+    <h3>Negative Schiefe</h3>
+    <p>x̄ − x̃ &lt; 0: Linksschief (rechtssteil). Der Mittelwert wird durch niedrige Ausreißer nach links gezogen.</p>
+  </div>
+</div>
+
+<!-- Deep Dive: Beweis Transformationsregeln -->
+<div class="deep-dive" id="dd4a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd4a')">
+    <span class="dd-icon">▼</span>
+    Beweis: Lineare Transformation von Mittelwert und Varianz
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Mittelwert</h4>
+    <p>ȳ = (1/n) Σyᵢ = (1/n) Σ(p·xᵢ + q) = p · (1/n)Σxᵢ + (1/n) · n · q = p · x̄ + q ✓</p>
+    <h4>Varianz</h4>
+    <p>s̃²<sub>y</sub> = (1/n) Σ(yᵢ − ȳ)² = (1/n) Σ(p·xᵢ + q − p·x̄ − q)² = (1/n) Σ(p·(xᵢ − x̄))² = p² · (1/n) Σ(xᵢ − x̄)² = p² · s̃²<sub>x</sub> ✓</p>
+    <h4>z-Transformation: z̄ = 0 und s̃²<sub>z</sub> = 1</h4>
+    <p>z̄ = (1/s̃<sub>x</sub>) · x̄ − x̄/s̃<sub>x</sub> = 0 ✓</p>
+    <p>s̃²<sub>z</sub> = (1/s̃<sub>x</sub>)² · s̃²<sub>x</sub> = 1 ✓</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz6">
+  <h4>🧪 Wissenscheck: z-Transformation</h4>
+  <p>Eine Klausur hat x̄ = 60 und s̃ = 10. Welchen z-Wert hat ein Student mit 75 Punkten?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz6',this,false)">z = 0.75</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz6',this,true)" data-correct="true">z = 1.5</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz6',this,false)">z = 7.5</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz6',this,false)">z = 15</button>
+  <div class="quiz-feedback correct-fb">Richtig! z = (75 − 60) / 10 = 15/10 = 1.5. Der Student liegt 1.5 Standardabweichungen über dem Mittelwert.</div>
+  <div class="quiz-feedback wrong-fb">z = (xᵢ − x̄) / s̃ = (75 − 60) / 10 = 1.5. Der z-Wert gibt an, wie viele Standardabweichungen der Wert vom Mittelwert entfernt ist.</div>
+</div>
+
+<div class="quiz" id="quiz7">
+  <h4>🧪 Wissenscheck: Varianz</h4>
+  <p>Wenn alle Werte einer Stichprobe mit 3 multipliziert werden, wie verändert sich die Varianz?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz7',this,false)">Sie wird verdreifacht</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz7',this,true)" data-correct="true">Sie wird verneunfacht (×9)</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz7',this,false)">Sie bleibt gleich</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz7',this,false)">Sie wird verdoppelt</button>
+  <div class="quiz-feedback correct-fb">Richtig! Bei yᵢ = 3·xᵢ gilt s̃²<sub>y</sub> = 3² · s̃²<sub>x</sub> = 9 · s̃²<sub>x</sub>. Die Varianz skaliert mit dem Quadrat des Faktors.</div>
+  <div class="quiz-feedback wrong-fb">Bei Multiplikation mit p gilt: s̃²<sub>y</sub> = p² · s̃²<sub>x</sub>. Also wird die Varianz mit 3² = 9 multipliziert. Die Standardabweichung wird verdreifacht.</div>
+</div>
+
+</section>

@@ -1,0 +1,154 @@
+<!-- ═══════════════ 8 · VERTEILUNGEN ═══════════════ -->
+<section id="verteilungen">
+<div class="section-number">08</div>
+<h2>Wahrscheinlichkeitsverteilungen</h2>
+<p class="section-subtitle">Binomialverteilung, Normalverteilung und Stichprobenverteilungen</p>
+
+<p>Wahrscheinlichkeitsverteilungen beschreiben, mit welchen Wahrscheinlichkeiten eine <strong>Zufallsvariable</strong> bestimmte Werte annimmt.</p>
+
+<h3 class="sub">Zufallsvariablen</h3>
+
+<div class="def-box">
+  <div class="label">Definition</div>
+  <p>Eine <strong>Zufallsvariable</strong> X ist eine Funktion, die jedem Ergebnis ω ∈ Ω einen Zahlenwert X(ω) zuordnet. Man unterscheidet <strong>diskrete</strong> (abzählbar viele Werte) und <strong>stetige</strong> (kontinuierliches Spektrum) Zufallsvariablen.</p>
+</div>
+
+<div class="vergleich">
+  <div class="vergleich-seite">
+    <h4>Diskret</h4>
+    <ul>
+      <li>Wahrscheinlichkeitsfunktion P(X = x)</li>
+      <li>Summe aller P(X = xₖ) = 1</li>
+      <li>E(X) = Σ xₖ · P(X = xₖ)</li>
+      <li>Beispiele: Binomial, Poisson</li>
+    </ul>
+  </div>
+  <div class="vergleich-seite">
+    <h4>Stetig</h4>
+    <ul>
+      <li>Dichtefunktion f(x) mit P(a ≤ X ≤ b) = ∫f(x)dx</li>
+      <li>P(X = x) = 0 für jeden einzelnen Punkt</li>
+      <li>E(X) = ∫ x · f(x) dx</li>
+      <li>Beispiele: Normal, Exponential</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="sub">Erwartungswert und Varianz</h3>
+
+<div class="def-box blue">
+  <div class="label">Kenngrößen</div>
+  <p><strong>Erwartungswert:</strong> E(X) = μ — der „theoretische Mittelwert"</p>
+  <p><strong>Varianz:</strong> Var(X) = E[(X − μ)²] = σ²</p>
+  <p><strong>Standardabweichung:</strong> σ = √Var(X)</p>
+</div>
+
+<div class="merksatz">
+  <p><strong>Rechenregeln:</strong> E(aX + b) = a·E(X) + b und Var(aX + b) = a²·Var(X). Bei unabhängigen X, Y: E(X + Y) = E(X) + E(Y) und Var(X + Y) = Var(X) + Var(Y).</p>
+</div>
+
+<h3 class="sub">Binomialverteilung</h3>
+
+<div class="def-box green">
+  <div class="label">Bernoulli- und Binomialverteilung</div>
+  <p>Ein <strong>Bernoulli-Experiment</strong> hat zwei Ausgänge (Erfolg mit P = p, Misserfolg mit P = 1−p) und wird n-mal unabhängig wiederholt.</p>
+  <p>Die Wahrscheinlichkeit für genau k Erfolge:</p>
+  <p style="text-align:center; font-size:1.1rem">P(X = k) = C(n,k) · p<sup>k</sup> · (1−p)<sup>n−k</sup></p>
+  <p><strong>Parameter:</strong> E(X) = n·p, Var(X) = n·p·(1−p)</p>
+</div>
+
+<div class="example">
+  <p><strong>Diskriminationsexperiment:</strong> Eine VP soll in n = 20 Durchgängen einen Reiz erkennen (2AFC, Ratewahrscheinlichkeit p = 0.5). Wie wahrscheinlich sind mindestens 15 richtige Antworten?</p>
+  <p>P(X ≥ 15) = Σ C(20,k) · 0.5²⁰ für k = 15, …, 20 ≈ 0.021 → sehr unwahrscheinlich durch Raten.</p>
+</div>
+
+<h3 class="sub">Normalverteilung</h3>
+
+<div class="def-box purple">
+  <div class="label">Definition</div>
+  <p>Die <strong>Normalverteilung</strong> N(μ, σ²) hat die Dichtefunktion:</p>
+  <p style="text-align:center; font-size:1.05rem">φ(x) = (1 / (σ√(2π))) · exp(−(x − μ)² / (2σ²))</p>
+  <p>Parameter: μ = Erwartungswert (Lage), σ² = Varianz (Breite). Die Kurve ist symmetrisch um μ und hat die Form der „Gaußschen Glockenkurve".</p>
+</div>
+
+<h3 class="sub">Standardnormalverteilung N(0,1)</h3>
+
+<p>Durch z-Transformation Z = (X − μ) / σ wird jede Normalverteilung auf die <strong>Standardnormalverteilung</strong> N(0,1) zurückgeführt.</p>
+
+<div class="def-box gold">
+  <div class="label">Rechenregeln mit z-Tabelle</div>
+  <p><strong>Fall 1 — Wahrscheinlichkeit gesucht:</strong> P(X ≤ x) = Φ((x − μ)/σ), dann in z-Tabelle nachschlagen.</p>
+  <p><strong>Fall 2 — Quantil gesucht:</strong> x<sub>p</sub> = μ + σ · z<sub>p</sub>, wobei Φ(z<sub>p</sub>) = p aus der Tabelle.</p>
+  <p><strong>Negativregel:</strong> Φ(−z) = 1 − Φ(z) (Symmetrie der Standardnormalverteilung).</p>
+</div>
+
+<div class="example">
+  <p><strong>IQ-Verteilung:</strong> X ~ N(100, 15²). Wie wahrscheinlich ist IQ ≤ 120?</p>
+  <p>z = (120 − 100)/15 = 1.33 → Φ(1.33) ≈ 0.908 → 90.8% der Bevölkerung haben IQ ≤ 120.</p>
+</div>
+
+<div class="example">
+  <p><strong>Quantil:</strong> Welcher IQ-Wert wird von 67% der Bevölkerung nicht überschritten?</p>
+  <p>Φ(z) = 0.67 → z ≈ 0.44 (aus Tabelle) → x = 100 + 15 · 0.44 = 106.6</p>
+</div>
+
+<div class="merksatz">
+  <p><strong>68-95-99.7-Regel:</strong> Bei jeder Normalverteilung liegen ca. 68% der Werte im Intervall μ ± σ, ca. 95% in μ ± 1.96σ (Faustregel: ≈ 2σ ergibt 95.4%), und ca. 99.7% in μ ± 3σ.</p>
+</div>
+
+<!-- Deep Dive: Multinomialverteilung -->
+<div class="deep-dive" id="dd8a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd8a')">
+    <span class="dd-icon">▼</span>
+    Multinomialverteilung und Stichprobenverteilung des Mittelwerts
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Multinomialverteilung</h4>
+    <p>Verallgemeinerung der Binomialverteilung auf r > 2 Ausgänge mit Wahrscheinlichkeiten p₁, …, pᵣ:</p>
+    <p style="text-align:center">P(k₁, k₂, …, kᵣ) = n! / (k₁! · k₂! · … · kᵣ!) · p₁<sup>k₁</sup> · p₂<sup>k₂</sup> · … · pᵣ<sup>kᵣ</sup></p>
+    <p>Beispiel: Würfel (r = 6, pⱼ = 1/6), Blutgruppen in einer Stichprobe.</p>
+
+    <h4>Stichprobenverteilung des Mittelwerts</h4>
+    <p>Für den Mittelwert X̄ einer Stichprobe vom Umfang n aus einer Verteilung mit μ und σ² gilt:</p>
+    <p><strong>E(X̄) = μ</strong> und <strong>Var(X̄) = σ²/n</strong></p>
+    <p>Der <strong>Standardfehler</strong> σ/√n beschreibt die Streuung des Stichprobenmittelwerts. Er wird mit wachsendem n kleiner — die Schätzung wird präziser.</p>
+    <p>Nach dem <strong>Zentralen Grenzwertsatz</strong> ist X̄ für großes n annähernd normalverteilt, auch wenn die Ausgangspopulation nicht normalverteilt ist.</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz14">
+  <h4>🧪 Wissenscheck: Binomialverteilung</h4>
+  <p>Ein fairer Würfel wird 6-mal geworfen. Wie groß ist die Wahrscheinlichkeit, genau zweimal eine 6 zu würfeln?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz14',this,false)">1/6</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz14',this,true)" data-correct="true">C(6,2) · (1/6)² · (5/6)⁴ ≈ 0.20</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz14',this,false)">2/6 = 0.33</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz14',this,false)">(1/6)² ≈ 0.03</button>
+  <div class="quiz-feedback correct-fb">Richtig! Bernoulli-Experiment mit n = 6, k = 2, p = 1/6: P = C(6,2) · (1/6)² · (5/6)⁴ = 15 · (1/36) · (625/1296) ≈ 0.20.</div>
+  <div class="quiz-feedback wrong-fb">Binomialverteilung: P(X=2) = C(6,2) · (1/6)² · (5/6)⁴ = 15 · 0.0278 · 0.482 ≈ 0.20.</div>
+</div>
+
+<div class="quiz" id="quiz15">
+  <h4>🧪 Wissenscheck: Normalverteilung</h4>
+  <p>X ~ N(50, 100). Wie standardisiert man den Wert x = 65?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz15',this,true)" data-correct="true">z = (65 − 50) / 10 = 1.5</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz15',this,false)">z = (65 − 50) / 100 = 0.15</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz15',this,false)">z = 65 / 50 = 1.3</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz15',this,false)">z = (65 − 50) / √50 ≈ 2.12</button>
+  <div class="quiz-feedback correct-fb">Richtig! N(50, 100) bedeutet μ = 50 und σ² = 100, also σ = 10. Damit z = (65 − 50)/10 = 1.5.</div>
+  <div class="quiz-feedback wrong-fb">Bei N(μ, σ²) mit μ = 50 und σ² = 100 ist σ = √100 = 10. Also z = (x − μ)/σ = (65 − 50)/10 = 1.5.</div>
+</div>
+
+<div class="quiz" id="quiz16">
+  <h4>🧪 Wissenscheck: 68-95-99.7</h4>
+  <p>Bei einer Normalverteilung N(100, 225) liegen ca. 95% der Werte in welchem Intervall? (Faustregel: μ ± 2σ)</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz16',this,false)">85 bis 115</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz16',this,true)" data-correct="true">70 bis 130</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz16',this,false)">55 bis 145</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz16',this,false)">50 bis 150</button>
+  <div class="quiz-feedback correct-fb">Richtig! σ = √225 = 15. Faustregel: μ ± 2σ = 100 ± 30, also [70, 130]. Exakt: μ ± 1.96σ = [70.6, 129.4] für genau 95%.</div>
+  <div class="quiz-feedback wrong-fb">σ = √225 = 15. Faustregel: μ ± 2σ = 100 ± 30 → Intervall [70, 130]. (Exakt 95%: μ ± 1.96σ.)</div>
+</div>
+
+</section>

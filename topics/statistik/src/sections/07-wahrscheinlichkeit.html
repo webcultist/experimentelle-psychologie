@@ -1,0 +1,126 @@
+<!-- ═══════════════ 7 · WAHRSCHEINLICHKEIT ═══════════════ -->
+<section id="wahrscheinlichkeit">
+<div class="section-number">07</div>
+<h2>Wahrscheinlichkeitstheorie</h2>
+<p class="section-subtitle">Axiome, Kombinatorik und bedingte Wahrscheinlichkeit</p>
+
+<p>Die <strong>Wahrscheinlichkeitstheorie</strong> bildet die Grundlage der Inferenzstatistik. Sie formalisiert den Umgang mit Zufall und Unsicherheit.</p>
+
+<h3 class="sub">Kolmogorov-Axiome</h3>
+
+<div class="def-box">
+  <div class="label">Die drei Axiome</div>
+  <p>Sei Ω ein Ergebnisraum (Menge aller möglichen Ergebnisse). Eine Wahrscheinlichkeitsfunktion P ordnet jedem Ereignis A ⊆ Ω eine Zahl P(A) zu mit:</p>
+  <p><strong>Axiom 1:</strong> P(Ω) = 1 (Normierung)</p>
+  <p><strong>Axiom 2:</strong> P(A) ≥ 0 für alle A (Nichtnegativität)</p>
+  <p><strong>Axiom 3:</strong> P(A ∪ B) = P(A) + P(B) falls A ∩ B = ∅ (Additivität für disjunkte Ereignisse)</p>
+</div>
+
+<p>Aus diesen drei Axiomen folgen alle weiteren Rechenregeln:</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h3>Komplementregel</h3>
+    <p>P(Ā) = 1 − P(A)<br>Die Wahrscheinlichkeit des Gegenereignisses.</p>
+  </div>
+  <div class="card">
+    <h3>Monotonie</h3>
+    <p>A ⊆ B → P(A) ≤ P(B)<br>Teilmengen haben kleinere oder gleiche Wahrscheinlichkeit.</p>
+  </div>
+  <div class="card">
+    <h3>Additionssatz</h3>
+    <p>P(A ∪ B) = P(A) + P(B) − P(A ∩ B)<br>Für nicht-disjunkte Ereignisse.</p>
+  </div>
+  <div class="card">
+    <h3>Laplace-Experiment</h3>
+    <p>Alle Ergebnisse gleichwahrscheinlich:<br>P(A) = |A| / |Ω|</p>
+  </div>
+</div>
+
+<h3 class="sub">Kombinatorik</h3>
+
+<p>Die Kombinatorik liefert Methoden zum Abzählen von Möglichkeiten — essenziell für Laplace-Wahrscheinlichkeiten.</p>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Typ</th><th>Reihenfolge</th><th>Wiederholung</th><th>Formel</th><th>Beispiel</th></tr>
+  <tr><td><strong>Permutation m.W.</strong></td><td>ja</td><td>ja</td><td>n<sup>k</sup></td><td>PIN-Code (10⁴ = 10000)</td></tr>
+  <tr><td><strong>Permutation o.W.</strong></td><td>ja</td><td>nein</td><td>n! / (n−k)!</td><td>Podestplätze (Medaillen)</td></tr>
+  <tr><td><strong>Kombination o.W.</strong></td><td>nein</td><td>nein</td><td>C(n,k) = n! / (k!(n−k)!)</td><td>Lotto 6 aus 49</td></tr>
+  <tr><td><strong>Kombination m.W.</strong></td><td>nein</td><td>ja</td><td>C(n+k−1, k)</td><td>Kugeln auf Fächer</td></tr>
+</table>
+</div>
+
+<div class="example">
+  <p><strong>Fußballtoto (11er-Wette):</strong> 3 Möglichkeiten pro Spiel (0, 1, 2), 11 Spiele. Das ist eine Permutation mit Wiederholung: 3¹¹ = 177.147 verschiedene Tipps.</p>
+</div>
+
+<div class="merksatz">
+  <p>Der <strong>Binomialkoeffizient</strong> C(n,k) = „n über k" zählt die Möglichkeiten, k Elemente aus n <strong>ohne Reihenfolge und ohne Zurücklegen</strong> auszuwählen. Er taucht bei der Binomialverteilung wieder auf.</p>
+</div>
+
+<h3 class="sub">Bedingte Wahrscheinlichkeit</h3>
+
+<div class="def-box green">
+  <div class="label">Definition</div>
+  <p>Die <strong>bedingte Wahrscheinlichkeit</strong> von A gegeben B:</p>
+  <p style="text-align:center; font-size:1.1rem">P(A | B) = P(A ∩ B) / P(B) &nbsp;&nbsp;&nbsp; (falls P(B) &gt; 0)</p>
+</div>
+
+<div class="def-box blue">
+  <div class="label">Multiplikationssatz</div>
+  <p>P(A ∩ B) = P(A | B) · P(B) = P(B | A) · P(A)</p>
+</div>
+
+<div class="def-box purple">
+  <div class="label">Stochastische Unabhängigkeit</div>
+  <p>Zwei Ereignisse A und B sind <strong>stochastisch unabhängig</strong>, wenn gilt:</p>
+  <p style="text-align:center">P(A ∩ B) = P(A) · P(B) &nbsp;&nbsp; bzw. äquivalent: P(A | B) = P(A)</p>
+  <p>Das Wissen über B ändert die Wahrscheinlichkeit von A nicht.</p>
+</div>
+
+<!-- Deep Dive: Satz von Bayes -->
+<div class="deep-dive" id="dd7a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd7a')">
+    <span class="dd-icon">▼</span>
+    Satz von Bayes und totale Wahrscheinlichkeit
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Satz der totalen Wahrscheinlichkeit</h4>
+    <p>Wenn B₁, B₂, …, Bₖ eine Partition von Ω bilden (disjunkt und Vereinigung = Ω):</p>
+    <p style="text-align:center">P(A) = Σ P(A | Bⱼ) · P(Bⱼ)</p>
+    <h4>Satz von Bayes</h4>
+    <p style="text-align:center; font-size:1.05rem">P(Bⱼ | A) = P(A | Bⱼ) · P(Bⱼ) / P(A)</p>
+    <p>Bayes erlaubt es, von der „Wirkung" (A beobachtet) auf die „Ursache" (welches Bⱼ?) rückzuschließen.</p>
+    <h4>Beispiel: Medizinischer Test</h4>
+    <p>Krankheit: P(K) = 0.01. Sensitivität: P(+ | K) = 0.99. Falsch-positiv-Rate: P(+ | K̄) = 0.05.</p>
+    <p>P(K | +) = (0.99 · 0.01) / (0.99 · 0.01 + 0.05 · 0.99) = 0.0099 / 0.0594 ≈ 0.167</p>
+    <p>Nur ~17% der positiv Getesteten sind tatsächlich krank — das Base-Rate-Problem!</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz12">
+  <h4>🧪 Wissenscheck: Wahrscheinlichkeit</h4>
+  <p>Wenn P(A) = 0.3 und P(B) = 0.5 und A, B unabhängig, was ist P(A ∩ B)?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz12',this,false)">0.8</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz12',this,true)" data-correct="true">0.15</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz12',this,false)">0.2</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz12',this,false)">0.65</button>
+  <div class="quiz-feedback correct-fb">Richtig! Bei Unabhängigkeit gilt P(A ∩ B) = P(A) · P(B) = 0.3 · 0.5 = 0.15.</div>
+  <div class="quiz-feedback wrong-fb">Bei stochastischer Unabhängigkeit: P(A ∩ B) = P(A) · P(B) = 0.3 · 0.5 = 0.15.</div>
+</div>
+
+<div class="quiz" id="quiz13">
+  <h4>🧪 Wissenscheck: Kombinatorik</h4>
+  <p>Wie viele Möglichkeiten gibt es, aus 10 Studierenden ein 3er-Team (ohne Reihenfolge) zu bilden?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz13',this,false)">30</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz13',this,false)">720</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz13',this,true)" data-correct="true">120</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz13',this,false)">1000</button>
+  <div class="quiz-feedback correct-fb">Richtig! C(10,3) = 10! / (3! · 7!) = (10·9·8) / (3·2·1) = 120.</div>
+  <div class="quiz-feedback wrong-fb">Ohne Reihenfolge, ohne Wiederholung: C(10,3) = 10! / (3!·7!) = 720/6 = 120.</div>
+</div>
+
+</section>

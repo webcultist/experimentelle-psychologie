@@ -1,0 +1,46 @@
+name: Deploy to psychologie.webcultist.de
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Rsync to staging directory
+        run: |
+          rsync -avz --delete \
+            --exclude='.git/' \
+            --exclude='.claude/' \
+            --exclude='.idea/' \
+            --exclude='CLAUDE.md' \
+            --exclude='archive/' \
+            --exclude='build.sh' \
+            --exclude='topics/*/build.sh' \
+            --exclude='topics/*/src/' \
+            --exclude='topics/*/resources/' \
+            --exclude='chat-server.js' \
+            --exclude='.DS_Store' \
+            --exclude='.gitignore' \
+            -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            ./ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/webcultist/deploy-staging/psychologie/"
+
+      - name: Deploy from staging to web root and fix ownership
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "sudo rsync -avz --delete /home/webcultist/deploy-staging/psychologie/ /var/www/vhosts/webcultist.de/psychologie.webcultist.de/ && sudo chown -R webcultist_admin:psaserv /var/www/vhosts/webcultist.de/psychologie.webcultist.de/"

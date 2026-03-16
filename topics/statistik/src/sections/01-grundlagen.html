@@ -1,0 +1,97 @@
+<!-- ═══════════════ 1 · GRUNDLAGEN ═══════════════ -->
+<section id="grundlagen">
+<div class="section-number">01</div>
+<h2>Grundlagen der Statistik</h2>
+<p class="section-subtitle">Merkmale, Skalenniveaus und Datenstrukturen</p>
+
+<p>Das Wort <em>Statistik</em> stammt vom lateinischen <em>status</em> (Zustand) ab. Die Disziplin gliedert sich in zwei Hauptbereiche: <strong>deskriptive Statistik</strong> (Beschreibung und Zusammenfassung von Daten) und <strong>Inferenzstatistik</strong> (Schlüsse von Stichproben auf Populationen).</p>
+
+<h3 class="sub">Merkmale und Merkmalstypen</h3>
+
+<div class="def-box">
+  <div class="label">Definition</div>
+  <p>Ein <strong>Merkmal</strong> (Variable) ist eine Eigenschaft, die an Untersuchungseinheiten beobachtet wird. Die möglichen Werte heißen <strong>Merkmalsausprägungen</strong>.</p>
+</div>
+
+<div class="card-grid">
+  <div class="card">
+    <h3><span class="icon">📊</span> Quantitativ</h3>
+    <p>Numerische Merkmale, bei denen Rechenoperationen sinnvoll sind. Beispiel: Körpergröße, Reaktionszeit, IQ-Wert.</p>
+  </div>
+  <div class="card">
+    <h3><span class="icon">🏷️</span> Qualitativ</h3>
+    <p>Kategoriale Merkmale ohne natürliche Ordnung oder mit Ordnung, aber ohne feste Abstände. Beispiel: Geschlecht, Schulnoten.</p>
+  </div>
+  <div class="card">
+    <h3><span class="icon">🔢</span> Diskret</h3>
+    <p>Endlich oder abzählbar viele Ausprägungen. Beispiel: Anzahl Kinder, Würfelergebnis.</p>
+  </div>
+  <div class="card">
+    <h3><span class="icon">📈</span> Stetig</h3>
+    <p>Überabzählbar viele Ausprägungen (jeder Wert in einem Intervall möglich). Beispiel: Gewicht, Temperatur.</p>
+  </div>
+</div>
+
+<h3 class="sub">Skalenniveaus</h3>
+
+<p>Das Skalenniveau bestimmt, welche Operationen und statistischen Kennwerte <strong>bedeutsam</strong> (sinnvoll interpretierbar) sind.</p>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Skala</th><th>Eigenschaft</th><th>Zulässige Transformation</th><th>Beispiel</th></tr>
+  <tr><td><strong>Nominalskala</strong></td><td>Gleichheit / Verschiedenheit</td><td>Jede eineindeutige Abbildung</td><td>Geschlecht, Blutgruppe</td></tr>
+  <tr><td><strong>Ordinalskala</strong></td><td>Rangordnung</td><td>Streng monoton steigende Funktionen</td><td>Schulnoten, Ranglisten</td></tr>
+  <tr><td><strong>Intervallskala</strong></td><td>Gleiche Abstände interpretierbar</td><td>Positiv lineare: y = p·x + q (p &gt; 0)</td><td>Temperatur (°C), Kalender</td></tr>
+  <tr><td><strong>Verhältnisskala</strong></td><td>Natürlicher Nullpunkt</td><td>Ähnlichkeit: y = p·x (p &gt; 0)</td><td>Gewicht, Länge, Dauer</td></tr>
+  <tr><td><strong>Absolutskala</strong></td><td>Natürliche Einheit</td><td>Nur Identität: y = x</td><td>Anzahl, Häufigkeit</td></tr>
+</table>
+</div>
+
+<div class="merksatz">
+  <p>Ein statistisches Ergebnis ist <strong>bedeutsam</strong>, wenn es unter allen zulässigen Transformationen der verwendeten Skala invariant bleibt. Beispiel: „Der Median der Noten ist 3" bleibt sinnvoll auch bei Umkodierung (solange die Ordnung erhalten bleibt).</p>
+</div>
+
+<div class="achtung">
+  <p>Mittelwert und Standardabweichung setzen mindestens <strong>Intervallskalenniveau</strong> voraus. Für ordinale Daten (z.B. Schulnoten) sind diese Kennwerte streng genommen nicht bedeutsam — auch wenn sie in der Praxis oft trotzdem berechnet werden.</p>
+</div>
+
+<!-- Deep Dive: Bedeutsamkeit -->
+<div class="deep-dive" id="dd1a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd1a')">
+    <span class="dd-icon">▼</span>
+    Bedeutsamkeit von Aussagen — formaler Hintergrund
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Repräsentationstheorem</h4>
+    <p>Eine Skala ist eine Abbildung von einem empirischen Relativ (Objekten mit Relationen) in ein numerisches Relativ. Die <strong>zulässigen Transformationen</strong> sind genau die Abbildungen, die eine gültige Skala wieder in eine gültige Skala überführen.</p>
+    <h4>Beispiel: Temperatur</h4>
+    <p>Celsius und Fahrenheit sind beide Intervallskalen. Die Umrechnung F = 1.8·C + 32 ist positiv linear. Die Aussage „Heute ist es doppelt so warm wie gestern" ist in Celsius und Fahrenheit verschieden — also <strong>nicht bedeutsam</strong> auf Intervallskalenniveau.</p>
+    <p>Dagegen ist die Aussage „Der Temperaturunterschied zwischen Montag und Dienstag ist gleich groß wie zwischen Mittwoch und Donnerstag" invariant unter linearer Transformation — also <strong>bedeutsam</strong>.</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz1">
+  <h4>🧪 Wissenscheck: Skalenniveaus</h4>
+  <p>Welches Skalenniveau hat das Merkmal „Reaktionszeit in Millisekunden"?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz1',this,false)">Ordinalskala</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz1',this,false)">Intervallskala</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz1',this,true)" data-correct="true">Verhältnisskala</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz1',this,false)">Nominalskala</button>
+  <div class="quiz-feedback correct-fb">Richtig! Reaktionszeit hat einen natürlichen Nullpunkt (0 ms = keine Zeit) und eine natürliche Einheit. Damit ist das Verhältnis zweier Zeiten sinnvoll interpretierbar.</div>
+  <div class="quiz-feedback wrong-fb">Nicht ganz. Reaktionszeit hat einen natürlichen Nullpunkt → Verhältnisskala. Aussagen wie „doppelt so schnell" sind bedeutsam.</div>
+</div>
+
+<div class="quiz" id="quiz2">
+  <h4>🧪 Wissenscheck: Bedeutsamkeit</h4>
+  <p>Welche Aussage ist auf <strong>Ordinalskala</strong> bedeutsam?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz2',this,false)">Der Durchschnitt der Schulnoten beträgt 2.3</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz2',this,true)" data-correct="true">Schüler A hat eine bessere Note als Schüler B</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz2',this,false)">Der Notenunterschied zwischen 1 und 2 ist gleich groß wie zwischen 4 und 5</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz2',this,false)">Note 2 ist doppelt so gut wie Note 4</button>
+  <div class="quiz-feedback correct-fb">Richtig! Auf Ordinalskala sind nur Rangvergleiche (besser/schlechter) bedeutsam, keine Abstände oder Verhältnisse.</div>
+  <div class="quiz-feedback wrong-fb">Falsch. Die Ordinalskala erlaubt nur Aussagen über Rangordnungen — also „besser als" oder „schlechter als".</div>
+</div>
+
+</section>

@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistik I – Lernhilfe | Uni Tübingen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8; --bg-card: #fffdf8; --text: #2a2520; --text-secondary: #6b5e52;
+  --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a5276; --accent4: #7d3c98; --accent5: #b7950b;
+  --border: #d4cbbf; --highlight: #fef3c7; --shadow: rgba(42,37,32,0.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Source Sans 3', Georgia, serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 17px; -webkit-font-smoothing: antialiased; }
+body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
+::selection { background: var(--accent); color: white; }
+
+/* HEADER */
+header { padding: 4rem 2rem 3rem; text-align: center; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #ece5d8, var(--bg)); position: relative; }
+header::after { content: '§'; position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); background: var(--bg); padding: 0 1rem; font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--accent); }
+.uni-badge { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); border: 1.5px solid var(--accent); padding: 0.3em 1em; margin-bottom: 1.5rem; border-radius: 2px; }
+header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; line-height: 1.2; margin-bottom: 0.5rem; }
+header h1 em { color: var(--accent); font-style: italic; }
+.subtitle { font-size: 1.05rem; color: var(--text-secondary); font-weight: 300; max-width: 620px; margin: 0 auto; }
+.subtitle strong { font-weight: 600; color: var(--text); }
+.header-hint { margin-top: 1.2rem; font-size: 0.82rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.header-hint .toggle-icon { display: inline-flex; align-items: center; background: var(--accent3); color: white; padding: 0.2em 0.6em; border-radius: 3px; font-size: 0.72rem; font-weight: 600; }
+
+/* NAV */
+nav { position: sticky; top: 0; z-index: 100; background: rgba(245,240,232,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); overflow-x: auto; }
+nav::-webkit-scrollbar { height: 0; }
+nav ul { display: flex; list-style: none; max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
+nav li a { display: block; padding: 0.85rem 1rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; white-space: nowrap; border-bottom: 2.5px solid transparent; transition: all 0.2s; }
+nav li a:hover, nav li a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* MAIN */
+main { max-width: 880px; margin: 0 auto; padding: 2rem 1.5rem 6rem; }
+section { margin-bottom: 4rem; scroll-margin-top: 60px; }
+.section-number { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700; color: var(--accent); opacity: 0.15; line-height: 1; margin-bottom: -0.8rem; }
+section > h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; display: inline-block; }
+section > .section-subtitle { font-size: 0.95rem; color: var(--text-secondary); font-style: italic; margin-bottom: 1.5rem; }
+section p, .deep-dive-content p { margin-bottom: 1rem; max-width: 72ch; }
+h3.sub { font-family: 'Playfair Display', serif; margin: 2rem 0 1rem; font-size: 1.2rem; }
+
+/* CARDS */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px var(--shadow); }
+.card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
+.card h3 .icon { font-size: 1.3rem; }
+.card p { font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary); }
+
+/* BOXES */
+.def-box { background: var(--bg-card); border-left: 4px solid var(--accent); padding: 1.2rem 1.5rem; margin: 1.2rem 0; border-radius: 0 4px 4px 0; }
+.def-box.green { border-left-color: var(--accent2); } .def-box.blue { border-left-color: var(--accent3); }
+.def-box.purple { border-left-color: var(--accent4); } .def-box.gold { border-left-color: var(--accent5); }
+.def-box .label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.4rem; color: var(--accent); }
+.def-box.green .label { color: var(--accent2); } .def-box.blue .label { color: var(--accent3); }
+.def-box.purple .label { color: var(--accent4); } .def-box.gold .label { color: var(--accent5); }
+.def-box p { font-size: 0.95rem; margin-bottom: 0.5rem; }
+.def-box p:last-child { margin-bottom: 0; }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 4px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: var(--bg-card); }
+th { background: #ece5d8; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; text-align: left; padding: 0.8rem 1rem; border-bottom: 2px solid var(--border); }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; } tr:hover td { background: var(--highlight); }
+
+/* CODE */
+.formula { font-family: 'JetBrains Mono', monospace; background: #2a2520; color: #f0e6d3; padding: 1.2rem 1.5rem; border-radius: 4px; margin: 1rem 0; overflow-x: auto; font-size: 0.85rem; line-height: 1.8; }
+.formula .comment { color: #8b7d6b; } .formula .keyword { color: #e8a87c; }
+.formula .symbol { color: #c0392b; } .formula .result { color: #58d68d; }
+code { font-family: 'JetBrains Mono', monospace; background: rgba(42,37,32,0.06); padding: 0.15em 0.4em; border-radius: 3px; font-size: 0.88em; }
+
+/* COLORED BOXES */
+.example { background: linear-gradient(135deg, #fef9f0, #fef3c7); border: 1px solid #e8d9a0; border-radius: 4px; padding: 1.3rem 1.5rem; margin: 1.2rem 0; }
+.example::before { content: '💡 Beispiel'; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent5); display: block; margin-bottom: 0.5rem; }
+.merksatz { background: linear-gradient(135deg, #eaf5ee, #d5f5e3); border: 1px solid #a9dfbf; border-radius: 4px; padding: 1.3rem 1.5rem; margin: 1.2rem 0; }
+.merksatz::before { content: '✓ Merke'; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent2); display: block; margin-bottom: 0.5rem; }
+.achtung { background: linear-gradient(135deg, #fdf2f2, #fadbd8); border: 1px solid #f1948a; border-radius: 4px; padding: 1.3rem 1.5rem; margin: 1.2rem 0; }
+.achtung::before { content: '⚠ Haufiger Fehler'; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 0.5rem; }
+.analogie { background: linear-gradient(135deg, #f4ecf7, #e8daef); border: 1px solid #c39bd3; border-radius: 4px; padding: 1.3rem 1.5rem; margin: 1.2rem 0; }
+.analogie::before { content: '🎯 Analogie'; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent4); display: block; margin-bottom: 0.5rem; }
+.example p, .merksatz p, .achtung p, .analogie p { font-size: 0.92rem; }
+
+/* DEEP DIVE */
+.deep-dive { margin: 1.5rem 0; border: 1.5px solid var(--accent3); border-radius: 6px; overflow: hidden; background: var(--bg-card); }
+.deep-dive-toggle { width: 100%; display: flex; align-items: center; gap: 0.7rem; padding: 1rem 1.3rem; background: linear-gradient(135deg, #eaf2f8, #d6eaf8); border: none; cursor: pointer; font-family: inherit; font-size: 0.92rem; font-weight: 600; color: var(--accent3); text-align: left; transition: background 0.2s; }
+.deep-dive-toggle:hover { background: linear-gradient(135deg, #d6eaf8, #aed6f1); }
+.deep-dive-toggle .dd-icon { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent3); color: white; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; transition: transform 0.3s; }
+.deep-dive.open .deep-dive-toggle .dd-icon { transform: rotate(180deg); }
+.deep-dive-toggle .dd-badge { margin-left: auto; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent3); color: white; padding: 0.2em 0.6em; border-radius: 3px; opacity: 0.8; }
+.deep-dive-content { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), padding 0.3s; padding: 0 1.5rem; }
+.deep-dive.open .deep-dive-content { max-height: 8000px; padding: 1.5rem; border-top: 1px solid #aed6f1; }
+.deep-dive-content h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin: 1.5rem 0 0.6rem; color: var(--accent3); }
+.deep-dive-content h4:first-child { margin-top: 0; }
+
+/* COMPARISON */
+.vergleich { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.vergleich-seite { padding: 1.2rem 1.3rem; background: var(--bg-card); font-size: 0.9rem; }
+.vergleich-seite:first-child { border-right: 1px solid var(--border); }
+.vergleich-seite h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--accent2); }
+.vergleich-seite:last-child h4 { border-bottom-color: var(--accent); }
+.vergleich-seite ul { list-style: none; padding: 0; }
+.vergleich-seite ul li { padding: 0.3rem 0 0.3rem 1.2rem; position: relative; font-size: 0.88rem; color: var(--text-secondary); }
+.vergleich-seite ul li::before { position: absolute; left: 0; font-size: 0.85rem; }
+.vergleich-seite:first-child ul li::before { content: '✓'; color: var(--accent2); }
+.vergleich-seite:last-child ul li::before { content: '✗'; color: var(--accent); }
+
+/* QUIZ */
+.quiz { background: var(--bg-card); border: 1.5px solid var(--accent3); border-radius: 4px; padding: 1.5rem; margin: 1.5rem 0; }
+.quiz h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin-bottom: 1rem; color: var(--accent3); }
+.quiz-option { display: block; width: 100%; text-align: left; padding: 0.7rem 1rem; margin: 0.4rem 0; background: transparent; border: 1px solid var(--border); border-radius: 3px; cursor: pointer; font-family: inherit; font-size: 0.9rem; color: var(--text); transition: all 0.2s; }
+.quiz-option:hover:not(:disabled) { border-color: var(--accent3); background: rgba(26,82,118,0.04); }
+.quiz-option.correct { border-color: var(--accent2) !important; background: #d5f5e3 !important; color: var(--accent2); font-weight: 600; }
+.quiz-option.wrong { border-color: var(--accent) !important; background: #fadbd8 !important; color: var(--accent); opacity: 0.7; }
+.quiz-option:disabled { cursor: default; }
+.quiz-feedback { margin-top: 0.8rem; padding: 0.8rem 1rem; border-radius: 3px; font-size: 0.88rem; display: none; line-height: 1.6; }
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { background: #d5f5e3; color: #1e7e34; }
+.quiz-feedback.wrong-fb { background: #fadbd8; color: var(--accent); }
+
+/* FLOW */
+.flow { display: flex; align-items: center; margin: 1.5rem 0; overflow-x: auto; padding: 1rem 0; flex-wrap: wrap; justify-content: center; }
+.flow-step { background: var(--bg-card); border: 1.5px solid var(--border); border-radius: 4px; padding: 0.8rem 1.2rem; font-size: 0.82rem; font-weight: 600; text-align: center; min-width: 100px; transition: transform 0.2s; }
+.flow-step:hover { transform: scale(1.05); box-shadow: 0 4px 16px var(--shadow); border-color: var(--accent); }
+.flow-step small { display: block; font-weight: 400; font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.3rem; }
+.flow-arrow { font-size: 1.2rem; color: var(--accent); padding: 0 0.4rem; flex-shrink: 0; }
+
+/* DIAGRAM */
+.diagram { margin: 1.5rem 0; text-align: center; }
+.diagram svg { max-width: 100%; height: auto; }
+.diagram-caption { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem; font-style: italic; }
+
+/* MISC */
+.sep { text-align: center; margin: 3rem 0; color: var(--border); font-family: 'Playfair Display', serif; font-size: 1.2rem; letter-spacing: 0.5em; }
+#progressBar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 200; transition: width 0.15s; width: 0; }
+footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--text-secondary); }
+#topBtn { position: fixed; bottom: 2rem; right: 2rem; background: var(--accent); color: white; border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; opacity: 0; transition: opacity 0.3s, transform 0.3s; z-index: 50; box-shadow: 0 4px 12px rgba(192,57,43,0.3); }
+#topBtn.visible { opacity: 1; } #topBtn:hover { transform: scale(1.1); }
+
+@media (max-width: 640px) {
+  header { padding: 2.5rem 1.2rem 2rem; } main { padding: 1.5rem 1rem 4rem; }
+  nav li a { padding: 0.7rem 0.6rem; font-size: 0.68rem; } .card-grid { grid-template-columns: 1fr; }
+  .flow { flex-direction: column; } .flow-arrow { transform: rotate(90deg); }
+  .section-number { font-size: 2.5rem; } section > h2 { font-size: 1.4rem; }
+  .vergleich { grid-template-columns: 1fr; } .vergleich-seite:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+}
+</style>
+</head>
+<body>
+<div id="progressBar"></div>
+
+<header>
+  <a href="../../index.html" style="display:inline-block;font-size:0.78rem;color:var(--text-secondary);text-decoration:none;margin-bottom:0.8rem" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-secondary)'">&larr; Alle Themen</a>
+  <div class="uni-badge">Universität Tübingen · Fachbereich Psychologie</div>
+  <h1>Statistik <em>I</em></h1>
+  <p class="subtitle">Lernhilfe zur Vorlesung von <strong>Florian Wickelmaier</strong> — basierend auf Fahrmeir et al. (2023)</p>
+  <p class="header-hint">Klick auf <span class="toggle-icon">▼ Vertiefung</span> für erweiterte Erklärungen zu jedem Thema</p>
+</header>
+
+<nav><ul>
+  <li><a href="#grundlagen">Grundlagen</a></li>
+  <li><a href="#haeufigkeit">Häufigkeit</a></li>
+  <li><a href="#lagemasse">Lagemaße</a></li>
+  <li><a href="#streuung">Streuung</a></li>
+  <li><a href="#korrelation">Korrelation</a></li>
+  <li><a href="#regression">Regression</a></li>
+  <li><a href="#wahrscheinlichkeit">Wahrscheinlichkeit</a></li>
+  <li><a href="#verteilungen">Verteilungen</a></li>
+</ul></nav>
+
+<main>
+<!-- ═══════════════ 1 · GRUNDLAGEN ═══════════════ -->
+<section id="grundlagen">
+<div class="section-number">01</div>
+<h2>Grundlagen der Statistik</h2>
+<p class="section-subtitle">Merkmale, Skalenniveaus und Datenstrukturen</p>
+
+<p>Das Wort <em>Statistik</em> stammt vom lateinischen <em>status</em> (Zustand) ab. Die Disziplin gliedert sich in zwei Hauptbereiche: <strong>deskriptive Statistik</strong> (Beschreibung und Zusammenfassung von Daten) und <strong>Inferenzstatistik</strong> (Schlüsse von Stichproben auf Populationen).</p>
+
+<h3 class="sub">Merkmale und Merkmalstypen</h3>
+
+<div class="def-box">
+  <div class="label">Definition</div>
+  <p>Ein <strong>Merkmal</strong> (Variable) ist eine Eigenschaft, die an Untersuchungseinheiten beobachtet wird. Die möglichen Werte heißen <strong>Merkmalsausprägungen</strong>.</p>
+</div>
+
+<div class="card-grid">
+  <div class="card">
+    <h3><span class="icon">📊</span> Quantitativ</h3>
+    <p>Numerische Merkmale, bei denen Rechenoperationen sinnvoll sind. Beispiel: Körpergröße, Reaktionszeit, IQ-Wert.</p>
+  </div>
+  <div class="card">
+    <h3><span class="icon">🏷️</span> Qualitativ</h3>
+    <p>Kategoriale Merkmale ohne natürliche Ordnung oder mit Ordnung, aber ohne feste Abstände. Beispiel: Geschlecht, Schulnoten.</p>
+  </div>
+  <div class="card">
+    <h3><span class="icon">🔢</span> Diskret</h3>
+    <p>Endlich oder abzählbar viele Ausprägungen. Beispiel: Anzahl Kinder, Würfelergebnis.</p>
+  </div>
+  <div class="card">
+    <h3><span class="icon">📈</span> Stetig</h3>
+    <p>Überabzählbar viele Ausprägungen (jeder Wert in einem Intervall möglich). Beispiel: Gewicht, Temperatur.</p>
+  </div>
+</div>
+
+<h3 class="sub">Skalenniveaus</h3>
+
+<p>Das Skalenniveau bestimmt, welche Operationen und statistischen Kennwerte <strong>bedeutsam</strong> (sinnvoll interpretierbar) sind.</p>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Skala</th><th>Eigenschaft</th><th>Zulässige Transformation</th><th>Beispiel</th></tr>
+  <tr><td><strong>Nominalskala</strong></td><td>Gleichheit / Verschiedenheit</td><td>Jede eineindeutige Abbildung</td><td>Geschlecht, Blutgruppe</td></tr>
+  <tr><td><strong>Ordinalskala</strong></td><td>Rangordnung</td><td>Streng monoton steigende Funktionen</td><td>Schulnoten, Ranglisten</td></tr>
+  <tr><td><strong>Intervallskala</strong></td><td>Gleiche Abstände interpretierbar</td><td>Positiv lineare: y = p·x + q (p &gt; 0)</td><td>Temperatur (°C), Kalender</td></tr>
+  <tr><td><strong>Verhältnisskala</strong></td><td>Natürlicher Nullpunkt</td><td>Ähnlichkeit: y = p·x (p &gt; 0)</td><td>Gewicht, Länge, Dauer</td></tr>
+  <tr><td><strong>Absolutskala</strong></td><td>Natürliche Einheit</td><td>Nur Identität: y = x</td><td>Anzahl, Häufigkeit</td></tr>
+</table>
+</div>
+
+<div class="merksatz">
+  <p>Ein statistisches Ergebnis ist <strong>bedeutsam</strong>, wenn es unter allen zulässigen Transformationen der verwendeten Skala invariant bleibt. Beispiel: „Der Median der Noten ist 3" bleibt sinnvoll auch bei Umkodierung (solange die Ordnung erhalten bleibt).</p>
+</div>
+
+<div class="achtung">
+  <p>Mittelwert und Standardabweichung setzen mindestens <strong>Intervallskalenniveau</strong> voraus. Für ordinale Daten (z.B. Schulnoten) sind diese Kennwerte streng genommen nicht bedeutsam — auch wenn sie in der Praxis oft trotzdem berechnet werden.</p>
+</div>
+
+<!-- Deep Dive: Bedeutsamkeit -->
+<div class="deep-dive" id="dd1a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd1a')">
+    <span class="dd-icon">▼</span>
+    Bedeutsamkeit von Aussagen — formaler Hintergrund
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Repräsentationstheorem</h4>
+    <p>Eine Skala ist eine Abbildung von einem empirischen Relativ (Objekten mit Relationen) in ein numerisches Relativ. Die <strong>zulässigen Transformationen</strong> sind genau die Abbildungen, die eine gültige Skala wieder in eine gültige Skala überführen.</p>
+    <h4>Beispiel: Temperatur</h4>
+    <p>Celsius und Fahrenheit sind beide Intervallskalen. Die Umrechnung F = 1.8·C + 32 ist positiv linear. Die Aussage „Heute ist es doppelt so warm wie gestern" ist in Celsius und Fahrenheit verschieden — also <strong>nicht bedeutsam</strong> auf Intervallskalenniveau.</p>
+    <p>Dagegen ist die Aussage „Der Temperaturunterschied zwischen Montag und Dienstag ist gleich groß wie zwischen Mittwoch und Donnerstag" invariant unter linearer Transformation — also <strong>bedeutsam</strong>.</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz1">
+  <h4>🧪 Wissenscheck: Skalenniveaus</h4>
+  <p>Welches Skalenniveau hat das Merkmal „Reaktionszeit in Millisekunden"?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz1',this,false)">Ordinalskala</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz1',this,false)">Intervallskala</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz1',this,true)" data-correct="true">Verhältnisskala</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz1',this,false)">Nominalskala</button>
+  <div class="quiz-feedback correct-fb">Richtig! Reaktionszeit hat einen natürlichen Nullpunkt (0 ms = keine Zeit) und eine natürliche Einheit. Damit ist das Verhältnis zweier Zeiten sinnvoll interpretierbar.</div>
+  <div class="quiz-feedback wrong-fb">Nicht ganz. Reaktionszeit hat einen natürlichen Nullpunkt → Verhältnisskala. Aussagen wie „doppelt so schnell" sind bedeutsam.</div>
+</div>
+
+<div class="quiz" id="quiz2">
+  <h4>🧪 Wissenscheck: Bedeutsamkeit</h4>
+  <p>Welche Aussage ist auf <strong>Ordinalskala</strong> bedeutsam?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz2',this,false)">Der Durchschnitt der Schulnoten beträgt 2.3</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz2',this,true)" data-correct="true">Schüler A hat eine bessere Note als Schüler B</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz2',this,false)">Der Notenunterschied zwischen 1 und 2 ist gleich groß wie zwischen 4 und 5</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz2',this,false)">Note 2 ist doppelt so gut wie Note 4</button>
+  <div class="quiz-feedback correct-fb">Richtig! Auf Ordinalskala sind nur Rangvergleiche (besser/schlechter) bedeutsam, keine Abstände oder Verhältnisse.</div>
+  <div class="quiz-feedback wrong-fb">Falsch. Die Ordinalskala erlaubt nur Aussagen über Rangordnungen — also „besser als" oder „schlechter als".</div>
+</div>
+
+</section>
+<!-- ═══════════════ 2 · HÄUFIGKEITSVERTEILUNGEN ═══════════════ -->
+<section id="haeufigkeit">
+<div class="section-number">02</div>
+<h2>Häufigkeitsverteilungen</h2>
+<p class="section-subtitle">Häufigkeitstabellen, Verteilungsfunktion und Formen</p>
+
+<p>Bei einem diskreten Merkmal <em>A</em> mit Ausprägungen {a₁, …, aₘ} und einer Urliste der Länge <em>n</em> beschreibt die Häufigkeitsverteilung, wie oft jede Ausprägung vorkommt.</p>
+
+<h3 class="sub">Absolute und relative Häufigkeit</h3>
+
+<div class="def-box blue">
+  <div class="label">Definition</div>
+  <p>Die <strong>absolute Häufigkeit</strong> h(aⱼ) gibt an, wie oft die Ausprägung aⱼ in der Urliste auftritt.</p>
+  <p>Die <strong>relative Häufigkeit</strong> f(aⱼ) = h(aⱼ) / n normiert auf den Stichprobenumfang.</p>
+</div>
+
+<div class="example">
+  <p><strong>Noten bei Klassenarbeit</strong> (n = 25): x = (3, 5, 4, 3, 2, 3, 4, 6, 1, 2, 3, 3, 4, 5, 2, 1, 3, 4, 2, 4, 3, 1, 2, 3, 4)</p>
+  <p>Note 1: h = 3, f = 0.12 · Note 2: h = 5, f = 0.20 · Note 3: h = 8, f = 0.32 · Note 4: h = 6, f = 0.24 · Note 5: h = 2, f = 0.08 · Note 6: h = 1, f = 0.04</p>
+</div>
+
+<h3 class="sub">Empirische Verteilungsfunktion</h3>
+
+<p>Die <strong>kumulierte Häufigkeit</strong> summiert alle Häufigkeiten bis zu einem Wert x auf:</p>
+
+<div class="def-box green">
+  <div class="label">Kumulierte Häufigkeiten</div>
+  <p><strong>Absolut:</strong> H(x) = Σ h(aⱼ) für alle aⱼ ≤ x</p>
+  <p><strong>Relativ:</strong> F(x) = H(x) / n = Σ f(aⱼ) für alle aⱼ ≤ x</p>
+</div>
+
+<p>Die empirische Verteilungsfunktion F(x) ist eine <strong>Treppenfunktion</strong> mit folgenden Eigenschaften:</p>
+<ul style="margin:0.5rem 0 1rem 1.5rem">
+  <li>F(x) = 0 für x &lt; a₁ (vor dem kleinsten Wert)</li>
+  <li>F(x) = 1 für x ≥ aₘ (ab dem größten Wert)</li>
+  <li>F(x) ist monoton nicht-fallend: x &lt; x' → F(x) ≤ F(x')</li>
+</ul>
+
+<h3 class="sub">Stetige Merkmale und Klasseneinteilung</h3>
+
+<p>Bei stetigen (oder quasi-stetigen) Merkmalen werden die Werte in <strong>Klassen</strong> (Intervalle) eingeteilt. Das resultierende Diagramm heißt <strong>Histogramm</strong>. Die Fläche jedes Balkens (nicht die Höhe!) gibt die relative Häufigkeit der Klasse an.</p>
+
+<div class="achtung">
+  <p>Im Histogramm ist die Höhe immer die <strong>Häufigkeitsdichte</strong> f(aⱼ)/Δⱼ — die Fläche eines Balkens ergibt die relative Häufigkeit. Bei gleichen Klassenbreiten ist die Dichte proportional zur Häufigkeit, bei <strong>ungleichen Breiten</strong> muss die Dichte explizit berechnet werden, sonst werden breitere Klassen visuell überrepräsentiert.</p>
+</div>
+
+<h3 class="sub">Formen von Verteilungen</h3>
+
+<div class="card-grid">
+  <div class="card">
+    <h3>Symmetrisch</h3>
+    <p>Spiegelsymmetrie um den Mittelpunkt. Modus, Median und Mittelwert fallen zusammen.</p>
+  </div>
+  <div class="card">
+    <h3>Rechtsschief (linkssteil)</h3>
+    <p>Langer Schwanz nach rechts. Mittelwert &gt; Median &gt; Modus. Beispiel: Einkommensverteilung.</p>
+  </div>
+  <div class="card">
+    <h3>Linksschief (rechtssteil)</h3>
+    <p>Langer Schwanz nach links. Modus &gt; Median &gt; Mittelwert. Beispiel: Klausurergebnisse bei leichter Klausur.</p>
+  </div>
+  <div class="card">
+    <h3>Bimodal</h3>
+    <p>Zwei Gipfel — oft Hinweis auf zwei verschiedene Subpopulationen in den Daten.</p>
+  </div>
+</div>
+
+<!-- Deep Dive: R-Code -->
+<div class="deep-dive" id="dd2a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd2a')">
+    <span class="dd-icon">▼</span>
+    Empirische Verteilungsfunktion in R
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Verteilungsfunktion mit ecdf()</h4>
+    <div class="formula">
+<span class="comment"># Urliste eingeben</span>
+x <- c(3,5,4,3,2,3,4,6,1,2,3,3,4,5,2,1,3,4,2,4,3,1,2,3,4)
+
+<span class="comment"># Empirische Verteilungsfunktion berechnen</span>
+F <- <span class="keyword">ecdf</span>(x)  <span class="comment"># Rückgabewert ist eine Funktion</span>
+
+<span class="comment"># Grafisch darstellen</span>
+<span class="keyword">plot</span>(F, col.points="red", col.hor="red", pch=16,
+     ylab="F(x)", main="Empirische Verteilungsfunktion")
+    </div>
+    <p>Die Funktion <code>ecdf()</code> gibt eine Funktion zurück, die für jeden Wert x die kumulierte relative Häufigkeit liefert: <code>F(3)</code> ergibt 0.64.</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz3">
+  <h4>🧪 Wissenscheck: Verteilungsfunktion</h4>
+  <p>Gegeben die Urliste x = (1, 3, 3, 5, 5, 5, 7). Was ist F(5)?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz3',this,false)">3/7 ≈ 0.43</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz3',this,true)" data-correct="true">6/7 ≈ 0.86</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz3',this,false)">5/7 ≈ 0.71</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz3',this,false)">1.00</button>
+  <div class="quiz-feedback correct-fb">Richtig! F(5) = Anzahl der Werte ≤ 5 geteilt durch n. Das sind {1, 3, 3, 5, 5, 5} = 6 von 7 → F(5) = 6/7.</div>
+  <div class="quiz-feedback wrong-fb">F(5) zählt alle Werte ≤ 5: {1, 3, 3, 5, 5, 5} = 6 Werte. Also F(5) = 6/7 ≈ 0.86.</div>
+</div>
+
+</section>
+<!-- ═══════════════ 3 · LAGEMAßE ═══════════════ -->
+<section id="lagemasse">
+<div class="section-number">03</div>
+<h2>Lagemaße</h2>
+<p class="section-subtitle">Modus, Median, arithmetisches Mittel und weitere Mittelwerte</p>
+
+<p>Lagemaße beschreiben das „Zentrum" einer Verteilung — den typischen oder repräsentativen Wert.</p>
+
+<h3 class="sub">Modus (Modalwert)</h3>
+
+<div class="def-box">
+  <div class="label">Definition</div>
+  <p>Der <strong>Modus</strong> x<sub>mod</sub> ist die Merkmalsausprägung mit der größten Häufigkeit. Setzt mindestens <strong>Nominalskalenniveau</strong> voraus.</p>
+</div>
+
+<p>Der Modus muss nicht eindeutig sein (bimodale Verteilung). Er ist das einzige Lagemaß, das auch für qualitative Merkmale sinnvoll ist.</p>
+
+<h3 class="sub">Median (Zentralwert)</h3>
+
+<div class="def-box green">
+  <div class="label">Definition</div>
+  <p>Der <strong>Median</strong> x̃ teilt die geordnete Urliste in zwei gleich große Hälften. Setzt mindestens <strong>Ordinalskalenniveau</strong> voraus.</p>
+  <p>Für die Rangreihe x₍₁₎ ≤ x₍₂₎ ≤ … ≤ x₍ₙ₎ gilt:<br>
+  x̃ = x₍₍ₙ₊₁₎/₂₎ falls n ungerade<br>
+  x̃ = ½(x₍ₙ/₂₎ + x₍ₙ/₂₊₁₎) falls n gerade</p>
+</div>
+
+<div class="merksatz">
+  <p><strong>Minimumeigenschaft des Medians:</strong> Der Median minimiert die Summe der absoluten Abweichungen: Σ|xᵢ − a| wird minimal für a = x̃. Dies macht den Median robust gegen Ausreißer.</p>
+</div>
+
+<h3 class="sub">Arithmetisches Mittel</h3>
+
+<div class="def-box blue">
+  <div class="label">Definition</div>
+  <p>Das <strong>arithmetische Mittel</strong> x̄ = (1/n) · Σxᵢ ist der „Schwerpunkt" der Daten. Setzt mindestens <strong>Intervallskalenniveau</strong> voraus.</p>
+</div>
+
+<div class="card-grid">
+  <div class="card">
+    <h3>Nulleigenschaft</h3>
+    <p>Die Summe der Abweichungen vom Mittelwert ist null: Σ(xᵢ − x̄) = 0. Das Mittel liegt immer „in der Mitte" der Werte.</p>
+  </div>
+  <div class="card">
+    <h3>Minimumeigenschaft</h3>
+    <p>Das Mittel minimiert die Summe der <strong>quadrierten</strong> Abweichungen: Σ(xᵢ − a)² wird minimal für a = x̄.</p>
+  </div>
+</div>
+
+<h3 class="sub">Weitere Mittelwerte</h3>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Mittelwert</th><th>Formel</th><th>Anwendung</th></tr>
+  <tr><td><strong>Geometrisches Mittel</strong></td><td>x̄<sub>geo</sub> = (∏xᵢ)<sup>1/n</sup></td><td>Durchschnittliche Wachstumsraten, Verhältnisse</td></tr>
+  <tr><td><strong>Harmonisches Mittel</strong></td><td>x̄<sub>harm</sub> = n / Σ(1/xᵢ)</td><td>Durchschnittsgeschwindigkeit bei gleichen Strecken</td></tr>
+</table>
+</div>
+
+<div class="merksatz">
+  <p>Es gilt stets: x̄<sub>harm</sub> ≤ x̄<sub>geo</sub> ≤ x̄<sub>arith</sub> (Ungleichung der Mittelwerte). Gleichheit nur wenn alle Werte identisch sind.</p>
+</div>
+
+<div class="analogie">
+  <p><strong>Waage vs. Lineal:</strong> Der <strong>Mittelwert</strong> ist wie der Schwerpunkt einer Wippe — jeder Wert übt „Drehmoment" aus, proportional zu seinem Abstand. Der <strong>Median</strong> ist wie die Mitte einer Schlange — er teilt die Anzahl der Personen in zwei gleiche Gruppen, egal wie weit die Ausreißer entfernt stehen.</p>
+</div>
+
+<!-- Deep Dive: Bedeutsamkeit von Mittelwertvergleichen -->
+<div class="deep-dive" id="dd3a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd3a')">
+    <span class="dd-icon">▼</span>
+    Bedeutsamkeit: Welcher Mittelwert auf welcher Skala?
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Skalenabhängigkeit</h4>
+    <p>Der <strong>Modus</strong> ist auf allen Skalenniveaus bedeutsam (ab Nominal). Der <strong>Median</strong> erfordert Ordinalskala — er bleibt bei jeder streng monotonen Transformation erhalten. Das <strong>arithmetische Mittel</strong> erfordert Intervallskala, das <strong>geometrische Mittel</strong> erfordert Verhältnisskala.</p>
+    <h4>Vergleich von Mittelwerten</h4>
+    <p>Aussagen der Form „x̄(A) > x̄(B)" sind auf Intervallskala bedeutsam: Unter positiv linearer Transformation y = p·x + q wird ȳ(A) = p·x̄(A) + q > p·x̄(B) + q = ȳ(B) für p > 0.</p>
+    <p>Aber: „x̄(A) = 2 · x̄(B)" ist auf Intervallskala <strong>nicht</strong> bedeutsam, da die Transformation den Quotienten ändert.</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz4">
+  <h4>🧪 Wissenscheck: Lagemaße</h4>
+  <p>Für die Werte 2, 3, 3, 7, 100: Welches Lagemaß ist am robustesten gegenüber dem Ausreißer 100?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz4',this,false)">Arithmetisches Mittel</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz4',this,true)" data-correct="true">Median</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz4',this,false)">Geometrisches Mittel</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz4',this,false)">Harmonisches Mittel</button>
+  <div class="quiz-feedback correct-fb">Richtig! Der Median (= 3) ignoriert den Ausreißer 100 komplett. Das arithmetische Mittel (= 23) wird stark verzerrt.</div>
+  <div class="quiz-feedback wrong-fb">Der Median ist hier am robustesten: Er beträgt 3, unabhängig davon, ob der größte Wert 100 oder 1000 ist. Das arithmetische Mittel reagiert dagegen stark auf Extremwerte.</div>
+</div>
+
+<div class="quiz" id="quiz5">
+  <h4>🧪 Wissenscheck: Eigenschaften</h4>
+  <p>Welche Eigenschaft hat das arithmetische Mittel?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz5',this,false)">Es minimiert Σ|xᵢ − a|</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz5',this,true)" data-correct="true">Es minimiert Σ(xᵢ − a)²</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz5',this,false)">Es ist immer größer als der Median</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz5',this,false)">Es erfordert Nominalskalenniveau</button>
+  <div class="quiz-feedback correct-fb">Richtig! Das arithmetische Mittel minimiert die Summe der quadrierten Abweichungen (Minimumeigenschaft). Die absoluten Abweichungen werden vom Median minimiert.</div>
+  <div class="quiz-feedback wrong-fb">Σ(xᵢ − a)² wird durch a = x̄ minimiert (Minimumeigenschaft des Mittels). Σ|xᵢ − a| wird dagegen vom Median minimiert.</div>
+</div>
+
+</section>
+<!-- ═══════════════ 4 · STREUUNG & TRANSFORMATION ═══════════════ -->
+<section id="streuung">
+<div class="section-number">04</div>
+<h2>Streuung und Transformationen</h2>
+<p class="section-subtitle">Varianz, Standardabweichung, z-Transformation und Schiefe</p>
+
+<p>Während Lagemaße das Zentrum beschreiben, quantifizieren <strong>Streuungsmaße</strong> die Variabilität der Daten um dieses Zentrum herum.</p>
+
+<h3 class="sub">Varianz und Standardabweichung</h3>
+
+<div class="def-box">
+  <div class="label">Definitionen</div>
+  <p><strong>Varianz:</strong> s̃² = (1/n) · Σ(xᵢ − x̄)² — mittlere quadrierte Abweichung vom Mittelwert.</p>
+  <p><strong>Standardabweichung:</strong> s̃ = √s̃² — in der Originaleinheit der Daten.</p>
+  <p>Beide setzen mindestens <strong>Intervallskalenniveau</strong> voraus.</p>
+</div>
+
+<div class="merksatz">
+  <p><strong>Verschiebungssatz:</strong> s̃² = (1/n) · Σxᵢ² − x̄² = x̄² − (x̄)². Die Varianz entspricht dem „mittleren Quadrat minus Quadrat des Mittels". Nützlich für Handrechnung.</p>
+</div>
+
+<h3 class="sub">Weitere Streuungsmaße</h3>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Maß</th><th>Formel</th><th>Skalenniveau</th></tr>
+  <tr><td><strong>Spannweite</strong></td><td>R = x<sub>(n)</sub> − x<sub>(1)</sub></td><td>Ordinal</td></tr>
+  <tr><td><strong>Interquartilsabstand</strong></td><td>IQR = Q₃ − Q₁</td><td>Ordinal</td></tr>
+  <tr><td><strong>Mittlere absolute Abw.</strong></td><td>d = (1/n) · Σ|xᵢ − x̃|</td><td>Intervall</td></tr>
+  <tr><td><strong>Varianz</strong></td><td>s̃² = (1/n) · Σ(xᵢ − x̄)²</td><td>Intervall</td></tr>
+  <tr><td><strong>Variationskoeffizient</strong></td><td>V = s̃ / x̄</td><td>Verhältnis</td></tr>
+</table>
+</div>
+
+<h3 class="sub">Lineare Transformationen</h3>
+
+<p>Werden Daten linear transformiert mit yᵢ = p · xᵢ + q, dann gilt:</p>
+
+<div class="def-box blue">
+  <div class="label">Transformationsregeln</div>
+  <p><strong>Mittelwert:</strong> ȳ = p · x̄ + q</p>
+  <p><strong>Varianz:</strong> s̃²<sub>y</sub> = p² · s̃²<sub>x</sub></p>
+  <p><strong>Standardabweichung:</strong> s̃<sub>y</sub> = |p| · s̃<sub>x</sub></p>
+</div>
+
+<h3 class="sub">z-Transformation (Standardisierung)</h3>
+
+<div class="def-box green">
+  <div class="label">Definition</div>
+  <p>Die <strong>z-Transformation</strong> (Standardisierung) transformiert Daten so, dass Mittelwert = 0 und Varianz = 1:</p>
+  <p style="text-align:center; font-size:1.1rem; margin:0.8rem 0"><strong>zᵢ = (xᵢ − x̄) / s̃<sub>x</sub></strong></p>
+  <p>Dies ist ein Spezialfall der linearen Transformation mit p = 1/s̃<sub>x</sub> und q = −x̄/s̃<sub>x</sub>.</p>
+</div>
+
+<div class="example">
+  <p><strong>Werte:</strong> 16, 4, 13, 9, 8 → x̄ = 10, s̃<sub>x</sub> = √17.2 ≈ 4.15</p>
+  <p><strong>z-Werte:</strong> z₁ = (16−10)/4.15 = 1.45, z₂ = (4−10)/4.15 = −1.45, z₃ = 0.72, z₄ = −0.24, z₅ = −0.48</p>
+  <p>Kontrolle: z̄ = 0, s̃²<sub>z</sub> = 1 ✓</p>
+</div>
+
+<div class="merksatz">
+  <p>Die z-Transformation macht Werte aus verschiedenen Verteilungen <strong>vergleichbar</strong>. Ein z-Wert von +2 bedeutet immer: „2 Standardabweichungen über dem Mittelwert" — egal ob es um Klausurergebnisse, IQ oder Reaktionszeiten geht.</p>
+</div>
+
+<h3 class="sub">Schiefe</h3>
+
+<p>Die <strong>Schiefe</strong> (skewness) beschreibt die Asymmetrie einer Verteilung. Ein erster Anhaltspunkt ist die Differenz x̄ − x̃:</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h3>Keine Schiefe</h3>
+    <p>x̄ − x̃ = 0: Symmetrische Verteilung. Modus, Median und Mittelwert fallen zusammen.</p>
+  </div>
+  <div class="card">
+    <h3>Positive Schiefe</h3>
+    <p>x̄ − x̃ &gt; 0: Rechtsschief (linkssteil). Der Mittelwert wird durch hohe Ausreißer nach rechts gezogen.</p>
+  </div>
+  <div class="card">
+    <h3>Negative Schiefe</h3>
+    <p>x̄ − x̃ &lt; 0: Linksschief (rechtssteil). Der Mittelwert wird durch niedrige Ausreißer nach links gezogen.</p>
+  </div>
+</div>
+
+<!-- Deep Dive: Beweis Transformationsregeln -->
+<div class="deep-dive" id="dd4a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd4a')">
+    <span class="dd-icon">▼</span>
+    Beweis: Lineare Transformation von Mittelwert und Varianz
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Mittelwert</h4>
+    <p>ȳ = (1/n) Σyᵢ = (1/n) Σ(p·xᵢ + q) = p · (1/n)Σxᵢ + (1/n) · n · q = p · x̄ + q ✓</p>
+    <h4>Varianz</h4>
+    <p>s̃²<sub>y</sub> = (1/n) Σ(yᵢ − ȳ)² = (1/n) Σ(p·xᵢ + q − p·x̄ − q)² = (1/n) Σ(p·(xᵢ − x̄))² = p² · (1/n) Σ(xᵢ − x̄)² = p² · s̃²<sub>x</sub> ✓</p>
+    <h4>z-Transformation: z̄ = 0 und s̃²<sub>z</sub> = 1</h4>
+    <p>z̄ = (1/s̃<sub>x</sub>) · x̄ − x̄/s̃<sub>x</sub> = 0 ✓</p>
+    <p>s̃²<sub>z</sub> = (1/s̃<sub>x</sub>)² · s̃²<sub>x</sub> = 1 ✓</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz6">
+  <h4>🧪 Wissenscheck: z-Transformation</h4>
+  <p>Eine Klausur hat x̄ = 60 und s̃ = 10. Welchen z-Wert hat ein Student mit 75 Punkten?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz6',this,false)">z = 0.75</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz6',this,true)" data-correct="true">z = 1.5</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz6',this,false)">z = 7.5</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz6',this,false)">z = 15</button>
+  <div class="quiz-feedback correct-fb">Richtig! z = (75 − 60) / 10 = 15/10 = 1.5. Der Student liegt 1.5 Standardabweichungen über dem Mittelwert.</div>
+  <div class="quiz-feedback wrong-fb">z = (xᵢ − x̄) / s̃ = (75 − 60) / 10 = 1.5. Der z-Wert gibt an, wie viele Standardabweichungen der Wert vom Mittelwert entfernt ist.</div>
+</div>
+
+<div class="quiz" id="quiz7">
+  <h4>🧪 Wissenscheck: Varianz</h4>
+  <p>Wenn alle Werte einer Stichprobe mit 3 multipliziert werden, wie verändert sich die Varianz?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz7',this,false)">Sie wird verdreifacht</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz7',this,true)" data-correct="true">Sie wird verneunfacht (×9)</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz7',this,false)">Sie bleibt gleich</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz7',this,false)">Sie wird verdoppelt</button>
+  <div class="quiz-feedback correct-fb">Richtig! Bei yᵢ = 3·xᵢ gilt s̃²<sub>y</sub> = 3² · s̃²<sub>x</sub> = 9 · s̃²<sub>x</sub>. Die Varianz skaliert mit dem Quadrat des Faktors.</div>
+  <div class="quiz-feedback wrong-fb">Bei Multiplikation mit p gilt: s̃²<sub>y</sub> = p² · s̃²<sub>x</sub>. Also wird die Varianz mit 3² = 9 multipliziert. Die Standardabweichung wird verdreifacht.</div>
+</div>
+
+</section>
+<!-- ═══════════════ 5 · KORRELATION ═══════════════ -->
+<section id="korrelation">
+<div class="section-number">05</div>
+<h2>Korrelation</h2>
+<p class="section-subtitle">Zusammenhangsmaße, Korrelationskoeffizienten und partielle Korrelation</p>
+
+<p>Korrelationsmaße quantifizieren den <strong>linearen Zusammenhang</strong> zwischen zwei Merkmalen. Die Art des Zusammenhangsmaßes hängt vom Skalenniveau der beteiligten Variablen ab.</p>
+
+<h3 class="sub">Kovarianz</h3>
+
+<div class="def-box">
+  <div class="label">Definition</div>
+  <p>Die <strong>empirische Kovarianz</strong> zweier Merkmale X und Y:</p>
+  <p style="text-align:center; font-size:1.05rem">s̃<sub>xy</sub> = (1/n) · Σ(xᵢ − x̄)(yᵢ − ȳ)</p>
+  <p>Positiv → gleichsinniger Zusammenhang · Negativ → gegensinnig · Null → kein linearer Zusammenhang</p>
+</div>
+
+<h3 class="sub">Pearson-Korrelation r</h3>
+
+<div class="def-box green">
+  <div class="label">Definition</div>
+  <p>Der <strong>Produkt-Moment-Korrelationskoeffizient</strong> (Pearson):</p>
+  <p style="text-align:center; font-size:1.05rem">r = s̃<sub>xy</sub> / (s̃<sub>x</sub> · s̃<sub>y</sub>)</p>
+  <p>Es gilt immer: <strong>−1 ≤ r ≤ +1</strong>. Setzt Intervallskalenniveau voraus.</p>
+</div>
+
+<div class="card-grid">
+  <div class="card">
+    <h3>r = +1</h3>
+    <p>Perfekt positiver linearer Zusammenhang. Alle Punkte liegen auf einer Geraden mit positiver Steigung.</p>
+  </div>
+  <div class="card">
+    <h3>r = 0</h3>
+    <p>Kein linearer Zusammenhang. Aber: Es kann trotzdem ein nichtlinearer Zusammenhang bestehen!</p>
+  </div>
+  <div class="card">
+    <h3>r = −1</h3>
+    <p>Perfekt negativer linearer Zusammenhang. Alle Punkte auf einer Geraden mit negativer Steigung.</p>
+  </div>
+</div>
+
+<div class="achtung">
+  <p><strong>Korrelation ≠ Kausalität!</strong> Ein hoher Korrelationskoeffizient zeigt nur einen statistischen Zusammenhang, keine Ursache-Wirkungs-Beziehung. Klassiker: Eisverkauf und Ertrinkungsfälle korrelieren positiv — die gemeinsame Ursache ist die Temperatur.</p>
+</div>
+
+<h3 class="sub">Spearman-Rangkorrelation r<sub>s</sub></h3>
+
+<div class="def-box blue">
+  <div class="label">Definition</div>
+  <p>Für ordinale Daten: Man ersetzt die Werte durch ihre Ränge und berechnet die Pearson-Korrelation der Ränge. Bei keinen Bindungen gilt die vereinfachte Formel:</p>
+  <p style="text-align:center; font-size:1.05rem">r<sub>s</sub> = 1 − 6·Σdᵢ² / (n·(n²−1))</p>
+  <p>wobei dᵢ = Rang(xᵢ) − Rang(yᵢ) die Rangdifferenzen sind.</p>
+</div>
+
+<h3 class="sub">Zusammenhangsmaße für kategoriale Daten</h3>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Maß</th><th>Anwendung</th><th>Wertebereich</th></tr>
+  <tr><td><strong>φ-Koeffizient</strong></td><td>Zwei dichotome Merkmale (2×2-Tafel)</td><td>−1 bis +1</td></tr>
+  <tr><td><strong>Odds Ratio (OR)</strong></td><td>Vierfeldertafel: Chancenverhältnis</td><td>0 bis ∞ (1 = kein Zusammenhang)</td></tr>
+  <tr><td><strong>Kontingenzkoeffizient</strong></td><td>Allgemeine Kontingenztafeln</td><td>0 bis 1</td></tr>
+</table>
+</div>
+
+<div class="example">
+  <p><strong>Vierfeldertafel:</strong> In einer 2×2-Tafel mit Zellen a, b, c, d (zeilenweise) berechnet sich:</p>
+  <p>φ = (a·d − b·c) / √((a+b)(c+d)(a+c)(b+d))</p>
+  <p>OR = (a·d) / (b·c) — ein OR von 3 bedeutet: Die Chance für das Ereignis ist in Gruppe 1 dreimal so hoch wie in Gruppe 2.</p>
+</div>
+
+<h3 class="sub">Partielle Korrelation</h3>
+
+<p>Die <strong>partielle Korrelation</strong> r<sub>xy.z</sub> misst den Zusammenhang zwischen X und Y, nachdem der Einfluss eines dritten Merkmals Z statistisch eliminiert (herauspartialisiert) wurde.</p>
+
+<div class="def-box purple">
+  <div class="label">Formel</div>
+  <p style="text-align:center; font-size:1.05rem">r<sub>xy.z</sub> = (r<sub>xy</sub> − r<sub>xz</sub> · r<sub>yz</sub>) / √((1 − r²<sub>xz</sub>) · (1 − r²<sub>yz</sub>))</p>
+</div>
+
+<div class="example">
+  <p><strong>Scheinkorrelation:</strong> Mit r<sub>xy</sub> = 0.5, r<sub>xz</sub> = 0.5, r<sub>yz</sub> = 0.5 ergibt sich:</p>
+  <p>r<sub>xy.z</sub> = (0.5 − 0.5·0.5) / √((1−0.25)·(1−0.25)) = 0.25/0.75 = 0.33</p>
+  <p>Der Zusammenhang zwischen X und Y wird schwächer, wenn Z kontrolliert wird.</p>
+</div>
+
+<div class="example">
+  <p><strong>Suppression:</strong> Lernaufwand (X), Prüfungsleistung (Y), Prüfungsangst (Z):</p>
+  <p>r<sub>xy</sub> = +0.2, r<sub>xz</sub> = +0.8, r<sub>yz</sub> = −0.4</p>
+  <p>r<sub>xy.z</sub> = (0.2 − 0.8·(−0.4)) / √((1−0.64)·(1−0.16)) = 0.52/0.55 ≈ <strong>+0.95</strong></p>
+  <p>Nach Kontrolle der Angst wird der wahre Zusammenhang zwischen Lernen und Leistung sichtbar!</p>
+</div>
+
+<!-- Deep Dive -->
+<div class="deep-dive" id="dd5a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd5a')">
+    <span class="dd-icon">▼</span>
+    Herleitung der partiellen Korrelation
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Idee: Herauspartialisieren</h4>
+    <p>Man berechnet die Regression von X auf Z und von Y auf Z. Die Residuen (x − a<sub>xz</sub> − b<sub>xz</sub>·z) und (y − a<sub>yz</sub> − b<sub>yz</sub>·z) repräsentieren den Anteil von X bzw. Y, der nicht durch Z erklärt wird.</p>
+    <p>Die partielle Korrelation r<sub>xy.z</sub> ist dann die Pearson-Korrelation dieser Residuen.</p>
+    <h4>Herleitung</h4>
+    <p>Mithilfe der Bilinearität der Kovarianz lässt sich die <strong>partielle Kovarianz</strong> als s̃<sub>xy.z</sub> = s̃<sub>xy</sub> − s̃<sub>xz</sub>·s̃<sub>yz</sub>/s̃²<sub>z</sub> herleiten. Die Residualvarianzen sind s̃²(x−b<sub>xz</sub>z) = s̃²<sub>x</sub>·(1−r²<sub>xz</sub>) und analog für Y. Division der partiellen Kovarianz durch die Residual-Standardabweichungen ergibt die Korrelationsformel r<sub>xy.z</sub> = (r<sub>xy</sub> − r<sub>xz</sub>·r<sub>yz</sub>) / √((1−r²<sub>xz</sub>)·(1−r²<sub>yz</sub>)).</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz8">
+  <h4>🧪 Wissenscheck: Korrelation</h4>
+  <p>Der Korrelationskoeffizient r = −0.85 bedeutet:</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz8',this,false)">Es besteht kein Zusammenhang</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz8',this,false)">X verursacht Y in negativer Richtung</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz8',this,true)" data-correct="true">Es besteht ein starker negativer linearer Zusammenhang</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz8',this,false)">85% der Varianz werden erklärt</button>
+  <div class="quiz-feedback correct-fb">Richtig! r = −0.85 zeigt einen starken negativen linearen Zusammenhang. Korrelation sagt nichts über Kausalität aus, und der erklärte Varianzanteil wäre r² = 0.72 (72%).</div>
+  <div class="quiz-feedback wrong-fb">r = −0.85 bedeutet: starker negativer linearer Zusammenhang. Der erklärte Varianzanteil ist r² = 0.72, nicht 0.85. Und Korrelation impliziert keine Kausalität.</div>
+</div>
+
+<div class="quiz" id="quiz9">
+  <h4>🧪 Wissenscheck: Spearman</h4>
+  <p>Wann ist die Spearman-Rangkorrelation r<sub>s</sub> dem Pearson-r vorzuziehen?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz9',this,false)">Wenn die Daten normalverteilt sind</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz9',this,true)" data-correct="true">Wenn die Daten ordinalskaliert sind oder der Zusammenhang monoton, aber nicht linear ist</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz9',this,false)">Wenn n > 100</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz9',this,false)">Wenn die Varianz groß ist</button>
+  <div class="quiz-feedback correct-fb">Richtig! Spearman ist für ordinale Daten geeignet und erfasst auch monotone nichtlineare Zusammenhänge, da er nur die Rangordnung berücksichtigt.</div>
+  <div class="quiz-feedback wrong-fb">Spearman eignet sich für ordinal skalierte Daten und monotone (nicht notwendig lineare) Zusammenhänge — er basiert auf Rängen statt Originalwerten.</div>
+</div>
+
+</section>
+<!-- ═══════════════ 6 · REGRESSION ═══════════════ -->
+<section id="regression">
+<div class="section-number">06</div>
+<h2>Lineare Regression</h2>
+<p class="section-subtitle">Methode der kleinsten Quadrate, Determinationskoeffizient und Varianzzerlegung</p>
+
+<p>Die <strong>lineare Regression</strong> modelliert den Zusammenhang zwischen einem Prädiktor X und einem Kriterium Y durch eine Gerade: ŷ = â + b̂·x.</p>
+
+<h3 class="sub">Methode der kleinsten Quadrate</h3>
+
+<div class="def-box">
+  <div class="label">Prinzip</div>
+  <p>Gesucht sind â und b̂, die die <strong>Summe der quadrierten Residuen</strong> minimieren:</p>
+  <p style="text-align:center; font-size:1.05rem">Q(a, b) = Σ(yᵢ − a − b·xᵢ)² → min</p>
+</div>
+
+<p>Durch Ableiten und Nullsetzen erhält man die <strong>Normalgleichungen</strong>:</p>
+
+<div class="def-box green">
+  <div class="label">Regressionskoeffizienten</div>
+  <p><strong>Steigung:</strong> b̂ = s̃<sub>xy</sub> / s̃²<sub>x</sub></p>
+  <p><strong>Achsenabschnitt:</strong> â = ȳ − b̂·x̄</p>
+  <p>Die Regressionsgerade geht immer durch den Schwerpunkt (x̄, ȳ).</p>
+</div>
+
+<div class="merksatz">
+  <p>Der Regressionskoeffizient b̂ lässt sich mit dem Korrelationskoeffizienten r ausdrücken: <strong>b̂ = (s̃<sub>y</sub>/s̃<sub>x</sub>) · r</strong>. Bei z-transformierten Daten vereinfacht sich alles zu â = 0 und b̂ = r.</p>
+</div>
+
+<h3 class="sub">Determinationskoeffizient r²</h3>
+
+<div class="def-box blue">
+  <div class="label">Definition</div>
+  <p>Die Varianz der Residuen eᵢ = yᵢ − ŷᵢ ist:</p>
+  <p style="text-align:center">s̃²<sub>e</sub> = (1 − r²) · s̃²<sub>y</sub></p>
+  <p>Der <strong>Determinationskoeffizient</strong> r² gibt den Anteil der Varianz von Y an, der durch die Regression auf X <strong>erklärt</strong> wird.</p>
+</div>
+
+<div class="example">
+  <p>Bei r = 0.80 ist r² = 0.64 → 64% der Varianz von Y werden durch X erklärt. Die restlichen 36% sind „Residualvarianz".</p>
+</div>
+
+<h3 class="sub">Varianzzerlegung</h3>
+
+<p>Die Gesamtvarianz von Y lässt sich zerlegen in erklärte und nicht-erklärte Varianz:</p>
+
+<div class="def-box gold">
+  <div class="label">Varianzzerlegung</div>
+  <p style="text-align:center; font-size:1.05rem"><strong>s̃²<sub>y</sub> = s̃²<sub>ŷ</sub> + s̃²<sub>e</sub></strong></p>
+  <p>Gesamtvarianz = erklärte Varianz (durch Regression) + Residualvarianz (nicht erklärt)</p>
+</div>
+
+<div class="flow">
+  <div class="flow-step">Gesamtvarianz<small>s̃²<sub>y</sub></small></div>
+  <span class="flow-arrow">=</span>
+  <div class="flow-step" style="border-color:var(--accent2)">Erklärte Varianz<small>s̃²<sub>ŷ</sub> = r² · s̃²<sub>y</sub></small></div>
+  <span class="flow-arrow">+</span>
+  <div class="flow-step" style="border-color:var(--accent)">Residualvarianz<small>s̃²<sub>e</sub> = (1−r²) · s̃²<sub>y</sub></small></div>
+</div>
+
+<!-- Deep Dive -->
+<div class="deep-dive" id="dd6a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd6a')">
+    <span class="dd-icon">▼</span>
+    Herleitung: Von den Normalgleichungen zum Determinationskoeffizienten
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Residualvarianz herleiten</h4>
+    <p>s̃²<sub>e</sub> = (1/n) Σ(yᵢ − ŷᵢ)² = (1/n) Σ[yᵢ − ȳ − (s̃<sub>xy</sub>/s̃²<sub>x</sub>)(xᵢ − x̄)]²</p>
+    <p>Ausmultiplizieren und vereinfachen unter Nutzung der Definitionen von s̃²<sub>y</sub>, s̃²<sub>x</sub>, s̃<sub>xy</sub>:</p>
+    <p>s̃²<sub>e</sub> = s̃²<sub>y</sub> − 2·(s̃²<sub>xy</sub>/s̃²<sub>x</sub>) + (s̃<sub>xy</sub>/s̃²<sub>x</sub>)²·s̃²<sub>x</sub> = s̃²<sub>y</sub> − s̃²<sub>xy</sub>/s̃²<sub>x</sub></p>
+    <p>Mit r = s̃<sub>xy</sub>/(s̃<sub>x</sub>·s̃<sub>y</sub>) und b̂ = (s̃<sub>y</sub>/s̃<sub>x</sub>)·r:</p>
+    <p>s̃²<sub>e</sub> = s̃²<sub>y</sub> − s̃²<sub>y</sub>·r² = <strong>(1 − r²) · s̃²<sub>y</sub></strong> ✓</p>
+    <h4>Varianzzerlegung</h4>
+    <p>Man kann zeigen, dass der „Kreuzterm" 2·(1/n)Σ(yᵢ − ŷᵢ)(ŷᵢ − ȳ) verschwindet. Damit folgt direkt s̃²<sub>y</sub> = s̃²<sub>ŷ</sub> + s̃²<sub>e</sub>.</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz10">
+  <h4>🧪 Wissenscheck: Regression</h4>
+  <p>Die Regressionsgerade ŷ = 2 + 0.5x wurde berechnet. Durch welchen Punkt verläuft sie garantiert?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz10',this,false)">Durch den Ursprung (0, 0)</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz10',this,true)" data-correct="true">Durch den Schwerpunkt (x̄, ȳ)</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz10',this,false)">Durch den Punkt (2, 0.5)</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz10',this,false)">Durch den Median beider Variablen</button>
+  <div class="quiz-feedback correct-fb">Richtig! Die Regressionsgerade verläuft immer durch (x̄, ȳ), da â = ȳ − b̂·x̄ → ŷ(x̄) = â + b̂·x̄ = ȳ.</div>
+  <div class="quiz-feedback wrong-fb">Die Regressionsgerade verläuft immer durch den Schwerpunkt (x̄, ȳ) der Daten. Das folgt direkt aus der Bestimmungsgleichung für â.</div>
+</div>
+
+<div class="quiz" id="quiz11">
+  <h4>🧪 Wissenscheck: r²</h4>
+  <p>Wenn r² = 0.49, wie viel Prozent der Varianz von Y bleiben durch die Regression unerklärt?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz11',this,false)">49%</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz11',this,true)" data-correct="true">51%</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz11',this,false)">70%</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz11',this,false)">30%</button>
+  <div class="quiz-feedback correct-fb">Richtig! Unerklärt = 1 − r² = 1 − 0.49 = 0.51 = 51%. Bei r = 0.7 werden also „nur" knapp die Hälfte der Varianz erklärt.</div>
+  <div class="quiz-feedback wrong-fb">r² = 0.49 bedeutet 49% erklärte Varianz. Also bleiben 1 − 0.49 = 51% unerklärt.</div>
+</div>
+
+</section>
+<!-- ═══════════════ 7 · WAHRSCHEINLICHKEIT ═══════════════ -->
+<section id="wahrscheinlichkeit">
+<div class="section-number">07</div>
+<h2>Wahrscheinlichkeitstheorie</h2>
+<p class="section-subtitle">Axiome, Kombinatorik und bedingte Wahrscheinlichkeit</p>
+
+<p>Die <strong>Wahrscheinlichkeitstheorie</strong> bildet die Grundlage der Inferenzstatistik. Sie formalisiert den Umgang mit Zufall und Unsicherheit.</p>
+
+<h3 class="sub">Kolmogorov-Axiome</h3>
+
+<div class="def-box">
+  <div class="label">Die drei Axiome</div>
+  <p>Sei Ω ein Ergebnisraum (Menge aller möglichen Ergebnisse). Eine Wahrscheinlichkeitsfunktion P ordnet jedem Ereignis A ⊆ Ω eine Zahl P(A) zu mit:</p>
+  <p><strong>Axiom 1:</strong> P(Ω) = 1 (Normierung)</p>
+  <p><strong>Axiom 2:</strong> P(A) ≥ 0 für alle A (Nichtnegativität)</p>
+  <p><strong>Axiom 3:</strong> P(A ∪ B) = P(A) + P(B) falls A ∩ B = ∅ (Additivität für disjunkte Ereignisse)</p>
+</div>
+
+<p>Aus diesen drei Axiomen folgen alle weiteren Rechenregeln:</p>
+
+<div class="card-grid">
+  <div class="card">
+    <h3>Komplementregel</h3>
+    <p>P(Ā) = 1 − P(A)<br>Die Wahrscheinlichkeit des Gegenereignisses.</p>
+  </div>
+  <div class="card">
+    <h3>Monotonie</h3>
+    <p>A ⊆ B → P(A) ≤ P(B)<br>Teilmengen haben kleinere oder gleiche Wahrscheinlichkeit.</p>
+  </div>
+  <div class="card">
+    <h3>Additionssatz</h3>
+    <p>P(A ∪ B) = P(A) + P(B) − P(A ∩ B)<br>Für nicht-disjunkte Ereignisse.</p>
+  </div>
+  <div class="card">
+    <h3>Laplace-Experiment</h3>
+    <p>Alle Ergebnisse gleichwahrscheinlich:<br>P(A) = |A| / |Ω|</p>
+  </div>
+</div>
+
+<h3 class="sub">Kombinatorik</h3>
+
+<p>Die Kombinatorik liefert Methoden zum Abzählen von Möglichkeiten — essenziell für Laplace-Wahrscheinlichkeiten.</p>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Typ</th><th>Reihenfolge</th><th>Wiederholung</th><th>Formel</th><th>Beispiel</th></tr>
+  <tr><td><strong>Permutation m.W.</strong></td><td>ja</td><td>ja</td><td>n<sup>k</sup></td><td>PIN-Code (10⁴ = 10000)</td></tr>
+  <tr><td><strong>Permutation o.W.</strong></td><td>ja</td><td>nein</td><td>n! / (n−k)!</td><td>Podestplätze (Medaillen)</td></tr>
+  <tr><td><strong>Kombination o.W.</strong></td><td>nein</td><td>nein</td><td>C(n,k) = n! / (k!(n−k)!)</td><td>Lotto 6 aus 49</td></tr>
+  <tr><td><strong>Kombination m.W.</strong></td><td>nein</td><td>ja</td><td>C(n+k−1, k)</td><td>Kugeln auf Fächer</td></tr>
+</table>
+</div>
+
+<div class="example">
+  <p><strong>Fußballtoto (11er-Wette):</strong> 3 Möglichkeiten pro Spiel (0, 1, 2), 11 Spiele. Das ist eine Permutation mit Wiederholung: 3¹¹ = 177.147 verschiedene Tipps.</p>
+</div>
+
+<div class="merksatz">
+  <p>Der <strong>Binomialkoeffizient</strong> C(n,k) = „n über k" zählt die Möglichkeiten, k Elemente aus n <strong>ohne Reihenfolge und ohne Zurücklegen</strong> auszuwählen. Er taucht bei der Binomialverteilung wieder auf.</p>
+</div>
+
+<h3 class="sub">Bedingte Wahrscheinlichkeit</h3>
+
+<div class="def-box green">
+  <div class="label">Definition</div>
+  <p>Die <strong>bedingte Wahrscheinlichkeit</strong> von A gegeben B:</p>
+  <p style="text-align:center; font-size:1.1rem">P(A | B) = P(A ∩ B) / P(B) &nbsp;&nbsp;&nbsp; (falls P(B) &gt; 0)</p>
+</div>
+
+<div class="def-box blue">
+  <div class="label">Multiplikationssatz</div>
+  <p>P(A ∩ B) = P(A | B) · P(B) = P(B | A) · P(A)</p>
+</div>
+
+<div class="def-box purple">
+  <div class="label">Stochastische Unabhängigkeit</div>
+  <p>Zwei Ereignisse A und B sind <strong>stochastisch unabhängig</strong>, wenn gilt:</p>
+  <p style="text-align:center">P(A ∩ B) = P(A) · P(B) &nbsp;&nbsp; bzw. äquivalent: P(A | B) = P(A)</p>
+  <p>Das Wissen über B ändert die Wahrscheinlichkeit von A nicht.</p>
+</div>
+
+<!-- Deep Dive: Satz von Bayes -->
+<div class="deep-dive" id="dd7a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd7a')">
+    <span class="dd-icon">▼</span>
+    Satz von Bayes und totale Wahrscheinlichkeit
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Satz der totalen Wahrscheinlichkeit</h4>
+    <p>Wenn B₁, B₂, …, Bₖ eine Partition von Ω bilden (disjunkt und Vereinigung = Ω):</p>
+    <p style="text-align:center">P(A) = Σ P(A | Bⱼ) · P(Bⱼ)</p>
+    <h4>Satz von Bayes</h4>
+    <p style="text-align:center; font-size:1.05rem">P(Bⱼ | A) = P(A | Bⱼ) · P(Bⱼ) / P(A)</p>
+    <p>Bayes erlaubt es, von der „Wirkung" (A beobachtet) auf die „Ursache" (welches Bⱼ?) rückzuschließen.</p>
+    <h4>Beispiel: Medizinischer Test</h4>
+    <p>Krankheit: P(K) = 0.01. Sensitivität: P(+ | K) = 0.99. Falsch-positiv-Rate: P(+ | K̄) = 0.05.</p>
+    <p>P(K | +) = (0.99 · 0.01) / (0.99 · 0.01 + 0.05 · 0.99) = 0.0099 / 0.0594 ≈ 0.167</p>
+    <p>Nur ~17% der positiv Getesteten sind tatsächlich krank — das Base-Rate-Problem!</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz12">
+  <h4>🧪 Wissenscheck: Wahrscheinlichkeit</h4>
+  <p>Wenn P(A) = 0.3 und P(B) = 0.5 und A, B unabhängig, was ist P(A ∩ B)?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz12',this,false)">0.8</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz12',this,true)" data-correct="true">0.15</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz12',this,false)">0.2</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz12',this,false)">0.65</button>
+  <div class="quiz-feedback correct-fb">Richtig! Bei Unabhängigkeit gilt P(A ∩ B) = P(A) · P(B) = 0.3 · 0.5 = 0.15.</div>
+  <div class="quiz-feedback wrong-fb">Bei stochastischer Unabhängigkeit: P(A ∩ B) = P(A) · P(B) = 0.3 · 0.5 = 0.15.</div>
+</div>
+
+<div class="quiz" id="quiz13">
+  <h4>🧪 Wissenscheck: Kombinatorik</h4>
+  <p>Wie viele Möglichkeiten gibt es, aus 10 Studierenden ein 3er-Team (ohne Reihenfolge) zu bilden?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz13',this,false)">30</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz13',this,false)">720</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz13',this,true)" data-correct="true">120</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz13',this,false)">1000</button>
+  <div class="quiz-feedback correct-fb">Richtig! C(10,3) = 10! / (3! · 7!) = (10·9·8) / (3·2·1) = 120.</div>
+  <div class="quiz-feedback wrong-fb">Ohne Reihenfolge, ohne Wiederholung: C(10,3) = 10! / (3!·7!) = 720/6 = 120.</div>
+</div>
+
+</section>
+<!-- ═══════════════ 8 · VERTEILUNGEN ═══════════════ -->
+<section id="verteilungen">
+<div class="section-number">08</div>
+<h2>Wahrscheinlichkeitsverteilungen</h2>
+<p class="section-subtitle">Binomialverteilung, Normalverteilung und Stichprobenverteilungen</p>
+
+<p>Wahrscheinlichkeitsverteilungen beschreiben, mit welchen Wahrscheinlichkeiten eine <strong>Zufallsvariable</strong> bestimmte Werte annimmt.</p>
+
+<h3 class="sub">Zufallsvariablen</h3>
+
+<div class="def-box">
+  <div class="label">Definition</div>
+  <p>Eine <strong>Zufallsvariable</strong> X ist eine Funktion, die jedem Ergebnis ω ∈ Ω einen Zahlenwert X(ω) zuordnet. Man unterscheidet <strong>diskrete</strong> (abzählbar viele Werte) und <strong>stetige</strong> (kontinuierliches Spektrum) Zufallsvariablen.</p>
+</div>
+
+<div class="vergleich">
+  <div class="vergleich-seite">
+    <h4>Diskret</h4>
+    <ul>
+      <li>Wahrscheinlichkeitsfunktion P(X = x)</li>
+      <li>Summe aller P(X = xₖ) = 1</li>
+      <li>E(X) = Σ xₖ · P(X = xₖ)</li>
+      <li>Beispiele: Binomial, Poisson</li>
+    </ul>
+  </div>
+  <div class="vergleich-seite">
+    <h4>Stetig</h4>
+    <ul>
+      <li>Dichtefunktion f(x) mit P(a ≤ X ≤ b) = ∫f(x)dx</li>
+      <li>P(X = x) = 0 für jeden einzelnen Punkt</li>
+      <li>E(X) = ∫ x · f(x) dx</li>
+      <li>Beispiele: Normal, Exponential</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="sub">Erwartungswert und Varianz</h3>
+
+<div class="def-box blue">
+  <div class="label">Kenngrößen</div>
+  <p><strong>Erwartungswert:</strong> E(X) = μ — der „theoretische Mittelwert"</p>
+  <p><strong>Varianz:</strong> Var(X) = E[(X − μ)²] = σ²</p>
+  <p><strong>Standardabweichung:</strong> σ = √Var(X)</p>
+</div>
+
+<div class="merksatz">
+  <p><strong>Rechenregeln:</strong> E(aX + b) = a·E(X) + b und Var(aX + b) = a²·Var(X). Bei unabhängigen X, Y: E(X + Y) = E(X) + E(Y) und Var(X + Y) = Var(X) + Var(Y).</p>
+</div>
+
+<h3 class="sub">Binomialverteilung</h3>
+
+<div class="def-box green">
+  <div class="label">Bernoulli- und Binomialverteilung</div>
+  <p>Ein <strong>Bernoulli-Experiment</strong> hat zwei Ausgänge (Erfolg mit P = p, Misserfolg mit P = 1−p) und wird n-mal unabhängig wiederholt.</p>
+  <p>Die Wahrscheinlichkeit für genau k Erfolge:</p>
+  <p style="text-align:center; font-size:1.1rem">P(X = k) = C(n,k) · p<sup>k</sup> · (1−p)<sup>n−k</sup></p>
+  <p><strong>Parameter:</strong> E(X) = n·p, Var(X) = n·p·(1−p)</p>
+</div>
+
+<div class="example">
+  <p><strong>Diskriminationsexperiment:</strong> Eine VP soll in n = 20 Durchgängen einen Reiz erkennen (2AFC, Ratewahrscheinlichkeit p = 0.5). Wie wahrscheinlich sind mindestens 15 richtige Antworten?</p>
+  <p>P(X ≥ 15) = Σ C(20,k) · 0.5²⁰ für k = 15, …, 20 ≈ 0.021 → sehr unwahrscheinlich durch Raten.</p>
+</div>
+
+<h3 class="sub">Normalverteilung</h3>
+
+<div class="def-box purple">
+  <div class="label">Definition</div>
+  <p>Die <strong>Normalverteilung</strong> N(μ, σ²) hat die Dichtefunktion:</p>
+  <p style="text-align:center; font-size:1.05rem">φ(x) = (1 / (σ√(2π))) · exp(−(x − μ)² / (2σ²))</p>
+  <p>Parameter: μ = Erwartungswert (Lage), σ² = Varianz (Breite). Die Kurve ist symmetrisch um μ und hat die Form der „Gaußschen Glockenkurve".</p>
+</div>
+
+<h3 class="sub">Standardnormalverteilung N(0,1)</h3>
+
+<p>Durch z-Transformation Z = (X − μ) / σ wird jede Normalverteilung auf die <strong>Standardnormalverteilung</strong> N(0,1) zurückgeführt.</p>
+
+<div class="def-box gold">
+  <div class="label">Rechenregeln mit z-Tabelle</div>
+  <p><strong>Fall 1 — Wahrscheinlichkeit gesucht:</strong> P(X ≤ x) = Φ((x − μ)/σ), dann in z-Tabelle nachschlagen.</p>
+  <p><strong>Fall 2 — Quantil gesucht:</strong> x<sub>p</sub> = μ + σ · z<sub>p</sub>, wobei Φ(z<sub>p</sub>) = p aus der Tabelle.</p>
+  <p><strong>Negativregel:</strong> Φ(−z) = 1 − Φ(z) (Symmetrie der Standardnormalverteilung).</p>
+</div>
+
+<div class="example">
+  <p><strong>IQ-Verteilung:</strong> X ~ N(100, 15²). Wie wahrscheinlich ist IQ ≤ 120?</p>
+  <p>z = (120 − 100)/15 = 1.33 → Φ(1.33) ≈ 0.908 → 90.8% der Bevölkerung haben IQ ≤ 120.</p>
+</div>
+
+<div class="example">
+  <p><strong>Quantil:</strong> Welcher IQ-Wert wird von 67% der Bevölkerung nicht überschritten?</p>
+  <p>Φ(z) = 0.67 → z ≈ 0.44 (aus Tabelle) → x = 100 + 15 · 0.44 = 106.6</p>
+</div>
+
+<div class="merksatz">
+  <p><strong>68-95-99.7-Regel:</strong> Bei jeder Normalverteilung liegen ca. 68% der Werte im Intervall μ ± σ, ca. 95% in μ ± 1.96σ (Faustregel: ≈ 2σ ergibt 95.4%), und ca. 99.7% in μ ± 3σ.</p>
+</div>
+
+<!-- Deep Dive: Multinomialverteilung -->
+<div class="deep-dive" id="dd8a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd8a')">
+    <span class="dd-icon">▼</span>
+    Multinomialverteilung und Stichprobenverteilung des Mittelwerts
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Multinomialverteilung</h4>
+    <p>Verallgemeinerung der Binomialverteilung auf r > 2 Ausgänge mit Wahrscheinlichkeiten p₁, …, pᵣ:</p>
+    <p style="text-align:center">P(k₁, k₂, …, kᵣ) = n! / (k₁! · k₂! · … · kᵣ!) · p₁<sup>k₁</sup> · p₂<sup>k₂</sup> · … · pᵣ<sup>kᵣ</sup></p>
+    <p>Beispiel: Würfel (r = 6, pⱼ = 1/6), Blutgruppen in einer Stichprobe.</p>
+
+    <h4>Stichprobenverteilung des Mittelwerts</h4>
+    <p>Für den Mittelwert X̄ einer Stichprobe vom Umfang n aus einer Verteilung mit μ und σ² gilt:</p>
+    <p><strong>E(X̄) = μ</strong> und <strong>Var(X̄) = σ²/n</strong></p>
+    <p>Der <strong>Standardfehler</strong> σ/√n beschreibt die Streuung des Stichprobenmittelwerts. Er wird mit wachsendem n kleiner — die Schätzung wird präziser.</p>
+    <p>Nach dem <strong>Zentralen Grenzwertsatz</strong> ist X̄ für großes n annähernd normalverteilt, auch wenn die Ausgangspopulation nicht normalverteilt ist.</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz14">
+  <h4>🧪 Wissenscheck: Binomialverteilung</h4>
+  <p>Ein fairer Würfel wird 6-mal geworfen. Wie groß ist die Wahrscheinlichkeit, genau zweimal eine 6 zu würfeln?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz14',this,false)">1/6</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz14',this,true)" data-correct="true">C(6,2) · (1/6)² · (5/6)⁴ ≈ 0.20</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz14',this,false)">2/6 = 0.33</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz14',this,false)">(1/6)² ≈ 0.03</button>
+  <div class="quiz-feedback correct-fb">Richtig! Bernoulli-Experiment mit n = 6, k = 2, p = 1/6: P = C(6,2) · (1/6)² · (5/6)⁴ = 15 · (1/36) · (625/1296) ≈ 0.20.</div>
+  <div class="quiz-feedback wrong-fb">Binomialverteilung: P(X=2) = C(6,2) · (1/6)² · (5/6)⁴ = 15 · 0.0278 · 0.482 ≈ 0.20.</div>
+</div>
+
+<div class="quiz" id="quiz15">
+  <h4>🧪 Wissenscheck: Normalverteilung</h4>
+  <p>X ~ N(50, 100). Wie standardisiert man den Wert x = 65?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz15',this,true)" data-correct="true">z = (65 − 50) / 10 = 1.5</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz15',this,false)">z = (65 − 50) / 100 = 0.15</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz15',this,false)">z = 65 / 50 = 1.3</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz15',this,false)">z = (65 − 50) / √50 ≈ 2.12</button>
+  <div class="quiz-feedback correct-fb">Richtig! N(50, 100) bedeutet μ = 50 und σ² = 100, also σ = 10. Damit z = (65 − 50)/10 = 1.5.</div>
+  <div class="quiz-feedback wrong-fb">Bei N(μ, σ²) mit μ = 50 und σ² = 100 ist σ = √100 = 10. Also z = (x − μ)/σ = (65 − 50)/10 = 1.5.</div>
+</div>
+
+<div class="quiz" id="quiz16">
+  <h4>🧪 Wissenscheck: 68-95-99.7</h4>
+  <p>Bei einer Normalverteilung N(100, 225) liegen ca. 95% der Werte in welchem Intervall? (Faustregel: μ ± 2σ)</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz16',this,false)">85 bis 115</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz16',this,true)" data-correct="true">70 bis 130</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz16',this,false)">55 bis 145</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz16',this,false)">50 bis 150</button>
+  <div class="quiz-feedback correct-fb">Richtig! σ = √225 = 15. Faustregel: μ ± 2σ = 100 ± 30, also [70, 130]. Exakt: μ ± 1.96σ = [70.6, 129.4] für genau 95%.</div>
+  <div class="quiz-feedback wrong-fb">σ = √225 = 15. Faustregel: μ ± 2σ = 100 ± 30 → Intervall [70, 130]. (Exakt 95%: μ ± 1.96σ.)</div>
+</div>
+
+</section>
+
+</main>
+
+<footer>
+  <p>Lernhilfe · Fachbereich Psychologie · Universität Tübingen</p>
+  <p style="margin-top:0.5rem">Basierend auf: Fahrmeir et al. (2023). <em>Statistik: Der Weg zur Datenanalyse.</em> 9. Aufl., Springer. · Keine offizielle Uni-Seite.</p>
+</footer>
+
+<button id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+function toggleDD(id){document.getElementById(id).classList.toggle('open')}
+function checkQuiz(id,btn,ok){
+  const q=document.getElementById(id),os=q.querySelectorAll('.quiz-option'),fc=q.querySelector('.correct-fb'),fw=q.querySelector('.wrong-fb');
+  os.forEach(o=>{o.disabled=true;o.classList.remove('correct','wrong')});
+  if(ok){btn.classList.add('correct');fc.classList.add('show');fw.classList.remove('show')}
+  else{btn.classList.add('wrong');fw.classList.add('show');fc.classList.remove('show');os.forEach(o=>{if(o.dataset.correct==='true')o.classList.add('correct')})}
+}
+const secs=document.querySelectorAll('section[id]'),navs=document.querySelectorAll('nav a');
+function upNav(){const y=window.scrollY+100;secs.forEach(s=>{if(y>=s.offsetTop&&y<s.offsetTop+s.offsetHeight)navs.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+s.id))})}
+function upProg(){document.getElementById('progressBar').style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100+'%'}
+function upTop(){document.getElementById('topBtn').classList.toggle('visible',window.scrollY>500)}
+window.addEventListener('scroll',()=>{upNav();upProg();upTop()});upNav();
+navs.forEach(l=>l.addEventListener('click',e=>{e.preventDefault();document.querySelector(l.getAttribute('href'))?.scrollIntoView({behavior:'smooth'})}));
+</script>
+</body>
+</html>

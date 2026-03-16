@@ -1,0 +1,104 @@
+<!-- ═══════════════ 2 · HÄUFIGKEITSVERTEILUNGEN ═══════════════ -->
+<section id="haeufigkeit">
+<div class="section-number">02</div>
+<h2>Häufigkeitsverteilungen</h2>
+<p class="section-subtitle">Häufigkeitstabellen, Verteilungsfunktion und Formen</p>
+
+<p>Bei einem diskreten Merkmal <em>A</em> mit Ausprägungen {a₁, …, aₘ} und einer Urliste der Länge <em>n</em> beschreibt die Häufigkeitsverteilung, wie oft jede Ausprägung vorkommt.</p>
+
+<h3 class="sub">Absolute und relative Häufigkeit</h3>
+
+<div class="def-box blue">
+  <div class="label">Definition</div>
+  <p>Die <strong>absolute Häufigkeit</strong> h(aⱼ) gibt an, wie oft die Ausprägung aⱼ in der Urliste auftritt.</p>
+  <p>Die <strong>relative Häufigkeit</strong> f(aⱼ) = h(aⱼ) / n normiert auf den Stichprobenumfang.</p>
+</div>
+
+<div class="example">
+  <p><strong>Noten bei Klassenarbeit</strong> (n = 25): x = (3, 5, 4, 3, 2, 3, 4, 6, 1, 2, 3, 3, 4, 5, 2, 1, 3, 4, 2, 4, 3, 1, 2, 3, 4)</p>
+  <p>Note 1: h = 3, f = 0.12 · Note 2: h = 5, f = 0.20 · Note 3: h = 8, f = 0.32 · Note 4: h = 6, f = 0.24 · Note 5: h = 2, f = 0.08 · Note 6: h = 1, f = 0.04</p>
+</div>
+
+<h3 class="sub">Empirische Verteilungsfunktion</h3>
+
+<p>Die <strong>kumulierte Häufigkeit</strong> summiert alle Häufigkeiten bis zu einem Wert x auf:</p>
+
+<div class="def-box green">
+  <div class="label">Kumulierte Häufigkeiten</div>
+  <p><strong>Absolut:</strong> H(x) = Σ h(aⱼ) für alle aⱼ ≤ x</p>
+  <p><strong>Relativ:</strong> F(x) = H(x) / n = Σ f(aⱼ) für alle aⱼ ≤ x</p>
+</div>
+
+<p>Die empirische Verteilungsfunktion F(x) ist eine <strong>Treppenfunktion</strong> mit folgenden Eigenschaften:</p>
+<ul style="margin:0.5rem 0 1rem 1.5rem">
+  <li>F(x) = 0 für x &lt; a₁ (vor dem kleinsten Wert)</li>
+  <li>F(x) = 1 für x ≥ aₘ (ab dem größten Wert)</li>
+  <li>F(x) ist monoton nicht-fallend: x &lt; x' → F(x) ≤ F(x')</li>
+</ul>
+
+<h3 class="sub">Stetige Merkmale und Klasseneinteilung</h3>
+
+<p>Bei stetigen (oder quasi-stetigen) Merkmalen werden die Werte in <strong>Klassen</strong> (Intervalle) eingeteilt. Das resultierende Diagramm heißt <strong>Histogramm</strong>. Die Fläche jedes Balkens (nicht die Höhe!) gibt die relative Häufigkeit der Klasse an.</p>
+
+<div class="achtung">
+  <p>Im Histogramm ist die Höhe immer die <strong>Häufigkeitsdichte</strong> f(aⱼ)/Δⱼ — die Fläche eines Balkens ergibt die relative Häufigkeit. Bei gleichen Klassenbreiten ist die Dichte proportional zur Häufigkeit, bei <strong>ungleichen Breiten</strong> muss die Dichte explizit berechnet werden, sonst werden breitere Klassen visuell überrepräsentiert.</p>
+</div>
+
+<h3 class="sub">Formen von Verteilungen</h3>
+
+<div class="card-grid">
+  <div class="card">
+    <h3>Symmetrisch</h3>
+    <p>Spiegelsymmetrie um den Mittelpunkt. Modus, Median und Mittelwert fallen zusammen.</p>
+  </div>
+  <div class="card">
+    <h3>Rechtsschief (linkssteil)</h3>
+    <p>Langer Schwanz nach rechts. Mittelwert &gt; Median &gt; Modus. Beispiel: Einkommensverteilung.</p>
+  </div>
+  <div class="card">
+    <h3>Linksschief (rechtssteil)</h3>
+    <p>Langer Schwanz nach links. Modus &gt; Median &gt; Mittelwert. Beispiel: Klausurergebnisse bei leichter Klausur.</p>
+  </div>
+  <div class="card">
+    <h3>Bimodal</h3>
+    <p>Zwei Gipfel — oft Hinweis auf zwei verschiedene Subpopulationen in den Daten.</p>
+  </div>
+</div>
+
+<!-- Deep Dive: R-Code -->
+<div class="deep-dive" id="dd2a">
+  <button class="deep-dive-toggle" onclick="toggleDD('dd2a')">
+    <span class="dd-icon">▼</span>
+    Empirische Verteilungsfunktion in R
+    <span class="dd-badge">Vertiefung</span>
+  </button>
+  <div class="deep-dive-content">
+    <h4>Verteilungsfunktion mit ecdf()</h4>
+    <div class="formula">
+<span class="comment"># Urliste eingeben</span>
+x <- c(3,5,4,3,2,3,4,6,1,2,3,3,4,5,2,1,3,4,2,4,3,1,2,3,4)
+
+<span class="comment"># Empirische Verteilungsfunktion berechnen</span>
+F <- <span class="keyword">ecdf</span>(x)  <span class="comment"># Rückgabewert ist eine Funktion</span>
+
+<span class="comment"># Grafisch darstellen</span>
+<span class="keyword">plot</span>(F, col.points="red", col.hor="red", pch=16,
+     ylab="F(x)", main="Empirische Verteilungsfunktion")
+    </div>
+    <p>Die Funktion <code>ecdf()</code> gibt eine Funktion zurück, die für jeden Wert x die kumulierte relative Häufigkeit liefert: <code>F(3)</code> ergibt 0.64.</p>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="quiz" id="quiz3">
+  <h4>🧪 Wissenscheck: Verteilungsfunktion</h4>
+  <p>Gegeben die Urliste x = (1, 3, 3, 5, 5, 5, 7). Was ist F(5)?</p>
+  <button class="quiz-option" onclick="checkQuiz('quiz3',this,false)">3/7 ≈ 0.43</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz3',this,true)" data-correct="true">6/7 ≈ 0.86</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz3',this,false)">5/7 ≈ 0.71</button>
+  <button class="quiz-option" onclick="checkQuiz('quiz3',this,false)">1.00</button>
+  <div class="quiz-feedback correct-fb">Richtig! F(5) = Anzahl der Werte ≤ 5 geteilt durch n. Das sind {1, 3, 3, 5, 5, 5} = 6 von 7 → F(5) = 6/7.</div>
+  <div class="quiz-feedback wrong-fb">F(5) zählt alle Werte ≤ 5: {1, 3, 3, 5, 5, 5} = 6 Werte. Also F(5) = 6/7 ≈ 0.86.</div>
+</div>
+
+</section>

@@ -1,5 +1,5 @@
 # Resources (PDFs, exam papers, lecture slides - not for public repo)
-resources/
+**/resources/
 
 # OS files
 .DS_Store

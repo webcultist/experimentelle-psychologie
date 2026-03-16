@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wissenstest — Statistik I | Uni Tübingen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8; --bg-card: #fffdf8; --text: #2a2520; --text-secondary: #6b5e52;
+  --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a5276; --accent4: #7d3c98; --accent5: #b7950b;
+  --border: #d4cbbf; --highlight: #fef3c7; --shadow: rgba(42,37,32,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Source Sans 3',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:17px;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+::selection{background:var(--accent);color:#fff}
+a{color:var(--accent3);text-decoration:none}a:hover{text-decoration:underline}
+
+header{padding:3rem 2rem 2.5rem;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#ece5d8,var(--bg));position:relative}
+header::after{content:'§';position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 1rem;font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--accent)}
+.uni-badge{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1.5px solid var(--accent);padding:.3em 1em;margin-bottom:1rem;border-radius:2px}
+header h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;line-height:1.2;margin-bottom:.4rem}
+header h1 em{color:var(--accent);font-style:italic}
+.subtitle{font-size:1rem;color:var(--text-secondary);font-weight:300;max-width:620px;margin:0 auto}
+.back-link{margin-top:1rem;font-size:.85rem}
+
+.container{max-width:880px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── START SCREEN ── */
+#startScreen .intro{text-align:center;margin-bottom:2rem}
+#startScreen .intro h2{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:.5rem}
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin:1.5rem 0}
+.topic-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:6px;padding:1.2rem 1.4rem;cursor:pointer;transition:all .2s;position:relative;user-select:none}
+.topic-card:hover{border-color:var(--accent3);transform:translateY(-2px);box-shadow:0 6px 20px var(--shadow)}
+.topic-card.selected{border-color:var(--accent2);background:linear-gradient(135deg,#eaf5ee,#d5f5e3)}
+.topic-card .check{position:absolute;top:.8rem;right:.8rem;width:22px;height:22px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:#fff;transition:all .2s}
+.topic-card.selected .check{background:var(--accent2);border-color:var(--accent2)}
+.topic-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:.3rem;padding-right:2rem}
+.topic-card .num{font-size:.7rem;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
+.topic-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.5}
+
+.config-row{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;margin:1.5rem 0;padding:1.2rem 1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:6px}
+.config-row label{font-size:.88rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.config-row select,.config-row input[type=number]{font-family:inherit;font-size:.88rem;padding:.3em .6em;border:1px solid var(--border);border-radius:4px;background:var(--bg)}
+.config-row .toggle{display:flex;align-items:center;gap:.4rem;cursor:pointer}
+.config-row .toggle input{accent-color:var(--accent3)}
+
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;font-family:inherit;font-size:1rem;font-weight:600;border:none;border-radius:4px;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#a93226;transform:translateY(-1px)}
+.btn-secondary{background:var(--accent3);color:#fff}.btn-secondary:hover{background:#154360}
+.btn-outline{background:transparent;border:1.5px solid var(--accent3);color:var(--accent3)}.btn-outline:hover{background:var(--accent3);color:#fff}
+.btn:disabled{opacity:.4;cursor:default;transform:none}
+.btn-row{display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap}
+.select-helpers{display:flex;gap:.8rem;margin-bottom:1rem}
+.select-helpers button{font-size:.78rem;padding:.3em .8em;background:transparent;border:1px solid var(--border);border-radius:3px;cursor:pointer;font-family:inherit;color:var(--text-secondary)}
+.select-helpers button:hover{border-color:var(--accent3);color:var(--accent3)}
+
+/* ── TEST SCREEN ── */
+#testScreen{display:none}
+.test-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.8rem}
+.test-header .progress-text{font-size:.88rem;font-weight:600;color:var(--text-secondary)}
+.test-header .timer{font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:500;color:var(--accent3);background:rgba(26,82,118,.06);padding:.3em .8em;border-radius:4px}
+.progress-bar-wrap{width:100%;height:6px;background:var(--border);border-radius:3px;margin-bottom:2rem;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--accent2);border-radius:3px;transition:width .3s}
+
+.question-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:8px;padding:2rem;margin-bottom:1.5rem}
+.question-card .q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.question-card .q-section{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent3);background:rgba(26,82,118,.08);padding:.2em .7em;border-radius:3px}
+.question-card .q-type{font-size:.68rem;font-weight:600;color:var(--text-secondary)}
+.question-card .q-text{font-family:'Playfair Display',serif;font-size:1.15rem;line-height:1.5;margin-bottom:1.2rem}
+.question-card .q-text code{font-family:'JetBrains Mono',monospace;background:rgba(42,37,32,.06);padding:.1em .35em;border-radius:3px;font-size:.88em}
+
+.options-list{display:flex;flex-direction:column;gap:.5rem}
+.opt-btn{display:block;width:100%;text-align:left;padding:.75rem 1.1rem;background:transparent;border:1.5px solid var(--border);border-radius:4px;cursor:pointer;font-family:inherit;font-size:.92rem;color:var(--text);transition:all .15s;line-height:1.5}
+.opt-btn:hover:not(:disabled){border-color:var(--accent3);background:rgba(26,82,118,.03)}
+.opt-btn.correct{border-color:var(--accent2)!important;background:#d5f5e3!important;color:var(--accent2);font-weight:600}
+.opt-btn.wrong{border-color:var(--accent)!important;background:#fadbd8!important;color:var(--accent);opacity:.75}
+.opt-btn.reveal{border-color:var(--accent2);background:rgba(44,110,73,.08)}
+.opt-btn:disabled{cursor:default}
+
+.feedback{margin-top:1rem;padding:1rem 1.2rem;border-radius:4px;font-size:.9rem;line-height:1.6;display:none}
+.feedback.show{display:block}
+.feedback.correct-fb{background:#d5f5e3;color:#1e7e34;border:1px solid #a9dfbf}
+.feedback.wrong-fb{background:#fadbd8;color:var(--accent);border:1px solid #f1948a}
+.next-btn-wrap{text-align:right;margin-top:1.2rem}
+
+/* ── RESULTS SCREEN ── */
+#resultScreen{display:none}
+.result-header{text-align:center;margin-bottom:2rem}
+.result-header h2{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:.5rem}
+.score-big{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:700;color:var(--accent2)}
+.score-big.mediocre{color:var(--accent5)}.score-big.poor{color:var(--accent)}
+.result-summary{font-size:1rem;color:var(--text-secondary);margin-top:.5rem}
+
+.section-results{margin:2rem 0}
+.section-result-row{display:flex;align-items:center;gap:1rem;padding:.8rem 1.2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;margin-bottom:.5rem}
+.section-result-row .sr-name{flex:1;font-weight:600;font-size:.92rem}
+.section-result-row .sr-bar{flex:2;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.section-result-row .sr-bar-fill{height:100%;border-radius:4px;transition:width .5s}
+.section-result-row .sr-score{font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:600;min-width:60px;text-align:right}
+
+.review-section{margin-top:2.5rem}
+.review-section h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:1rem}
+.review-item{padding:1rem 1.2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;margin-bottom:.6rem;font-size:.9rem}
+.review-item.was-correct{border-left:4px solid var(--accent2)}
+.review-item.was-wrong{border-left:4px solid var(--accent)}
+.review-item .ri-q{font-weight:600;margin-bottom:.3rem}
+.review-item .ri-answer{font-size:.85rem;color:var(--text-secondary)}
+.review-item .ri-answer strong{color:var(--accent2)}
+.review-item .ri-explain{font-size:.82rem;color:var(--text-secondary);margin-top:.3rem;font-style:italic}
+
+footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-size:.82rem;color:var(--text-secondary)}
+
+@media(max-width:640px){
+  header{padding:2rem 1rem 1.5rem}.container{padding:1.5rem 1rem 3rem}
+  .topic-grid{grid-template-columns:1fr}.config-row{flex-direction:column;align-items:flex-start}
+  .question-card{padding:1.3rem}.score-big{font-size:2.5rem}
+  .section-result-row{flex-wrap:wrap}.section-result-row .sr-bar{flex-basis:100%;order:3}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="uni-badge">Universität Tübingen · Fachbereich Psychologie</div>
+  <h1>Wissens<em>test</em></h1>
+  <p class="subtitle">Prüfe dein Verständnis von Statistik I</p>
+  <p class="back-link"><a href="index.html">&larr; Zurück zur Lernseite</a></p>
+</header>
+
+<div class="container">
+
+<!-- ════ START ════ -->
+<div id="startScreen">
+  <div class="intro">
+    <h2>Themen auswählen</h2>
+    <p style="color:var(--text-secondary);font-size:.95rem">Wähle die Kapitel, die du testen möchtest. Pro Kapitel werden zufällig 10 Fragen aus einem größeren Pool gezogen.</p>
+  </div>
+
+  <div class="select-helpers">
+    <button onclick="selectAll()">Alle auswählen</button>
+    <button onclick="selectNone()">Keine</button>
+  </div>
+
+  <div class="topic-grid">
+    <div class="topic-card selected" data-section="grundlagen" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 01</div>
+      <h3>Grundlagen</h3>
+      <p>Merkmale, Skalenniveaus, Bedeutsamkeit</p>
+    </div>
+    <div class="topic-card selected" data-section="haeufigkeit" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 02</div>
+      <h3>Häufigkeitsverteilungen</h3>
+      <p>Häufigkeitstabellen, Verteilungsfunktion, Histogramme</p>
+    </div>
+    <div class="topic-card selected" data-section="lagemasse" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 03</div>
+      <h3>Lagemaße</h3>
+      <p>Modus, Median, Mittelwerte, Minimumeigenschaften</p>
+    </div>
+    <div class="topic-card selected" data-section="streuung" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 04</div>
+      <h3>Streuung & Transformation</h3>
+      <p>Varianz, z-Transformation, Schiefe</p>
+    </div>
+    <div class="topic-card selected" data-section="korrelation" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 05</div>
+      <h3>Korrelation</h3>
+      <p>Pearson, Spearman, partielle Korrelation</p>
+    </div>
+    <div class="topic-card selected" data-section="regression" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 06</div>
+      <h3>Regression</h3>
+      <p>Kleinste Quadrate, r², Varianzzerlegung</p>
+    </div>
+    <div class="topic-card selected" data-section="wahrscheinlichkeit" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 07</div>
+      <h3>Wahrscheinlichkeit</h3>
+      <p>Axiome, Kombinatorik, bedingte Wahrscheinlichkeit</p>
+    </div>
+    <div class="topic-card selected" data-section="verteilungen" onclick="toggleTopic(this)">
+      <div class="check">✓</div>
+      <div class="num">Kapitel 08</div>
+      <h3>Verteilungen</h3>
+      <p>Binomial, Normal, Standardnormalverteilung</p>
+    </div>
+  </div>
+
+  <div class="config-row">
+    <label>Fragen pro Kapitel:
+      <select id="cfgCount">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="99">Alle</option>
+      </select>
+    </label>
+    <label class="toggle"><input type="checkbox" id="cfgTimer"> Timer anzeigen</label>
+    <label class="toggle"><input type="checkbox" id="cfgShuffle" checked> Fragen mischen</label>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="startBtn" onclick="startTest()">Test starten</button>
+  </div>
+</div>
+
+<!-- ════ TEST ════ -->
+<div id="testScreen">
+  <div class="test-header">
+    <span class="progress-text" id="progressText">Frage 1 / 10</span>
+    <span class="timer" id="timerDisplay" style="display:none">00:00</span>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+  <div id="questionArea"></div>
+  <div class="next-btn-wrap">
+    <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()" style="display:none">Nächste Frage &rarr;</button>
+    <button class="btn btn-primary" id="finishBtn" onclick="showResults()" style="display:none">Ergebnis anzeigen</button>
+  </div>
+</div>
+
+<!-- ════ RESULTS ════ -->
+<div id="resultScreen">
+  <div class="result-header">
+    <h2>Dein Ergebnis</h2>
+    <div class="score-big" id="totalScore">0%</div>
+    <div class="result-summary" id="resultSummary"></div>
+  </div>
+  <div class="section-results" id="sectionResults"></div>
+  <div class="review-section">
+    <h3>Detailansicht</h3>
+    <div id="reviewList"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="restart()">Neuer Test (neue Fragen)</button>
+    <button class="btn btn-outline" onclick="location.href='index.html'">Zurück zur Lernseite</button>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <p>Lernhilfe · Fachbereich Psychologie · Universität Tübingen</p>
+  <p style="margin-top:.4rem">Basierend auf: Fahrmeir et al. (2023). <em>Statistik: Der Weg zur Datenanalyse.</em> 9. Aufl., Springer.</p>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   QUESTION POOL — ~20 questions per section
+   Types: mc (multiple choice, 4 opts), tf (wahr/falsch)
+   ══════════════════════════════════════════════════════════════ */
+const POOL = {
+
+grundlagen: [
+{type:'mc',q:'Welches Skalenniveau erlaubt nur die Unterscheidung von Gleichheit und Verschiedenheit?',options:['Ordinalskala','Intervallskala','Nominalskala','Verhältnisskala'],correct:2,explanation:'Nominalskala: Nur = / ≠ möglich. Beispiel: Geschlecht, Blutgruppe. Keine Rangfolge, keine Abstände interpretierbar.'},
+{type:'mc',q:'Welche Transformation ist auf der Ordinalskala zulässig?',options:['Nur die Identität','Jede streng monotone Transformation','Lineare Transformation y = ax + b','Proportionale Transformation y = ax'],correct:1,explanation:'Ordinalskala: Jede streng monotone (ordnungserhaltende) Transformation ist zulässig. Nur die Rangfolge ist interpretierbar.'},
+{type:'mc',q:'Welches Skalenniveau hat die Temperatur in Celsius?',options:['Nominalskala','Ordinalskala','Intervallskala','Verhältnisskala'],correct:2,explanation:'Celsius ist intervallskaliert: Abstände sind gleich (10°-Unterschied überall gleich), aber 0°C ist kein absoluter Nullpunkt. 20°C ist nicht „doppelt so warm" wie 10°C.'},
+{type:'tf',q:'Ein Merkmal heißt stetig, wenn es überabzählbar viele Ausprägungen annehmen kann.',correct:true,explanation:'Stetige Merkmale können jeden Wert in einem Intervall annehmen (überabzählbar viele). Beispiel: Körpergröße, Reaktionszeit. Diskrete Merkmale haben abzählbar viele Ausprägungen.'},
+{type:'mc',q:'Welches ist ein Beispiel für ein qualitatives Merkmal?',options:['Reaktionszeit in ms','Anzahl richtiger Antworten','Familienstand','IQ-Wert'],correct:2,explanation:'Familienstand (ledig, verheiratet, geschieden) ist qualitativ — die Ausprägungen sind Kategorien ohne natürliche Ordnung. Die anderen sind quantitativ.'},
+{type:'mc',q:'Die Verhältnisskala erlaubt welche Transformation?',options:['Beliebige bijektive Abbildung','Streng monotone Abbildung','y = ax + b (a > 0)','y = ax (a > 0)'],correct:3,explanation:'Verhältnisskala: y = ax mit a > 0. Der Nullpunkt bleibt erhalten, Verhältnisse bleiben gleich. Beispiel: kg ↔ Pfund.'},
+{type:'tf',q:'Auf einer Intervallskala sind Verhältnisaussagen wie „doppelt so viel" zulässig.',correct:false,explanation:'Verhältnisaussagen setzen einen absoluten Nullpunkt voraus (Verhältnisskala). Bei der Intervallskala sind nur Differenzen interpretierbar.'},
+{type:'mc',q:'Was bedeutet „Bedeutsamkeit" (Meaningfulness) einer statistischen Aussage?',options:['Die Aussage ist statistisch signifikant','Die Aussage bleibt unter allen zulässigen Transformationen des Skalenniveaus invariant','Die Aussage hat praktische Relevanz','Die Aussage ist reproduzierbar'],correct:1,explanation:'Eine Aussage ist bedeutsam, wenn sie sich unter allen zulässigen Skalentransformationen nicht ändert. Beispiel: „Köln ist wärmer als Berlin" bleibt in Celsius und Fahrenheit wahr.'},
+{type:'mc',q:'Welches Skalenniveau hat die Absolutskala?',options:['Erlaubt nur streng monotone Transformationen','Erlaubt nur lineare Transformationen','Erlaubt nur proportionale Transformationen','Erlaubt nur die Identitätstransformation'],correct:3,explanation:'Absolutskala: Einzige zulässige Transformation ist die Identität. Die Zahlen haben eine feste, eindeutige Bedeutung. Beispiel: Anzahl (3 Äpfel = genau 3).'},
+{type:'mc',q:'Was unterscheidet ein diskretes von einem stetigen Merkmal?',options:['Diskret = qualitativ, stetig = quantitativ','Diskret hat abzählbar viele Ausprägungen, stetig hat überabzählbar viele','Diskret hat endlich viele, stetig hat unendlich viele','Es gibt keinen Unterschied'],correct:1,explanation:'Diskret: abzählbar viele Werte (z.B. Kinderzahl: 0, 1, 2, ...). Stetig: überabzählbar viele Werte in einem Intervall (z.B. Körpergröße).'},
+{type:'tf',q:'Schulnoten bilden eine Intervallskala.',correct:false,explanation:'Schulnoten sind ordinalskaliert. Man kann sagen 1 < 2 < 3, aber der Abstand zwischen 1 und 2 ist nicht notwendig gleich dem zwischen 2 und 3. Mittelwerte sind streng genommen nicht zulässig.'},
+{type:'mc',q:'Welche Aussage über die Nominalskala ist korrekt?',options:['Mittelwert ist erlaubt','Median ist erlaubt','Nur der Modus ist als Lagemaß erlaubt','Alle Lagemaße sind erlaubt'],correct:2,explanation:'Nominalskala: Nur Gleichheit/Verschiedenheit. Als Lagemaß ist nur der Modus (häufigster Wert) sinnvoll. Median und Mittelwert setzen mindestens Ordinal- bzw. Intervallniveau voraus.'},
+{type:'mc',q:'Was ist ein quantitatives Merkmal?',options:['Ein Merkmal, dessen Ausprägungen Zahlen sind und arithmetische Operationen erlauben','Ein Merkmal mit genau zwei Kategorien','Ein Merkmal, das nur auf Nominalskala gemessen werden kann','Ein Merkmal mit natürlicher Ordnung'],correct:0,explanation:'Quantitative Merkmale haben numerische Ausprägungen, auf denen Rechenoperationen sinnvoll sind (z.B. Körpergröße, Einkommen). Qualitative Merkmale sind kategorial.'},
+{type:'tf',q:'Die Aussage „A ist doppelt so groß wie B" ist auf der Intervallskala bedeutsam.',correct:false,explanation:'Verhältnisaussagen sind nur auf der Verhältnisskala bedeutsam. Auf der Intervallskala ändert sich das Verhältnis bei linearer Transformation y = ax + b, sofern b ≠ 0.'},
+{type:'mc',q:'Welches Skalenniveau hat die Anzahl richtiger Antworten in einem Test?',options:['Nominalskala','Ordinalskala','Intervallskala','Verhältnisskala'],correct:3,explanation:'Anzahl hat einen absoluten Nullpunkt (0 = keine richtige Antwort) und gleiche Abstände. 6 richtige sind doppelt so viele wie 3. Es handelt sich sogar um eine Absolutskala.'},
+{type:'mc',q:'Ein Merkmal mit den Ausprägungen {sehr unzufrieden, unzufrieden, neutral, zufrieden, sehr zufrieden} hat welches Skalenniveau?',options:['Nominalskala','Ordinalskala','Intervallskala','Verhältnisskala'],correct:1,explanation:'Likert-Skala: Es gibt eine natürliche Rangordnung, aber die Abstände zwischen den Stufen sind nicht notwendig gleich. Daher Ordinalniveau.'},
+{type:'tf',q:'Ein qualitatives Merkmal kann auch ordinalskaliert sein.',correct:true,explanation:'Qualitative Merkmale mit natürlicher Ordnung sind ordinalskaliert. Beispiel: Schulabschluss (Hauptschule < Realschule < Abitur) — qualitativ, aber geordnet.'},
+{type:'mc',q:'Welche Berechnung ist auf der Ordinalskala NICHT bedeutsam?',options:['Median','Rangkorrelation nach Spearman','Arithmetisches Mittel','Quantile'],correct:2,explanation:'Das arithmetische Mittel setzt mindestens Intervallskalierung voraus. Auf der Ordinalskala sind Median, Quantile und Rangkorrelationen zulässig.'},
+{type:'mc',q:'Was ist der Unterschied zwischen einem manifesten und einem latenten Merkmal?',options:['Manifest = direkt beobachtbar, latent = nicht direkt beobachtbar','Manifest = stetig, latent = diskret','Manifest = quantitativ, latent = qualitativ','Es gibt keinen Unterschied'],correct:0,explanation:'Manifeste Merkmale sind direkt messbar (z.B. Körpergröße). Latente Merkmale sind nicht direkt beobachtbar und werden über Indikatoren erschlossen (z.B. Intelligenz, Zufriedenheit).'},
+{type:'mc',q:'Welche Transformation ist auf der Intervallskala zulässig?',options:['Beliebige bijektive Abbildung','Streng monotone Abbildung','y = ax + b mit a > 0','y = ax mit a > 0'],correct:2,explanation:'Intervallskala: Zulässig sind positiv lineare Transformationen y = ax + b (a > 0). Abstände bleiben proportional erhalten. Beispiel: Celsius → Fahrenheit: F = 1.8·C + 32.'}
+],
+
+haeufigkeit: [
+{type:'mc',q:'Wie ist die relative Häufigkeit <code>f(aⱼ)</code> definiert?',options:['Anzahl der Beobachtungen mit Wert aⱼ','n(aⱼ) / n — absolute Häufigkeit geteilt durch Stichprobengröße','Die kumulative Häufigkeit bis aⱼ','Der Anteil aller verschiedenen Werte'],correct:1,explanation:'Relative Häufigkeit f(aⱼ) = n(aⱼ)/n. Sie gibt den Anteil der Beobachtungen mit Wert aⱼ an der Gesamtstichprobe an. Es gilt: 0 ≤ f(aⱼ) ≤ 1 und Σf(aⱼ) = 1.'},
+{type:'mc',q:'Was gilt für die empirische Verteilungsfunktion F(x) für x < a₁ (dem kleinsten Wert)?',options:['F(x) = 1','F(x) = 0','F(x) = 0.5','F(x) ist undefiniert'],correct:1,explanation:'Für x kleiner als der kleinste beobachtete Wert a₁ ist F(x) = 0 — kein Wert liegt unterhalb von x.'},
+{type:'tf',q:'Die empirische Verteilungsfunktion F(x) ist monoton fallend.',correct:false,explanation:'F(x) ist monoton STEIGEND (nicht-fallend). F(x) springt an jedem Datenpunkt um die relative Häufigkeit nach oben und bleibt dazwischen konstant.'},
+{type:'mc',q:'Wann verwendet man ein Histogramm statt eines Stabdiagramms?',options:['Immer bei großen Stichproben','Bei diskreten Merkmalen','Bei stetigen (klassierten) Merkmalen','Bei Nominalskala'],correct:2,explanation:'Histogramm: Für stetige oder klassierte Daten. Die Fläche der Balken (nicht die Höhe!) repräsentiert die relative Häufigkeit. Stabdiagramm: Für diskrete Merkmale.'},
+{type:'mc',q:'Im Histogramm repräsentiert die Fläche eines Balkens die:',options:['Absolute Häufigkeit','Relative Häufigkeit der Klasse','Klassenmitte','Klassenbreite'],correct:1,explanation:'Die Fläche = Höhe × Breite = Häufigkeitsdichte × Klassenbreite = relative Häufigkeit der Klasse. Bei ungleichen Klassenbreiten ist die Höhe daher NICHT die relative Häufigkeit!'},
+{type:'mc',q:'Gegeben: n = 100 Beobachtungen, davon 25 mit Wert 3. Was ist f(3)?',options:['3','25','0.25','0.75'],correct:2,explanation:'f(3) = n(3)/n = 25/100 = 0.25. Die relative Häufigkeit von 3 beträgt 25%.'},
+{type:'tf',q:'Die Summe aller relativen Häufigkeiten ergibt immer 1.',correct:true,explanation:'Σ f(aⱼ) = Σ n(aⱼ)/n = n/n = 1. Die relativen Häufigkeiten summieren sich stets zu 1 (= 100%).'},
+{type:'mc',q:'Die kumulierte Häufigkeit F(aⱼ) gibt an:',options:['Die Häufigkeit des Wertes aⱼ','Den Anteil der Beobachtungen ≤ aⱼ','Den Anteil der Beobachtungen > aⱼ','Die Häufigkeitsdichte bei aⱼ'],correct:1,explanation:'F(aⱼ) = Σᵢ₌₁ʲ f(aᵢ) — der Anteil aller Beobachtungen, die kleiner oder gleich aⱼ sind.'},
+{type:'mc',q:'Eine Verteilung heißt rechtsschief (linkssteil), wenn:',options:['Der Schwanz nach links zeigt','Der Schwanz nach rechts zeigt, d.h. es gibt extreme Werte nach oben','Die Verteilung symmetrisch ist','Modus > Median > Mittelwert'],correct:1,explanation:'Rechtsschief = linkssteiler Anstieg mit langem Schwanz nach rechts. Typisch: Einkommensverteilung. Es gilt: Modus < Median < Mittelwert.'},
+{type:'tf',q:'Bei einer symmetrischen Verteilung sind Mittelwert, Median und Modus gleich.',correct:true,explanation:'Bei perfekter Symmetrie (z.B. Normalverteilung) gilt: Modus = Median = Mittelwert. Bei Schiefe weichen sie voneinander ab.'},
+{type:'mc',q:'Was ist die Häufigkeitsdichte im Histogramm?',options:['Die absolute Häufigkeit pro Klasse','Die relative Häufigkeit geteilt durch die Klassenbreite','Die kumulierte Häufigkeit','Die Klassenmitte'],correct:1,explanation:'Häufigkeitsdichte = f(Klasse) / Klassenbreite. Dadurch ist die FLÄCHE des Balkens (nicht die Höhe) gleich der relativen Häufigkeit. Wichtig bei ungleichen Klassenbreiten!'},
+{type:'mc',q:'Welche Aussage über die empirische Verteilungsfunktion F(x) ist FALSCH?',options:['F(x) ist monoton steigend','F(x) ist eine Treppenfunktion bei diskreten Daten','F(x) kann Werte > 1 annehmen','F(x) = 1 für x ≥ aₖ (dem größten Wert)'],correct:2,explanation:'F(x) nimmt nur Werte zwischen 0 und 1 an. Sie beginnt bei 0 (für x < a₁) und erreicht 1 (für x ≥ aₖ).'},
+{type:'mc',q:'Eine bimodale Verteilung hat:',options:['Einen Gipfel','Zwei Gipfel','Keinen Gipfel','Drei Gipfel'],correct:1,explanation:'Bimodal: Die Häufigkeitsverteilung hat zwei lokale Maxima (Gipfel). Kann auf zwei überlagerte Gruppen hindeuten.'},
+{type:'mc',q:'Bei einer Stichprobe von n = 200 Personen haben 80 den Wert „ja". Was ist F(ja), wenn „ja" der höchste von zwei Werten ist?',options:['0.40','0.60','1.00','0.80'],correct:2,explanation:'Wenn „ja" der höchste Wert ist (z.B. nein < ja), dann ist F(ja) = f(nein) + f(ja) = 120/200 + 80/200 = 1.00.'},
+{type:'tf',q:'Ein Stabdiagramm ist für stetige Merkmale geeignet.',correct:false,explanation:'Stabdiagramme sind für diskrete Merkmale geeignet. Für stetige Merkmale verwendet man Histogramme, bei denen die Fläche die Häufigkeit repräsentiert.'},
+{type:'mc',q:'Was passiert mit dem Histogramm, wenn man die Klassenbreite verdoppelt?',options:['Die Balken werden doppelt so hoch','Die Häufigkeitsdichte halbiert sich bei gleicher relativer Häufigkeit','Nichts ändert sich','Die Verteilung wird symmetrischer'],correct:1,explanation:'Häufigkeitsdichte = f(Klasse)/Klassenbreite. Bei doppelter Breite und gleicher relativer Häufigkeit halbiert sich die Dichte, damit die Fläche gleich bleibt.'},
+{type:'mc',q:'Eine linkssteile Verteilung zeigt typischerweise:',options:['x̄ < Median < Modus','Modus < Median < x̄','x̄ = Median = Modus','Modus < x̄ < Median'],correct:1,explanation:'Linkssteil = rechtsschief: Der Schwanz zeigt nach rechts. Extremwerte nach oben ziehen den Mittelwert nach rechts: Modus < Median < x̄.'},
+{type:'mc',q:'Die empirische Verteilungsfunktion F(x) springt an der Stelle aⱼ um:',options:['Die absolute Häufigkeit n(aⱼ)','Die relative Häufigkeit f(aⱼ)','Die kumulierte Häufigkeit F(aⱼ)','1/n'],correct:1,explanation:'F(x) springt an jeder Beobachtungsstelle aⱼ um die relative Häufigkeit f(aⱼ) = n(aⱼ)/n nach oben.'},
+{type:'tf',q:'Bei einem Histogramm mit gleichen Klassenbreiten ist die Höhe der Balken proportional zur relativen Häufigkeit.',correct:true,explanation:'Bei gleichen Klassenbreiten Δ gilt: Fläche = Dichte × Δ = f(Klasse). Da Δ konstant ist, ist die Dichte (= Höhe) proportional zu f(Klasse).'},
+{type:'mc',q:'Welche Verteilungsform liegt vor, wenn Modus = Median = Mittelwert?',options:['Rechtsschief','Linksschief','Symmetrisch','Bimodal'],correct:2,explanation:'Wenn alle drei Lagemaße übereinstimmen, ist die Verteilung symmetrisch (oder zumindest nahezu symmetrisch).'}
+],
+
+lagemasse: [
+{type:'mc',q:'Der Modus ist definiert als:',options:['Der mittlere Wert der geordneten Daten','Der häufigste Wert','Das arithmetische Mittel','Der Wert, der die Summe der Abweichungen minimiert'],correct:1,explanation:'Modus (Modalwert) = der Wert mit der größten Häufigkeit. Er ist das einzige Lagemaß, das bereits auf Nominalskalenniveau definiert ist.'},
+{type:'mc',q:'Welches Lagemaß minimiert die Summe der absoluten Abweichungen <code>Σ|xᵢ − a|</code>?',options:['Modus','Arithmetisches Mittel','Median','Geometrisches Mittel'],correct:2,explanation:'Der Median minimiert Σ|xᵢ − a|. Er ist der optimale Lageparameter für die Summe der absoluten Abweichungen (L1-Norm).'},
+{type:'mc',q:'Welches Lagemaß minimiert die Summe der quadratischen Abweichungen <code>Σ(xᵢ − a)²</code>?',options:['Modus','Median','Arithmetisches Mittel','Geometrisches Mittel'],correct:2,explanation:'Das arithmetische Mittel x̄ minimiert Σ(xᵢ − a)² (Methode der kleinsten Quadrate). Diese Minimumeigenschaft ist grundlegend für die Regression.'},
+{type:'mc',q:'Die Nulleigenschaft des arithmetischen Mittels besagt:',options:['x̄ = 0','Σ(xᵢ − x̄) = 0','Σxᵢ = 0','x̄ minimiert die Varianz'],correct:1,explanation:'Nulleigenschaft: Die Summe aller Abweichungen vom Mittelwert ist null: Σ(xᵢ − x̄) = 0. Positive und negative Abweichungen heben sich auf.'},
+{type:'mc',q:'Berechne den Median der Werte: 2, 5, 7, 8, 12.',options:['5','7','8','6.8'],correct:1,explanation:'Bei n = 5 (ungerade) ist der Median der mittlere Wert der geordneten Reihe: x₍₃₎ = 7.'},
+{type:'mc',q:'Berechne das arithmetische Mittel: 3, 5, 7, 9, 11.',options:['5','7','9','6'],correct:1,explanation:'x̄ = (3+5+7+9+11)/5 = 35/5 = 7.'},
+{type:'mc',q:'Für die Ungleichung zwischen den Mittelwerten positiver Zahlen gilt:',options:['Arithmetisches ≤ geometrisches ≤ harmonisches','Harmonisches ≤ geometrisches ≤ arithmetisches','Geometrisches ≤ harmonisches ≤ arithmetisches','Alle drei sind gleich'],correct:1,explanation:'Für positive Werte gilt stets: Harmonisches Mittel ≤ Geometrisches Mittel ≤ Arithmetisches Mittel. Gleichheit nur, wenn alle Werte identisch sind.'},
+{type:'tf',q:'Der Median ist gegenüber Ausreißern robuster als das arithmetische Mittel.',correct:true,explanation:'Der Median basiert nur auf der Rangposition und wird durch einzelne extreme Werte kaum beeinflusst. Das arithmetische Mittel wird durch Ausreißer stark verzerrt.'},
+{type:'mc',q:'Das geometrische Mittel von 4 und 16 ist:',options:['10','8','12','20'],correct:1,explanation:'Geometrisches Mittel = √(4 × 16) = √64 = 8. Es wird für Wachstumsraten und Verhältnisse verwendet.'},
+{type:'mc',q:'Wann ist das harmonische Mittel sinnvoll?',options:['Bei normalverteilten Daten','Bei der Mittelung von Raten oder Geschwindigkeiten','Bei nominal skalierten Daten','Bei ordinalen Rangdaten'],correct:1,explanation:'Das harmonische Mittel x_H = n / Σ(1/xᵢ) ist sinnvoll bei der Mittelung von Raten/Geschwindigkeiten (z.B. Durchschnittsgeschwindigkeit bei gleichen Strecken).'},
+{type:'mc',q:'Gegeben: x₁=2, x₂=3, x₃=3, x₄=5, x₅=7. Was ist der Modus?',options:['2','3','5','7'],correct:1,explanation:'Der Modus ist der häufigste Wert. 3 kommt zweimal vor, alle anderen einmal. Also Modus = 3.'},
+{type:'tf',q:'Das arithmetische Mittel ist bereits auf Ordinalskalenniveau definiert.',correct:false,explanation:'Das arithmetische Mittel setzt mindestens Intervallskalierung voraus, da es auf Additionen und Divisionen basiert. Auf Ordinalskala ist der Median das geeignete Lagemaß.'},
+{type:'mc',q:'Gegeben: Hinfahrt 60 km/h, Rückfahrt 40 km/h (gleiche Strecke). Was ist die Durchschnittsgeschwindigkeit?',options:['50 km/h','48 km/h','45 km/h','52 km/h'],correct:1,explanation:'Harmonisches Mittel: x_H = 2/(1/60 + 1/40) = 2/(2/120 + 3/120) = 2/(5/120) = 240/5 = 48 km/h. Nicht 50 km/h (das wäre das arithmetische Mittel)!'},
+{type:'mc',q:'Der Median bei gerader Anzahl n wird berechnet als:',options:['Der (n/2)-te Wert','Der (n/2+1)-te Wert','Der Durchschnitt des (n/2)-ten und (n/2+1)-ten Wertes','Der Modus'],correct:2,explanation:'Bei geradem n ist der Median definiert als (x₍ₙ/₂₎ + x₍ₙ/₂₊₁₎) / 2 — der Durchschnitt der beiden mittleren Werte der geordneten Reihe.'},
+{type:'tf',q:'Wenn alle Werte einer Stichprobe identisch sind, gilt: harmonisches Mittel = geometrisches Mittel = arithmetisches Mittel.',correct:true,explanation:'Wenn x₁ = x₂ = ... = xₙ = c, dann sind alle drei Mittelwerte gleich c. Die Ungleichung x_H ≤ x_G ≤ x̄ wird zur Gleichheit.'},
+{type:'mc',q:'Die Aussage „Der Mittelwert in Gruppe A ist doppelt so hoch wie in Gruppe B" ist bedeutsam auf welchem Skalenniveau?',options:['Nominalskala','Ordinalskala','Intervallskala','Verhältnisskala'],correct:3,explanation:'Verhältnisaussagen über Mittelwerte setzen Verhältnisskalierung voraus. Auf der Intervallskala ändern sich Verhältnisse bei Verschiebung (b ≠ 0).'},
+{type:'mc',q:'Gegeben: x̄ = 10 und es wird eine Konstante c = 5 zu allen Werten addiert. Wie lautet das neue x̄?',options:['10','15','5','50'],correct:1,explanation:'Wenn yᵢ = xᵢ + c, dann ȳ = x̄ + c = 10 + 5 = 15. Das Mittel verschiebt sich um die addierte Konstante.'},
+{type:'mc',q:'Welches Lagemaß setzt mindestens Nominalskalenniveau voraus?',options:['Arithmetisches Mittel','Median','Modus','Geometrisches Mittel'],correct:2,explanation:'Der Modus (häufigster Wert) braucht nur Gleichheit/Verschiedenheit — also Nominalniveau. Der Median braucht Ordinalskala, Mittelwerte brauchen mindestens Intervallskala.'},
+{type:'mc',q:'Berechne das gewichtete Mittel: Werte 2, 4, 6 mit Gewichten 1, 3, 1.',options:['4.0','3.6','4.4','3.8'],correct:0,explanation:'x̄_w = (1·2 + 3·4 + 1·6) / (1+3+1) = (2+12+6)/5 = 20/5 = 4.0.'},
+{type:'tf',q:'Der Median einer Stichprobe kann einen Wert annehmen, der in den Daten nicht vorkommt.',correct:true,explanation:'Bei gerader Anzahl n wird der Median als Durchschnitt der zwei mittleren Werte berechnet. Z.B. bei {1, 3}: Median = (1+3)/2 = 2, obwohl 2 nicht in den Daten vorkommt.'}
+],
+
+streuung: [
+{type:'mc',q:'Wie ist die empirische Varianz <code>s²</code> definiert?',options:['s² = Σ(xᵢ − x̄) / n','s² = Σ(xᵢ − x̄)² / n','s² = Σ(xᵢ − x̄)² / (n−1)','s² = √(Σ(xᵢ − x̄)² / n)'],correct:1,explanation:'Empirische Varianz: s² = (1/n) Σ(xᵢ − x̄)². Sie misst die durchschnittliche quadratische Abweichung vom Mittelwert.'},
+{type:'mc',q:'Was besagt der Verschiebungssatz der Varianz?',options:['s² = x̄² − x̄','s² = x̄² − (x̄)²','s² = (1/n)Σxᵢ² − x̄²','s² = Σxᵢ² − n·x̄'],correct:2,explanation:'Verschiebungssatz: s² = (1/n)Σxᵢ² − x̄² = x̄² − x̄² (Mittel der Quadrate minus Quadrat des Mittels). Vereinfacht die Berechnung.'},
+{type:'mc',q:'Gegeben: x̄ = 50, s = 10. Was ist der z-Wert für x = 35?',options:['1.5','−1.5','−15','0.35'],correct:1,explanation:'z = (x − x̄) / s = (35 − 50) / 10 = −15/10 = −1.5. Der Wert 35 liegt 1.5 Standardabweichungen unter dem Mittelwert.'},
+{type:'mc',q:'Nach der z-Transformation gilt für die transformierten Werte:',options:['z̄ = 0, s²_z = 1','z̄ = 1, s²_z = 0','z̄ = 0, s²_z = n','z̄ = x̄, s²_z = s²'],correct:0,explanation:'Die z-Transformation zᵢ = (xᵢ − x̄)/s erzeugt standardisierte Werte mit Mittelwert z̄ = 0 und Varianz s²_z = 1.'},
+{type:'mc',q:'Was ist der Interquartilsabstand (IQR)?',options:['Q₃ − Q₁','Q₃ + Q₁','(Q₃ − Q₁) / 2','Q₂ − Q₁'],correct:0,explanation:'IQR = Q₃ − Q₁ (Abstand zwischen dem 75%- und dem 25%-Quantil). Der IQR enthält die mittleren 50% der Daten und ist robust gegenüber Ausreißern.'},
+{type:'mc',q:'Bei linearer Transformation yᵢ = p·xᵢ + q gilt für die Varianz:',options:['s²_y = p·s²_x + q','s²_y = p²·s²_x','s²_y = p²·s²_x + q²','s²_y = s²_x'],correct:1,explanation:'s²_y = p²·s²_x. Die Varianz wird mit p² (nicht p) skaliert. Die additive Konstante q hat keinen Einfluss auf die Streuung.'},
+{type:'mc',q:'Die Spannweite (Range) ist definiert als:',options:['x̄ − Median','x_(n) − x_(1)','IQR / 2','Σ|xᵢ − x̄| / n'],correct:1,explanation:'Spannweite R = x_(n) − x_(1) = Maximum − Minimum. Einfaches, aber nicht robustes Streuungsmaß (empfindlich gegenüber Ausreißern).'},
+{type:'tf',q:'Die Standardabweichung s hat die gleiche Einheit wie die Originalwerte.',correct:true,explanation:'s = √s². Da die Varianz in quadrierten Einheiten gemessen wird, hat die Standardabweichung nach dem Wurzelziehen wieder die Originaleinheit (z.B. cm, Sekunden).'},
+{type:'mc',q:'Gegeben: x̄ = 100, s = 15. Berechne den z-Wert für x = 130.',options:['2.0','−2.0','1.5','3.0'],correct:0,explanation:'z = (130 − 100) / 15 = 30/15 = 2.0. Der Wert 130 liegt genau 2 Standardabweichungen über dem Mittelwert.'},
+{type:'mc',q:'Was bedeutet ein positiver Wert für die Schiefe (x̄ − x̃ > 0)?',options:['Die Verteilung ist symmetrisch','Die Verteilung ist linksschief','Die Verteilung ist rechtsschief','Die Verteilung ist bimodal'],correct:2,explanation:'x̄ − x̃ > 0 bedeutet: Mittelwert > Median. Das tritt bei rechtsschiefe Verteilungen auf, wo Extremwerte nach rechts den Mittelwert nach oben ziehen.'},
+{type:'mc',q:'Gegeben: Werte 2, 4, 4, 4, 6. Berechne die Varianz s².',options:['1.6','2.0','2.5','1.2'],correct:0,explanation:'x̄ = 20/5 = 4. s² = [(2−4)² + (4−4)² + (4−4)² + (4−4)² + (6−4)²] / 5 = [4+0+0+0+4]/5 = 8/5 = 1.6.'},
+{type:'tf',q:'Zentrierung bedeutet: <code>xᵢ − x̄</code>, sodass der neue Mittelwert 0 ist.',correct:true,explanation:'Zentrierung: Man subtrahiert den Mittelwert von jedem Wert. Die zentrierten Werte haben Mittelwert 0, die Varianz bleibt unverändert.'},
+{type:'mc',q:'Bei der linearen Transformation yᵢ = 2xᵢ + 3 gilt für den Mittelwert:',options:['ȳ = 2x̄ + 3','ȳ = 2x̄','ȳ = x̄ + 3','ȳ = 4x̄ + 9'],correct:0,explanation:'ȳ = p·x̄ + q = 2·x̄ + 3. Der Mittelwert wird linear transformiert. Die Varianz wird mit p² = 4 multipliziert (nicht um q verschoben).'},
+{type:'mc',q:'Welches Streuungsmaß ist robust gegenüber Ausreißern?',options:['Varianz','Spannweite','Interquartilsabstand (IQR)','Standardabweichung'],correct:2,explanation:'Der IQR basiert nur auf den mittleren 50% der Daten und wird durch einzelne Extremwerte nicht beeinflusst. Varianz, SD und Spannweite sind empfindlich.'},
+{type:'mc',q:'Gegeben: s²_x = 25. Bei yᵢ = 3xᵢ − 10 ist s²_y:',options:['75','225','15','25'],correct:1,explanation:'s²_y = p²·s²_x = 3²·25 = 9·25 = 225. Die Varianz wird mit dem Quadrat des Skalierungsfaktors multipliziert.'},
+{type:'tf',q:'Die z-Transformation verändert die Form der Verteilung.',correct:false,explanation:'Die z-Transformation ist linear (zᵢ = (xᵢ − x̄)/s). Lineare Transformationen ändern Lage und Streuung, aber nicht die Form der Verteilung.'},
+{type:'mc',q:'Welche Aussage über die Varianz ist KORREKT?',options:['s² kann negativ sein','s² = 0 bedeutet, dass alle Werte gleich sind','s² hat die gleiche Einheit wie die Daten','s² ist immer größer als die Standardabweichung'],correct:1,explanation:'s² = 0 genau dann, wenn alle xᵢ = x̄, also alle Werte identisch sind. s² ist nie negativ (Summe von Quadraten).'},
+{type:'mc',q:'Die Formel <code>s² = (1/n)Σxᵢ² − x̄²</code> heißt:',options:['Minimumeigenschaft','Nulleigenschaft','Verschiebungssatz','z-Transformation'],correct:2,explanation:'Der Verschiebungssatz vereinfacht die Berechnung: s² = Mittel der Quadrate − Quadrat des Mittels.'},
+{type:'mc',q:'Berechne die Standardabweichung: Werte 10, 20, 30. x̄ = 20.',options:['8.16','6.67','10','100'],correct:0,explanation:'s² = [(10−20)² + (20−20)² + (30−20)²]/3 = [100+0+100]/3 = 200/3 ≈ 66.67. s = √66.67 ≈ 8.16.'},
+{type:'mc',q:'Was bewirkt die z-Transformation bei der Standardabweichung?',options:['Sie wird verdoppelt','Sie wird 0','Sie wird 1','Sie bleibt unverändert'],correct:2,explanation:'Nach z-Transformation gilt s_z = 1. Die Daten werden so skaliert, dass die Standardabweichung genau 1 beträgt.'}
+],
+
+korrelation: [
+{type:'mc',q:'Die Kovarianz s_xy ist definiert als:',options:['(1/n)Σ(xᵢ − x̄)(yᵢ − ȳ)','(1/n)Σ(xᵢ − x̄)²','Σxᵢyᵢ / n','(1/n)Σ|xᵢ − yᵢ|'],correct:0,explanation:'Kovarianz: s_xy = (1/n)Σ(xᵢ − x̄)(yᵢ − ȳ). Sie misst die gemeinsame Variation zweier Merkmale. Positiv bei gleichsinniger, negativ bei gegenläufiger Variation.'},
+{type:'mc',q:'Der Korrelationskoeffizient nach Pearson ist definiert als:',options:['r = s_xy · s_x · s_y','r = s_xy / (s_x + s_y)','r = s_xy / (s_x · s_y)','r = s²_xy / (s²_x · s²_y)'],correct:2,explanation:'Pearson r = s_xy / (s_x · s_y) — die standardisierte Kovarianz. Dadurch liegt r immer zwischen −1 und +1.'},
+{type:'mc',q:'Ein Pearson-Korrelationskoeffizient r = −0.85 bedeutet:',options:['Kein Zusammenhang','Starker positiver linearer Zusammenhang','Starker negativer linearer Zusammenhang','Kausaler Zusammenhang'],correct:2,explanation:'r = −0.85 zeigt einen starken negativen linearen Zusammenhang: Wenn x steigt, sinkt y tendenziell. Beachte: r misst nur lineare Zusammenhänge und impliziert keine Kausalität!'},
+{type:'tf',q:'Eine Korrelation von r = 0 bedeutet, dass kein Zusammenhang zwischen den Variablen besteht.',correct:false,explanation:'r = 0 bedeutet nur: kein LINEARER Zusammenhang. Es kann dennoch ein starker nichtlinearer Zusammenhang bestehen (z.B. U-förmig).'},
+{type:'mc',q:'Die Rangkorrelation nach Spearman wird berechnet als:',options:['r_s = 1 − 6Σdᵢ² / (n(n²−1))','r_s = Σdᵢ / n','r_s = 6Σdᵢ² / (n(n²−1))','r_s = 1 − Σdᵢ / n²'],correct:0,explanation:'Spearman: r_s = 1 − 6Σdᵢ²/(n(n²−1)), wobei dᵢ = Rang(xᵢ) − Rang(yᵢ). Es ist die Pearson-Korrelation der Ränge.'},
+{type:'mc',q:'Gegeben: n = 5, Σdᵢ² = 10. Berechne Spearman r_s.',options:['0.50','0.75','−0.50','1.00'],correct:0,explanation:'r_s = 1 − 6·10/(5·(25−1)) = 1 − 60/120 = 1 − 0.5 = 0.50.'},
+{type:'tf',q:'Korrelation impliziert Kausalität.',correct:false,explanation:'Einer der wichtigsten Grundsätze der Statistik: Korrelation ≠ Kausalität. Eine Drittvariable kann den Zusammenhang erklären (Scheinkorrelation), oder die Kausalrichtung kann unklar sein.'},
+{type:'mc',q:'Was misst der φ-Koeffizient?',options:['Die Korrelation bei stetigen Variablen','Den Zusammenhang in einer 2×2-Vierfeldertafel','Die partielle Korrelation','Die Rangkorrelation'],correct:1,explanation:'Der φ-Koeffizient ist ein Zusammenhangsmaß für dichotome (0/1) Variablen in einer 2×2-Tabelle: φ = (ad − bc) / √((a+b)(c+d)(a+c)(b+d)).'},
+{type:'mc',q:'Die partielle Korrelation r_xy.z kontrolliert:',options:['Den Einfluss von x auf y','Den Einfluss einer Drittvariablen z','Die Stichprobengröße','Die Skalierung'],correct:1,explanation:'Die partielle Korrelation r_xy.z misst den Zusammenhang zwischen x und y, nachdem der lineare Einfluss von z auf beide Variablen herausgerechnet wurde.'},
+{type:'mc',q:'Die Formel für die partielle Korrelation lautet:',options:['r_xy.z = r_xy − r_xz − r_yz','r_xy.z = (r_xy − r_xz · r_yz) / √((1−r²_xz)(1−r²_yz))','r_xy.z = r_xy / r_xz','r_xy.z = r_xy · r_xz · r_yz'],correct:1,explanation:'r_xy.z = (r_xy − r_xz · r_yz) / √((1−r²_xz)(1−r²_yz)). Sie „bereinigt" r_xy um den Einfluss von z.'},
+{type:'mc',q:'Was ist eine Scheinkorrelation?',options:['Eine Korrelation, die statistisch nicht signifikant ist','Eine Korrelation zwischen x und y, die verschwindet, wenn man eine Drittvariable z kontrolliert','Eine negative Korrelation','Eine Korrelation nahe 0'],correct:1,explanation:'Scheinkorrelation: x und y korrelieren nur, weil beide von z beeinflusst werden. Beispiel: Eisverkauf und Ertrinkungsfälle korrelieren — Drittvariable: Temperatur.'},
+{type:'mc',q:'Was ist Suppression?',options:['r_xy ≈ 0, aber r_xy.z ≠ 0 — die Drittvariable unterdrückt den wahren Zusammenhang','r_xy ≠ 0, aber r_xy.z ≈ 0','r_xy > 1','Korrelation verschwindet bei großem n'],correct:0,explanation:'Suppression: Die Korrelation r_xy ist klein oder null, aber nach Kontrolle von z wird r_xy.z deutlich größer. Die Variable z hat den wahren Zusammenhang unterdrückt.'},
+{type:'mc',q:'In einer Vierfeldertafel: a=20, b=10, c=5, d=15. Berechne das Odds Ratio (OR).',options:['6.0','3.0','0.17','2.0'],correct:0,explanation:'OR = (a·d)/(b·c) = (20·15)/(10·5) = 300/50 = 6.0. Die Chance für das Ergebnis ist in Gruppe 1 sechsmal so hoch wie in Gruppe 2.'},
+{type:'tf',q:'Pearson r kann nur Werte zwischen −1 und +1 annehmen.',correct:true,explanation:'Per Definition: r = s_xy/(s_x·s_y). Nach der Cauchy-Schwarz-Ungleichung gilt stets −1 ≤ r ≤ 1. r = ±1 bedeutet perfekter linearer Zusammenhang.'},
+{type:'mc',q:'Welches Skalenniveau setzen Pearson-Korrelationen voraus?',options:['Nominalniveau','Ordinalniveau','Mindestens Intervallniveau','Verhältnisniveau'],correct:2,explanation:'Pearson r basiert auf Mittelwerten, Varianzen und Kovarianz — setzt daher mindestens Intervallskalierung voraus. Für Ordinalskala: Spearman r_s.'},
+{type:'mc',q:'Wenn r_xy = 0.6, r_xz = 0.8, r_yz = 0.7, was passiert mit r_xy.z?',options:['r_xy.z wird größer','r_xy.z wird kleiner (evtl. nahe 0)','r_xy.z bleibt 0.6','r_xy.z wird negativ'],correct:1,explanation:'Da z stark mit beiden Variablen korreliert (r_xz = 0.8, r_yz = 0.7), wird ein Teil der Korrelation r_xy = 0.6 durch z erklärt. Die partielle Korrelation r_xy.z wird daher kleiner.'},
+{type:'mc',q:'Was bedeutet ein Odds Ratio von 1?',options:['Perfekter Zusammenhang','Kein Zusammenhang — gleiche Chancen in beiden Gruppen','Negativer Zusammenhang','Unmögliches Ergebnis'],correct:1,explanation:'OR = 1 bedeutet: Die Odds (Chancen) sind in beiden Gruppen gleich → kein Zusammenhang. OR > 1: erhöhte Chance, OR < 1: verringerte Chance.'},
+{type:'mc',q:'Spearman r_s eignet sich besonders für:',options:['Normalverteilte Daten','Ordinalskalierte Daten oder bei Ausreißern','Nominale Daten','Nur stetige Daten'],correct:1,explanation:'Spearman r_s arbeitet mit Rängen und ist daher: (1) ab Ordinalniveau anwendbar, (2) robust gegenüber Ausreißern, (3) erfasst auch monotone (nicht nur lineare) Zusammenhänge.'},
+{type:'tf',q:'Der Pearson-Korrelationskoeffizient erfasst auch nichtlineare Zusammenhänge zuverlässig.',correct:false,explanation:'Pearson r misst nur den LINEAREN Zusammenhang. Ein perfekter quadratischer Zusammenhang (z.B. y = x²) kann r ≈ 0 ergeben!'},
+{type:'mc',q:'Eine Korrelation von r = 1.0 bedeutet:',options:['Alle Punkte liegen exakt auf einer ansteigenden Geraden','Alle Punkte liegen nahe einer Geraden','Es gibt einen kausalen Zusammenhang','Die Variablen sind identisch'],correct:0,explanation:'r = 1.0: Perfekter positiver linearer Zusammenhang — alle Datenpunkte liegen exakt auf einer Geraden mit positiver Steigung.'}
+],
+
+regression: [
+{type:'mc',q:'Die Methode der kleinsten Quadrate minimiert:',options:['Σ|yᵢ − ŷᵢ|','Σ(yᵢ − ŷᵢ)²','Σ(xᵢ − x̄)²','Σ(yᵢ − ȳ)'],correct:1,explanation:'Die Methode der kleinsten Quadrate (OLS) minimiert die Summe der quadrierten Residuen: Σ(yᵢ − ŷᵢ)² = Σeᵢ² → Minimum.'},
+{type:'mc',q:'Der Regressionskoeffizient b̂ berechnet sich als:',options:['b̂ = s_xy / s²_y','b̂ = s_xy / s²_x','b̂ = s²_x / s_xy','b̂ = r · s_x / s_y'],correct:1,explanation:'b̂ = s_xy / s²_x = Kovarianz / Varianz von x. Alternativ: b̂ = r · (s_y / s_x).'},
+{type:'mc',q:'Der y-Achsenabschnitt â der Regressionsgeraden berechnet sich als:',options:['â = ȳ + b̂ · x̄','â = ȳ − b̂ · x̄','â = x̄ − b̂ · ȳ','â = b̂ · ȳ / x̄'],correct:1,explanation:'â = ȳ − b̂ · x̄. Die Regressionsgerade geht immer durch den Schwerpunkt (x̄, ȳ).'},
+{type:'tf',q:'Die Regressionsgerade verläuft immer durch den Punkt (x̄, ȳ).',correct:true,explanation:'Ja! Setzt man x = x̄ in ŷ = â + b̂·x ein: ŷ = (ȳ − b̂·x̄) + b̂·x̄ = ȳ. Der Schwerpunkt liegt immer auf der Geraden.'},
+{type:'mc',q:'Das Bestimmtheitsmaß r² gibt an:',options:['Die Steigung der Regressionsgeraden','Den Anteil der durch x erklärten Varianz von y','Die Signifikanz der Regression','Die Anzahl der Prädiktoren'],correct:1,explanation:'r² = s²_ŷ / s²_y — der Anteil der Varianz von y, der durch die lineare Beziehung mit x erklärt wird. r² = 0.64 bedeutet: 64% der Varianz erklärt.'},
+{type:'mc',q:'Die Varianzzerlegung in der Regression lautet:',options:['s²_y = s²_ŷ · s²_e','s²_y = s²_ŷ + s²_e','s²_y = s²_ŷ − s²_e','s²_y = s²_e / s²_ŷ'],correct:1,explanation:'Varianzzerlegung: s²_y = s²_ŷ + s²_e (Gesamtvarianz = erklärte Varianz + Residualvarianz). Daraus folgt: r² = s²_ŷ/s²_y und 1−r² = s²_e/s²_y.'},
+{type:'mc',q:'Gegeben: r = 0.8, s_x = 5, s_y = 10. Berechne b̂.',options:['1.6','0.4','4.0','0.8'],correct:0,explanation:'b̂ = r · (s_y/s_x) = 0.8 · (10/5) = 0.8 · 2 = 1.6.'},
+{type:'mc',q:'Was gilt für die Residualvarianz s²_e?',options:['s²_e = r² · s²_y','s²_e = (1 − r²) · s²_y','s²_e = s²_y + s²_ŷ','s²_e = s²_y / r²'],correct:1,explanation:'s²_e = (1 − r²) · s²_y. Je größer r², desto kleiner die Residualvarianz — desto besser die Vorhersage.'},
+{type:'mc',q:'Gegeben: r² = 0.49. Wie viel Prozent der Varianz von y sind NICHT durch x erklärt?',options:['49%','51%','7%','70%'],correct:1,explanation:'Nicht erklärte Varianz = 1 − r² = 1 − 0.49 = 0.51 = 51%.'},
+{type:'tf',q:'b̂ = r · (s_y / s_x) und gleichzeitig b̂ = s_xy / s²_x — beide Formeln sind äquivalent.',correct:true,explanation:'Ja! r = s_xy/(s_x·s_y), also r·(s_y/s_x) = [s_xy/(s_x·s_y)]·(s_y/s_x) = s_xy/s²_x = b̂. Beide Darstellungen sind identisch.'},
+{type:'mc',q:'Was bedeutet b̂ = 2.5 in der Regression ŷ = 10 + 2.5x?',options:['Wenn x um 1 steigt, steigt ŷ um 2.5','Wenn x = 0, ist ŷ = 2.5','r² = 2.5','x und y korrelieren mit r = 2.5'],correct:0,explanation:'b̂ = 2.5 ist die Steigung: Pro Einheit Zunahme in x steigt der vorhergesagte y-Wert um 2.5 Einheiten.'},
+{type:'mc',q:'Gegeben: x̄ = 20, ȳ = 60, b̂ = 2. Berechne â.',options:['20','100','−20','40'],correct:0,explanation:'â = ȳ − b̂·x̄ = 60 − 2·20 = 60 − 40 = 20.'},
+{type:'mc',q:'Die Korrelation zwischen y und ŷ (vorhergesagte Werte) ist:',options:['r','r²','1','0'],correct:0,explanation:'Die Korrelation zwischen y und den Vorhersagewerten ŷ ist genau r (der Pearson-Korrelationskoeffizient). Daher: r(y,ŷ)² = r².'},
+{type:'tf',q:'Bei r = 0 ist die beste Vorhersage für y einfach ȳ (der Gesamtmittelwert).',correct:true,explanation:'Wenn r = 0, ist b̂ = 0 und ŷ = â = ȳ − 0·x̄ = ȳ. Ohne linearen Zusammenhang ist der Mittelwert die beste Schätzung.'},
+{type:'mc',q:'Gegeben: r = −0.6, s_y = 8. Berechne s²_e.',options:['40.96','20.48','51.20','64.00'],correct:0,explanation:'s²_e = (1−r²)·s²_y = (1−0.36)·64 = 0.64·64 = 40.96.'},
+{type:'mc',q:'Die Regression von y auf x und die Regression von x auf y ergeben:',options:['Dieselbe Gerade','Verschiedene Geraden (außer bei r = ±1)','Parallele Geraden','Senkrechte Geraden'],correct:1,explanation:'Die Regression von y auf x minimiert vertikale Abstände, die von x auf y horizontale. Nur bei r = ±1 (perfekter Zusammenhang) fallen beide Geraden zusammen.'},
+{type:'mc',q:'Was ist ein Residuum eᵢ?',options:['Die vorhergesagte Abweichung','Die Differenz eᵢ = yᵢ − ŷᵢ zwischen beobachtetem und vorhergesagtem Wert','Die Steigung der Geraden','Der y-Achsenabschnitt'],correct:1,explanation:'Residuum eᵢ = yᵢ − ŷᵢ = beobachteter Wert minus vorhergesagter Wert. Positive Residuen: Unterschätzung. Negative: Überschätzung.'},
+{type:'tf',q:'Die Summe aller Residuen ist null: Σeᵢ = 0.',correct:true,explanation:'Die OLS-Methode garantiert Σeᵢ = Σ(yᵢ − ŷᵢ) = 0. Das ist eine Eigenschaft der Methode der kleinsten Quadrate (analog zur Nulleigenschaft des Mittelwerts).'},
+{type:'mc',q:'Gegeben: s²_y = 100, r² = 0.81. Wie groß ist die erklärte Varianz s²_ŷ?',options:['81','19','9','181'],correct:0,explanation:'s²_ŷ = r² · s²_y = 0.81 · 100 = 81. Die Regression erklärt 81% der Gesamtvarianz.'},
+{type:'mc',q:'Welche Annahme wird bei der linearen Regression NICHT gemacht?',options:['Linearer Zusammenhang zwischen x und y','Homoskedastizität (gleiche Residualstreuung)','Normalverteilung von x','Unabhängigkeit der Residuen'],correct:2,explanation:'Die Regression setzt nicht voraus, dass x normalverteilt ist. Voraussetzungen: Linearität, Homoskedastizität, Unabhängigkeit und (für Inferenz) Normalverteilung der Residuen.'}
+],
+
+wahrscheinlichkeit: [
+{type:'mc',q:'Welches Kolmogorov-Axiom besagt P(Ω) = 1?',options:['Nichtnegativität','Normiertheit','σ-Additivität','Unabhängigkeit'],correct:1,explanation:'Axiom 2 (Normiertheit): P(Ω) = 1. Die Wahrscheinlichkeit des sicheren Ereignisses ist 1.'},
+{type:'mc',q:'Die Komplementregel besagt:',options:['P(A) = P(B)','P(Ā) = 1 − P(A)','P(A∪B) = P(A) + P(B)','P(A∩B) = P(A) · P(B)'],correct:1,explanation:'Komplementregel: P(Ā) = 1 − P(A). Die Wahrscheinlichkeit des Gegenereignisses ist 1 minus die Wahrscheinlichkeit von A.'},
+{type:'mc',q:'Der allgemeine Additionssatz lautet:',options:['P(A∪B) = P(A) + P(B)','P(A∪B) = P(A) · P(B)','P(A∪B) = P(A) + P(B) − P(A∩B)','P(A∪B) = P(A) − P(B) + P(A∩B)'],correct:2,explanation:'P(A∪B) = P(A) + P(B) − P(A∩B). Der Schnitt wird abgezogen, damit er nicht doppelt gezählt wird.'},
+{type:'mc',q:'Bei einem Laplace-Experiment gilt P(A) = :',options:['|A| · |Ω|','|Ω| / |A|','|A| / |Ω|','1 / |A|'],correct:2,explanation:'Laplace: Alle Elementarereignisse sind gleichwahrscheinlich. P(A) = |A|/|Ω| = Anzahl günstige / Anzahl mögliche.'},
+{type:'mc',q:'Auf wie viele Arten kann man 3 Personen aus 10 auswählen (ohne Reihenfolge)?',options:['720','120','30','1000'],correct:1,explanation:'Kombination ohne Wiederholung: C(10,3) = 10!/(3!·7!) = (10·9·8)/(3·2·1) = 720/6 = 120.'},
+{type:'mc',q:'Die bedingte Wahrscheinlichkeit P(A|B) ist definiert als:',options:['P(A) · P(B)','P(A∩B) / P(B)','P(A∪B) / P(B)','P(B|A) · P(A)'],correct:1,explanation:'P(A|B) = P(A∩B)/P(B), vorausgesetzt P(B) > 0. Die Wahrscheinlichkeit von A, gegeben dass B eingetreten ist.'},
+{type:'mc',q:'Zwei Ereignisse A und B sind stochastisch unabhängig, wenn:',options:['P(A∩B) = 0','P(A∪B) = P(A) + P(B)','P(A∩B) = P(A) · P(B)','P(A|B) = P(B|A)'],correct:2,explanation:'Stochastische Unabhängigkeit: P(A∩B) = P(A)·P(B). Äquivalent: P(A|B) = P(A) — die Kenntnis von B ändert nichts an der Wahrscheinlichkeit von A.'},
+{type:'mc',q:'Wie viele Permutationen gibt es von 5 verschiedenen Elementen?',options:['25','120','10','32'],correct:1,explanation:'Permutationen von n Elementen: n! = 5! = 5·4·3·2·1 = 120.'},
+{type:'mc',q:'Der Satz von Bayes lautet:',options:['P(A|B) = P(A) + P(B)','P(A|B) = P(B|A) · P(A) / P(B)','P(A|B) = P(A∩B) + P(A∪B)','P(A|B) = P(A) / P(B)'],correct:1,explanation:'Bayes: P(A|B) = P(B|A)·P(A)/P(B). Erlaubt die Umkehrung bedingter Wahrscheinlichkeiten.'},
+{type:'mc',q:'Gegeben: P(A) = 0.3, P(B) = 0.5, P(A∩B) = 0.1. Berechne P(A∪B).',options:['0.7','0.8','0.6','0.15'],correct:0,explanation:'P(A∪B) = P(A) + P(B) − P(A∩B) = 0.3 + 0.5 − 0.1 = 0.7.'},
+{type:'tf',q:'P(A) kann negativ sein.',correct:false,explanation:'Axiom 1 (Nichtnegativität): P(A) ≥ 0 für jedes Ereignis A. Wahrscheinlichkeiten sind nie negativ.'},
+{type:'mc',q:'Der Multiplikationssatz für unabhängige Ereignisse lautet:',options:['P(A∩B) = P(A) + P(B)','P(A∩B) = P(A) · P(B)','P(A∩B) = P(A|B)','P(A∩B) = P(A) − P(B)'],correct:1,explanation:'Bei Unabhängigkeit: P(A∩B) = P(A)·P(B). Die gemeinsame Wahrscheinlichkeit ist das Produkt der Einzelwahrscheinlichkeiten.'},
+{type:'mc',q:'Wie viele Möglichkeiten gibt es, 2 Elemente aus 6 auszuwählen MIT Reihenfolge (ohne Wiederholung)?',options:['30','15','12','36'],correct:0,explanation:'Variation ohne Wiederholung: 6!/(6−2)! = 6·5 = 30.'},
+{type:'mc',q:'P(A) = 0.4, P(B|A) = 0.5. Berechne P(A∩B).',options:['0.9','0.2','0.1','0.8'],correct:1,explanation:'Multiplikationssatz: P(A∩B) = P(B|A)·P(A) = 0.5·0.4 = 0.2.'},
+{type:'tf',q:'Wenn A und B disjunkt sind (A∩B = ∅), dann sind sie stochastisch unabhängig.',correct:false,explanation:'Disjunkt ≠ unabhängig! Disjunkte Ereignisse sind sogar maximal abhängig: Wenn A eintritt, kann B nicht eintreten (P(B|A) = 0 ≠ P(B)).'},
+{type:'mc',q:'Der Binomialkoeffizient C(n,k) = n!/(k!(n−k)!) gibt an:',options:['Die Anzahl der Permutationen von n Elementen','Die Anzahl der Möglichkeiten, k aus n Elementen auszuwählen (ohne Reihenfolge)','Die Wahrscheinlichkeit von k Treffern','Die Varianz der Binomialverteilung'],correct:1,explanation:'C(n,k) = „n über k" = Anzahl der Kombinationen ohne Wiederholung: k Elemente aus n auswählen, Reihenfolge egal.'},
+{type:'mc',q:'Berechne C(6,2).',options:['12','15','30','720'],correct:1,explanation:'C(6,2) = 6!/(2!·4!) = (6·5)/(2·1) = 30/2 = 15.'},
+{type:'mc',q:'Gegeben: P(Krankheit) = 0.01, P(+|Krankheit) = 0.95, P(+|gesund) = 0.05. Berechne P(Krankheit|+).',options:['95%','16.1%','50%','1%'],correct:1,explanation:'Bayes: P(K|+) = P(+|K)·P(K) / [P(+|K)·P(K) + P(+|¬K)·P(¬K)] = (0.95·0.01)/(0.95·0.01 + 0.05·0.99) = 0.0095/0.059 ≈ 0.161 = 16.1%.'},
+{type:'tf',q:'Für disjunkte Ereignisse A und B gilt: P(A∪B) = P(A) + P(B).',correct:true,explanation:'Wenn A∩B = ∅ (disjunkt), dann entfällt der Korrekturterm: P(A∪B) = P(A) + P(B). Das ist das Additivitätsaxiom von Kolmogorov.'},
+{type:'mc',q:'Wie viele Möglichkeiten gibt es, 3 Kugeln aus 3 mit Zurücklegen und Reihenfolge zu ziehen?',options:['27','6','9','3'],correct:0,explanation:'Variation mit Wiederholung: n^k = 3³ = 27. Bei jedem der 3 Züge hat man 3 Möglichkeiten.'}
+],
+
+verteilungen: [
+{type:'mc',q:'Die Binomialverteilung beschreibt:',options:['Die Verteilung stetiger Merkmale','Die Anzahl der Erfolge in n unabhängigen Bernoulli-Versuchen','Die Verteilung von Mittelwerten','Die Verteilung der Differenz zweier Variablen'],correct:1,explanation:'Binomialverteilung B(n,p): Anzahl der Erfolge X in n unabhängigen Versuchen mit konstanter Erfolgswahrscheinlichkeit p.'},
+{type:'mc',q:'Die Wahrscheinlichkeitsfunktion der Binomialverteilung lautet:',options:['P(X=k) = C(n,k) · p^k · (1−p)^(n−k)','P(X=k) = n · p · k','P(X=k) = p^n · k','P(X=k) = C(n,k) / p^k'],correct:0,explanation:'P(X=k) = C(n,k) · p^k · (1−p)^(n−k) für k = 0, 1, ..., n. Kombination aus Binomialkoeffizient, Erfolgs- und Misserfolgswahrscheinlichkeiten.'},
+{type:'mc',q:'Erwartungswert und Varianz der Binomialverteilung B(n,p) sind:',options:['E(X) = n/p, Var(X) = n/p²','E(X) = np, Var(X) = np(1−p)','E(X) = p, Var(X) = p(1−p)','E(X) = np², Var(X) = np'],correct:1,explanation:'Binomialverteilung: E(X) = np (Erwartungswert), Var(X) = np(1−p) (Varianz).'},
+{type:'mc',q:'Berechne P(X=3) bei B(5, 0.4).',options:['0.2304','0.3456','0.1152','0.0768'],correct:0,explanation:'P(X=3) = C(5,3)·0.4³·0.6² = 10·0.064·0.36 = 10·0.02304 = 0.2304.'},
+{type:'mc',q:'Berechne E(X) für X ~ B(20, 0.3).',options:['6','3','9','0.3'],correct:0,explanation:'E(X) = np = 20·0.3 = 6. Im Mittel erwartet man 6 Erfolge bei 20 Versuchen.'},
+{type:'mc',q:'Die Standardnormalverteilung N(0,1) hat:',options:['μ = 0, σ² = 0','μ = 1, σ² = 1','μ = 0, σ² = 1','μ = 0, σ² = ∞'],correct:2,explanation:'Standardnormalverteilung: μ = 0, σ² = 1. Jede Normalverteilung kann durch z = (x−μ)/σ in die Standardnormalverteilung transformiert werden.'},
+{type:'mc',q:'Die 68-95-99.7-Regel besagt: Wie viel Prozent liegen in μ ± 1σ?',options:['50%','68%','95%','99.7%'],correct:1,explanation:'Ca. 68% der Werte liegen innerhalb von μ ± 1σ, exakt 95% in μ ± 1.96σ (Faustregel: μ ± 2σ ≈ 95.4%), ~99.7% in μ ± 3σ.'},
+{type:'mc',q:'Gegeben: X ~ N(100, 225). Berechne P(X ≤ 85) mit Hilfe der Standardnormalverteilung.',options:['Φ(−1)','Φ(1)','Φ(−15)','Φ(0.67)'],correct:0,explanation:'σ = √225 = 15. z = (85−100)/15 = −1. Also P(X ≤ 85) = Φ(−1) ≈ 0.1587.'},
+{type:'tf',q:'Die Normalverteilung ist symmetrisch um μ.',correct:true,explanation:'Die Dichtefunktion der Normalverteilung ist eine symmetrische Glockenkurve mit Maximum bei μ. Es gilt: f(μ+a) = f(μ−a) für alle a.'},
+{type:'mc',q:'Die Negativregel der Standardnormalverteilung lautet:',options:['Φ(z) = 1 + Φ(−z)','Φ(−z) = 1 − Φ(z)','Φ(−z) = Φ(z)','Φ(−z) = −Φ(z)'],correct:1,explanation:'Negativregel: Φ(−z) = 1 − Φ(z). Folgt aus der Symmetrie der Standardnormalverteilung um 0.'},
+{type:'mc',q:'Gegeben: Φ(1.96) ≈ 0.975. Berechne P(−1.96 ≤ Z ≤ 1.96).',options:['0.975','0.95','0.05','0.025'],correct:1,explanation:'P(−1.96 ≤ Z ≤ 1.96) = Φ(1.96) − Φ(−1.96) = 0.975 − (1−0.975) = 0.975 − 0.025 = 0.95. Das ist das bekannte 95%-Intervall.'},
+{type:'mc',q:'Der Erwartungswert einer diskreten Zufallsvariable X ist:',options:['Der häufigste Wert','E(X) = Σ xᵢ · P(X = xᵢ)','Der Median','E(X) = n · p'],correct:1,explanation:'E(X) = Σ xᵢ · P(X = xᵢ) — jeder mögliche Wert wird mit seiner Wahrscheinlichkeit gewichtet und aufsummiert.'},
+{type:'mc',q:'Die Varianz einer Zufallsvariable ist definiert als:',options:['Var(X) = E(X)²','Var(X) = E(X²) − [E(X)]²','Var(X) = E(X) − E(X²)','Var(X) = [E(X)]² − E(X²)'],correct:1,explanation:'Var(X) = E(X²) − [E(X)]² (Verschiebungssatz). Äquivalent: Var(X) = E[(X − μ)²].'},
+{type:'mc',q:'Berechne Var(X) für X ~ B(10, 0.5).',options:['5.0','2.5','25','0.25'],correct:1,explanation:'Var(X) = np(1−p) = 10·0.5·0.5 = 2.5.'},
+{type:'tf',q:'Jede Normalverteilung kann durch z-Transformation in die Standardnormalverteilung überführt werden.',correct:true,explanation:'z = (X − μ)/σ transformiert X ~ N(μ,σ²) in Z ~ N(0,1). Damit kann man Wahrscheinlichkeiten über die z-Tabelle berechnen.'},
+{type:'mc',q:'Gegeben: X ~ N(170, 100). Was ist P(X > 180)?',options:['Φ(1)','1 − Φ(1)','Φ(−1)','1 − Φ(−1)'],correct:1,explanation:'σ = 10. z = (180−170)/10 = 1. P(X > 180) = P(Z > 1) = 1 − Φ(1) ≈ 1 − 0.8413 = 0.1587.'},
+{type:'mc',q:'Das z-Quantil z_0.975 ist ungefähr:',options:['1.28','1.645','1.96','2.576'],correct:2,explanation:'z_0.975 ≈ 1.96 — der Wert, unterhalb dessen 97.5% der Standardnormalverteilung liegen. Wichtig für 95%-Konfidenzintervalle.'},
+{type:'mc',q:'Eine Bernoulli-Verteilung ist ein Spezialfall der Binomialverteilung mit:',options:['n = 0','n = 1','p = 0.5','p = 1'],correct:1,explanation:'Bernoulli-Verteilung = B(1,p): Ein einziger Versuch mit Erfolgswahrscheinlichkeit p. X kann nur 0 oder 1 sein.'},
+{type:'mc',q:'Was beschreibt die Stichprobenverteilung des Mittelwerts?',options:['Die Verteilung der Einzelwerte','Die Verteilung der Mittelwerte bei wiederholter Stichprobenziehung','Die Verteilung der Varianz','Die Verteilung der Residuen'],correct:1,explanation:'Die Stichprobenverteilung von X̄ gibt an, wie sich der Mittelwert bei wiederholter Stichprobenziehung verhält. Nach dem ZGS ist sie bei großem n annähernd normalverteilt.'},
+{type:'mc',q:'Gegeben: μ = 500, σ = 100, n = 25. Was ist der Standardfehler des Mittelwerts?',options:['100','20','4','500'],correct:1,explanation:'Standardfehler SE = σ/√n = 100/√25 = 100/5 = 20. Der Standardfehler gibt die Streuung der Stichprobenmittelwerte an.'}
+]
+
+};
+
+/* Section display names */
+const SEC_NAMES = {
+  grundlagen:'Grundlagen', haeufigkeit:'Häufigkeitsverteilungen', lagemasse:'Lagemaße',
+  streuung:'Streuung & Transformation', korrelation:'Korrelation',
+  regression:'Regression', wahrscheinlichkeit:'Wahrscheinlichkeit', verteilungen:'Verteilungen'
+};
+
+/* ── State ── */
+let questions=[], current=0, answers=[], timerInterval=null, seconds=0, useTimer=false;
+
+/* ── Topic selection ── */
+function toggleTopic(el){el.classList.toggle('selected')}
+function selectAll(){document.querySelectorAll('.topic-card').forEach(c=>c.classList.add('selected'))}
+function selectNone(){document.querySelectorAll('.topic-card').forEach(c=>c.classList.remove('selected'))}
+
+/* ── Shuffle (Fisher-Yates) ── */
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+
+/* ── Start test ── */
+function startTest(){
+  const selected=[...document.querySelectorAll('.topic-card.selected')].map(c=>c.dataset.section);
+  if(!selected.length) return alert('Bitte mindestens ein Kapitel auswählen.');
+  const perSection=parseInt(document.getElementById('cfgCount').value);
+  const doShuffle=document.getElementById('cfgShuffle').checked;
+  useTimer=document.getElementById('cfgTimer').checked;
+
+  questions=[];
+  selected.forEach(sec=>{
+    let pool=[...POOL[sec]].map(q=>({...q, section:sec}));
+    if(doShuffle) shuffle(pool);
+    const n=perSection>=20?pool.length:Math.min(perSection,pool.length);
+    questions.push(...pool.slice(0,n));
+  });
+  if(doShuffle) shuffle(questions);
+
+  // shuffle MC options for each question
+  questions.forEach(q=>{
+    if(q.type==='mc'){
+      const correctText=q.options[q.correct];
+      shuffle(q.options);
+      q.correct=q.options.indexOf(correctText);
+    }
+  });
+
+  current=0; answers=new Array(questions.length).fill(null);
+  document.getElementById('startScreen').style.display='none';
+  document.getElementById('testScreen').style.display='block';
+
+  if(useTimer){seconds=0;document.getElementById('timerDisplay').style.display='';timerInterval=setInterval(()=>{seconds++;const m=String(Math.floor(seconds/60)).padStart(2,'0'),s=String(seconds%60).padStart(2,'0');document.getElementById('timerDisplay').textContent=m+':'+s},1000)}
+
+  renderQuestion();
+}
+
+/* ── Render question ── */
+function renderQuestion(){
+  const q=questions[current];
+  const total=questions.length;
+  document.getElementById('progressText').textContent=`Frage ${current+1} / ${total}`;
+  document.getElementById('progressBar').style.width=((current)/total*100)+'%';
+  document.getElementById('nextBtn').style.display='none';
+  document.getElementById('finishBtn').style.display='none';
+
+  const area=document.getElementById('questionArea');
+  let typeLabel=q.type==='tf'?'Wahr / Falsch':'Multiple Choice';
+  let opts='';
+  if(q.type==='mc'){
+    opts=q.options.map((o,i)=>`<button class="opt-btn" onclick="answer(${i})">${o}</button>`).join('');
+  } else {
+    opts=`<button class="opt-btn" onclick="answer(true)">Wahr</button><button class="opt-btn" onclick="answer(false)">Falsch</button>`;
+  }
+  area.innerHTML=`<div class="question-card"><div class="q-meta"><span class="q-section">${SEC_NAMES[q.section]}</span><span class="q-type">${typeLabel}</span></div><p class="q-text">${q.q}</p><div class="options-list">${opts}</div><div class="feedback correct-fb">${q.explanation}</div><div class="feedback wrong-fb">${q.explanation}</div></div>`;
+}
+
+/* ── Answer ── */
+function answer(val){
+  const q=questions[current];
+  const card=document.querySelector('.question-card');
+  const btns=card.querySelectorAll('.opt-btn');
+  const isCorrect=(val===q.correct);
+  answers[current]={given:val,correct:q.correct,isCorrect};
+
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    if(q.type==='mc'){
+      if(i===q.correct)b.classList.add('correct');
+      if(i===val&&!isCorrect)b.classList.add('wrong');
+    } else {
+      const bVal=i===0?true:false;
+      if(bVal===q.correct)b.classList.add('correct');
+      if(bVal===val&&!isCorrect)b.classList.add('wrong');
+    }
+  });
+
+  const fb=card.querySelector(isCorrect?'.correct-fb':'.wrong-fb');
+  fb.classList.add('show');
+
+  if(current<questions.length-1) document.getElementById('nextBtn').style.display='';
+  else document.getElementById('finishBtn').style.display='';
+}
+
+/* ── Next ── */
+function nextQuestion(){current++;renderQuestion()}
+
+/* ── Results ── */
+function showResults(){
+  if(timerInterval)clearInterval(timerInterval);
+  document.getElementById('testScreen').style.display='none';
+  document.getElementById('resultScreen').style.display='block';
+
+  const totalCorrect=answers.filter(a=>a&&a.isCorrect).length;
+  const pct=Math.round(totalCorrect/questions.length*100);
+  const scoreEl=document.getElementById('totalScore');
+  scoreEl.textContent=pct+'%';
+  scoreEl.className='score-big'+(pct>=70?'':pct>=50?' mediocre':' poor');
+  document.getElementById('resultSummary').textContent=`${totalCorrect} von ${questions.length} Fragen richtig`+(useTimer?` · Zeit: ${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`:'');
+
+  // per-section breakdown
+  const secStats={};
+  questions.forEach((q,i)=>{
+    if(!secStats[q.section])secStats[q.section]={total:0,correct:0};
+    secStats[q.section].total++;
+    if(answers[i]&&answers[i].isCorrect)secStats[q.section].correct++;
+  });
+  let secHtml='';
+  Object.keys(secStats).forEach(sec=>{
+    const s=secStats[sec];const p=Math.round(s.correct/s.total*100);
+    const color=p>=70?'var(--accent2)':p>=50?'var(--accent5)':'var(--accent)';
+    secHtml+=`<div class="section-result-row"><span class="sr-name">${SEC_NAMES[sec]}</span><div class="sr-bar"><div class="sr-bar-fill" style="width:${p}%;background:${color}"></div></div><span class="sr-score" style="color:${color}">${s.correct}/${s.total}</span></div>`;
+  });
+  document.getElementById('sectionResults').innerHTML=secHtml;
+
+  // detailed review
+  let revHtml='';
+  questions.forEach((q,i)=>{
+    const a=answers[i];
+    const cls=a&&a.isCorrect?'was-correct':'was-wrong';
+    let givenText='';
+    if(q.type==='mc')givenText=a?q.options[a.given]:'—';
+    else givenText=a?(a.given?'Wahr':'Falsch'):'—';
+    let correctText='';
+    if(q.type==='mc')correctText=q.options[q.correct];
+    else correctText=q.correct?'Wahr':'Falsch';
+    revHtml+=`<div class="review-item ${cls}"><div class="ri-q">${i+1}. ${q.q}</div><div class="ri-answer">${a&&a.isCorrect?'✓ Richtig':'✗ Deine Antwort: '+givenText+' — <strong>Richtig: '+correctText+'</strong>'}</div><div class="ri-explain">${q.explanation}</div></div>`;
+  });
+  document.getElementById('reviewList').innerHTML=revHtml;
+}
+
+/* ── Restart ── */
+function restart(){
+  document.getElementById('resultScreen').style.display='none';
+  document.getElementById('startScreen').style.display='block';
+  seconds=0;
+  document.getElementById('timerDisplay').textContent='00:00';
+}
+</script>
+</body>
+</html>

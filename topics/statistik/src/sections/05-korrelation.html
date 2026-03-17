@@ -43,6 +43,42 @@
   <p><strong>Korrelation ≠ Kausalität!</strong> Ein hoher Korrelationskoeffizient zeigt nur einen statistischen Zusammenhang, keine Ursache-Wirkungs-Beziehung. Klassiker: Eisverkauf und Ertrinkungsfälle korrelieren positiv — die gemeinsame Ursache ist die Temperatur.</p>
 </div>
 
+<div class="visual-mnemonic">
+  <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="max-width:400px; width:100%;">
+    <defs>
+      <marker id="arKor" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2a2520"/></marker>
+    </defs>
+    <!-- Panel 1: r = +0.8 -->
+    <text x="66" y="12" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">r = +0,8</text>
+    <line x1="16" y1="145" x2="116" y2="145" stroke="#d4cbbf" stroke-width="1" marker-end="url(#arKor)"/>
+    <line x1="16" y1="145" x2="16" y2="20" stroke="#d4cbbf" stroke-width="1" marker-end="url(#arKor)"/>
+    <circle cx="30" cy="130" r="3" fill="#2c6e49"/><circle cx="42" cy="118" r="3" fill="#2c6e49"/>
+    <circle cx="55" cy="105" r="3" fill="#2c6e49"/><circle cx="68" cy="90" r="3" fill="#2c6e49"/>
+    <circle cx="80" cy="78" r="3" fill="#2c6e49"/><circle cx="92" cy="62" r="3" fill="#2c6e49"/>
+    <circle cx="105" cy="50" r="3" fill="#2c6e49"/>
+    <line x1="25" y1="136" x2="110" y2="44" stroke="#2c6e49" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <!-- Panel 2: r ≈ 0 -->
+    <text x="200" y="12" text-anchor="middle" font-size="10" font-weight="700" fill="#6b5e52" font-family="'Source Sans 3',sans-serif">r ≈ 0</text>
+    <line x1="150" y1="145" x2="250" y2="145" stroke="#d4cbbf" stroke-width="1" marker-end="url(#arKor)"/>
+    <line x1="150" y1="145" x2="150" y2="20" stroke="#d4cbbf" stroke-width="1" marker-end="url(#arKor)"/>
+    <circle cx="162" cy="50" r="3" fill="#6b5e52"/><circle cx="175" cy="130" r="3" fill="#6b5e52"/>
+    <circle cx="188" cy="80" r="3" fill="#6b5e52"/><circle cx="200" cy="40" r="3" fill="#6b5e52"/>
+    <circle cx="212" cy="115" r="3" fill="#6b5e52"/><circle cx="224" cy="65" r="3" fill="#6b5e52"/>
+    <circle cx="237" cy="100" r="3" fill="#6b5e52"/>
+    <line x1="158" y1="85" x2="242" y2="85" stroke="#6b5e52" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <!-- Panel 3: r = -0.8 -->
+    <text x="334" y="12" text-anchor="middle" font-size="10" font-weight="700" fill="#c0392b" font-family="'Source Sans 3',sans-serif">r = −0,8</text>
+    <line x1="284" y1="145" x2="384" y2="145" stroke="#d4cbbf" stroke-width="1" marker-end="url(#arKor)"/>
+    <line x1="284" y1="145" x2="284" y2="20" stroke="#d4cbbf" stroke-width="1" marker-end="url(#arKor)"/>
+    <circle cx="296" cy="48" r="3" fill="#c0392b"/><circle cx="308" cy="62" r="3" fill="#c0392b"/>
+    <circle cx="320" cy="78" r="3" fill="#c0392b"/><circle cx="332" cy="92" r="3" fill="#c0392b"/>
+    <circle cx="344" cy="106" r="3" fill="#c0392b"/><circle cx="357" cy="118" r="3" fill="#c0392b"/>
+    <circle cx="370" cy="132" r="3" fill="#c0392b"/>
+    <line x1="292" y1="44" x2="374" y2="138" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3"/>
+  </svg>
+  <figcaption>Drei Streudiagramme: starker positiver Zusammenhang (r = +0,8), kein Zusammenhang (r ≈ 0), starker negativer Zusammenhang (r = −0,8).</figcaption>
+</div>
+
 <h3 class="sub">Spearman-Rangkorrelation r<sub>s</sub></h3>
 
 <div class="def-box blue">

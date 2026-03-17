@@ -860,6 +860,36 @@ img[loading="lazy"] {
 
   <div class="merksatz"><p><strong>Induktion vs. Deduktion:</strong> Induktion: Einzelfall → Allgemeines (unsicher!). Deduktion: Allgemeines → Einzelfall (gültig). Popper: <strong>hypothetisch-deduktive Methode</strong> — Hypothese → Vorhersage → empirisch prüfen.</p></div>
 
+  <div class="visual-mnemonic">
+    <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="max-width:400px; width:100%;">
+      <!-- Induktion: Einzelfall → Allgemeines (bottom up) -->
+      <rect x="10" y="110" width="160" height="36" rx="6" fill="#eaf5ee" stroke="#2c6e49" stroke-width="1.5"/>
+      <text x="90" y="124" text-anchor="middle" font-size="11" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">Einzelbeobachtungen</text>
+      <text x="90" y="138" text-anchor="middle" font-size="10" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">„Alle bisher gesehenen Schwäne…"</text>
+      <rect x="10" y="14" width="160" height="36" rx="6" fill="#2c6e49" stroke="#2c6e49" stroke-width="1.5"/>
+      <text x="90" y="28" text-anchor="middle" font-size="11" font-weight="700" fill="#f5f0e8" font-family="'Source Sans 3',sans-serif">Allgemeine Theorie</text>
+      <text x="90" y="42" text-anchor="middle" font-size="10" fill="#f5f0e8" font-family="'Source Sans 3',sans-serif">„Alle Schwäne sind weiß."</text>
+      <line x1="90" y1="108" x2="90" y2="52" stroke="#2c6e49" stroke-width="2" marker-end="url(#arUp)"/>
+      <text x="96" y="84" font-size="10" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">INDUKTION</text>
+      <text x="96" y="96" font-size="9" fill="#6b5e52" font-family="'Source Sans 3',sans-serif">(unsicher!)</text>
+      <defs>
+        <marker id="arUp" markerWidth="8" markerHeight="6" refX="4" refY="3" orient="auto"><path d="M0,6 L4,0 L8,6" fill="none" stroke="#2c6e49" stroke-width="1.5"/></marker>
+        <marker id="arDown" markerWidth="8" markerHeight="6" refX="4" refY="3" orient="auto"><path d="M0,0 L4,6 L8,0" fill="none" stroke="#1a5276" stroke-width="1.5"/></marker>
+      </defs>
+      <!-- Deduktion: Allgemeines → Einzelfall (top down) -->
+      <rect x="230" y="14" width="160" height="36" rx="6" fill="#1a5276" stroke="#1a5276" stroke-width="1.5"/>
+      <text x="310" y="28" text-anchor="middle" font-size="11" font-weight="700" fill="#f5f0e8" font-family="'Source Sans 3',sans-serif">Allgemeine Theorie</text>
+      <text x="310" y="42" text-anchor="middle" font-size="10" fill="#f5f0e8" font-family="'Source Sans 3',sans-serif">„Alle Metalle leiten Strom."</text>
+      <rect x="230" y="110" width="160" height="36" rx="6" fill="#e8f0f8" stroke="#1a5276" stroke-width="1.5"/>
+      <text x="310" y="124" text-anchor="middle" font-size="11" font-weight="700" fill="#1a5276" font-family="'Source Sans 3',sans-serif">Einzelvorhersage</text>
+      <text x="310" y="138" text-anchor="middle" font-size="10" fill="#1a5276" font-family="'Source Sans 3',sans-serif">„Dieses Kupfer leitet Strom."</text>
+      <line x1="310" y1="52" x2="310" y2="108" stroke="#1a5276" stroke-width="2" marker-end="url(#arDown)"/>
+      <text x="316" y="84" font-size="10" font-weight="700" fill="#1a5276" font-family="'Source Sans 3',sans-serif">DEDUKTION</text>
+      <text x="316" y="96" font-size="9" fill="#6b5e52" font-family="'Source Sans 3',sans-serif">(gültig!)</text>
+    </svg>
+    <figcaption>Induktion schließt vom Einzelfall auf das Allgemeine (unsicher) — Deduktion umgekehrt (gültig). Popper bevorzugt die hypothetisch-deduktive Methode.</figcaption>
+  </div>
+
   <div class="deep-dive" id="dd-wiss">
     <button class="deep-dive-toggle" onclick="toggleDD('dd-wiss')"><span class="dd-icon">▼</span>Vertiefung: Wissenschaftstheorie im Detail<span class="dd-badge">Erweitert</span></button>
     <div class="deep-dive-content">
@@ -1001,6 +1031,32 @@ img[loading="lazy"] {
 
   <div class="example"><p><strong>Psychologie:</strong> „Wenn depressiv (A), dann niedrige Serotoninaktivität (B)." ✓ Person depressiv → niedrige Serotonin (Ponens). ✗ Niedrige Serotonin → depressiv? Fehlschluss! (Andere Ursachen möglich.)</p></div>
 
+  <div class="visual-mnemonic">
+    <svg viewBox="0 0 400 170" xmlns="http://www.w3.org/2000/svg" style="max-width:400px; width:100%;">
+      <defs>
+        <marker id="arMP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2c6e49"/></marker>
+      </defs>
+      <!-- Title -->
+      <text x="200" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#2a2520" font-family="'Playfair Display',serif">Modus Ponens — Schritt für Schritt</text>
+      <!-- Circle P -->
+      <ellipse cx="110" cy="95" rx="88" ry="55" fill="none" stroke="#1a5276" stroke-width="2"/>
+      <text x="60" y="78" font-size="10" fill="#1a5276" font-family="'Source Sans 3',sans-serif">Es regnet (P)</text>
+      <!-- Circle Q inside P area, overlapping -->
+      <ellipse cx="150" cy="105" rx="60" ry="38" fill="rgba(192,57,43,0.12)" stroke="#c0392b" stroke-width="2"/>
+      <text x="155" y="118" font-size="10" fill="#c0392b" font-family="'Source Sans 3',sans-serif">Straße nass (Q)</text>
+      <!-- Arrow from P to Q -->
+      <line x1="200" y1="95" x2="310" y2="95" stroke="#2c6e49" stroke-width="2" marker-end="url(#arMP)"/>
+      <text x="255" y="88" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">P → Q</text>
+      <!-- Result box -->
+      <rect x="315" y="75" width="78" height="40" rx="6" fill="#eaf5ee" stroke="#2c6e49" stroke-width="1.5"/>
+      <text x="354" y="91" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">P gilt</text>
+      <text x="354" y="108" text-anchor="middle" font-size="11" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">∴ Q gilt ✓</text>
+      <!-- Labels -->
+      <text x="110" y="158" text-anchor="middle" font-size="9" fill="#6b5e52" font-style="italic" font-family="'Source Sans 3',sans-serif">P enthält Q — wenn P, dann immer Q</text>
+    </svg>
+    <figcaption>Modus Ponens: Q ist in P enthalten. Wenn P wahr ist, folgt Q zwingend. Umkehrung (Q → P) wäre ein Fehlschluss.</figcaption>
+  </div>
+
   <h3 class="sub">Prädikatenlogik</h3>
   <div class="def-box purple">
     <div class="label">Quantoren</div>
@@ -1123,6 +1179,36 @@ img[loading="lazy"] {
 
   <div class="achtung"><p><strong>„Doppelt so viel Schmerz"</strong> — nur bei Verhältnisskala! Bei Ordinalskala (1–10) sind Verhältnisaussagen unzulässig.</p></div>
 
+  <div class="visual-mnemonic">
+    <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" style="max-width:400px; width:100%;">
+      <defs>
+        <marker id="arLad" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2a2520"/></marker>
+      </defs>
+      <!-- Vertical arrow -->
+      <line x1="60" y1="200" x2="60" y2="20" stroke="#2a2520" stroke-width="2" marker-end="url(#arLad)"/>
+      <text x="60" y="212" text-anchor="middle" font-size="10" fill="#6b5e52" font-family="'Source Sans 3',sans-serif">schwächer</text>
+      <!-- Rungs: Nominal -->
+      <rect x="75" y="170" width="305" height="32" rx="5" fill="#f5e6e6" stroke="#c0392b" stroke-width="1.5"/>
+      <text x="228" y="183" text-anchor="middle" font-size="12" font-weight="700" fill="#c0392b" font-family="'Source Sans 3',sans-serif">Nominalskala</text>
+      <text x="228" y="197" text-anchor="middle" font-size="10" fill="#c0392b" font-family="'Source Sans 3',sans-serif">Gleichheit / Verschiedenheit · z.B. Geschlecht</text>
+      <!-- Ordinal -->
+      <rect x="75" y="128" width="305" height="32" rx="5" fill="#fef9e7" stroke="#b7950b" stroke-width="1.5"/>
+      <text x="228" y="141" text-anchor="middle" font-size="12" font-weight="700" fill="#b7950b" font-family="'Source Sans 3',sans-serif">Ordinalskala</text>
+      <text x="228" y="155" text-anchor="middle" font-size="10" fill="#b7950b" font-family="'Source Sans 3',sans-serif">+ Rangordnung · z.B. Schulnoten</text>
+      <!-- Intervall -->
+      <rect x="75" y="86" width="305" height="32" rx="5" fill="#e8f0f8" stroke="#1a5276" stroke-width="1.5"/>
+      <text x="228" y="99" text-anchor="middle" font-size="12" font-weight="700" fill="#1a5276" font-family="'Source Sans 3',sans-serif">Intervallskala</text>
+      <text x="228" y="113" text-anchor="middle" font-size="10" fill="#1a5276" font-family="'Source Sans 3',sans-serif">+ gleiche Abstände · z.B. Temperatur °C</text>
+      <!-- Verhältnis -->
+      <rect x="75" y="44" width="305" height="32" rx="5" fill="#eaf5ee" stroke="#2c6e49" stroke-width="1.5"/>
+      <text x="228" y="57" text-anchor="middle" font-size="12" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">Verhältnisskala</text>
+      <text x="228" y="71" text-anchor="middle" font-size="10" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">+ absoluter Nullpunkt · z.B. Reaktionszeit</text>
+      <!-- Top label -->
+      <text x="60" y="15" text-anchor="middle" font-size="10" fill="#6b5e52" font-family="'Source Sans 3',sans-serif">stärker</text>
+    </svg>
+    <figcaption>Skalenniveaus als Leiter: Jede Stufe enthält alle Eigenschaften der unteren — Verhältnisskala erlaubt alle Rechenoperationen.</figcaption>
+  </div>
+
   <h3 class="sub">Ordinale Messung & Matrix-Aufgaben</h3>
   <p>In <strong>jeder Klausur</strong> kommt eine Matrix-Aufgabe: Gegeben eine Vergleichsmatrix, prüfe ob eine ordinale Messung möglich ist.</p>
 
@@ -1206,6 +1292,34 @@ img[loading="lazy"] {
   </div>
 
   <div class="example"><p><strong>Weber:</strong> 1 kg → 50 g extra merkbar. 20 kg → ~400 g nötig. Weber-Bruch Gewicht: k ≈ 1/50. Tonhöhe: k ≈ 1/333!</p></div>
+
+  <div class="visual-mnemonic">
+    <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="max-width:400px; width:100%;">
+      <defs>
+        <marker id="arW" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2a2520"/></marker>
+      </defs>
+      <!-- Axes -->
+      <line x1="50" y1="130" x2="370" y2="130" stroke="#2a2520" stroke-width="1.5" marker-end="url(#arW)"/>
+      <line x1="50" y1="130" x2="50" y2="20" stroke="#2a2520" stroke-width="1.5" marker-end="url(#arW)"/>
+      <text x="210" y="148" text-anchor="middle" font-size="10" fill="#2a2520" font-family="'Source Sans 3',sans-serif">Reizintensität I</text>
+      <text x="18" y="80" text-anchor="middle" font-size="10" fill="#2a2520" transform="rotate(-90,18,80)" font-family="'Source Sans 3',sans-serif">JND (ΔI)</text>
+      <!-- Linear JND line: ΔI = k·I, so JND is linear in I -->
+      <line x1="50" y1="130" x2="350" y2="30" stroke="#c0392b" stroke-width="2.5"/>
+      <text x="355" y="28" font-size="10" font-weight="700" fill="#c0392b" font-family="'Source Sans 3',sans-serif">Weber</text>
+      <!-- Illustration: small I → small JND -->
+      <line x1="100" y1="130" x2="100" y2="97" stroke="#1a5276" stroke-width="2"/>
+      <line x1="88" y1="97" x2="112" y2="97" stroke="#1a5276" stroke-width="1.5"/>
+      <text x="104" y="115" font-size="9" fill="#1a5276" font-family="'Source Sans 3',sans-serif">klein</text>
+      <!-- Illustration: large I → large JND -->
+      <line x1="280" y1="130" x2="280" y2="46" stroke="#2c6e49" stroke-width="2"/>
+      <line x1="265" y1="46" x2="295" y2="46" stroke="#2c6e49" stroke-width="1.5"/>
+      <text x="284" y="92" font-size="9" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">groß</text>
+      <!-- Formula label -->
+      <rect x="155" y="60" width="100" height="22" rx="4" fill="#f5f0e8" stroke="#c0392b" stroke-width="1"/>
+      <text x="205" y="75" text-anchor="middle" font-size="12" font-weight="700" fill="#c0392b" font-family="monospace">ΔI/I = k</text>
+    </svg>
+    <figcaption>Webersches Gesetz: Der ebenmerkliche Unterschied (JND) wächst proportional zur Reizintensität — das Verhältnis ΔI/I bleibt konstant.</figcaption>
+  </div>
 
   <h3 class="sub">Formale Psychophysik (Klausurrelevant!)</h3>
   <div class="def-box red">
@@ -1338,6 +1452,36 @@ img[loading="lazy"] {
   </table></div>
 
   <div class="analogie"><p><strong>Kochen:</strong> UV = Zutat. AV = Geschmack. Störvar. = Ofentemp. Konfundierung = Salz UND Pfeffer gleichzeitig ändern.</p></div>
+
+  <div class="visual-mnemonic">
+    <svg viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg" style="max-width:400px; width:100%;">
+      <defs>
+        <marker id="arExp" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2a2520"/></marker>
+        <marker id="arRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#c0392b"/></marker>
+        <marker id="arGold" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#b7950b"/></marker>
+      </defs>
+      <!-- UV box -->
+      <rect x="20" y="55" width="100" height="40" rx="6" fill="#eaf5ee" stroke="#2c6e49" stroke-width="2"/>
+      <text x="70" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">UV</text>
+      <text x="70" y="86" text-anchor="middle" font-size="10" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">Koffein-Dosis</text>
+      <!-- Arrow UV → AV -->
+      <line x1="122" y1="75" x2="200" y2="75" stroke="#2a2520" stroke-width="2" marker-end="url(#arExp)"/>
+      <text x="161" y="68" text-anchor="middle" font-size="9" font-weight="700" fill="#2a2520" font-family="'Source Sans 3',sans-serif">manipuliert</text>
+      <!-- AV box -->
+      <rect x="202" y="55" width="100" height="40" rx="6" fill="#e8f0f8" stroke="#1a5276" stroke-width="2"/>
+      <text x="252" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="#1a5276" font-family="'Source Sans 3',sans-serif">AV</text>
+      <text x="252" y="86" text-anchor="middle" font-size="10" fill="#1a5276" font-family="'Source Sans 3',sans-serif">Reaktionszeit</text>
+      <!-- Störvariable box (above, dashed arrow to AV) -->
+      <rect x="280" y="10" width="110" height="36" rx="6" fill="#fef9e7" stroke="#b7950b" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="335" y="25" text-anchor="middle" font-size="11" font-weight="700" fill="#b7950b" font-family="'Source Sans 3',sans-serif">Störvariable</text>
+      <text x="335" y="39" text-anchor="middle" font-size="9" fill="#b7950b" font-family="'Source Sans 3',sans-serif">Müdigkeit</text>
+      <line x1="335" y1="47" x2="282" y2="57" stroke="#b7950b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arGold)"/>
+      <!-- Konfundierung arrow (Störvar also to UV, dashed red) -->
+      <line x1="305" y1="47" x2="120" y2="63" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arRed)"/>
+      <text x="200" y="125" text-anchor="middle" font-size="9" fill="#c0392b" font-style="italic" font-family="'Source Sans 3',sans-serif">Rote gestrichelte Linie = Konfundierung (SV kovariiert mit UV → interne Validität ↓)</text>
+    </svg>
+    <figcaption>Experimentelles Design: UV → AV ist die Kernbeziehung. Störvariablen beeinflussen die AV. Konfundierung entsteht, wenn die Störvariable auch mit der UV variiert.</figcaption>
+  </div>
 
   <div class="merksatz"><p><strong>Max-Kon-Min-Prinzip (Kerlinger):</strong> <strong>Max</strong>imiere Primärvarianz (starke UV-Manipulation). <strong>Kon</strong>trolliere Sekundärvarianz (Störvariablen ausschalten). <strong>Min</strong>imiere Fehlervarianz (präzise Messung, große Stichprobe).</p></div>
 

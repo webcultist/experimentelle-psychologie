@@ -40,6 +40,51 @@
   <p>Bei r = 0.80 ist r² = 0.64 → 64% der Varianz von Y werden durch X erklärt. Die restlichen 36% sind „Residualvarianz".</p>
 </div>
 
+<div class="visual-mnemonic">
+  <svg viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg" style="max-width:400px; width:100%;">
+    <defs>
+      <marker id="arReg" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2a2520"/></marker>
+    </defs>
+    <!-- Axes -->
+    <line x1="40" y1="155" x2="380" y2="155" stroke="#2a2520" stroke-width="1.5" marker-end="url(#arReg)"/>
+    <line x1="40" y1="155" x2="40" y2="20" stroke="#2a2520" stroke-width="1.5" marker-end="url(#arReg)"/>
+    <text x="210" y="172" text-anchor="middle" font-size="10" fill="#6b5e52" font-family="'Source Sans 3',sans-serif">X (Prädiktor)</text>
+    <text x="15" y="90" text-anchor="middle" font-size="10" fill="#6b5e52" transform="rotate(-90,15,90)" font-family="'Source Sans 3',sans-serif">Y (Kriterium)</text>
+    <!-- Regression line: y = a + b*x, from (50,140) to (360,40) -->
+    <line x1="50" y1="142" x2="360" y2="42" stroke="#1a5276" stroke-width="2.5"/>
+    <text x="362" y="40" font-size="10" font-weight="700" fill="#1a5276" font-family="'Source Sans 3',sans-serif">ŷ = â + b̂x</text>
+    <!-- Scatter points with residuals -->
+    <!-- Point 1: x=80, predicted≈128, actual=110 -->
+    <circle cx="95" cy="110" r="4" fill="#c0392b"/>
+    <line x1="95" y1="110" x2="95" y2="130" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <circle cx="95" cy="130" r="2" fill="#1a5276"/>
+    <!-- Point 2: x=150, predicted≈108, actual=125 -->
+    <circle cx="155" cy="98" r="4" fill="#c0392b"/>
+    <line x1="155" y1="98" x2="155" y2="112" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <circle cx="155" cy="112" r="2" fill="#1a5276"/>
+    <!-- Point 3: x=200, predicted≈90, actual=82 -->
+    <circle cx="210" cy="82" r="4" fill="#c0392b"/>
+    <line x1="210" y1="82" x2="210" y2="96" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <circle cx="210" cy="96" r="2" fill="#1a5276"/>
+    <!-- Point 4: x=270, predicted≈68, actual=80 -->
+    <circle cx="270" cy="75" r="4" fill="#c0392b"/>
+    <line x1="270" y1="75" x2="270" y2="64" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <circle cx="270" cy="64" r="2" fill="#1a5276"/>
+    <!-- Point 5: x=320, predicted≈55, actual=43 -->
+    <circle cx="320" cy="43" r="4" fill="#c0392b"/>
+    <line x1="320" y1="43" x2="320" y2="50" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <circle cx="320" cy="50" r="2" fill="#1a5276"/>
+    <!-- Legend -->
+    <circle cx="50" cy="178" r="4" fill="#c0392b"/>
+    <text x="60" y="182" font-size="9" fill="#c0392b" font-family="'Source Sans 3',sans-serif">Beobachteter Wert yᵢ</text>
+    <line x1="155" y1="178" x2="175" y2="178" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <text x="180" y="182" font-size="9" fill="#c0392b" font-family="'Source Sans 3',sans-serif">Residuum eᵢ = yᵢ − ŷᵢ</text>
+    <line x1="295" y1="178" x2="315" y2="178" stroke="#1a5276" stroke-width="2.5"/>
+    <text x="320" y="182" font-size="9" fill="#1a5276" font-family="'Source Sans 3',sans-serif">Regressionsgerade</text>
+  </svg>
+  <figcaption>Regressionsgerade durch die Punktewolke: Rote gestrichelte Linien zeigen die Residuen eᵢ = yᵢ − ŷᵢ — die KQ-Methode minimiert Σeᵢ².</figcaption>
+</div>
+
 <h3 class="sub">Varianzzerlegung</h3>
 
 <p>Die Gesamtvarianz von Y lässt sich zerlegen in erklärte und nicht-erklärte Varianz:</p>

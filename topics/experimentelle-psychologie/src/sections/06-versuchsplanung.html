@@ -26,6 +26,36 @@
 
   <div class="analogie"><p><strong>Kochen:</strong> UV = Zutat. AV = Geschmack. Störvar. = Ofentemp. Konfundierung = Salz UND Pfeffer gleichzeitig ändern.</p></div>
 
+  <div class="visual-mnemonic">
+    <svg viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg" style="max-width:400px; width:100%;">
+      <defs>
+        <marker id="arExp" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2a2520"/></marker>
+        <marker id="arRed" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#c0392b"/></marker>
+        <marker id="arGold" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#b7950b"/></marker>
+      </defs>
+      <!-- UV box -->
+      <rect x="20" y="55" width="100" height="40" rx="6" fill="#eaf5ee" stroke="#2c6e49" stroke-width="2"/>
+      <text x="70" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">UV</text>
+      <text x="70" y="86" text-anchor="middle" font-size="10" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">Koffein-Dosis</text>
+      <!-- Arrow UV → AV -->
+      <line x1="122" y1="75" x2="200" y2="75" stroke="#2a2520" stroke-width="2" marker-end="url(#arExp)"/>
+      <text x="161" y="68" text-anchor="middle" font-size="9" font-weight="700" fill="#2a2520" font-family="'Source Sans 3',sans-serif">manipuliert</text>
+      <!-- AV box -->
+      <rect x="202" y="55" width="100" height="40" rx="6" fill="#e8f0f8" stroke="#1a5276" stroke-width="2"/>
+      <text x="252" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="#1a5276" font-family="'Source Sans 3',sans-serif">AV</text>
+      <text x="252" y="86" text-anchor="middle" font-size="10" fill="#1a5276" font-family="'Source Sans 3',sans-serif">Reaktionszeit</text>
+      <!-- Störvariable box (above, dashed arrow to AV) -->
+      <rect x="280" y="10" width="110" height="36" rx="6" fill="#fef9e7" stroke="#b7950b" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="335" y="25" text-anchor="middle" font-size="11" font-weight="700" fill="#b7950b" font-family="'Source Sans 3',sans-serif">Störvariable</text>
+      <text x="335" y="39" text-anchor="middle" font-size="9" fill="#b7950b" font-family="'Source Sans 3',sans-serif">Müdigkeit</text>
+      <line x1="335" y1="47" x2="282" y2="57" stroke="#b7950b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arGold)"/>
+      <!-- Konfundierung arrow (Störvar also to UV, dashed red) -->
+      <line x1="305" y1="47" x2="120" y2="63" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arRed)"/>
+      <text x="200" y="125" text-anchor="middle" font-size="9" fill="#c0392b" font-style="italic" font-family="'Source Sans 3',sans-serif">Rote gestrichelte Linie = Konfundierung (SV kovariiert mit UV → interne Validität ↓)</text>
+    </svg>
+    <figcaption>Experimentelles Design: UV → AV ist die Kernbeziehung. Störvariablen beeinflussen die AV. Konfundierung entsteht, wenn die Störvariable auch mit der UV variiert.</figcaption>
+  </div>
+
   <div class="merksatz"><p><strong>Max-Kon-Min-Prinzip (Kerlinger):</strong> <strong>Max</strong>imiere Primärvarianz (starke UV-Manipulation). <strong>Kon</strong>trolliere Sekundärvarianz (Störvariablen ausschalten). <strong>Min</strong>imiere Fehlervarianz (präzise Messung, große Stichprobe).</p></div>
 
   <h3 class="sub">Designs</h3>

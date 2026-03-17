@@ -60,6 +60,32 @@
 
   <div class="example"><p><strong>Psychologie:</strong> „Wenn depressiv (A), dann niedrige Serotoninaktivität (B)." ✓ Person depressiv → niedrige Serotonin (Ponens). ✗ Niedrige Serotonin → depressiv? Fehlschluss! (Andere Ursachen möglich.)</p></div>
 
+  <div class="visual-mnemonic">
+    <svg viewBox="0 0 400 170" xmlns="http://www.w3.org/2000/svg" style="max-width:400px; width:100%;">
+      <defs>
+        <marker id="arMP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2c6e49"/></marker>
+      </defs>
+      <!-- Title -->
+      <text x="200" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#2a2520" font-family="'Playfair Display',serif">Modus Ponens — Schritt für Schritt</text>
+      <!-- Circle P -->
+      <ellipse cx="110" cy="95" rx="88" ry="55" fill="none" stroke="#1a5276" stroke-width="2"/>
+      <text x="60" y="78" font-size="10" fill="#1a5276" font-family="'Source Sans 3',sans-serif">Es regnet (P)</text>
+      <!-- Circle Q inside P area, overlapping -->
+      <ellipse cx="150" cy="105" rx="60" ry="38" fill="rgba(192,57,43,0.12)" stroke="#c0392b" stroke-width="2"/>
+      <text x="155" y="118" font-size="10" fill="#c0392b" font-family="'Source Sans 3',sans-serif">Straße nass (Q)</text>
+      <!-- Arrow from P to Q -->
+      <line x1="200" y1="95" x2="310" y2="95" stroke="#2c6e49" stroke-width="2" marker-end="url(#arMP)"/>
+      <text x="255" y="88" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">P → Q</text>
+      <!-- Result box -->
+      <rect x="315" y="75" width="78" height="40" rx="6" fill="#eaf5ee" stroke="#2c6e49" stroke-width="1.5"/>
+      <text x="354" y="91" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">P gilt</text>
+      <text x="354" y="108" text-anchor="middle" font-size="11" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">∴ Q gilt ✓</text>
+      <!-- Labels -->
+      <text x="110" y="158" text-anchor="middle" font-size="9" fill="#6b5e52" font-style="italic" font-family="'Source Sans 3',sans-serif">P enthält Q — wenn P, dann immer Q</text>
+    </svg>
+    <figcaption>Modus Ponens: Q ist in P enthalten. Wenn P wahr ist, folgt Q zwingend. Umkehrung (Q → P) wäre ein Fehlschluss.</figcaption>
+  </div>
+
   <h3 class="sub">Prädikatenlogik</h3>
   <div class="def-box purple">
     <div class="label">Quantoren</div>

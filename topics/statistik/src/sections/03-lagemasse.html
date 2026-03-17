@@ -65,6 +65,38 @@
   <p><strong>Waage vs. Lineal:</strong> Der <strong>Mittelwert</strong> ist wie der Schwerpunkt einer Wippe — jeder Wert übt „Drehmoment" aus, proportional zu seinem Abstand. Der <strong>Median</strong> ist wie die Mitte einer Schlange — er teilt die Anzahl der Personen in zwei gleiche Gruppen, egal wie weit die Ausreißer entfernt stehen.</p>
 </div>
 
+<div class="visual-mnemonic">
+  <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:400px; width:100%;">
+    <defs>
+      <marker id="arLag" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#2a2520"/></marker>
+    </defs>
+    <!-- Axes -->
+    <line x1="30" y1="130" x2="380" y2="130" stroke="#2a2520" stroke-width="1.5" marker-end="url(#arLag)"/>
+    <line x1="30" y1="130" x2="30" y2="20" stroke="#2a2520" stroke-width="1.5" marker-end="url(#arLag)"/>
+    <text x="205" y="148" text-anchor="middle" font-size="10" fill="#6b5e52" font-family="'Source Sans 3',sans-serif">Wert (rechtsschief verteilt)</text>
+    <text x="16" y="80" text-anchor="middle" font-size="10" fill="#6b5e52" transform="rotate(-90,16,80)" font-family="'Source Sans 3',sans-serif">Häufigkeit</text>
+    <!-- Skewed distribution curve -->
+    <path d="M40,128 Q80,60 120,35 Q160,15 190,28 Q230,48 270,90 Q310,115 360,128" fill="rgba(26,82,118,0.12)" stroke="#1a5276" stroke-width="2"/>
+    <!-- Modus: peak at ~120 -->
+    <line x1="120" y1="130" x2="120" y2="35" stroke="#2c6e49" stroke-width="2" stroke-dasharray="5,3"/>
+    <text x="120" y="20" text-anchor="middle" font-size="10" font-weight="700" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">Modus</text>
+    <!-- Median: ~160 -->
+    <line x1="165" y1="130" x2="165" y2="24" stroke="#b7950b" stroke-width="2" stroke-dasharray="5,3"/>
+    <text x="165" y="15" text-anchor="middle" font-size="10" font-weight="700" fill="#b7950b" font-family="'Source Sans 3',sans-serif">Median</text>
+    <!-- Mean: ~210 (pulled right) -->
+    <line x1="215" y1="130" x2="215" y2="55" stroke="#c0392b" stroke-width="2" stroke-dasharray="5,3"/>
+    <text x="215" y="42" text-anchor="middle" font-size="10" font-weight="700" fill="#c0392b" font-family="'Source Sans 3',sans-serif">Mittelwert</text>
+    <!-- Ausreißer dot -->
+    <circle cx="348" cy="127" r="5" fill="#c0392b"/>
+    <text x="348" y="143" text-anchor="middle" font-size="9" fill="#c0392b" font-family="'Source Sans 3',sans-serif">Ausreißer</text>
+    <!-- Legend -->
+    <text x="30" y="168" font-size="9" fill="#2c6e49" font-family="'Source Sans 3',sans-serif">— Modus (häufigster)</text>
+    <text x="140" y="168" font-size="9" fill="#b7950b" font-family="'Source Sans 3',sans-serif">— Median (Mitte)</text>
+    <text x="245" y="168" font-size="9" fill="#c0392b" font-family="'Source Sans 3',sans-serif">— Mittelwert (verzerrt)</text>
+  </svg>
+  <figcaption>Bei rechtsschiefer Verteilung: Modus &lt; Median &lt; Mittelwert — der Mittelwert wird durch Ausreißer nach rechts gezogen, der Median bleibt robust.</figcaption>
+</div>
+
 <!-- Deep Dive: Bedeutsamkeit von Mittelwertvergleichen -->
 <div class="deep-dive" id="dd3a">
   <button class="deep-dive-toggle" onclick="toggleDD('dd3a')">

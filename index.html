@@ -148,6 +148,8 @@ footer { text-align: center; padding: 2.5rem 1.5rem; border-top: 1px solid var(-
 </footer>
 
 <script>
+// Apply saved dark mode preference
+(function(){const t=localStorage.getItem('lp_global_theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
 }

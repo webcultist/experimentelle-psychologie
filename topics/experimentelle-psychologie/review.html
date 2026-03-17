@@ -37,7 +37,7 @@ header { padding: 1.2rem 1.2rem 1rem; border-bottom: 1px solid var(--border); ba
 .header-title h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 4vw, 1.8rem); font-weight: 700; line-height: 1.2; }
 .header-title h1 em { color: var(--accent); font-style: italic; }
 .header-title .subtitle { font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem; }
-.theme-btn { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 0.4em 0.6em; cursor: pointer; font-size: 1rem; color: var(--text-secondary); min-width: 36px; }
+.theme-btn { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 0.4em 0.6em; cursor: pointer; font-size: 1rem; color: var(--text-secondary); min-width: 44px; min-height: 44px; }
 
 /* STATS BAR */
 .stats-bar { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; font-size: 0.78rem; }
@@ -202,9 +202,9 @@ main { max-width: 560px; margin: 0 auto; padding: 1.5rem 1rem 6rem; display: fle
     <span id="statTotal">0 gesamt</span>
   </div>
   <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.6rem">
-    <button onclick="exportAnki()" style="background:var(--accent3);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;">📥 Anki Export</button>
-    <button onclick="exportData()" style="background:var(--accent2);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;">💾 Daten exportieren</button>
-    <button onclick="document.getElementById('importFile').click()" style="background:var(--accent4);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;">📤 Daten importieren</button>
+    <button onclick="exportAnki()" style="background:var(--accent3);color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:.85rem;min-height:44px;">📥 Anki Export</button>
+    <button onclick="exportData()" style="background:var(--accent2);color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:.85rem;min-height:44px;">💾 Daten exportieren</button>
+    <button onclick="document.getElementById('importFile').click()" style="background:var(--accent4);color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:.85rem;min-height:44px;">📤 Daten importieren</button>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
   </div>
 </header>
@@ -814,12 +814,18 @@ function handleTouchEnd(e) {
 }
 
 // ─── THEME ─────────────────────────────────────────────────────────────────
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('lp_theme', next);
+function initTheme() {
+  const saved = localStorage.getItem('lp_global_theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
 }
+function toggleTheme() {
+  const attr = document.documentElement.getAttribute('data-theme');
+  const isDark = attr ? attr === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const next = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('lp_global_theme', next);
+}
+initTheme();
 
 // ─── START ─────────────────────────────────────────────────────────────────
 init();

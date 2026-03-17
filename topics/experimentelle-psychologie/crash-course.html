@@ -359,12 +359,24 @@ body.chat-open #sessionView{margin-right:380px;transition:margin 0.3s ease}
 </div>
 
 <script>
+/* ── DARK MODE INIT ── */
+(function(){const t=localStorage.getItem('lp_global_theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
+
+/* ── STATE KEY MIGRATION (epv3_state → lp_experimentelle-psychologie_state) ── */
+(function(){
+  const OLD='epv3_state', NEW='lp_experimentelle-psychologie_state';
+  if(localStorage.getItem(OLD)&&!localStorage.getItem(NEW)){
+    localStorage.setItem(NEW,localStorage.getItem(OLD));
+    localStorage.removeItem(OLD);
+  }
+})();
+
 /* ══════════════════════════════════════════════════════════════
    PLACEHOLDER — DATA + LOGIC added in next steps
    ══════════════════════════════════════════════════════════════ */
 
 /* ── STATE ── */
-const STATE_KEY = 'epv3_state';
+const STATE_KEY = 'lp_experimentelle-psychologie_state';
 let S = loadState();
 
 function defaultState(){return{

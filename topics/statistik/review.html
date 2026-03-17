@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f5f0e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Tägliche Wiederholung — Statistik I | Uni Tübingen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8; --bg-card: #fffdf8; --text: #2a2520; --text-secondary: #6b5e52;
+  --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a5276; --accent4: #7d3c98; --accent5: #b7950b;
+  --border: #d4cbbf; --highlight: #fef3c7; --shadow: rgba(42,37,32,0.08);
+  --card-h: min(440px, 58vh);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1a1816; --bg-card: #242220; --text: #e8e0d4; --text-secondary: #a89e8c; --accent: #e05545; --accent2: #3d9460; --accent3: #2e6fa3; --accent4: #9b59b6; --accent5: #d4ac0d; --border: #3a3530; --highlight: #3a3010; --shadow: rgba(0,0,0,0.3); }
+}
+[data-theme="dark"] { --bg: #1a1816; --bg-card: #242220; --text: #e8e0d4; --text-secondary: #a89e8c; --accent: #e05545; --accent2: #3d9460; --accent3: #2e6fa3; --accent4: #9b59b6; --accent5: #d4ac0d; --border: #3a3530; --highlight: #3a3010; --shadow: rgba(0,0,0,0.3); }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Source Sans 3', Georgia, serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 17px; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
+::selection { background: var(--accent); color: white; }
+
+header { padding: 1.2rem 1.2rem 1rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(236,229,216,0.8), var(--bg)); }
+@media (prefers-color-scheme: dark) { header { background: linear-gradient(180deg, rgba(42,37,32,0.8), var(--bg)); } }
+[data-theme="dark"] header { background: linear-gradient(180deg, rgba(42,37,32,0.8), var(--bg)); }
+.header-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.8rem; }
+.back-link { font-size: 0.82rem; color: var(--accent3); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.3rem; }
+.back-link:hover { text-decoration: underline; }
+.header-title { text-align: center; flex: 1; }
+.header-title h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 4vw, 1.8rem); font-weight: 700; line-height: 1.2; }
+.header-title h1 em { color: var(--accent); font-style: italic; }
+.header-title .subtitle { font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem; }
+.theme-btn { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 0.4em 0.6em; cursor: pointer; font-size: 1rem; color: var(--text-secondary); min-width: 36px; }
+
+.stats-bar { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; font-size: 0.78rem; }
+.stats-bar span { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 0.25em 0.8em; color: var(--text-secondary); }
+.stats-bar .stat-due { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+main { max-width: 560px; margin: 0 auto; padding: 1.5rem 1rem 6rem; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+
+.session-progress { width: 100%; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.session-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent3)); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+
+.card-stack-wrap { width: 100%; position: relative; }
+.review-card { width: 100%; height: var(--card-h); perspective: 1000px; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+.card-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
+.review-card.flipped .card-inner { transform: rotateY(180deg); }
+.card-front, .card-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 10px; border: 1.5px solid var(--border); background: var(--bg-card); box-shadow: 0 4px 20px var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
+.card-back { transform: rotateY(180deg); }
+
+.card-front { justify-content: center; align-items: center; padding: 2rem 1.8rem; text-align: center; }
+.card-section-badge { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.2em 0.8em; border-radius: 3px; margin-bottom: 1rem; display: inline-block; }
+.card-section-badge.tier-a { background: rgba(192,57,43,0.1); color: var(--accent); }
+.card-section-badge.tier-b { background: rgba(26,82,118,0.1); color: var(--accent3); }
+.card-section-badge.tier-c { background: rgba(125,60,152,0.1); color: var(--accent4); }
+.card-front h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 3.5vw, 1.45rem); line-height: 1.3; margin-bottom: 0.5rem; }
+.card-topic { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+.card-hint { font-size: 0.75rem; color: var(--text-secondary); opacity: 0.7; display: flex; align-items: center; gap: 0.4rem; justify-content: center; }
+.card-hint::before { content: '↕'; font-size: 1rem; }
+.card-fsrs-info { position: absolute; top: 0.8rem; right: 0.8rem; font-size: 0.65rem; color: var(--text-secondary); opacity: 0.5; font-family: 'JetBrains Mono', monospace; }
+
+.card-back { padding: 1.4rem 1.6rem; overflow-y: auto; }
+.card-back-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+.card-content { font-size: 0.88rem; line-height: 1.75; }
+.card-content p { margin-bottom: 0.6rem; }
+.card-content strong { color: var(--text); }
+.card-content .def-box { border-left: 4px solid var(--accent); padding: 0.7rem 1rem; margin: 0.6rem 0; border-radius: 0 4px 4px 0; font-size: 0.85rem; background: var(--bg); }
+.card-content .def-box.green { border-left-color: var(--accent2); }
+.card-content .def-box.blue { border-left-color: var(--accent3); }
+.card-content .def-box.purple { border-left-color: var(--accent4); }
+.card-content .def-box.gold { border-left-color: var(--accent5); }
+.card-content .merksatz { background: linear-gradient(135deg,rgba(44,110,73,0.08),rgba(44,110,73,0.04)); border: 1px solid rgba(44,110,73,0.25); border-radius: 4px; padding: 0.7rem 1rem; margin: 0.6rem 0; font-size: 0.85rem; }
+.card-content .achtung { background: linear-gradient(135deg,rgba(192,57,43,0.06),rgba(192,57,43,0.03)); border: 1px solid rgba(192,57,43,0.2); border-radius: 4px; padding: 0.7rem 1rem; margin: 0.6rem 0; font-size: 0.85rem; }
+.card-content .example-box { background: linear-gradient(135deg,rgba(183,149,11,0.06),rgba(183,149,11,0.03)); border: 1px solid rgba(183,149,11,0.2); border-radius: 4px; padding: 0.7rem 1rem; margin: 0.6rem 0; font-size: 0.85rem; }
+.card-content .formula { font-family: 'JetBrains Mono', monospace; background: #2a2520; color: #f0e6d3; padding: 0.7rem 1rem; border-radius: 4px; margin: 0.6rem 0; overflow-x: auto; font-size: 0.78rem; line-height: 1.7; white-space: pre; }
+.card-content .formula .comment { color: #8b7d6b; }
+.card-content .formula .keyword { color: #e8a87c; }
+.card-content .formula .symbol { color: #c0392b; }
+.card-content .formula .result { color: #58d68d; }
+@media (prefers-color-scheme: dark) { .card-content .formula { background: #0d0c0b; } }
+[data-theme="dark"] .card-content .formula { background: #0d0c0b; }
+
+.swipe-hint { position: absolute; top: 50%; transform: translateY(-50%); pointer-events: none; opacity: 0; font-size: 1.5rem; font-weight: 700; padding: 0.4em 0.8em; border-radius: 6px; border: 3px solid; transition: opacity 0.15s; z-index: 10; }
+.swipe-hint.left { right: 1.5rem; color: var(--accent); border-color: var(--accent); background: rgba(192,57,43,0.1); }
+.swipe-hint.right { left: 1.5rem; color: var(--accent2); border-color: var(--accent2); background: rgba(44,110,73,0.1); }
+
+.rating-row { width: 100%; display: none; gap: 0.5rem; }
+.rating-row.visible { display: flex; }
+.rate-btn { flex: 1; min-height: 52px; border: none; border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1rem; transition: transform 0.15s, box-shadow 0.15s; -webkit-tap-highlight-color: transparent; }
+.rate-btn:active { transform: scale(0.96); }
+.rate-btn .interval { font-size: 0.65rem; font-weight: 400; opacity: 0.8; }
+.rate-again { background: rgba(192,57,43,0.12); color: var(--accent); border: 1.5px solid rgba(192,57,43,0.3); }
+.rate-again:hover { background: var(--accent); color: white; }
+.rate-hard { background: rgba(230,126,34,0.12); color: #e67e22; border: 1.5px solid rgba(230,126,34,0.3); }
+.rate-hard:hover { background: #e67e22; color: white; }
+.rate-good { background: rgba(44,110,73,0.12); color: var(--accent2); border: 1.5px solid rgba(44,110,73,0.3); }
+.rate-good:hover { background: var(--accent2); color: white; }
+.rate-easy { background: rgba(26,82,118,0.12); color: var(--accent3); border: 1.5px solid rgba(26,82,118,0.3); }
+.rate-easy:hover { background: var(--accent3); color: white; }
+
+#empty-state { display: none; text-align: center; padding: 3rem 1.5rem; animation: fadeIn 0.5s ease; width: 100%; }
+.empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+#empty-state h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 0.8rem; }
+#empty-state p { color: var(--text-secondary); max-width: 380px; margin: 0 auto 0.6rem; }
+.forecast-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; margin: 1.5rem auto 0; max-width: 320px; font-size: 0.88rem; }
+.forecast-box .fc-row { display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid var(--border); }
+.forecast-box .fc-row:last-child { border-bottom: none; }
+.forecast-box .fc-label { color: var(--text-secondary); }
+.forecast-box .fc-val { font-weight: 600; color: var(--accent3); }
+.empty-actions { display: flex; gap: 0.8rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
+.btn-primary { background: var(--accent3); color: white; border: none; padding: 0.7em 1.4em; border-radius: 5px; font-family: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; transition: opacity 0.15s; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-secondary { background: none; color: var(--text-secondary); border: 1px solid var(--border); padding: 0.7em 1.4em; border-radius: 5px; font-family: inherit; font-size: 0.88rem; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; transition: border-color 0.15s; }
+.btn-secondary:hover { border-color: var(--text-secondary); color: var(--text); }
+
+#summary { display: none; text-align: center; padding: 2rem 1rem; animation: fadeIn 0.5s ease; width: 100%; }
+#summary h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 1.5rem; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+.summary-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 0.5rem; }
+.summary-stat .ss-val { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--accent3); line-height: 1; margin-bottom: 0.3rem; }
+.summary-stat .ss-label { font-size: 0.72rem; color: var(--text-secondary); }
+.rating-breakdown { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; text-align: left; }
+.rating-breakdown h4 { font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.8rem; }
+.rb-bar-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; font-size: 0.82rem; }
+.rb-label { width: 56px; font-weight: 600; }
+.rb-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.rb-bar { height: 100%; border-radius: 3px; transition: width 0.6s ease 0.2s; }
+.rb-count { width: 24px; text-align: right; color: var(--text-secondary); }
+.rb-again .rb-bar { background: var(--accent); }
+.rb-hard .rb-bar { background: #e67e22; }
+.rb-good .rb-bar { background: var(--accent2); }
+.rb-easy .rb-bar { background: var(--accent3); }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideOut { to { opacity: 0; transform: translateX(var(--slide-dir, -120%)); } }
+.review-card.slide-out { animation: slideOut 0.35s ease-in forwards; }
+
+@media (min-width: 560px) {
+  header { padding: 1.5rem 2rem 1.2rem; }
+  main { padding: 2rem 1.5rem 6rem; }
+  .rating-row { gap: 0.8rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <a class="back-link" href="index.html">← Zurück</a>
+    <div class="header-title">
+      <h1>Tägliche <em>Wiederholung</em></h1>
+      <p class="subtitle">Statistik I &mdash; Spaced Repetition</p>
+    </div>
+    <button class="theme-btn" id="themeBtn" title="Dark mode">◑</button>
+  </div>
+  <div class="stats-bar">
+    <span class="stat-due" id="statDue">0 fällig</span>
+    <span id="statReviewed">0 wiederholt</span>
+    <span id="statRetention">— Retention</span>
+    <span id="statTotal">0 gesamt</span>
+  </div>
+  <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.6rem">
+    <button onclick="exportAnki()" style="background:var(--accent3);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;">📥 Anki Export</button>
+    <button onclick="exportData()" style="background:var(--accent2);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;">💾 Daten exportieren</button>
+    <button onclick="document.getElementById('importFile').click()" style="background:var(--accent4);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;">📤 Daten importieren</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+</header>
+
+<main>
+  <div class="session-progress" id="progressWrap" style="display:none">
+    <div class="session-progress-fill" id="progressFill"></div>
+  </div>
+
+  <div id="empty-state">
+    <div class="empty-icon">🎉</div>
+    <h2>Nichts fällig!</h2>
+    <p>Alle Karten sind wiederholt. Komm morgen wieder!</p>
+    <div class="forecast-box">
+      <div class="fc-row"><span class="fc-label">Heute wiederholt</span><span class="fc-val" id="fcToday">0</span></div>
+      <div class="fc-row"><span class="fc-label">Morgen fällig</span><span class="fc-val" id="fcTomorrow">0</span></div>
+      <div class="fc-row"><span class="fc-label">Übermorgen</span><span class="fc-val" id="fcDayAfter">0</span></div>
+      <div class="fc-row"><span class="fc-label">Neue Karten</span><span class="fc-val" id="fcNew">0</span></div>
+    </div>
+    <div class="empty-actions">
+      <a class="btn-primary" href="crash-course.html">Crash Course</a>
+      <button class="btn-secondary" id="btnAddNew">+ Neue Karten einführen</button>
+    </div>
+  </div>
+
+  <div id="card-area" style="display:none; width:100%">
+    <div class="card-stack-wrap">
+      <div class="review-card" id="reviewCard">
+        <div class="swipe-hint left" id="hintLeft">✗</div>
+        <div class="swipe-hint right" id="hintRight">✓</div>
+        <div class="card-inner" id="cardInner">
+          <div class="card-front" id="cardFront">
+            <span class="card-section-badge" id="cardBadge"></span>
+            <h2 id="cardTitle"></h2>
+            <p class="card-topic" id="cardTopic"></p>
+            <p class="card-hint">Tippe zum Umdrehen</p>
+            <span class="card-fsrs-info" id="cardFsrsInfo"></span>
+          </div>
+          <div class="card-back" id="cardBack">
+            <div class="card-back-title" id="cardBackTitle"></div>
+            <div class="card-content" id="cardContent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rating-row" id="ratingRow">
+      <button class="rate-btn rate-again" onclick="rateCard(1)">
+        <span>Nochmal</span>
+        <span class="interval" id="int1"></span>
+      </button>
+      <button class="rate-btn rate-hard" onclick="rateCard(2)">
+        <span>Schwer</span>
+        <span class="interval" id="int2"></span>
+      </button>
+      <button class="rate-btn rate-good" onclick="rateCard(3)">
+        <span>Gut</span>
+        <span class="interval" id="int3"></span>
+      </button>
+      <button class="rate-btn rate-easy" onclick="rateCard(4)">
+        <span>Leicht</span>
+        <span class="interval" id="int4"></span>
+      </button>
+    </div>
+  </div>
+
+  <div id="summary">
+    <h2>Session beendet! 🎓</h2>
+    <div class="summary-grid">
+      <div class="summary-stat">
+        <div class="ss-val" id="sumReviewed">0</div>
+        <div class="ss-label">Wiederholt</div>
+      </div>
+      <div class="summary-stat">
+        <div class="ss-val" id="sumRetention">—</div>
+        <div class="ss-label">Retention</div>
+      </div>
+      <div class="summary-stat">
+        <div class="ss-val" id="sumStreak">0</div>
+        <div class="ss-label">Richtig</div>
+      </div>
+    </div>
+    <div class="rating-breakdown">
+      <h4>Bewertungen</h4>
+      <div class="rb-bar-row rb-again"><span class="rb-label" style="color:var(--accent)">Nochmal</span><div class="rb-bar-wrap"><div class="rb-bar" id="rbAgain" style="width:0%"></div></div><span class="rb-count" id="rcAgain">0</span></div>
+      <div class="rb-bar-row rb-hard"><span class="rb-label" style="color:#e67e22">Schwer</span><div class="rb-bar-wrap"><div class="rb-bar" id="rbHard" style="width:0%"></div></div><span class="rb-count" id="rcHard">0</span></div>
+      <div class="rb-bar-row rb-good"><span class="rb-label" style="color:var(--accent2)">Gut</span><div class="rb-bar-wrap"><div class="rb-bar" id="rbGood" style="width:0%"></div></div><span class="rb-count" id="rcGood">0</span></div>
+      <div class="rb-bar-row rb-easy"><span class="rb-label" style="color:var(--accent3)">Leicht</span><div class="rb-bar-wrap"><div class="rb-bar" id="rbEasy" style="width:0%"></div></div><span class="rb-count" id="rcEasy">0</span></div>
+    </div>
+    <div class="empty-actions">
+      <button class="btn-primary" onclick="location.reload()">Neue Session</button>
+      <a class="btn-secondary" href="index.html">Zurück</a>
+    </div>
+  </div>
+</main>
+
+<script>
+// ─── FSRS ENGINE ───────────────────────────────────────────────────────────
+const FSRS = (() => {
+  const w = [0.4, 0.6, 2.4, 5.8, 4.93, 0.94, 0.86, 0.01, 1.49, 0.14, 0.94, 2.18, 0.05, 0.34, 1.26, 0.29, 2.61];
+  const DAY_MS = 86400000;
+  function initCard() { return { stability:0, difficulty:0, elapsedDays:0, scheduledDays:0, reps:0, lapses:0, state:0, due:Date.now(), lastReview:0 }; }
+  function clamp(v,a,b){return Math.min(Math.max(v,a),b);}
+  function initDifficulty(r){return clamp(w[4]-(r-3)*w[5],1,10);}
+  function initStability(r){return Math.max(w[r-1],0.1);}
+  function nextDifficulty(d,r){const nd=d-w[6]*(r-3);return clamp(w[7]*initDifficulty(3)+(1-w[7])*nd,1,10);}
+  function nextRecallStability(d,s,r,rating){const hp=rating===2?w[15]:1,eb=rating===4?w[16]:1;return s*(1+Math.exp(w[8])*(11-d)*Math.pow(s,-w[9])*(Math.exp((1-r)*w[10])-1)*hp*eb);}
+  function nextForgetStability(d,s,r){return w[11]*Math.pow(d,-w[12])*(Math.pow(s+1,w[13])-1)*Math.exp((1-r)*w[14]);}
+  function nextInterval(s){return Math.max(1,Math.round(Math.min((s/9)*(Math.pow(0.9,1/-0.5)-1),365)));}
+  function retrievability(s,e){return s<=0?0:Math.pow(1+e/(9*s),-1);}
+  function review(card,rating){
+    const now=Date.now(),c={...card},elapsed=c.lastReview?(now-c.lastReview)/DAY_MS:0;
+    c.elapsedDays=elapsed;c.lastReview=now;c.reps++;
+    if(c.state===0){
+      c.difficulty=initDifficulty(rating);c.stability=initStability(rating);
+      c.state=rating===1?1:2;
+      if(rating===1){c.scheduledDays=0;c.due=now;c.lapses++;}
+      else{c.scheduledDays=nextInterval(c.stability);c.due=now+c.scheduledDays*DAY_MS;}
+    } else {
+      const r=retrievability(c.stability,elapsed);
+      c.difficulty=nextDifficulty(c.difficulty,rating);
+      if(rating===1){c.stability=nextForgetStability(c.difficulty,c.stability,r);c.state=3;c.lapses++;c.scheduledDays=0;c.due=now;}
+      else{c.stability=nextRecallStability(c.difficulty,c.stability,r,rating);c.state=2;c.scheduledDays=nextInterval(c.stability);c.due=now+c.scheduledDays*DAY_MS;}
+    }
+    return c;
+  }
+  function getStore(slug){try{return JSON.parse(localStorage.getItem(`lp_${slug}_fsrs`))||{};}catch{return {};}}
+  function saveStore(slug,store){localStorage.setItem(`lp_${slug}_fsrs`,JSON.stringify(store));}
+  function reviewCard(slug,id,rating){const s=getStore(slug);s[id]=review(s[id]||initCard(),rating);saveStore(slug,s);return s[id];}
+  function getDueCards(slug){const s=getStore(slug),now=Date.now();return Object.entries(s).filter(([,c])=>c.due<=now).map(([id,c])=>({id,...c})).sort((a,b)=>a.due-b.due);}
+  return {reviewCard,getDueCards,getStore,saveStore,review,initCard};
+})();
+
+// ─── CARD DATA ─────────────────────────────────────────────────────────────
+const SLUG = 'statistik';
+const CARDS = [
+// Grundlagen
+{id:'gr1',title:'Statistik — Etymologie & Aufgaben',tier:'a',topic:'Grundlagen',body:'<p><strong>Statistik</strong> (lat. <em>status</em> = Zustand): Wissenschaft vom Sammeln, Beschreiben und Interpretieren von Daten.</p><div class="def-box blue"><strong>Deskriptive Statistik:</strong> Daten zusammenfassen (Tabellen, Kennwerte, Grafiken).<br><strong>Induktive Statistik:</strong> Von Stichprobe auf Population schließen.</div>'},
+{id:'gr2',title:'Merkmale: quantitativ vs. qualitativ',tier:'a',topic:'Grundlagen',body:'<p><strong>Quantitativ:</strong> Zahlenwerte, messbar (Alter, Gewicht, RT).</p><p><strong>Qualitativ:</strong> Kategorien, nicht messbar (Geschlecht, Studiengang, Augenfarbe).</p><div class="merksatz">Quantitativ kann <strong>diskret</strong> (abzählbar: Kinderzahl) oder <strong>stetig</strong> (jeder Wert möglich: Körpergröße) sein.</div>'},
+{id:'gr3',title:'Nominalskala',tier:'a',topic:'Grundlagen',body:'<p>Nur <strong>= / ≠</strong> unterscheidbar. Keine Ordnung, keine Abstände.</p><div class="formula"><span class="keyword">Erlaubt:</span> Bijektive Transformationen (1:1-Umkodierung)\n<span class="keyword">Statistik:</span> Modus, Häufigkeiten, Chi²</div><div class="example-box">Geschlecht (m/w/d), Blutgruppe (A/B/AB/0), PLZ</div>'},
+{id:'gr4',title:'Ordinalskala',tier:'a',topic:'Grundlagen',body:'<p>= / ≠ + <strong>Rangfolge</strong>. Keine gleichen Abstände!</p><div class="formula"><span class="keyword">Erlaubt:</span> Monotone Transformationen\n<span class="keyword">Statistik:</span> + Median, Quartile, Spearman r</div><div class="example-box">Schulnoten (1 besser als 2, aber Diff nicht gleich), Likert-Skala</div>'},
+{id:'gr5',title:'Intervallskala',tier:'a',topic:'Grundlagen',body:'<p>= / ≠ + Rangfolge + <strong>gleiche Abstände</strong>. Kein absoluter Nullpunkt.</p><div class="formula"><span class="keyword">Erlaubt:</span> Lineare Transformation y = a·x + b (a>0)\n<span class="keyword">Statistik:</span> + Mittelwert, Standardabweichung, Pearson r</div><div class="example-box">Temperatur in °C (0°C ≠ „keine Wärme"), IQ, Jahreszahlen</div>'},
+{id:'gr6',title:'Verhältnisskala',tier:'a',topic:'Grundlagen',body:'<p>Alle Eigenschaften + <strong>absoluter Nullpunkt</strong>. Transformation: y = a·x (a > 0).</p><div class="formula"><span class="keyword">Statistik:</span> + Geometrisches Mittel, Variationskoeffizient</div><div class="example-box">Gewicht, Länge, Reaktionszeit, Einkommen. 0 kg = kein Gewicht.</div>'},
+{id:'gr7',title:'Absolutskala',tier:'b',topic:'Grundlagen',body:'<p>Alle Eigenschaften + <strong>feste Einheit</strong>. Nur Identitätstransformation.</p><div class="example-box">Anzahlen (3 Kinder = 3 Kinder, nicht umkodierbar).</div>'},
+// Häufigkeitsverteilungen
+{id:'hv1',title:'Häufigkeitstabelle',tier:'a',topic:'Häufigkeitsverteilungen',body:'<p><strong>Absolute Häufigkeit</strong> h(x): Wie oft kommt Wert x vor?</p><p><strong>Relative Häufigkeit</strong> f(x) = h(x)/n: Anteil.</p><p><strong>Kumulierte Häufigkeit</strong> F(x) = Summe aller f(y) mit y ≤ x.</p><div class="formula"><span class="keyword">Summenregel:</span> Σ h(xᵢ) = n   und   Σ f(xᵢ) = 1</div>'},
+{id:'hv2',title:'Empirische Verteilungsfunktion',tier:'a',topic:'Häufigkeitsverteilungen',body:'<p><strong>F(x)</strong> = Anteil der Beobachtungen ≤ x. Treppenfunktion, monoton steigend.</p><div class="merksatz">F ist rechtsstetig: Sprung NACH dem Wert. F(x) = Σ f(xᵢ) für alle xᵢ ≤ x.</div><div class="example-box">Bei Daten {1,2,2,3}: F(1)=0.25, F(2)=0.75, F(3)=1.0</div>'},
+{id:'hv3',title:'Histogramm & Stabdiagramm',tier:'a',topic:'Häufigkeitsverteilungen',body:'<p><strong>Stabdiagramm:</strong> Diskrete Daten. Stäbe nicht berühren. Höhe = Häufigkeit.</p><p><strong>Histogramm:</strong> Stetige/klassierte Daten. Fläche ∝ Häufigkeit. Balken berühren sich.</p><div class="achtung">Bei ungleichen Klassenbreiten: Höhe = relative Häufigkeit / Klassenbreite!</div>'},
+{id:'hv4',title:'Formen von Verteilungen',tier:'b',topic:'Häufigkeitsverteilungen',body:'<p><strong>Symmetrisch:</strong> Glockenförmig (Normalverteilung). <strong>Rechtsschief:</strong> Langer Schwanz rechts (positiv, z.B. Einkommen). <strong>Linksschief:</strong> Langer Schwanz links (negativ, z.B. Klausurergebnisse).</p><div class="merksatz">Der Name bezieht sich auf den <strong>Schwanz</strong>, nicht den Gipfel!</div>'},
+{id:'hv5',title:'Klasseneinteilung',tier:'b',topic:'Häufigkeitsverteilungen',body:'<p>Stetige Daten → in Klassen einteilen. Faustregel: k ≈ √n Klassen.</p><div class="formula"><span class="keyword">Klassenbreite</span> ≈ (x_max − x_min) / k</div><p>Klassen müssen <strong>lückenlos</strong> und <strong>überschneidungsfrei</strong> sein. Konvention: links abgeschlossen, rechts offen [a, b).</p>'},
+// Lagemaße
+{id:'lm0',title:'Quantile & Quartile',tier:'a',topic:'Lagemaße',body:'<p><strong>p-Quantil x_p:</strong> Mindestens p·100% der Werte ≤ x_p und (1−p)·100% ≥ x_p.</p><div class="formula"><span class="keyword">Q₁</span> = x_0.25   <span class="keyword">Q₂</span> = x_0.50 = Median   <span class="keyword">Q₃</span> = x_0.75</div><div class="merksatz">Quartile teilen die Daten in vier gleich große Teile.</div>'},
+{id:'lm1',title:'Modus',tier:'a',topic:'Lagemaße',body:'<p>Häufigster Wert. Bei klassierten Daten: <strong>Modalklasse</strong>.</p><div class="merksatz">Einziges Lagemaß für Nominalskala! Kann mehrdeutig sein (bi-/multimodal).</div>'},
+{id:'lm2',title:'Median',tier:'a',topic:'Lagemaße',body:'<p>Mittlerer Wert wenn sortiert. 50%-Quantil.</p><div class="formula">n ungerade: x_(n+1)/2\nn gerade:   (x_n/2 + x_(n/2+1)) / 2</div><div class="merksatz">Robust gegenüber Ausreißern! Ab Ordinalskala sinnvoll.</div>'},
+{id:'lm3',title:'Arithmetisches Mittel',tier:'a',topic:'Lagemaße',body:'<div class="formula"><span class="keyword">x̄</span> = (1/n) · Σ xᵢ</div><p><strong>Nulleigenschaft:</strong> Σ(xᵢ − x̄) = 0. <strong>Minimumeigenschaft:</strong> x̄ minimiert Σ(xᵢ − c)².</p><div class="achtung">Anfällig für Ausreißer! Ab Intervallskala sinnvoll.</div>'},
+{id:'lm4',title:'Geometrisches Mittel',tier:'b',topic:'Lagemaße',body:'<div class="formula"><span class="keyword">x_geo</span> = (x₁·x₂·…·xₙ)^(1/n) = exp((1/n)·Σ ln(xᵢ))</div><p>Für positive Werte. Sinnvoll bei multiplikativen Prozessen (Wachstumsraten).</p><div class="example-box">Renditen 10%, 20%, -5%: x_geo = (1.1·1.2·0.95)^(1/3) − 1</div>'},
+{id:'lm5',title:'Harmonisches Mittel',tier:'b',topic:'Lagemaße',body:'<div class="formula"><span class="keyword">x_harm</span> = n / Σ (1/xᵢ)</div><p>Für Raten und Verhältnisse. <strong>Reihenfolge:</strong> x_harm ≤ x_geo ≤ x_arith.</p><div class="example-box">Durchschnittsgeschwindigkeit: 100km@50km/h + 100km@100km/h → x_harm = 2/(1/50+1/100) = 66.7 km/h</div>'},
+// Streuungsmaße
+{id:'lm6',title:'Spannweite & IQR',tier:'a',topic:'Streuungsmaße',body:'<div class="formula"><span class="keyword">Spannweite</span> R = x_max − x_min\n<span class="keyword">IQR</span> = Q₃ − Q₁   <span class="comment">// mittlere 50% der Daten</span></div><p>Spannweite: extrem ausreißerempfindlich. IQR: robust.</p>'},
+{id:'lm7',title:'Lineare Transformation',tier:'a',topic:'Streuungsmaße',body:'<p>Wenn y = p·x + q, dann:</p><div class="formula"><span class="keyword">ȳ</span> = p·x̄ + q\n<span class="keyword">s²_y</span> = p²·s²_x   <span class="comment">// Verschiebung q fällt raus!</span>\n<span class="keyword">s_y</span> = |p|·s_x</div><div class="example-box">°C → °F: F = 1.8·C + 32. s_F = 1.8·s_C.</div>'},
+{id:'lm8',title:'Varianz & Standardabweichung',tier:'a',topic:'Streuungsmaße',body:'<div class="formula"><span class="keyword">s²</span> = (1/n) · Σ(xᵢ − x̄)²   <span class="comment">// empirische Varianz</span>\n<span class="keyword">s</span>  = √s²</div><div class="merksatz">Verschiebungssatz: s² = x̄² − x̄² ... oder: s² = (Σxᵢ²/n) − x̄²</div>'},
+{id:'lm9',title:'Schiefe',tier:'b',topic:'Streuungsmaße',body:'<div class="formula"><span class="keyword">g₁</span> = (1/n) · Σ((xᵢ−x̄)/s)³</div><p>g₁ > 0: rechtsschief. g₁ < 0: linksschief. g₁ = 0: symmetrisch.</p><div class="merksatz">Dritte Potenz bewahrt das Vorzeichen!</div>'},
+{id:'lm10',title:'Boxplot',tier:'a',topic:'Streuungsmaße',body:'<p><strong>Box:</strong> Q₁ bis Q₃ (= IQR). <strong>Linie in Box:</strong> Median. <strong>Whiskers:</strong> bis max. 1.5·IQR. <strong>Punkte:</strong> Ausreißer jenseits der Whiskers.</p><div class="merksatz">5-Punkte-Zusammenfassung: Min, Q₁, Median, Q₃, Max.</div>'},
+{id:'lm11',title:'Zentrierung & z-Transformation',tier:'b',topic:'Streuungsmaße',body:'<p><strong>Zentrierung:</strong> x\'ᵢ = xᵢ − x̄ → Mittelwert 0.</p><p><strong>z-Transformation:</strong> zᵢ = (xᵢ − x̄) / s → Mittelwert 0, SD 1.</p><div class="example-box">z = 2.0 → 2 Standardabweichungen über dem Mittel.</div>'},
+// Korrelation
+{id:'ko1',title:'Kovarianz',tier:'a',topic:'Korrelation',body:'<div class="formula"><span class="keyword">s_xy</span> = (1/n) · Σ(xᵢ − x̄)(yᵢ − ȳ)</div><p>Maß für den <strong>linearen Zusammenhang</strong>. Positiv: gleichgerichtet. Negativ: gegenläufig.</p><div class="achtung">Problem: Einheitenabhängig! Daher → Standardisierung zu r.</div>'},
+{id:'ko2',title:'Pearson-Korrelationskoeffizient',tier:'a',topic:'Korrelation',body:'<div class="formula"><span class="keyword">r</span> = s_xy / (s_x · s_y)   <span class="comment">// ∈ [−1, +1]</span></div><p>r = +1: perfekt positiv. r = 0: kein linearer Zshg. r = −1: perfekt negativ.</p><div class="achtung">r misst nur linearen Zusammenhang! Anscombe Quartett!</div>'},
+{id:'ko3',title:'Korrelation ≠ Kausalität',tier:'a',topic:'Korrelation',body:'<div class="achtung"><strong>Drei Möglichkeiten bei r ≠ 0:</strong><br>1. X → Y<br>2. Y → X<br>3. Z → X und Z → Y (Drittvariable!)</div><div class="example-box">Eisverkauf korreliert mit Ertrinken. Drittvariable: Temperatur!</div>'},
+{id:'ko4',title:'Spearman r_s',tier:'a',topic:'Korrelation',body:'<p>Pearson r auf die <strong>Ränge</strong> angewendet. Robust, für ordinale Daten.</p><div class="formula"><span class="keyword">r_s</span> = Pearson(Rang(x), Rang(y))\n<span class="comment">// Ohne Bindungen: r_s = 1 − 6·Σdᵢ²/(n(n²−1))</span></div>'},
+{id:'ko5',title:'Phi-Koeffizient & Odds Ratio',tier:'b',topic:'Korrelation',body:'<p>Zusammenhang zweier <strong>dichotomer</strong> Merkmale (Vierfeldertafel).</p><div class="formula"><span class="keyword">φ</span> = (ad − bc) / √((a+b)(c+d)(a+c)(b+d))\n<span class="keyword">OR</span> = (a·d) / (b·c)</div><p>OR = 1: kein Zusammenhang. OR > 1: positiv. OR < 1: negativ.</p>'},
+{id:'ko6',title:'Vierfeldertafel',tier:'a',topic:'Korrelation',body:'<div class="def-box blue">Kreuzklassifikation zweier dichotomer Merkmale. Zellen a, b, c, d.</div><div class="example-box">Rauchen × Lungenkrebs: a=R+K, b=R+keinK, c=NR+K, d=NR+keinK</div>'},
+// Regression
+{id:'re1',title:'Regressionsgerade (KQ-Methode)',tier:'a',topic:'Regression',body:'<div class="formula"><span class="keyword">ŷ</span> = b̂₀ + b̂₁·x   <span class="comment">// minimiert Σ(yᵢ − ŷᵢ)²</span></div><div class="merksatz">Die Gerade geht IMMER durch (x̄, ȳ).</div>'},
+{id:'re2',title:'Regressionskoeffizienten',tier:'a',topic:'Regression',body:'<div class="formula"><span class="keyword">b̂₁</span> = s_xy / s²_x   <span class="comment">// Steigung</span>\n<span class="keyword">b̂₀</span> = ȳ − b̂₁·x̄    <span class="comment">// Achsenabschnitt</span></div><p>b̂₁ = r · (s_y/s_x). Regression Y auf X ≠ X auf Y!</p>'},
+{id:'re3',title:'Determinationskoeffizient r²',tier:'a',topic:'Regression',body:'<div class="formula"><span class="keyword">r²</span> = s²_ŷ / s²_y = 1 − s²_e / s²_y</div><p>Anteil der Varianz von Y, der durch X „erklärt" wird.</p><div class="example-box">r = 0.7 → r² = 0.49 → 49% erklärt, 51% Restvarianz.</div>'},
+{id:'re4',title:'Varianzzerlegung',tier:'a',topic:'Regression',body:'<div class="formula"><span class="keyword">s²_y</span> = <span class="result">s²_ŷ</span> + <span class="symbol">s²_e</span>\n<span class="comment">Gesamt = Erklärt + Residuen</span></div><div class="merksatz">Residuen eᵢ = yᵢ − ŷᵢ haben Mittelwert 0 und sind unkorreliert mit x.</div>'},
+{id:'re5',title:'Partielle Korrelation',tier:'b',topic:'Regression',body:'<div class="formula"><span class="keyword">r_xy.z</span> = (r_xy − r_xz·r_yz) / √((1−r²_xz)(1−r²_yz))</div><p>Zusammenhang X-Y nach Herausrechnen von Z.</p><div class="example-box">r(Eis,Ertrinken) hoch. r(Eis,Ertrinken|Temp) ≈ 0 → Scheinkorrelation.</div>'},
+{id:'re6',title:'Scheinkorrelation & Suppression',tier:'b',topic:'Regression',body:'<p><strong>Scheinkorrelation:</strong> r_xy ≠ 0, aber r_xy.z ≈ 0 (verschwindet).</p><p><strong>Suppression:</strong> r_xy ≈ 0, aber r_xy.z ≠ 0 (taucht erst auf!).</p><div class="achtung">Suppression: Gegenläufige Effekte heben sich ohne Kontrolle auf.</div>'},
+// Wahrscheinlichkeit
+{id:'ws1',title:'Kolmogorov-Axiome',tier:'a',topic:'Wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">1.</span> P(A) ≥ 0\n<span class="keyword">2.</span> P(Ω) = 1\n<span class="keyword">3.</span> A∩B=∅ ⇒ P(A∪B)=P(A)+P(B)</div>'},
+{id:'ws2',title:'Folgerungen (Komplement, Additionssatz)',tier:'a',topic:'Wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">Komplement:</span>    P(Ā) = 1 − P(A)\n<span class="keyword">Additionssatz:</span> P(A∪B) = P(A)+P(B)−P(A∩B)\n<span class="keyword">Monotonie:</span>     A⊆B ⇒ P(A) ≤ P(B)</div>'},
+{id:'ws3',title:'Laplace-Experiment',tier:'a',topic:'Wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">P(A)</span> = |A| / |Ω|   <span class="comment">// günstige / mögliche</span></div><div class="example-box">Würfel: P(gerade) = 3/6 = 1/2</div>'},
+{id:'ws4',title:'Kombinatorik',tier:'a',topic:'Wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">Permutationen:</span>    n!\n<span class="keyword">Variation o.Z.:</span>   n!/(n−k)!\n<span class="keyword">Kombination o.Z.:</span> C(n,k) = n!/(k!(n−k)!)</div><div class="example-box">Lotto 6 aus 49 = C(49,6) = 13.983.816</div>'},
+{id:'ws5',title:'Binomialkoeffizient',tier:'a',topic:'Wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">C(n,k)</span> = n! / (k!(n−k)!)</div><div class="merksatz">C(n,0)=1, C(n,n)=1, C(n,k)=C(n,n−k)</div>'},
+{id:'ws6',title:'Bedingte Wahrscheinlichkeit',tier:'a',topic:'Wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">P(A|B)</span> = P(A∩B) / P(B)</div><div class="example-box">Würfel: P(gerade | >3) = P({4,6})/P({4,5,6}) = 2/3</div>'},
+{id:'ws7',title:'Multiplikationssatz & Unabhängigkeit',tier:'a',topic:'Wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">Allgemein:</span>  P(A∩B) = P(A|B)·P(B)\n<span class="keyword">Unabhängig:</span> P(A∩B) = P(A)·P(B)</div><div class="achtung">Unabhängig ≠ disjunkt! Disjunkt → maximal abhängig.</div>'},
+// Verteilungen
+{id:'vt1',title:'Bernoulli- & Binomialverteilung',tier:'a',topic:'Verteilungen',body:'<div class="formula"><span class="keyword">P(X=k)</span> = C(n,k)·p^k·(1−p)^(n−k)\n<span class="keyword">E(X)</span> = n·p   <span class="keyword">Var(X)</span> = n·p·(1−p)</div><div class="example-box">10× Münze: P(7 Köpfe) = C(10,7)·0.5¹⁰ ≈ 0.117</div>'},
+{id:'vt2',title:'Normalverteilung (Dichtefunktion)',tier:'a',topic:'Verteilungen',body:'<div class="formula"><span class="keyword">f(x)</span> = (1/(σ√(2π)))·exp(−(x−μ)²/(2σ²))</div><p>Symmetrisch, glockenförmig. Wendepunkte bei μ ± σ.</p>'},
+{id:'vt3',title:'Standardnormalverteilung',tier:'a',topic:'Verteilungen',body:'<p>N(0,1). Standardisierung: z = (x−μ)/σ.</p><div class="formula"><span class="keyword">Φ(z)</span> = P(Z ≤ z)   <span class="comment">// Verteilungsfunktion → z-Tabelle</span></div>'},
+{id:'vt4',title:'z-Tabelle: Wahrscheinlichkeit ablesen',tier:'a',topic:'Verteilungen',body:'<div class="formula"><span class="keyword">P(Z ≤ 1.96)</span> = <span class="result">0.975</span>\n<span class="keyword">P(Z > z)</span> = 1 − Φ(z)\n<span class="keyword">P(Z ≤ −z)</span> = 1 − Φ(z)   <span class="comment">// Symmetrie</span></div><div class="example-box">P(−1.5 ≤ Z ≤ 2.0) = Φ(2.0)−Φ(−1.5) = 0.9772−0.0668 = 0.9104</div>'},
+{id:'vt5',title:'z-Tabelle: Quantile ablesen',tier:'a',topic:'Verteilungen',body:'<div class="formula"><span class="keyword">z_0.975</span> = <span class="result">1.96</span>\n<span class="keyword">z_0.025</span> = <span class="result">−1.96</span>   <span class="comment">// z_α = −z_(1−α)</span></div>'},
+{id:'vt6',title:'68-95-99.7-Regel',tier:'a',topic:'Verteilungen',body:'<div class="merksatz"><strong>68%</strong> in μ ± 1σ. <strong>95%</strong> in μ ± 1.96σ. <strong>99.7%</strong> in μ ± 3σ.</div><div class="example-box">IQ ~ N(100,15): 68% zwischen 85-115. 95% zwischen 70-130.</div>'},
+];
+
+const CARD_MAP = {};
+CARDS.forEach(c => { CARD_MAP[c.id] = c; });
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+const NEW_CARDS_PER_SESSION = 10;
+let sessionQueue = [];
+let sessionIdx = 0;
+let reviewedCount = 0;
+let ratingCounts = {1:0, 2:0, 3:0, 4:0};
+let isFlipped = false;
+let isAnimating = false;
+let touchStartX = 0, touchStartY = 0, touchCurrentX = 0;
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+function init() {
+  const savedTheme = localStorage.getItem('lp_theme');
+  if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+  seedNewCards();
+  buildQueue();
+  updateStatsBar();
+  renderUI();
+}
+
+function seedNewCards() {
+  const store = FSRS.getStore(SLUG);
+  let added = 0;
+  CARDS.forEach(c => {
+    if (!store[c.id]) { store[c.id] = FSRS.initCard(); added++; }
+  });
+  if (added > 0) localStorage.setItem(`lp_${SLUG}_fsrs`, JSON.stringify(store));
+}
+
+function buildQueue() {
+  const store = FSRS.getStore(SLUG);
+  const now = Date.now();
+  const due = CARDS.filter(c => { const s=store[c.id]; return s && s.state!==0 && s.due<=now; })
+    .sort((a,b) => store[a.id].due - store[b.id].due);
+  const newCards = CARDS.filter(c => { const s=store[c.id]; return s && s.state===0; }).slice(0, NEW_CARDS_PER_SESSION);
+  sessionQueue = [...due, ...newCards];
+  sessionIdx = 0;
+}
+
+function updateStatsBar() {
+  const store = FSRS.getStore(SLUG);
+  const now = Date.now();
+  const entries = Object.values(store);
+  const dueCount = entries.filter(c => c.state!==0 && c.due<=now).length;
+  const newCount = entries.filter(c => c.state===0).length;
+  document.getElementById('statDue').textContent = `${dueCount} fällig`;
+  document.getElementById('statReviewed').textContent = `${reviewedCount} wiederholt`;
+  document.getElementById('statTotal').textContent = `${entries.length - newCount} gelernt`;
+  const reviewed = entries.filter(c => c.lastReview > 0);
+  const DAY_MS = 86400000;
+  if (reviewed.length > 0) {
+    const ret = Math.round(reviewed.reduce((s,c) => {
+      if (!c.stability || !c.lastReview) return s;
+      return s + Math.pow(1 + (now-c.lastReview)/DAY_MS/(9*c.stability), -1);
+    }, 0) / reviewed.length * 100);
+    document.getElementById('statRetention').textContent = `${ret}% Retention`;
+  } else {
+    document.getElementById('statRetention').textContent = '— Retention';
+  }
+}
+
+function renderUI() {
+  const hasCards = sessionQueue.length > 0 && sessionIdx < sessionQueue.length;
+  if (!hasCards && sessionIdx === 0) { showEmptyState(); }
+  else if (!hasCards) { showSummary(); }
+  else { showCard(); }
+}
+
+function showEmptyState() {
+  document.getElementById('empty-state').style.display = 'block';
+  document.getElementById('card-area').style.display = 'none';
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  const store = FSRS.getStore(SLUG);
+  const now = Date.now();
+  const DAY_MS = 86400000;
+  const entries = Object.values(store);
+  document.getElementById('fcToday').textContent = reviewedCount;
+  document.getElementById('fcTomorrow').textContent = entries.filter(c => c.due>now && c.due<=now+DAY_MS).length;
+  document.getElementById('fcDayAfter').textContent = entries.filter(c => c.due>now+DAY_MS && c.due<=now+2*DAY_MS).length;
+  document.getElementById('fcNew').textContent = entries.filter(c => c.state===0).length;
+  document.getElementById('btnAddNew').addEventListener('click', () => {
+    const s2 = FSRS.getStore(SLUG);
+    const newCards = CARDS.filter(c => s2[c.id] && s2[c.id].state===0);
+    if (!newCards.length) { alert('Keine neuen Karten mehr!'); return; }
+    sessionQueue = newCards.slice(0, NEW_CARDS_PER_SESSION);
+    sessionIdx = 0;
+    document.getElementById('empty-state').style.display = 'none';
+    showCard();
+  });
+}
+
+function showCard() {
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('card-area').style.display = 'block';
+  document.getElementById('progressWrap').style.display = 'block';
+  isFlipped = false; isAnimating = false;
+  const card = sessionQueue[sessionIdx];
+  const data = CARD_MAP[card.id];
+  if (!data) { sessionIdx++; renderUI(); return; }
+  const rc = document.getElementById('reviewCard');
+  rc.classList.remove('flipped','slide-out');
+  rc.style.transform = ''; rc.style.opacity = '';
+  document.getElementById('cardInner').style.transform = '';
+  document.getElementById('cardInner').style.transition = '';
+  const badge = document.getElementById('cardBadge');
+  badge.textContent = data.topic;
+  badge.className = `card-section-badge tier-${data.tier}`;
+  document.getElementById('cardTitle').textContent = data.title;
+  document.getElementById('cardTopic').textContent = data.topic;
+  const store = FSRS.getStore(SLUG);
+  const cs = store[card.id];
+  document.getElementById('cardFsrsInfo').textContent = (cs && cs.reps>0) ? `${cs.reps}× · ±${Math.round(cs.stability||0)}d` : 'Neu';
+  document.getElementById('cardBackTitle').textContent = data.title;
+  document.getElementById('cardContent').innerHTML = data.body || '';
+  document.getElementById('ratingRow').classList.remove('visible');
+  document.getElementById('hintLeft').style.opacity = '0';
+  document.getElementById('hintRight').style.opacity = '0';
+  const pct = sessionQueue.length > 0 ? (sessionIdx / sessionQueue.length) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  updateIntervalLabels(card.id);
+  updateStatsBar();
+  setupTouchHandlers();
+}
+
+function updateIntervalLabels(cardId) {
+  const store = FSRS.getStore(SLUG);
+  const c = store[cardId] || FSRS.initCard();
+  [1,2,3,4].forEach(r => {
+    const nc = FSRS.review(c, r);
+    const days = nc.scheduledDays || 0;
+    document.getElementById(`int${r}`).textContent = days===0?'jetzt':days===1?'1 Tag':`${days} Tage`;
+  });
+}
+
+function flipCard() {
+  if (isAnimating) return;
+  const rc = document.getElementById('reviewCard');
+  if (!isFlipped) {
+    rc.classList.add('flipped'); isFlipped = true;
+    document.getElementById('ratingRow').classList.add('visible');
+  } else {
+    rc.classList.remove('flipped'); isFlipped = false;
+    document.getElementById('ratingRow').classList.remove('visible');
+  }
+}
+
+function rateCard(rating) {
+  if (isAnimating) return;
+  isAnimating = true;
+  ratingCounts[rating] = (ratingCounts[rating]||0) + 1;
+  reviewedCount++;
+  FSRS.reviewCard(SLUG, sessionQueue[sessionIdx].id, rating);
+  if (rating === 1) {
+    const card = sessionQueue[sessionIdx];
+    const remaining = sessionQueue.length - sessionIdx - 1;
+    const insertAt = sessionIdx + 1 + Math.floor(Math.random() * Math.max(1, Math.min(remaining, 4)));
+    sessionQueue.splice(insertAt, 0, card);
+  }
+  const dir = rating <= 2 ? '-120%' : '120%';
+  const rc = document.getElementById('reviewCard');
+  rc.style.setProperty('--slide-dir', dir);
+  rc.classList.add('slide-out');
+  setTimeout(() => { sessionIdx++; renderUI(); }, 360);
+}
+
+function showSummary() {
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('card-area').style.display = 'none';
+  document.getElementById('summary').style.display = 'block';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('sumReviewed').textContent = reviewedCount;
+  const store = FSRS.getStore(SLUG);
+  const now = Date.now();
+  const DAY_MS = 86400000;
+  const reviewed = Object.values(store).filter(c => c.lastReview>0);
+  const ret = reviewed.length ? Math.round(reviewed.reduce((s,c) => {
+    if (!c.stability) return s;
+    return s + Math.pow(1+(now-c.lastReview)/DAY_MS/(9*c.stability),-1);
+  }, 0) / reviewed.length * 100) : 0;
+  document.getElementById('sumRetention').textContent = ret + '%';
+  document.getElementById('sumStreak').textContent = (ratingCounts[3]||0) + (ratingCounts[4]||0);
+  const total = Object.values(ratingCounts).reduce((s,v)=>s+v,0);
+  [['Again',1],['Hard',2],['Good',3],['Easy',4]].forEach(([name,r]) => {
+    const cnt = ratingCounts[r]||0;
+    const pct = total > 0 ? (cnt/total*100) : 0;
+    document.getElementById(`rb${name}`).style.width = pct + '%';
+    document.getElementById(`rc${name}`).textContent = cnt;
+  });
+}
+
+function setupTouchHandlers() {
+  const card = document.getElementById('reviewCard');
+  const newCard = card.cloneNode(true);
+  card.parentNode.replaceChild(newCard, card);
+  // Re-assign because cloneNode removes listeners
+  document.getElementById('reviewCard').addEventListener('click', handleCardClick);
+  document.getElementById('reviewCard').addEventListener('touchstart', handleTouchStart, {passive:true});
+  document.getElementById('reviewCard').addEventListener('touchmove', handleTouchMove, {passive:false});
+  document.getElementById('reviewCard').addEventListener('touchend', handleTouchEnd);
+}
+
+function handleCardClick(e) { if (!isFlipped) flipCard(); }
+
+function handleTouchStart(e) {
+  if (e.touches.length!==1) return;
+  touchStartX=e.touches[0].clientX; touchStartY=e.touches[0].clientY; touchCurrentX=touchStartX;
+}
+
+function handleTouchMove(e) {
+  if (e.touches.length!==1) return;
+  touchCurrentX=e.touches[0].clientX;
+  const dx=touchCurrentX-touchStartX, dy=Math.abs(e.touches[0].clientY-touchStartY);
+  if (Math.abs(dx)>dy && isFlipped) {
+    e.preventDefault();
+    const ci=document.getElementById('cardInner');
+    ci.style.transition='none';
+    ci.style.transform=`rotateY(180deg) translateX(${-dx}px)`;
+    document.getElementById('hintLeft').style.opacity=dx<-60?'1':'0';
+    document.getElementById('hintRight').style.opacity=dx>60?'1':'0';
+  }
+}
+
+function handleTouchEnd(e) {
+  const dx=touchCurrentX-touchStartX;
+  const ci=document.getElementById('cardInner');
+  ci.style.transition=''; ci.style.transform='';
+  document.getElementById('hintLeft').style.opacity='0';
+  document.getElementById('hintRight').style.opacity='0';
+  if (isFlipped && Math.abs(dx)>80) { rateCard(dx<0?1:3); }
+  else if (Math.abs(dx)<10) { handleCardClick(e); }
+}
+
+function toggleTheme() {
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('lp_theme',next);
+}
+
+init();
+
+// ─── ANKI EXPORT ───────────────────────────────────────────────────────────
+function exportAnki() {
+  const rows = ['#separator:tab', '#html:false', '#tags column:3'];
+  CARDS.forEach(card => {
+    const front = card.title || '';
+    const back = (card.body || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+    const section = (card.topic || '').replace(/\s+/g, '_');
+    const tags = 'statistik ' + section;
+    rows.push(`${front}\t${back}\t${tags}`);
+  });
+  const blob = new Blob([rows.join('\n')], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'statistik-anki-export.txt';
+  a.click();
+}
+
+// ─── JSON EXPORT / IMPORT ──────────────────────────────────────────────────
+function exportData() {
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('lp_') || key === 'stat1v3_state') data[key] = localStorage.getItem(key);
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `psychlearn-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      let count = 0;
+      Object.entries(data).forEach(([key, val]) => {
+        if (key.startsWith('lp_') || key === 'stat1v3_state') { localStorage.setItem(key, val); count++; }
+      });
+      alert(`✅ ${count} Einträge importiert! Seite wird neu geladen.`);
+      location.reload();
+    } catch (err) {
+      alert('❌ Fehler beim Import: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+</script>
+</body>
+</html>

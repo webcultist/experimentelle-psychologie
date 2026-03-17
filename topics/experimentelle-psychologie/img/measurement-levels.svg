@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 320" width="360" height="320" role="img" aria-label="Skalentypen Stufendiagramm">
+  <title>Messskalen – Nominalskala bis Ratioskala</title>
+  <rect width="360" height="320" fill="#f5f0e8" rx="8"/>
+
+  <!-- Title -->
+  <text x="180" y="24" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#2a2520">Skalentypen</text>
+
+  <!-- Row 1: Nominalskala (lightest green) -->
+  <rect x="20" y="40" width="320" height="56" rx="4" fill="#d5f5e3" stroke="#a9dfbf" stroke-width="1.5"/>
+  <text x="40" y="65" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#1e5c3a">Nominalskala</text>
+  <text x="40" y="83" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#2c6e49">Kategorien ohne Reihenfolge · z.B. Geschlecht, Farbe</text>
+  <text x="320" y="65" text-anchor="end" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#2c6e49">= ≠</text>
+
+  <!-- Divider arrow -->
+  <text x="180" y="108" text-anchor="middle" font-size="14" fill="#2c6e49">↓ + Rangordnung</text>
+
+  <!-- Row 2: Ordinalskala -->
+  <rect x="40" y="118" width="280" height="56" rx="4" fill="#aed6f1" stroke="#7fb3d3" stroke-width="1.5"/>
+  <text x="60" y="143" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#1a5276">Ordinalskala</text>
+  <text x="60" y="161" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#1a5276">Rangfolge, Abstände unbekannt · z.B. Schulnoten</text>
+  <text x="300" y="143" text-anchor="end" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#1a5276">&lt; &gt;</text>
+
+  <!-- Divider arrow -->
+  <text x="180" y="186" text-anchor="middle" font-size="14" fill="#2c6e49">↓ + gleiche Abstände</text>
+
+  <!-- Row 3: Intervallskala -->
+  <rect x="60" y="196" width="240" height="56" rx="4" fill="#2c6e49" stroke="#1e5c3a" stroke-width="1.5"/>
+  <text x="80" y="221" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#ffffff">Intervallskala</text>
+  <text x="80" y="239" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#d5f5e3">Gleiche Abstände, kein absoluter Nullpunkt</text>
+  <text x="280" y="221" text-anchor="end" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#d5f5e3">+ −</text>
+
+  <!-- Divider arrow -->
+  <text x="180" y="264" text-anchor="middle" font-size="14" fill="#2c6e49">↓ + absoluter Nullpunkt</text>
+
+  <!-- Row 4: Ratioskala -->
+  <rect x="80" y="274" width="200" height="38" rx="4" fill="#1e5c3a" stroke="#145a32" stroke-width="1.5"/>
+  <text x="180" y="297" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#ffffff">Ratioskala (Verhältnisskala)</text>
+</svg>

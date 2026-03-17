@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f5f0e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.svg">
 <title>Lernplattform | Uni Tubingen</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -11,22 +16,28 @@
   --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a5276; --accent4: #7d3c98; --accent5: #b7950b;
   --border: #d4cbbf; --highlight: #fef3c7; --shadow: rgba(42,37,32,0.08);
 }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1a1816; --bg-card: #242220; --text: #e8e0d4; --text-secondary: #a89e8c; --accent: #e05545; --accent2: #3d9460; --accent3: #2e6fa3; --accent4: #9b59b6; --accent5: #d4ac0d; --border: #3a3530; --highlight: #3a3010; --shadow: rgba(0,0,0,0.3); }
+}
+[data-theme="dark"] { --bg: #1a1816; --bg-card: #242220; --text: #e8e0d4; --text-secondary: #a89e8c; --accent: #e05545; --accent2: #3d9460; --accent3: #2e6fa3; --accent4: #9b59b6; --accent5: #d4ac0d; --border: #3a3530; --highlight: #3a3010; --shadow: rgba(0,0,0,0.3); }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Source Sans 3', Georgia, serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 17px; -webkit-font-smoothing: antialiased; }
+body { font-family: 'Source Sans 3', Georgia, serif; background: var(--bg); color: var(--text); line-height: 1.8; font-size: 18px; letter-spacing: 0.03em; -webkit-font-smoothing: antialiased; }
 body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
 ::selection { background: var(--accent); color: white; }
 
-header { padding: 4rem 2rem 3rem; text-align: center; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #ece5d8, var(--bg)); position: relative; }
+header { padding: 2.5rem 1.2rem 2rem; text-align: center; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #ece5d8, var(--bg)); position: relative; }
+@media (prefers-color-scheme: dark) { header { background: linear-gradient(180deg, #2a2520, var(--bg)); } }
+[data-theme="dark"] header { background: linear-gradient(180deg, #2a2520, var(--bg)); }
 header::after { content: '§'; position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); background: var(--bg); padding: 0 1rem; font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--accent); }
 .uni-badge { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); border: 1.5px solid var(--accent); padding: 0.3em 1em; margin-bottom: 1.5rem; border-radius: 2px; }
 header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; line-height: 1.2; margin-bottom: 0.5rem; }
 header h1 em { color: var(--accent); font-style: italic; }
 .subtitle { font-size: 1.05rem; color: var(--text-secondary); font-weight: 300; max-width: 620px; margin: 0 auto; }
 
-main { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem 4rem; }
 main > h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 1.5rem; color: var(--text-secondary); font-weight: 400; }
 
-.topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+.topic-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
 .topic-card { background: var(--bg-card); border: 1.5px solid var(--border); border-radius: 8px; padding: 1.8rem; transition: all 0.2s; text-decoration: none; color: inherit; display: block; position: relative; overflow: hidden; }
 .topic-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px var(--shadow); border-color: var(--accent); }
 .topic-card .semester { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
@@ -37,16 +48,22 @@ main > h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bo
 .topic-card .links { display: flex; gap: 0.6rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
 .topic-card .links a { font-size: 0.78rem; font-weight: 600; padding: 0.3em 0.8em; border: 1px solid var(--border); border-radius: 3px; color: var(--accent3); text-decoration: none; transition: all 0.15s; }
 .topic-card .links a:hover { background: var(--accent3); color: white; border-color: var(--accent3); }
+.topic-card .links a { min-height: 44px; display: inline-flex; align-items: center; }
 
 .coming-soon { opacity: 0.5; pointer-events: none; }
 .coming-soon::after { content: 'Kommt bald'; position: absolute; top: 1rem; right: 1rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--border); color: var(--text-secondary); padding: 0.2em 0.6em; border-radius: 3px; }
 
-footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--text-secondary); }
+footer { text-align: center; padding: 2.5rem 1.5rem; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--text-secondary); }
 
-@media (max-width: 640px) {
-  header { padding: 2.5rem 1.2rem 2rem; }
-  main { padding: 2rem 1rem 4rem; }
-  .topic-grid { grid-template-columns: 1fr; }
+@media (min-width: 641px) {
+  header { padding: 3rem 2rem 2.5rem; }
+  body { font-size: 17px; letter-spacing: normal; }
+  main { padding: 3rem 1.5rem 6rem; }
+  .topic-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  footer { padding: 3rem 2rem; }
+}
+@media (min-width: 1024px) {
+  header { padding: 4rem 2rem 3rem; }
 }
 </style>
 </head>
@@ -57,6 +74,12 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
   <h1>Lern<em>plattform</em></h1>
   <p class="subtitle">Lernhilfen, Wissenstests und Crash-Courses &mdash; kompakt, verstandlich, prufungsrelevant</p>
 </header>
+
+<div id="installBanner" style="display:none;background:#c0392b;color:#fff;padding:12px 20px;text-align:center;border-radius:8px;margin:0 1rem 1rem;font-family:'Source Sans 3',sans-serif;">
+  <span>📱 Als App installieren für Offline-Zugang!</span>
+  <button id="installBtn" style="background:#fff;color:#c0392b;border:none;padding:6px 16px;border-radius:4px;margin-left:12px;cursor:pointer;font-weight:600;">Installieren</button>
+  <button onclick="this.parentElement.style.display='none';localStorage.setItem('lp_dismiss_install','1')" style="background:none;border:none;color:#fff;cursor:pointer;margin-left:8px;font-size:1.2em;">✕</button>
+</div>
 
 <main>
   <h2>Verfugbare Themen</h2>
@@ -75,6 +98,8 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
         <a href="topics/experimentelle-psychologie/index.html">Lernhilfe</a>
         <a href="topics/experimentelle-psychologie/test.html">Wissenstest</a>
         <a href="topics/experimentelle-psychologie/crash-course.html">4h Crash Course</a>
+        <a href="topics/experimentelle-psychologie/review.html">Wiederholung</a>
+        <a href="topics/experimentelle-psychologie/stats.html">Fortschritt</a>
       </div>
     </div>
 
@@ -91,6 +116,8 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
         <a href="topics/statistik/index.html">Lernhilfe</a>
         <a href="topics/statistik/test.html">Wissenstest</a>
         <a href="topics/statistik/crash-course.html">4h Crash Course</a>
+        <a href="topics/statistik/review.html">Wiederholung</a>
+        <a href="topics/statistik/stats.html">Fortschritt</a>
       </div>
     </div>
 
@@ -118,5 +145,32 @@ footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--bor
   <p style="margin-top:0.5rem">Keine offizielle Universitatsseite.</p>
 </footer>
 
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+</script>
+<script>
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!localStorage.getItem('lp_dismiss_install')) {
+    document.getElementById('installBanner').style.display = 'flex';
+    document.getElementById('installBanner').style.alignItems = 'center';
+    document.getElementById('installBanner').style.justifyContent = 'center';
+    document.getElementById('installBanner').style.flexWrap = 'wrap';
+    document.getElementById('installBanner').style.gap = '8px';
+  }
+});
+document.getElementById('installBtn')?.addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('installBanner').style.display = 'none';
+  }
+});
+</script>
 </body>
 </html>

@@ -32,6 +32,7 @@ jobs:
             --exclude='topics/*/build.sh' \
             --exclude='topics/*/src/' \
             --exclude='topics/*/resources/' \
+            --exclude='topics/shared/' \
             --exclude='chat-server.js' \
             --exclude='.DS_Store' \
             --exclude='.gitignore' \

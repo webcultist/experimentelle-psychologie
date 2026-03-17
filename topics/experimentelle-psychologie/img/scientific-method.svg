@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 420" width="280" height="420" role="img" aria-label="Wissenschaftliche Methode Flussdiagramm">
+  <title>Wissenschaftliche Methode</title>
+  <rect width="280" height="420" fill="#f5f0e8" rx="8"/>
+
+  <!-- Step 1: Beobachtung -->
+  <rect x="60" y="20" width="160" height="52" rx="6" fill="#fffdf8" stroke="#d4cbbf" stroke-width="1.5"/>
+  <text x="140" y="43" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#2a2520">Beobachtung</text>
+  <text x="140" y="61" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#6b5e52">Phänomen wahrnehmen</text>
+
+  <!-- Arrow 1 -->
+  <line x1="140" y1="72" x2="140" y2="98" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="134,96 140,108 146,96" fill="#c0392b"/>
+
+  <!-- Step 2: Hypothese -->
+  <rect x="60" y="108" width="160" height="52" rx="6" fill="#fffdf8" stroke="#d4cbbf" stroke-width="1.5"/>
+  <text x="140" y="131" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#2a2520">Hypothese</text>
+  <text x="140" y="149" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#6b5e52">Vorhersage formulieren</text>
+
+  <!-- Arrow 2 -->
+  <line x1="140" y1="160" x2="140" y2="186" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="134,184 140,196 146,184" fill="#c0392b"/>
+
+  <!-- Step 3: Experiment -->
+  <rect x="60" y="196" width="160" height="52" rx="6" fill="#fffdf8" stroke="#d4cbbf" stroke-width="1.5"/>
+  <text x="140" y="219" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#2a2520">Experiment</text>
+  <text x="140" y="237" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#6b5e52">Systematisch testen</text>
+
+  <!-- Arrow 3 -->
+  <line x1="140" y1="248" x2="140" y2="274" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="134,272 140,284 146,272" fill="#c0392b"/>
+
+  <!-- Step 4: Analyse -->
+  <rect x="60" y="284" width="160" height="52" rx="6" fill="#fffdf8" stroke="#d4cbbf" stroke-width="1.5"/>
+  <text x="140" y="307" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#2a2520">Analyse</text>
+  <text x="140" y="325" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#6b5e52">Daten auswerten</text>
+
+  <!-- Arrow 4 -->
+  <line x1="140" y1="336" x2="140" y2="362" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="134,360 140,372 146,360" fill="#c0392b"/>
+
+  <!-- Step 5: Theorie -->
+  <rect x="60" y="372" width="160" height="36" rx="6" fill="#c0392b"/>
+  <text x="140" y="395" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#ffffff">Theorie</text>
+</svg>

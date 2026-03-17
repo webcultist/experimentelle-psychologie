@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f5f0e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Tägliche Wiederholung — Experimentelle Psychologie | Uni Tübingen</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8; --bg-card: #fffdf8; --text: #2a2520; --text-secondary: #6b5e52;
+  --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a5276; --accent4: #7d3c98; --accent5: #b7950b;
+  --border: #d4cbbf; --highlight: #fef3c7; --shadow: rgba(42,37,32,0.08);
+  --card-h: min(440px, 58vh);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1a1816; --bg-card: #242220; --text: #e8e0d4; --text-secondary: #a89e8c; --accent: #e05545; --accent2: #3d9460; --accent3: #2e6fa3; --accent4: #9b59b6; --accent5: #d4ac0d; --border: #3a3530; --highlight: #3a3010; --shadow: rgba(0,0,0,0.3); }
+}
+[data-theme="dark"] { --bg: #1a1816; --bg-card: #242220; --text: #e8e0d4; --text-secondary: #a89e8c; --accent: #e05545; --accent2: #3d9460; --accent3: #2e6fa3; --accent4: #9b59b6; --accent5: #d4ac0d; --border: #3a3530; --highlight: #3a3010; --shadow: rgba(0,0,0,0.3); }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Source Sans 3', Georgia, serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 17px; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
+::selection { background: var(--accent); color: white; }
+
+/* HEADER */
+header { padding: 1.2rem 1.2rem 1rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(236,229,216,0.8), var(--bg)); }
+@media (prefers-color-scheme: dark) { header { background: linear-gradient(180deg, rgba(42,37,32,0.8), var(--bg)); } }
+[data-theme="dark"] header { background: linear-gradient(180deg, rgba(42,37,32,0.8), var(--bg)); }
+.header-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.8rem; }
+.back-link { font-size: 0.82rem; color: var(--accent3); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.3rem; }
+.back-link:hover { text-decoration: underline; }
+.header-title { text-align: center; flex: 1; }
+.header-title h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 4vw, 1.8rem); font-weight: 700; line-height: 1.2; }
+.header-title h1 em { color: var(--accent); font-style: italic; }
+.header-title .subtitle { font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem; }
+.theme-btn { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 0.4em 0.6em; cursor: pointer; font-size: 1rem; color: var(--text-secondary); min-width: 36px; }
+
+/* STATS BAR */
+.stats-bar { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; font-size: 0.78rem; }
+.stats-bar span { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 0.25em 0.8em; color: var(--text-secondary); }
+.stats-bar .stat-due { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+/* MAIN */
+main { max-width: 560px; margin: 0 auto; padding: 1.5rem 1rem 6rem; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+
+/* PROGRESS BAR */
+.session-progress { width: 100%; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.session-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent3)); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+
+/* CARD STACK */
+.card-stack-wrap { width: 100%; position: relative; }
+.review-card {
+  width: 100%; height: var(--card-h);
+  perspective: 1000px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.card-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+}
+.review-card.flipped .card-inner { transform: rotateY(180deg); }
+.card-front, .card-back {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  box-shadow: 0 4px 20px var(--shadow);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.card-back { transform: rotateY(180deg); }
+
+/* Card front */
+.card-front { justify-content: center; align-items: center; padding: 2rem 1.8rem; text-align: center; }
+.card-section-badge { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.2em 0.8em; border-radius: 3px; margin-bottom: 1rem; display: inline-block; }
+.card-section-badge.tier-a { background: rgba(192,57,43,0.1); color: var(--accent); }
+.card-section-badge.tier-b { background: rgba(26,82,118,0.1); color: var(--accent3); }
+.card-section-badge.tier-c { background: rgba(125,60,152,0.1); color: var(--accent4); }
+.card-front h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 3.5vw, 1.45rem); line-height: 1.3; margin-bottom: 0.5rem; }
+.card-topic { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+.card-hint { font-size: 0.75rem; color: var(--text-secondary); opacity: 0.7; display: flex; align-items: center; gap: 0.4rem; justify-content: center; }
+.card-hint::before { content: '↕'; font-size: 1rem; }
+.card-fsrs-info { position: absolute; top: 0.8rem; right: 0.8rem; font-size: 0.65rem; color: var(--text-secondary); opacity: 0.5; font-family: 'JetBrains Mono', monospace; }
+
+/* Card back */
+.card-back { padding: 1.4rem 1.6rem; overflow-y: auto; }
+.card-back-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+.card-content { font-size: 0.88rem; line-height: 1.75; }
+.card-content p { margin-bottom: 0.6rem; }
+.card-content strong { color: var(--text); }
+.card-content .def-box { border-left: 4px solid var(--accent); padding: 0.7rem 1rem; margin: 0.6rem 0; border-radius: 0 4px 4px 0; font-size: 0.85rem; background: var(--bg); }
+.card-content .def-box.green { border-left-color: var(--accent2); }
+.card-content .def-box.blue { border-left-color: var(--accent3); }
+.card-content .def-box.purple { border-left-color: var(--accent4); }
+.card-content .def-box.gold { border-left-color: var(--accent5); }
+.card-content .merksatz { background: linear-gradient(135deg,rgba(44,110,73,0.08),rgba(44,110,73,0.04)); border: 1px solid rgba(44,110,73,0.25); border-radius: 4px; padding: 0.7rem 1rem; margin: 0.6rem 0; font-size: 0.85rem; }
+.card-content .achtung { background: linear-gradient(135deg,rgba(192,57,43,0.06),rgba(192,57,43,0.03)); border: 1px solid rgba(192,57,43,0.2); border-radius: 4px; padding: 0.7rem 1rem; margin: 0.6rem 0; font-size: 0.85rem; }
+.card-content .example-box { background: linear-gradient(135deg,rgba(183,149,11,0.06),rgba(183,149,11,0.03)); border: 1px solid rgba(183,149,11,0.2); border-radius: 4px; padding: 0.7rem 1rem; margin: 0.6rem 0; font-size: 0.85rem; }
+.card-content .formula { font-family: 'JetBrains Mono', monospace; background: #2a2520; color: #f0e6d3; padding: 0.7rem 1rem; border-radius: 4px; margin: 0.6rem 0; overflow-x: auto; font-size: 0.78rem; line-height: 1.7; white-space: pre; }
+.card-content .formula .comment { color: #8b7d6b; }
+.card-content .formula .keyword { color: #e8a87c; }
+.card-content .formula .symbol { color: #c0392b; }
+.card-content .formula .result { color: #58d68d; }
+@media (prefers-color-scheme: dark) { .card-content .formula { background: #0d0c0b; } }
+[data-theme="dark"] .card-content .formula { background: #0d0c0b; }
+
+/* Swipe overlay hints */
+.swipe-hint { position: absolute; top: 50%; transform: translateY(-50%); pointer-events: none; opacity: 0; font-size: 1.5rem; font-weight: 700; padding: 0.4em 0.8em; border-radius: 6px; border: 3px solid; transition: opacity 0.15s; z-index: 10; }
+.swipe-hint.left { right: 1.5rem; color: var(--accent); border-color: var(--accent); background: rgba(192,57,43,0.1); }
+.swipe-hint.right { left: 1.5rem; color: var(--accent2); border-color: var(--accent2); background: rgba(44,110,73,0.1); }
+
+/* RATING BUTTONS */
+.rating-row { width: 100%; display: none; gap: 0.5rem; }
+.rating-row.visible { display: flex; }
+.rate-btn { flex: 1; min-height: 52px; border: none; border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1rem; transition: transform 0.15s, box-shadow 0.15s; -webkit-tap-highlight-color: transparent; }
+.rate-btn:active { transform: scale(0.96); }
+.rate-btn .interval { font-size: 0.65rem; font-weight: 400; opacity: 0.8; }
+.rate-again { background: rgba(192,57,43,0.12); color: var(--accent); border: 1.5px solid rgba(192,57,43,0.3); }
+.rate-again:hover { background: var(--accent); color: white; }
+.rate-hard { background: rgba(230,126,34,0.12); color: #e67e22; border: 1.5px solid rgba(230,126,34,0.3); }
+.rate-hard:hover { background: #e67e22; color: white; }
+.rate-good { background: rgba(44,110,73,0.12); color: var(--accent2); border: 1.5px solid rgba(44,110,73,0.3); }
+.rate-good:hover { background: var(--accent2); color: white; }
+.rate-easy { background: rgba(26,82,118,0.12); color: var(--accent3); border: 1.5px solid rgba(26,82,118,0.3); }
+.rate-easy:hover { background: var(--accent3); color: white; }
+
+/* EMPTY STATE */
+#empty-state { display: none; text-align: center; padding: 3rem 1.5rem; animation: fadeIn 0.5s ease; width: 100%; }
+.empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+#empty-state h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 0.8rem; }
+#empty-state p { color: var(--text-secondary); max-width: 380px; margin: 0 auto 0.6rem; }
+.forecast-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; margin: 1.5rem auto 0; max-width: 320px; font-size: 0.88rem; }
+.forecast-box .fc-row { display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid var(--border); }
+.forecast-box .fc-row:last-child { border-bottom: none; }
+.forecast-box .fc-label { color: var(--text-secondary); }
+.forecast-box .fc-val { font-weight: 600; color: var(--accent3); }
+.empty-actions { display: flex; gap: 0.8rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
+.btn-primary { background: var(--accent3); color: white; border: none; padding: 0.7em 1.4em; border-radius: 5px; font-family: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; transition: opacity 0.15s; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-secondary { background: none; color: var(--text-secondary); border: 1px solid var(--border); padding: 0.7em 1.4em; border-radius: 5px; font-family: inherit; font-size: 0.88rem; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; transition: border-color 0.15s; }
+.btn-secondary:hover { border-color: var(--text-secondary); color: var(--text); }
+
+/* SUMMARY */
+#summary { display: none; text-align: center; padding: 2rem 1rem; animation: fadeIn 0.5s ease; width: 100%; }
+#summary h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 1.5rem; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+.summary-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 0.5rem; }
+.summary-stat .ss-val { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--accent3); line-height: 1; margin-bottom: 0.3rem; }
+.summary-stat .ss-label { font-size: 0.72rem; color: var(--text-secondary); }
+.rating-breakdown { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; text-align: left; }
+.rating-breakdown h4 { font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.8rem; }
+.rb-bar-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; font-size: 0.82rem; }
+.rb-label { width: 56px; font-weight: 600; }
+.rb-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.rb-bar { height: 100%; border-radius: 3px; transition: width 0.6s ease 0.2s; }
+.rb-count { width: 24px; text-align: right; color: var(--text-secondary); }
+.rb-again .rb-bar { background: var(--accent); }
+.rb-hard .rb-bar { background: #e67e22; }
+.rb-good .rb-bar { background: var(--accent2); }
+.rb-easy .rb-bar { background: var(--accent3); }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideOut { to { opacity: 0; transform: translateX(var(--slide-dir, -120%)); } }
+
+/* Card slide-off animation */
+.review-card.slide-out { animation: slideOut 0.35s ease-in forwards; }
+
+@media (min-width: 560px) {
+  header { padding: 1.5rem 2rem 1.2rem; }
+  main { padding: 2rem 1.5rem 6rem; }
+  .rating-row { gap: 0.8rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <a class="back-link" href="index.html">← Zurück</a>
+    <div class="header-title">
+      <h1>Tägliche <em>Wiederholung</em></h1>
+      <p class="subtitle">Experimentelle Psychologie &mdash; Spaced Repetition</p>
+    </div>
+    <button class="theme-btn" id="themeBtn" title="Dark mode">◑</button>
+  </div>
+  <div class="stats-bar">
+    <span class="stat-due" id="statDue">0 fällig</span>
+    <span id="statReviewed">0 wiederholt</span>
+    <span id="statRetention">— Retention</span>
+    <span id="statTotal">0 gesamt</span>
+  </div>
+  <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.6rem">
+    <button onclick="exportAnki()" style="background:var(--accent3);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;">📥 Anki Export</button>
+    <button onclick="exportData()" style="background:var(--accent2);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;">💾 Daten exportieren</button>
+    <button onclick="document.getElementById('importFile').click()" style="background:var(--accent4);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;">📤 Daten importieren</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+</header>
+
+<main>
+  <div class="session-progress" id="progressWrap" style="display:none">
+    <div class="session-progress-fill" id="progressFill"></div>
+  </div>
+
+  <!-- Empty state: nothing due -->
+  <div id="empty-state">
+    <div class="empty-icon">🎉</div>
+    <h2>Nichts fällig!</h2>
+    <p>Alle Karten sind wiederholt. Komm morgen wieder!</p>
+    <div class="forecast-box">
+      <div class="fc-row"><span class="fc-label">Heute wiederholt</span><span class="fc-val" id="fcToday">0</span></div>
+      <div class="fc-row"><span class="fc-label">Morgen fällig</span><span class="fc-val" id="fcTomorrow">0</span></div>
+      <div class="fc-row"><span class="fc-label">Übermorgen</span><span class="fc-val" id="fcDayAfter">0</span></div>
+      <div class="fc-row"><span class="fc-label">Neue Karten</span><span class="fc-val" id="fcNew">0</span></div>
+    </div>
+    <div class="empty-actions">
+      <a class="btn-primary" href="crash-course.html">Crash Course</a>
+      <button class="btn-secondary" id="btnAddNew">+ Neue Karten einführen</button>
+    </div>
+  </div>
+
+  <!-- Card area -->
+  <div id="card-area" style="display:none; width:100%">
+    <div class="card-stack-wrap">
+      <div class="review-card" id="reviewCard">
+        <div class="swipe-hint left" id="hintLeft">✗</div>
+        <div class="swipe-hint right" id="hintRight">✓</div>
+        <div class="card-inner" id="cardInner">
+          <div class="card-front" id="cardFront">
+            <span class="card-section-badge" id="cardBadge"></span>
+            <h2 id="cardTitle"></h2>
+            <p class="card-topic" id="cardTopic"></p>
+            <p class="card-hint">Tippe zum Umdrehen</p>
+            <span class="card-fsrs-info" id="cardFsrsInfo"></span>
+          </div>
+          <div class="card-back" id="cardBack">
+            <div class="card-back-title" id="cardBackTitle"></div>
+            <div class="card-content" id="cardContent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rating-row" id="ratingRow">
+      <button class="rate-btn rate-again" onclick="rateCard(1)">
+        <span>Nochmal</span>
+        <span class="interval" id="int1"></span>
+      </button>
+      <button class="rate-btn rate-hard" onclick="rateCard(2)">
+        <span>Schwer</span>
+        <span class="interval" id="int2"></span>
+      </button>
+      <button class="rate-btn rate-good" onclick="rateCard(3)">
+        <span>Gut</span>
+        <span class="interval" id="int3"></span>
+      </button>
+      <button class="rate-btn rate-easy" onclick="rateCard(4)">
+        <span>Leicht</span>
+        <span class="interval" id="int4"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div id="summary">
+    <h2>Session beendet! 🎓</h2>
+    <div class="summary-grid">
+      <div class="summary-stat">
+        <div class="ss-val" id="sumReviewed">0</div>
+        <div class="ss-label">Wiederholt</div>
+      </div>
+      <div class="summary-stat">
+        <div class="ss-val" id="sumRetention">—</div>
+        <div class="ss-label">Retention</div>
+      </div>
+      <div class="summary-stat">
+        <div class="ss-val" id="sumStreak">0</div>
+        <div class="ss-label">Richtig</div>
+      </div>
+    </div>
+    <div class="rating-breakdown">
+      <h4>Bewertungen</h4>
+      <div class="rb-bar-row rb-again"><span class="rb-label" style="color:var(--accent)">Nochmal</span><div class="rb-bar-wrap"><div class="rb-bar" id="rbAgain" style="width:0%"></div></div><span class="rb-count" id="rcAgain">0</span></div>
+      <div class="rb-bar-row rb-hard"><span class="rb-label" style="color:#e67e22">Schwer</span><div class="rb-bar-wrap"><div class="rb-bar" id="rbHard" style="width:0%"></div></div><span class="rb-count" id="rcHard">0</span></div>
+      <div class="rb-bar-row rb-good"><span class="rb-label" style="color:var(--accent2)">Gut</span><div class="rb-bar-wrap"><div class="rb-bar" id="rbGood" style="width:0%"></div></div><span class="rb-count" id="rcGood">0</span></div>
+      <div class="rb-bar-row rb-easy"><span class="rb-label" style="color:var(--accent3)">Leicht</span><div class="rb-bar-wrap"><div class="rb-bar" id="rbEasy" style="width:0%"></div></div><span class="rb-count" id="rcEasy">0</span></div>
+    </div>
+    <div class="empty-actions">
+      <button class="btn-primary" onclick="location.reload()">Neue Session</button>
+      <a class="btn-secondary" href="index.html">Zurück</a>
+    </div>
+  </div>
+</main>
+
+<script>
+// ─── FSRS ENGINE ───────────────────────────────────────────────────────────
+const FSRS = (() => {
+  const w = [0.4, 0.6, 2.4, 5.8, 4.93, 0.94, 0.86, 0.01, 1.49, 0.14, 0.94, 2.18, 0.05, 0.34, 1.26, 0.29, 2.61];
+  const DAY_MS = 86400000;
+  function initCard() { return { stability:0, difficulty:0, elapsedDays:0, scheduledDays:0, reps:0, lapses:0, state:0, due:Date.now(), lastReview:0 }; }
+  function clamp(v,a,b){return Math.min(Math.max(v,a),b);}
+  function initDifficulty(r){return clamp(w[4]-(r-3)*w[5],1,10);}
+  function initStability(r){return Math.max(w[r-1],0.1);}
+  function nextDifficulty(d,r){const nd=d-w[6]*(r-3);return clamp(w[7]*initDifficulty(3)+(1-w[7])*nd,1,10);}
+  function nextRecallStability(d,s,r,rating){const hp=rating===2?w[15]:1,eb=rating===4?w[16]:1;return s*(1+Math.exp(w[8])*(11-d)*Math.pow(s,-w[9])*(Math.exp((1-r)*w[10])-1)*hp*eb);}
+  function nextForgetStability(d,s,r){return w[11]*Math.pow(d,-w[12])*(Math.pow(s+1,w[13])-1)*Math.exp((1-r)*w[14]);}
+  function nextInterval(s){return Math.max(1,Math.round(Math.min((s/9)*(Math.pow(0.9,1/-0.5)-1),365)));}
+  function retrievability(s,e){return s<=0?0:Math.pow(1+e/(9*s),-1);}
+  function review(card,rating){
+    const now=Date.now(),c={...card},elapsed=c.lastReview?(now-c.lastReview)/DAY_MS:0;
+    c.elapsedDays=elapsed;c.lastReview=now;c.reps++;
+    if(c.state===0){
+      c.difficulty=initDifficulty(rating);c.stability=initStability(rating);
+      c.state=rating===1?1:2;
+      if(rating===1){c.scheduledDays=0;c.due=now;c.lapses++;}
+      else{c.scheduledDays=nextInterval(c.stability);c.due=now+c.scheduledDays*DAY_MS;}
+    } else {
+      const r=retrievability(c.stability,elapsed);
+      c.difficulty=nextDifficulty(c.difficulty,rating);
+      if(rating===1){c.stability=nextForgetStability(c.difficulty,c.stability,r);c.state=3;c.lapses++;c.scheduledDays=0;c.due=now;}
+      else{c.stability=nextRecallStability(c.difficulty,c.stability,r,rating);c.state=2;c.scheduledDays=nextInterval(c.stability);c.due=now+c.scheduledDays*DAY_MS;}
+    }
+    return c;
+  }
+  function getStore(slug){try{return JSON.parse(localStorage.getItem(`lp_${slug}_fsrs`))||{};}catch{return {};}}
+  function saveStore(slug,store){localStorage.setItem(`lp_${slug}_fsrs`,JSON.stringify(store));}
+  function reviewCard(slug,id,rating){const s=getStore(slug);s[id]=review(s[id]||initCard(),rating);saveStore(slug,s);return s[id];}
+  function getDueCards(slug){const s=getStore(slug),now=Date.now();return Object.entries(s).filter(([,c])=>c.due<=now).map(([id,c])=>({id,...c})).sort((a,b)=>a.due-b.due);}
+  function getStats(slug){
+    const s=getStore(slug),entries=Object.values(s),now=Date.now();
+    const due=entries.filter(c=>c.due<=now).length;
+    const avg=entries.length?entries.reduce((sum,c)=>sum+retrievability(c.stability,(now-c.lastReview)/DAY_MS),0)/entries.length:0;
+    return {total:entries.length,due,newCards:entries.filter(c=>c.state===0).length,avgRetention:Math.round(avg*100)};
+  }
+  function getForecast(slug){
+    const s=getStore(slug),now=Date.now(),d1=now+DAY_MS,d2=now+2*DAY_MS;
+    const entries=Object.values(s);
+    return {tomorrow:entries.filter(c=>c.due>now&&c.due<=d1).length,dayAfter:entries.filter(c=>c.due>d1&&c.due<=d2).length,newCards:entries.filter(c=>c.state===0).length};
+  }
+  function previewIntervals(slug,id){
+    const s=getStore(slug),c=s[id]||initCard();
+    return [1,2,3,4].map(r=>{const nc=review(c,r);return nc.scheduledDays||0;});
+  }
+  return {reviewCard,getDueCards,getStats,getForecast,previewIntervals,getStore,review,initCard};
+})();
+
+// ─── CARD DATA ─────────────────────────────────────────────────────────────
+const SLUG = 'experimentelle-psychologie';
+const CARDS = [
+// Wissenschaftstheorie
+{id:'wt1',title:'Logischer Empirismus',tier:'a',topic:'Wissenschaftstheorie',body:'<p>Wiener Kreis (Carnap, Schlick, 1920er): Nur <strong>empirisch überprüfbare</strong> Aussagen sind wissenschaftlich. Theorie + Beobachtung = Erkenntnis.</p><div class="merksatz">Sinnkriterium: Nicht-empirische Aussagen gelten als sinnlos.</div>'},
+{id:'wt2',title:'Kritischer Rationalismus (Popper)',tier:'a',topic:'Wissenschaftstheorie',body:'<p><strong>Falsifikationismus:</strong> Theorien können nie bewiesen, nur <strong>widerlegt</strong> werden. Wissenschaftlich = prinzipiell falsifizierbar.</p><div class="def-box blue"><strong>Asymmetrie:</strong> Verifikation unmöglich, Falsifikation mit einem Gegenbeispiel möglich.</div><div class="example-box">„Alle Schwäne sind weiß" — falsifizierbar. „Irgendwo gibt es Geister" — nicht falsifizierbar.</div>'},
+{id:'wt3',title:'Kuhn: Paradigmenwechsel',tier:'a',topic:'Wissenschaftstheorie',body:'<p>Normalwissenschaft → Anomalien → Krise → Paradigmenwechsel (Revolution). Nicht linear!</p><div class="merksatz">Paradigma = gemeinsame Annahmen, Methoden, Beispiele einer Wissenschaftsgemeinschaft.</div>'},
+{id:'wt4',title:'Induktion vs. Deduktion',tier:'a',topic:'Wissenschaftstheorie',body:'<p><strong>Induktion:</strong> Einzelfall → Allgemeines (unsicher!). <strong>Deduktion:</strong> Allgemeines → Einzelfall (gültig).</p><div class="merksatz">Popper: <strong>Hypothetisch-deduktive Methode</strong> — Hypothese → Vorhersage → empirisch prüfen (falsifizieren!).</div>'},
+{id:'wt5',title:'Theoriebegriff & Hypothesen',tier:'a',topic:'Wissenschaftstheorie',body:'<p>Theorie = System von Hypothesen. Hypothese = falsifizierbare Aussage über Zusammenhänge.</p><div class="def-box"><strong>Operationalisierung:</strong> Messbarmachung theoretischer Konstrukte (z.B. Intelligenz → IQ-Test).</div>'},
+{id:'wt6',title:'Erkenntnistheoretische Positionen',tier:'a',topic:'Wissenschaftstheorie',body:'<p><strong>Empirismus:</strong> Erkenntnis durch Sinneserfahrung (Locke, Hume).</p><p><strong>Rationalismus:</strong> Erkenntnis durch Vernunft (Descartes).</p><p><strong>Realismus:</strong> Welt existiert unabhängig (Popper).</p><p><strong>Skeptizismus:</strong> Sichere Erkenntnis unmöglich (Hume).</p>'},
+{id:'wt7',title:'Behaviorismus',tier:'a',topic:'Wissenschaftstheorie',body:'<p>Watson, Skinner: Nur beobachtbares Verhalten ist wissenschaftlich. S → R (Stimulus → Response).</p><div class="achtung">Problem: Kognitive Prozesse ausgeschlossen. Übermäßige Vereinfachung.</div>'},
+{id:'wt8',title:'Kognitive Wende',tier:'a',topic:'Wissenschaftstheorie',body:'<p>Paradigmenwechsel: Behaviorismus → Kognitivismus (~1960).</p><p><strong>Anomalien:</strong> Chomsky (Sprache ≠ nur Verstärkung), Tolman (kognitive Karten bei Ratten).</p><div class="example-box">Lachs-fMRI-Studie: Ohne Korrektur für multiples Testen „Aktivierung" bei totem Lachs!</div>'},
+// Messtheorie
+{id:'mt1',title:'Skalenniveaus im Überblick',tier:'a',topic:'Messtheorie',body:'<p><strong>Nominal:</strong> = / ≠. <strong>Ordinal:</strong> + Rangfolge. <strong>Intervall:</strong> + gleiche Abstände. <strong>Verhältnis:</strong> + absoluter Nullpunkt.</p><div class="merksatz">Jede höhere Skala schließt die Eigenschaften der unteren ein. Statistik muss zum Skalenniveau passen!</div>'},
+{id:'mt2',title:'Repräsentationstheorem',tier:'a',topic:'Messtheorie',body:'<p>Messung = Homomorphismus vom empirischen Relativ in ein numerisches Relativ.</p><div class="def-box blue"><strong>Eindeutigkeitstheorem:</strong> Welche Transformationen sind erlaubt? Nominal: bijektiv. Ordinal: monoton. Intervall: linear (ax+b). Verhältnis: ähnlich (ax).</div>'},
+{id:'mt3',title:'Schwache Ordnung',tier:'a',topic:'Messtheorie',body:'<p>Empirisches Relativ <strong>(M, ≥)</strong> ist schwache Ordnung wenn:</p><div class="formula"><span class="keyword">Transitivität:</span>  x ≥ y ∧ y ≥ z  →  x ≥ z\n<span class="keyword">Konnexität:</span>     x ≥ y  ∨  y ≥ x     <span class="comment">// alle Paare vergleichbar</span></div>'},
+{id:'mt4',title:'Intervallskala',tier:'a',topic:'Messtheorie',body:'<p>= / ≠ + Rangfolge + <strong>gleiche Abstände</strong>. Kein absoluter Nullpunkt.</p><div class="def-box">Erlaubte Transformation: y = a·x + b (a > 0). Erlaubt: Mittelwert, SD, Pearson r.</div><div class="example-box">Temperatur °C, IQ, Jahreszahlen.</div>'},
+{id:'mt5',title:'Verhältnisskala',tier:'a',topic:'Messtheorie',body:'<p>Alle Eigenschaften + <strong>absoluter Nullpunkt</strong>. Transformation: y = a·x (a > 0).</p><div class="example-box">Gewicht, Länge, Reaktionszeit, Kelvin. 0 kg = wirklich kein Gewicht.</div>'},
+{id:'mt6',title:'Zeilensummen als Homomorphismus',tier:'a',topic:'Messtheorie',body:'<p>Wenn schwache Ordnung gilt → <strong>Zeilensummen = Rangzahlen</strong> = gültiger ordinaler Homomorphismus.</p><div class="merksatz">Klausurtipp: Immer konkrete Gegenbeispiele mit Zeilen-/Spaltenangabe nennen!</div>'},
+// Versuchsplanung
+{id:'vp1',title:'Interne vs. externe Validität',tier:'a',topic:'Versuchsplanung',body:'<p><strong>Intern:</strong> Kausale Interpretation möglich (keine Konfundierung). <strong>Extern:</strong> Generalisierbarkeit auf andere Personen/Settings.</p><div class="achtung">Trade-off: Labor → hohe interne, niedrige externe Validität. Feld → umgekehrt.</div>'},
+{id:'vp2',title:'UV, AV, SV',tier:'a',topic:'Versuchsplanung',body:'<p><strong>UV</strong> (unabhängige Variable): Manipuliert. <strong>AV</strong> (abhängige Variable): Gemessen. <strong>SV</strong> (Störvariable): Systematisch oder unsystematisch.</p><div class="merksatz">Konfundierung: SV variiert systematisch mit UV → Kausalaussage unmöglich.</div>'},
+{id:'vp3',title:'Experimentelle Designs',tier:'a',topic:'Versuchsplanung',body:'<p><strong>Zwischen-Gruppen:</strong> Verschiedene VPs pro Bedingung. <strong>Innerhalb-Gruppen (Messwiederholung):</strong> Gleiche VPs in allen Bedingungen.</p><div class="def-box green">Messwiederholung: mehr Power, weniger VPs nötig. Problem: Carry-over-Effekte, Lernen, Müdigkeit.</div>'},
+{id:'vp4',title:'Kontrolltechniken für SVs',tier:'a',topic:'Versuchsplanung',body:'<p><strong>Konstanthaltung</strong>: SV festhalten (z.B. alle Tests morgens). <strong>Randomisierung</strong>: Zufällige Zuweisung. <strong>Parallelisierung (Matching)</strong>: Gruppen nach SV angleichen. <strong>Gegenbalancierung</strong>: Alle Reihenfolgen gleichhäufig.</div>'},
+{id:'vp5',title:'Randomisierung vs. Parallelisierung',tier:'a',topic:'Versuchsplanung',body:'<p><strong>Randomisierung:</strong> Kontrolliert ALLE SVs (auch unbekannte!), einfach, keine Vorabmessung. Braucht große Stichproben.</p><p><strong>Parallelisierung:</strong> Nur bekannte SVs, Vorabmessung nötig. Funktioniert auch bei kleinen N.</p><div class="merksatz">Klausur-Dauerbrenner: „Nennen Sie zwei Vorteile der Randomisierung!"</div>'},
+{id:'vp6',title:'Ceteris-paribus-Klausel',tier:'a',topic:'Versuchsplanung',body:'<div class="def-box">„Unter sonst gleichen Bedingungen." Zwischen den Gruppen darf sich <strong>nur die UV</strong> unterscheiden. Verletzung → Konfundierung → keine Kausalaussage.</div>'},
+{id:'vp7',title:'Verblindung',tier:'a',topic:'Versuchsplanung',body:'<p><strong>Einfach:</strong> VP weiß nicht → gegen Placebo, Demand Characteristics.</p><p><strong>Doppelt:</strong> + VL weiß nicht → + gegen Rosenthal-Effekt.</p><p><strong>Dreifach:</strong> + Auswerter weiß nicht → + gegen Auswertungsbias.</p><div class="example-box">Pygmalion (Rosenthal & Jacobson): Lehrer-Erwartung beeinflusst Schülerleistung → self-fulfilling prophecy.</div>'},
+{id:'vp8',title:'Demand Characteristics & Hawthorne',tier:'a',topic:'Versuchsplanung',body:'<p><strong>Demand Characteristics (Orne):</strong> VPs verhalten sich so, wie sie glauben, dass der VL es erwartet.</p><p><strong>Hawthorne-Effekt:</strong> Bloße Beobachtung verändert Verhalten (unabhängig von der UV).</p>'},
+{id:'vp9',title:'Forschungsethik',tier:'a',topic:'Versuchsplanung',body:'<p><strong>Milgram:</strong> 65% bis 450V, kein informed consent. <strong>Stanford Prison:</strong> Abbruch nach 6 Tagen. <strong>Little Albert:</strong> Keine Dekonditionierung.</p><div class="merksatz">Heute: (1) Informierte Einwilligung (2) Ethik-Kommission (3) Debriefing (4) Datenschutz (5) Schadensvermeidung.</div>'},
+// Logik
+{id:'lo1',title:'Aussagenlogik: Grundoperatoren',tier:'b',topic:'Logik',body:'<div class="formula"><span class="keyword">¬A</span>      Negation (nicht A)\n<span class="keyword">A ∧ B</span>   Konjunktion (und)\n<span class="keyword">A ∨ B</span>   Disjunktion (oder, inkl.)\n<span class="keyword">A → B</span>   Konditional (wenn, dann)\n<span class="keyword">A ↔ B</span>   Bikonditional (gdw.)</div>'},
+{id:'lo2',title:'Konditional (→)',tier:'b',topic:'Logik',body:'<p>A → B ist nur falsch wenn A=wahr und B=falsch!</p><div class="formula"><span class="keyword">A → B</span>  ≡  <span class="result">¬A ∨ B</span></div><div class="achtung">Häufigster Fehler: „A → B" bedeutet NICHT „B → A"! Umkehrung ist kein Gesetz.</div>'},
+{id:'lo3',title:'Kontraposition',tier:'b',topic:'Logik',body:'<div class="formula"><span class="keyword">(A → B)</span> <span class="symbol">≡</span> <span class="result">(¬B → ¬A)</span></div><div class="example-box">„Wenn neurotisch (A), dann Angst (B)." Kontraposition: „Keine Angst → nicht neurotisch."</div>'},
+{id:'lo4',title:'Quantoren & Negation',tier:'b',topic:'Logik',body:'<div class="formula"><span class="keyword">∀x: P(x)</span>     „Für alle x gilt P"\n<span class="keyword">∃x: P(x)</span>     „Es gibt mind. ein x"\n<span class="keyword">¬(∀x: P(x))</span> <span class="symbol">≡</span> <span class="result">∃x: ¬P(x)</span></div><div class="merksatz">Ein Gegenbeispiel reicht, um Allaussage zu falsifizieren!</div>'},
+{id:'lo5',title:'De Morgan',tier:'b',topic:'Logik',body:'<div class="formula"><span class="keyword">¬(A ∧ B)</span> <span class="symbol">≡</span> <span class="result">¬A ∨ ¬B</span>\n<span class="keyword">¬(A ∨ B)</span> <span class="symbol">≡</span> <span class="result">¬A ∧ ¬B</span></div><div class="example-box">„Nicht (hungrig UND müde)" = „Nicht hungrig ODER nicht müde."</div>'},
+{id:'lo6',title:'Wahrheitstabellen & Tautologien',tier:'b',topic:'Logik',body:'<p><strong>Tautologie:</strong> Immer wahr. Bsp: A∨¬A, ¬(A∧¬A), (A→B)↔(¬B→¬A).</p><div class="merksatz">Klausur: (A∧B) → (A→B) ist Tautologie! Bei falschem Antezedens ist Konditional automatisch wahr.</div>'},
+{id:'lo7',title:'Abbildungstypen',tier:'b',topic:'Logik',body:'<p><strong>Injektiv:</strong> Verschiedene Urbilder → verschiedene Bilder. <strong>Surjektiv:</strong> Jedes Bild wird getroffen. <strong>Bijektiv:</strong> Beides → umkehrbar.</p><div class="merksatz">Messtheorie: Bijektiv → Nominal. Monoton → Ordinal. Linear (ax+b) → Intervall.</div>'},
+// Statistik
+{id:'st1',title:'NHST & p-Wert',tier:'b',topic:'Statistik',body:'<p>H₀ → Daten → Teststatistik → p-Wert → p < α? → H₀ ablehnen.</p><div class="def-box"><strong>p-Wert:</strong> P(Daten so extrem | H₀). NICHT: P(H₀ | Daten)!</div><div class="achtung">❌ „p=.03 → H₀ ist 3% wahrscheinlich" — FALSCH!</div>'},
+{id:'st2',title:'Fehlerarten & Power',tier:'b',topic:'Statistik',body:'<p><strong>α-Fehler (Typ I):</strong> H₀ fälschlich ablehnen (Fehlalarm). <strong>β-Fehler (Typ II):</strong> H₀ beibehalten obwohl falsch (Übersehen).</p><div class="merksatz"><strong>Power = 1−β ≥ .80.</strong> Steigt mit: Effektstärke ↑, n ↑, α ↑, Streuung ↓.</div>'},
+{id:'st3',title:'Effektstärken',tier:'b',topic:'Statistik',body:'<p><strong>Cohen\'s d</strong> = (μ₁−μ₂)/σ. Klein=0.2, Mittel=0.5, Groß=0.8.</p><p><strong>r</strong>: Klein=0.1, Mittel=0.3, Groß=0.5.</p><div class="merksatz">Signifikanz ≠ Effektstärke! Großes N → kleine Effekte signifikant. Effektstärke ist inhaltlich bedeutsam.</div>'},
+{id:'st4',title:'Multiple Vergleiche & KI',tier:'b',topic:'Statistik',body:'<p>20 Tests, α=.05 → ~1 Falsch-Positiv! <strong>Bonferroni:</strong> α/k. <strong>FDR:</strong> weniger konservativ.</p><p><strong>95%-KI:</strong> Bei ∞ Wiederholungen enthält 95% den wahren Wert.</div>'},
+// Psychophysik
+{id:'pp1',title:'Weber-Gesetz',tier:'b',topic:'Psychophysik',body:'<p>Unterschiedsschwelle ΔI ist proportional zur Reizintensität I.</p><div class="formula"><span class="keyword">ΔI / I = k</span>   <span class="comment">// Weber-Bruch = konstant</span></div><div class="example-box">Gewicht: k ≈ 1/50. Tonhöhe: k ≈ 1/333 → viel feiner.</div>'},
+{id:'pp2',title:'Fechner-Gesetz',tier:'b',topic:'Psychophysik',body:'<p>Empfindungsstärke wächst logarithmisch mit physikalischer Intensität.</p><div class="formula"><span class="keyword">Ψ = k · log(I/I₀)</span></div><p>Baut auf Weber auf. Gleiche Empfindungsunterschiede → geometrisch steigende Reize.</p>'},
+{id:'pp3',title:'Stevens\' Potenzgesetz',tier:'b',topic:'Psychophysik',body:'<div class="formula"><span class="keyword">Ψ = k · I^n</span></div><p>n < 1: kompressive Funktion (Helligkeit). n = 1: linear (Länge). n > 1: expansiv (Schmerz).</p><div class="merksatz">Empirisch besser als Fechner für viele Modalitäten!</div>'},
+{id:'pp4',title:'Psychophysische Methoden',tier:'b',topic:'Psychophysik',body:'<p><strong>Grenzmethode:</strong> Reiz auf/ab bis Umschlag. ⚠ Erwartungsfehler.</p><p><strong>Konstante Reize:</strong> Zufällige Reihenfolge → S-Kurve. Schwelle = 50%. Genaueste!</p><p><strong>Herstellung:</strong> VP stellt selbst ein. Schnell, aber systematisch verzerrt.</p>'},
+{id:'pp5',title:'Signalentdeckungstheorie (SDT)',tier:'b',topic:'Psychophysik',body:'<p>Keine feste Schwelle! Trennt <strong>Sensitivität</strong> (d\') und <strong>Antwortneigung</strong> (β).</p><div class="formula"><span class="keyword">d\'</span> = z(Hit-Rate) − z(False-Alarm-Rate)</div><div class="example-box">Rauchmelder: d\' = Sensitivität. β = Auslöseschwelle (liberal → mehr Fehlalarme).</div>'},
+{id:'pp6',title:'Weber-Bruch Rechnung',tier:'b',topic:'Psychophysik',body:'<div class="example-box">k=1/50 (Gewicht). 1 kg → JND=20g. 10 kg → JND=200g. 20 kg → JND=400g.<br>k=1/333 (Tonhöhe) → viel feiner als Gewicht!</div>'},
+{id:'pp7',title:'Fechner vs. Stevens',tier:'b',topic:'Psychophysik',body:'<p>Fechner: logarithmisch (baut auf Weber). Stevens: Potenzfunktion (empirisch oft besser).</p><div class="merksatz">Für n=1 wäre Stevens linear, Fechner nie. Unterschiedliche Vorhersagen möglich.</div>'},
+// Wahrscheinlichkeit
+{id:'ws1',title:'Kolmogorov-Axiome',tier:'c',topic:'Wahrscheinlichkeit',body:'<p><strong>Ω</strong> = Ergebnismenge. <strong>A ⊆ Ω</strong> = Ereignis. <strong>P(A)</strong> ∈ [0,1].</p><div class="formula"><span class="keyword">1.</span> P(A) ≥ 0    <span class="keyword">2.</span> P(Ω) = 1    <span class="keyword">3.</span> A∩B=∅ ⇒ P(A∪B)=P(A)+P(B)</div>'},
+{id:'ws2',title:'Bedingte Wahrscheinlichkeit & Bayes',tier:'c',topic:'Wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">P(A|B)</span> = P(A∩B) / P(B)</div><div class="formula"><span class="keyword">Bayes:</span> P(A|B) = P(B|A)·P(A) / P(B)</div><div class="example-box">Diagnostischer Test: Sensitivität, Spezifität, Basisrate → positiver Vorhersagewert.</div>'},
+{id:'ws3',title:'Normalverteilung & ZGS',tier:'c',topic:'Wahrscheinlichkeit',body:'<p><strong>Zentraler Grenzwertsatz:</strong> Summe vieler unabhängiger Einflüsse → ~normalverteilt.</p><div class="merksatz"><strong>68-95-99.7:</strong> ~68% in μ±1σ, ~95% in μ±2σ, ~99.7% in μ±3σ.</div>'},
+{id:'ws4',title:'Erwartungswert & Varianz',tier:'c',topic:'Wahrscheinlichkeit',body:'<div class="formula"><span class="keyword">E(X)</span> = Σ xᵢ·P(xᵢ)   <span class="keyword">Var(X)</span> = E[(X−μ)²]</div><p><strong>Unabhängigkeit:</strong> A⊥B ⟺ P(A∩B) = P(A)·P(B). Unabhängig ≠ disjunkt!</p>'},
+// Lernen
+{id:'le1',title:'Paarassoziationslernen & Lernkurve',tier:'c',topic:'Lernen',body:'<p>Wort-Wort-Paare lernen. Lernkurve: Schneller Anfang → Plateau (negativ beschleunigt).</p><div class="formula"><span class="keyword">P(n)</span> = 1 − (1−α)<sup>n</sup>   <span class="comment">// α = Lernrate</span></div>'},
+{id:'le2',title:'Serielle Positionskurve',tier:'c',topic:'Lernen',body:'<p><strong>Primacy</strong> (Anfang → LZG) + <strong>Recency</strong> (Ende → AG) = <strong>U-Kurve</strong>. Mitte am schlechtesten.</p><div class="merksatz">Warum U? Anfang: oft wiederholt → LZG. Ende: noch im AG. Mitte: verdrängt.</div>'},
+{id:'le3',title:'Aktive Lernstrategien',tier:'c',topic:'Lernen',body:'<p><strong>Testing Effect:</strong> Abruf ist besser als Wiederholung. <strong>Spacing Effect:</strong> Verteiltes besser als massiertes Lernen. <strong>Interleaving:</strong> Wechsel zwischen Themen besser als Blocken.</p>'},
+{id:'le4',title:'Mehrspeichermodell',tier:'c',topic:'Lernen',body:'<p><strong>Sensorisch</strong> (~250ms) → <strong>Kurzzeitspeicher</strong> (~20s, 7±2 Chunks) → <strong>Langzeitspeicher</strong> (∞).</p><div class="merksatz"><strong>Glanzer & Cunitz (1966):</strong> 30s Ablenkung → Recency weg, Primacy bleibt. → Zwei-Speicher-Theorie!</div>'},
+{id:'le5',title:'Behaviorismus → Kognitive Wende',tier:'c',topic:'Lernen',body:'<p><strong>Watson:</strong> S→R. <strong>Skinner:</strong> Operante Konditionierung (Verstärkung/Bestrafung).</p><p><strong>Chomsky:</strong> Sprache ≠ nur Verstärkung. <strong>Tolman:</strong> Kognitive Karten. <strong>Miller:</strong> 7±2 Chunks.</p>'},
+{id:'le6',title:'Experimentelle Dissoziation',tier:'c',topic:'Lernen',body:'<p>Eine Manipulation beeinflusst Prozess A, aber nicht B → beide müssen <strong>getrennte Systeme</strong> sein.</p><div class="example-box">Glanzer & Cunitz: Ablenkung löscht Recency (AG) aber nicht Primacy (LZG) → Zwei separate Speicher.</div>'},
+];
+
+const CARD_MAP = {};
+CARDS.forEach(c => { CARD_MAP[c.id] = c; });
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+const NEW_CARDS_PER_SESSION = 10;
+let sessionQueue = [];
+let sessionIdx = 0;
+let sessionStart = 0;
+let reviewedCount = 0;
+let ratingCounts = {1:0, 2:0, 3:0, 4:0};
+let isFlipped = false;
+let isAnimating = false;
+
+// Touch state
+let touchStartX = 0;
+let touchStartY = 0;
+let touchCurrentX = 0;
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+function init() {
+  // Theme
+  const savedTheme = localStorage.getItem('lp_theme');
+  if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+
+  // Migrate triage if needed
+  tryMigrateTriage();
+
+  // Seed new cards into FSRS store if first visit
+  seedNewCards();
+
+  // Build session queue
+  buildQueue();
+  updateStatsBar();
+  renderUI();
+}
+
+function tryMigrateTriage() {
+  const triageKey = `lp_${SLUG}_triage`;
+  const old = localStorage.getItem(triageKey);
+  if (!old) return;
+  try {
+    const triage = JSON.parse(old);
+    const store = FSRS.getStore(SLUG);
+    const ratingMap = {red:1, yellow:2, green:3};
+    let migrated = 0;
+    Object.entries(triage).forEach(([id, tier]) => {
+      if (!store[id]) {
+        const card = FSRS.initCard();
+        store[id] = FSRS.review(card, ratingMap[tier]||3);
+        migrated++;
+      }
+    });
+    if (migrated > 0) {
+      // save store
+      localStorage.setItem(`lp_${SLUG}_fsrs`, JSON.stringify(store));
+    }
+    localStorage.removeItem(triageKey);
+  } catch(e) {}
+}
+
+function seedNewCards() {
+  const store = FSRS.getStore(SLUG);
+  // Add cards not yet in store as "New" (state=0, due=now)
+  let added = 0;
+  CARDS.forEach(c => {
+    if (!store[c.id]) {
+      store[c.id] = FSRS.initCard();
+      added++;
+    }
+  });
+  if (added > 0) {
+    localStorage.setItem(`lp_${SLUG}_fsrs`, JSON.stringify(store));
+  }
+}
+
+function buildQueue() {
+  const store = FSRS.getStore(SLUG);
+  const now = Date.now();
+
+  // Due cards (state 1, 2, 3 that are past due)
+  const due = CARDS
+    .filter(c => {
+      const s = store[c.id];
+      return s && s.state !== 0 && s.due <= now;
+    })
+    .sort((a, b) => store[a.id].due - store[b.id].due);
+
+  // New cards (state=0), limited per session
+  const newCards = CARDS
+    .filter(c => {
+      const s = store[c.id];
+      return s && s.state === 0;
+    })
+    .slice(0, NEW_CARDS_PER_SESSION);
+
+  sessionQueue = [...due, ...newCards];
+  sessionIdx = 0;
+  sessionStart = Date.now();
+}
+
+function updateStatsBar() {
+  const store = FSRS.getStore(SLUG);
+  const now = Date.now();
+  const allEntries = Object.values(store);
+  const dueCount = allEntries.filter(c => c.state !== 0 && c.due <= now).length;
+  const newCount = allEntries.filter(c => c.state === 0).length;
+  const total = allEntries.length;
+
+  // Retention
+  const reviewed = allEntries.filter(c => c.lastReview > 0);
+  const avgRet = reviewed.length ?
+    Math.round(reviewed.reduce((s, c) => s + FSRS.previewIntervals ? 0 : 0, 0)) : null;
+
+  document.getElementById('statDue').textContent = `${dueCount} fällig`;
+  document.getElementById('statReviewed').textContent = `${reviewedCount} wiederholt`;
+  document.getElementById('statTotal').textContent = `${total - newCount} gelernt`;
+
+  // Simple retention estimate
+  if (reviewed.length > 0) {
+    const DAY_MS = 86400000;
+    const ret = Math.round(reviewed.reduce((s, c) => {
+      if (!c.stability || !c.lastReview) return s;
+      const e = (now - c.lastReview) / DAY_MS;
+      return s + Math.pow(1 + e / (9 * c.stability), -1);
+    }, 0) / reviewed.length * 100);
+    document.getElementById('statRetention').textContent = `${ret}% Retention`;
+  } else {
+    document.getElementById('statRetention').textContent = '— Retention';
+  }
+}
+
+function renderUI() {
+  const hasCards = sessionQueue.length > 0 && sessionIdx < sessionQueue.length;
+
+  if (!hasCards && sessionIdx === 0) {
+    // Nothing due at all
+    showEmptyState();
+  } else if (!hasCards) {
+    // Session complete
+    showSummary();
+  } else {
+    showCard();
+  }
+}
+
+function showEmptyState() {
+  document.getElementById('empty-state').style.display = 'block';
+  document.getElementById('card-area').style.display = 'none';
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+
+  // Forecast
+  const store = FSRS.getStore(SLUG);
+  const now = Date.now();
+  const DAY_MS = 86400000;
+  const entries = Object.values(store);
+  document.getElementById('fcToday').textContent = reviewedCount;
+  document.getElementById('fcTomorrow').textContent = entries.filter(c => c.due > now && c.due <= now + DAY_MS).length;
+  document.getElementById('fcDayAfter').textContent = entries.filter(c => c.due > now + DAY_MS && c.due <= now + 2*DAY_MS).length;
+  document.getElementById('fcNew').textContent = entries.filter(c => c.state === 0).length;
+
+  // Button to add new cards
+  document.getElementById('btnAddNew').addEventListener('click', () => {
+    const store2 = FSRS.getStore(SLUG);
+    const newCards = CARDS.filter(c => store2[c.id] && store2[c.id].state === 0);
+    if (newCards.length === 0) { alert('Keine neuen Karten mehr!'); return; }
+    sessionQueue = newCards.slice(0, NEW_CARDS_PER_SESSION);
+    sessionIdx = 0;
+    document.getElementById('empty-state').style.display = 'none';
+    showCard();
+  });
+}
+
+function showCard() {
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('card-area').style.display = 'block';
+  document.getElementById('progressWrap').style.display = 'block';
+
+  isFlipped = false;
+  isAnimating = false;
+  const card = sessionQueue[sessionIdx];
+  const data = CARD_MAP[card.id];
+  if (!data) { nextCard(); return; }
+
+  // Reset card state
+  const reviewCard = document.getElementById('reviewCard');
+  reviewCard.classList.remove('flipped', 'slide-out');
+  reviewCard.style.transform = '';
+  reviewCard.style.opacity = '';
+
+  // Populate front
+  const badge = document.getElementById('cardBadge');
+  badge.textContent = data.topic;
+  badge.className = `card-section-badge tier-${data.tier}`;
+  document.getElementById('cardTitle').textContent = data.title;
+  document.getElementById('cardTopic').textContent = data.topic;
+
+  // FSRS info
+  const store = FSRS.getStore(SLUG);
+  const cs = store[card.id];
+  if (cs && cs.reps > 0) {
+    document.getElementById('cardFsrsInfo').textContent = `${cs.reps}× · ±${Math.round(cs.stability||0)}d`;
+  } else {
+    document.getElementById('cardFsrsInfo').textContent = 'Neu';
+  }
+
+  // Populate back
+  document.getElementById('cardBackTitle').textContent = data.title;
+  document.getElementById('cardContent').innerHTML = data.body || '';
+
+  // Hide rating, show hint
+  document.getElementById('ratingRow').classList.remove('visible');
+  document.getElementById('hintLeft').style.opacity = '0';
+  document.getElementById('hintRight').style.opacity = '0';
+
+  // Progress
+  const total = sessionQueue.length;
+  const pct = total > 0 ? (sessionIdx / total) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // Intervals preview (disabled on New card state 0 for speed)
+  updateIntervalLabels(card.id);
+  updateStatsBar();
+
+  setupTouchHandlers();
+}
+
+function updateIntervalLabels(cardId) {
+  const store = FSRS.getStore(SLUG);
+  const c = store[cardId] || FSRS.initCard();
+  const DAY_MS = 86400000;
+  const now = Date.now();
+  [1,2,3,4].forEach(r => {
+    const nc = FSRS.review(c, r);
+    const days = nc.scheduledDays || 0;
+    let label = '';
+    if (days === 0) label = 'jetzt';
+    else if (days === 1) label = '1 Tag';
+    else label = `${days} Tage`;
+    document.getElementById(`int${r}`).textContent = label;
+  });
+}
+
+function flipCard() {
+  if (isAnimating) return;
+  const reviewCard = document.getElementById('reviewCard');
+  if (!isFlipped) {
+    reviewCard.classList.add('flipped');
+    isFlipped = true;
+    document.getElementById('ratingRow').classList.add('visible');
+  } else {
+    reviewCard.classList.remove('flipped');
+    isFlipped = false;
+    document.getElementById('ratingRow').classList.remove('visible');
+  }
+}
+
+function rateCard(rating) {
+  if (isAnimating) return;
+  isAnimating = true;
+
+  // Record rating
+  ratingCounts[rating] = (ratingCounts[rating] || 0) + 1;
+  reviewedCount++;
+
+  // Update FSRS
+  FSRS.reviewCard(SLUG, sessionQueue[sessionIdx].id, rating);
+
+  // If "Again" (1), card needs to be re-queued
+  if (rating === 1) {
+    const card = sessionQueue[sessionIdx];
+    // Re-insert at a random position later in queue
+    const remaining = sessionQueue.length - sessionIdx - 1;
+    const insertAt = sessionIdx + 1 + Math.floor(Math.random() * Math.max(1, Math.min(remaining, 4)));
+    sessionQueue.splice(insertAt, 0, card);
+  }
+
+  // Animate out
+  const dir = rating <= 2 ? '-120%' : '120%';
+  const reviewCard = document.getElementById('reviewCard');
+  reviewCard.style.setProperty('--slide-dir', dir);
+  reviewCard.classList.add('slide-out');
+
+  setTimeout(() => {
+    sessionIdx++;
+    renderUI();
+  }, 360);
+}
+
+function nextCard() {
+  sessionIdx++;
+  renderUI();
+}
+
+function showSummary() {
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('card-area').style.display = 'none';
+  document.getElementById('summary').style.display = 'block';
+  document.getElementById('progressWrap').style.display = 'none';
+
+  document.getElementById('sumReviewed').textContent = reviewedCount;
+
+  const store = FSRS.getStore(SLUG);
+  const now = Date.now();
+  const DAY_MS = 86400000;
+  const reviewed = Object.values(store).filter(c => c.lastReview > 0);
+  const ret = reviewed.length ?
+    Math.round(reviewed.reduce((s, c) => {
+      if (!c.stability) return s;
+      const e = (now - c.lastReview) / DAY_MS;
+      return s + Math.pow(1 + e / (9 * c.stability), -1);
+    }, 0) / reviewed.length * 100) : 0;
+  document.getElementById('sumRetention').textContent = ret + '%';
+
+  const goodAndEasy = (ratingCounts[3]||0) + (ratingCounts[4]||0);
+  document.getElementById('sumStreak').textContent = goodAndEasy;
+
+  // Rating breakdown bars
+  const total = Object.values(ratingCounts).reduce((s,v)=>s+v, 0);
+  [{id:1,el:'AgainrbAgain'},{id:2,el:'Hardrb'},{id:3,el:'Good'},{id:4,el:'Easy'}].forEach(x => {});
+  [[1,'Again'],[2,'Hard'],[3,'Good'],[4,'Easy']].forEach(([r, name]) => {
+    const cnt = ratingCounts[r] || 0;
+    const pct = total > 0 ? (cnt / total * 100) : 0;
+    document.getElementById(`rb${name}`).style.width = pct + '%';
+    document.getElementById(`rc${name}`).textContent = cnt;
+  });
+}
+
+// ─── TOUCH / SWIPE ─────────────────────────────────────────────────────────
+function setupTouchHandlers() {
+  const card = document.getElementById('reviewCard');
+  card.removeEventListener('click', handleCardClick);
+  card.removeEventListener('touchstart', handleTouchStart, {passive:true});
+  card.removeEventListener('touchmove', handleTouchMove, {passive:false});
+  card.removeEventListener('touchend', handleTouchEnd);
+
+  card.addEventListener('click', handleCardClick);
+  card.addEventListener('touchstart', handleTouchStart, {passive:true});
+  card.addEventListener('touchmove', handleTouchMove, {passive:false});
+  card.addEventListener('touchend', handleTouchEnd);
+}
+
+function handleCardClick(e) {
+  if (!isFlipped) {
+    flipCard();
+  }
+}
+
+function handleTouchStart(e) {
+  if (e.touches.length !== 1) return;
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+  touchCurrentX = touchStartX;
+}
+
+function handleTouchMove(e) {
+  if (e.touches.length !== 1) return;
+  touchCurrentX = e.touches[0].clientX;
+  const dx = touchCurrentX - touchStartX;
+  const dy = Math.abs(e.touches[0].clientY - touchStartY);
+  if (Math.abs(dx) > dy && isFlipped) {
+    e.preventDefault();
+    const card = document.getElementById('cardInner');
+    card.style.transition = 'none';
+    card.style.transform = `rotateY(180deg) translateX(${-dx}px)`;
+    // Show hints
+    const threshold = 60;
+    document.getElementById('hintLeft').style.opacity = dx < -threshold ? '1' : '0';
+    document.getElementById('hintRight').style.opacity = dx > threshold ? '1' : '0';
+  }
+}
+
+function handleTouchEnd(e) {
+  const dx = touchCurrentX - touchStartX;
+  const card = document.getElementById('cardInner');
+  card.style.transition = '';
+  card.style.transform = '';
+  document.getElementById('hintLeft').style.opacity = '0';
+  document.getElementById('hintRight').style.opacity = '0';
+
+  if (isFlipped && Math.abs(dx) > 80) {
+    if (dx < 0) {
+      rateCard(1); // swipe left = Again
+    } else {
+      rateCard(3); // swipe right = Good
+    }
+  } else if (Math.abs(dx) < 10) {
+    handleCardClick(e);
+  }
+}
+
+// ─── THEME ─────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('lp_theme', next);
+}
+
+// ─── START ─────────────────────────────────────────────────────────────────
+init();
+
+// ─── ANKI EXPORT ───────────────────────────────────────────────────────────
+function exportAnki() {
+  const rows = ['#separator:tab', '#html:false', '#tags column:3'];
+  CARDS.forEach(card => {
+    const front = card.title || '';
+    const back = (card.body || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+    const section = (card.topic || '').replace(/\s+/g, '_');
+    const tags = 'experimentelle-psychologie ' + section;
+    rows.push(`${front}\t${back}\t${tags}`);
+  });
+  const blob = new Blob([rows.join('\n')], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'experimentelle-psychologie-anki-export.txt';
+  a.click();
+}
+
+// ─── JSON EXPORT / IMPORT ──────────────────────────────────────────────────
+function exportData() {
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('lp_') || key === 'epv3_state') data[key] = localStorage.getItem(key);
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `psychlearn-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      let count = 0;
+      Object.entries(data).forEach(([key, val]) => {
+        if (key.startsWith('lp_') || key === 'epv3_state') { localStorage.setItem(key, val); count++; }
+      });
+      alert(`✅ ${count} Einträge importiert! Seite wird neu geladen.`);
+      location.reload();
+    } catch (err) {
+      alert('❌ Fehler beim Import: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+</script>
+</body>
+</html>

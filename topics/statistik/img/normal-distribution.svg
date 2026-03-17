@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="400" height="240" role="img" aria-label="Normalverteilung Glockenkurve">
+  <title>Normalverteilung</title>
+  <rect width="400" height="240" fill="#f5f0e8" rx="8"/>
+
+  <!-- Title -->
+  <text x="200" y="22" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="13" font-weight="700" fill="#2a2520">Normalverteilung</text>
+
+  <!-- Bell curve fill (light blue) -->
+  <path d="M 40 190
+    C 60 190, 80 185, 100 170
+    C 120 155, 135 120, 150 90
+    C 162 65, 175 38, 200 35
+    C 225 38, 238 65, 250 90
+    C 265 120, 280 155, 300 170
+    C 320 185, 340 190, 360 190
+    Z" fill="#d6eaf8" stroke="#1a5276" stroke-width="2.5"/>
+
+  <!-- Baseline -->
+  <line x1="30" y1="190" x2="370" y2="190" stroke="#d4cbbf" stroke-width="1.5"/>
+
+  <!-- Mean line -->
+  <line x1="200" y1="35" x2="200" y2="190" stroke="#1a5276" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="200" y="208" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="11" font-weight="700" fill="#1a5276">μ</text>
+
+  <!-- -1σ line -->
+  <line x1="145" y1="90" x2="145" y2="190" stroke="#2e6fa3" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="145" y="208" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#2e6fa3">-1σ</text>
+
+  <!-- +1σ line -->
+  <line x1="255" y1="90" x2="255" y2="190" stroke="#2e6fa3" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="255" y="208" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#2e6fa3">+1σ</text>
+
+  <!-- -2σ line -->
+  <line x1="90" y1="162" x2="90" y2="190" stroke="#7fb3d3" stroke-width="1" stroke-dasharray="3,4"/>
+  <text x="90" y="208" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#7fb3d3">-2σ</text>
+
+  <!-- +2σ line -->
+  <line x1="310" y1="162" x2="310" y2="190" stroke="#7fb3d3" stroke-width="1" stroke-dasharray="3,4"/>
+  <text x="310" y="208" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#7fb3d3">+2σ</text>
+
+  <!-- -3σ line -->
+  <line x1="48" y1="188" x2="48" y2="190" stroke="#aed6f1" stroke-width="1"/>
+  <text x="48" y="208" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#aed6f1">-3σ</text>
+
+  <!-- +3σ line -->
+  <line x1="352" y1="188" x2="352" y2="190" stroke="#aed6f1" stroke-width="1"/>
+  <text x="352" y="208" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="10" fill="#aed6f1">+3σ</text>
+
+  <!-- Percentage labels -->
+  <text x="200" y="105" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="9" fill="#1a5276">68 %</text>
+  <line x1="150" y1="110" x2="250" y2="110" stroke="#1a5276" stroke-width="1"/>
+  <line x1="150" y1="107" x2="150" y2="113" stroke="#1a5276" stroke-width="1"/>
+  <line x1="250" y1="107" x2="250" y2="113" stroke="#1a5276" stroke-width="1"/>
+
+  <text x="200" y="135" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="9" fill="#2e6fa3">95 %</text>
+  <line x1="95" y1="140" x2="305" y2="140" stroke="#2e6fa3" stroke-width="1"/>
+  <line x1="95" y1="137" x2="95" y2="143" stroke="#2e6fa3" stroke-width="1"/>
+  <line x1="305" y1="137" x2="305" y2="143" stroke="#2e6fa3" stroke-width="1"/>
+
+  <text x="200" y="163" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="9" fill="#7fb3d3">99.7 %</text>
+  <line x1="52" y1="168" x2="348" y2="168" stroke="#7fb3d3" stroke-width="1"/>
+  <line x1="52" y1="165" x2="52" y2="171" stroke="#7fb3d3" stroke-width="1"/>
+  <line x1="348" y1="165" x2="348" y2="171" stroke="#7fb3d3" stroke-width="1"/>
+
+  <!-- Caption -->
+  <text x="200" y="228" text-anchor="middle" font-family="'Source Sans 3', Georgia, serif" font-size="9" font-style="italic" fill="#6b5e52">Symmetrische Glockenkurve: 68-95-99.7-Regel</text>
+</svg>

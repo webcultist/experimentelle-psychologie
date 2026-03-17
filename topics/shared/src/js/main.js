@@ -80,14 +80,18 @@ const LP = (() => {
 
   // ── 3. DARK MODE ────────────────────────────────────────────
   const darkMode = {
+    isDark() {
+      const attr = document.documentElement.getAttribute('data-theme');
+      if (attr) return attr === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    },
     init() {
       const saved = localStorage.getItem('lp_global_theme');
       if (saved) document.documentElement.setAttribute('data-theme', saved);
     },
     toggle() {
-      const html = document.documentElement;
-      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
+      const next = this.isDark() ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem('lp_global_theme', next);
       state.darkMode = next === 'dark';
       saveState();
@@ -731,7 +735,7 @@ const LP = (() => {
     open: false,
     refresh() {
       if (!this.el) return;
-      this.el.querySelector('#lp-s-dark').checked = document.documentElement.getAttribute('data-theme') === 'dark';
+      this.el.querySelector('#lp-s-dark').checked = darkMode.isDark();
       this.el.querySelector('#lp-s-bionic').checked = bionic.on;
       this.el.querySelector('#lp-s-sound').checked = state.sound;
       this.el.querySelector('#lp-s-noise').checked = state.noise;

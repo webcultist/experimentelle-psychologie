@@ -18,6 +18,7 @@
   :root { --bg: #1a1816; --bg-card: #242220; --text: #e8e0d4; --text-secondary: #a89e8c; --accent: #e05545; --accent2: #3d9460; --accent3: #2e6fa3; --accent4: #9b59b6; --accent5: #d4ac0d; --border: #3a3530; --highlight: #3a3010; --shadow: rgba(0,0,0,0.3); }
 }
 [data-theme="dark"] { --bg: #1a1816; --bg-card: #242220; --text: #e8e0d4; --text-secondary: #a89e8c; --accent: #e05545; --accent2: #3d9460; --accent3: #2e6fa3; --accent4: #9b59b6; --accent5: #d4ac0d; --border: #3a3530; --highlight: #3a3010; --shadow: rgba(0,0,0,0.3); }
+[data-theme="light"] { --bg: #f5f0e8; --bg-card: #fffdf8; --text: #2a2520; --text-secondary: #6b5e52; --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a5276; --accent4: #7d3c98; --accent5: #b7950b; --border: #d4cbbf; --highlight: #fef3c7; --shadow: rgba(42,37,32,0.08); }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Source Sans 3', Georgia, serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 17px; -webkit-font-smoothing: antialiased; min-height: 100vh; }
@@ -28,6 +29,7 @@ body::before { content: ''; position: fixed; inset: 0; background-image: url("da
 header { padding: 1.2rem 1.2rem 1rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(236,229,216,0.8), var(--bg)); }
 @media (prefers-color-scheme: dark) { header { background: linear-gradient(180deg, rgba(42,37,32,0.8), var(--bg)); } }
 [data-theme="dark"] header { background: linear-gradient(180deg, rgba(42,37,32,0.8), var(--bg)); }
+[data-theme="light"] header { background: linear-gradient(180deg, rgba(236,229,216,0.8), var(--bg)); }
 .header-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.8rem; }
 .back-link { font-size: 0.82rem; color: var(--accent3); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.3rem; }
 .back-link:hover { text-decoration: underline; }
@@ -112,6 +114,7 @@ main { max-width: 560px; margin: 0 auto; padding: 1.5rem 1rem 6rem; display: fle
 .card-content .formula .result { color: #58d68d; }
 @media (prefers-color-scheme: dark) { .card-content .formula { background: #0d0c0b; } }
 [data-theme="dark"] .card-content .formula { background: #0d0c0b; }
+[data-theme="light"] .card-content .formula { background: #2a2520; }
 
 /* Swipe overlay hints */
 .swipe-hint { position: absolute; top: 50%; transform: translateY(-50%); pointer-events: none; opacity: 0; font-size: 1.5rem; font-weight: 700; padding: 0.4em 0.8em; border-radius: 6px; border: 3px solid; transition: opacity 0.15s; z-index: 10; }

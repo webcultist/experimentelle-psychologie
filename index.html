@@ -20,6 +20,7 @@
   :root { --bg: #1a1816; --bg-card: #242220; --text: #e8e0d4; --text-secondary: #a89e8c; --accent: #e05545; --accent2: #3d9460; --accent3: #2e6fa3; --accent4: #9b59b6; --accent5: #d4ac0d; --border: #3a3530; --highlight: #3a3010; --shadow: rgba(0,0,0,0.3); }
 }
 [data-theme="dark"] { --bg: #1a1816; --bg-card: #242220; --text: #e8e0d4; --text-secondary: #a89e8c; --accent: #e05545; --accent2: #3d9460; --accent3: #2e6fa3; --accent4: #9b59b6; --accent5: #d4ac0d; --border: #3a3530; --highlight: #3a3010; --shadow: rgba(0,0,0,0.3); }
+[data-theme="light"] { --bg: #f5f0e8; --bg-card: #fffdf8; --text: #2a2520; --text-secondary: #6b5e52; --accent: #c0392b; --accent2: #2c6e49; --accent3: #1a5276; --accent4: #7d3c98; --accent5: #b7950b; --border: #d4cbbf; --highlight: #fef3c7; --shadow: rgba(42,37,32,0.08); }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Source Sans 3', Georgia, serif; background: var(--bg); color: var(--text); line-height: 1.8; font-size: 18px; letter-spacing: 0.03em; -webkit-font-smoothing: antialiased; }
 body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
@@ -28,6 +29,7 @@ body::before { content: ''; position: fixed; inset: 0; background-image: url("da
 header { padding: 2.5rem 1.2rem 2rem; text-align: center; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #ece5d8, var(--bg)); position: relative; }
 @media (prefers-color-scheme: dark) { header { background: linear-gradient(180deg, #2a2520, var(--bg)); } }
 [data-theme="dark"] header { background: linear-gradient(180deg, #2a2520, var(--bg)); }
+[data-theme="light"] header { background: linear-gradient(180deg, #ece5d8, var(--bg)); }
 header::after { content: '§'; position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); background: var(--bg); padding: 0 1rem; font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--accent); }
 .uni-badge { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); border: 1.5px solid var(--accent); padding: 0.3em 1em; margin-bottom: 1.5rem; border-radius: 2px; }
 header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; line-height: 1.2; margin-bottom: 0.5rem; }

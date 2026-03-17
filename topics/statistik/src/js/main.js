@@ -556,67 +556,133 @@ const LP = (() => {
   };
 
   // ── TTS (Text-to-Speech) ────────────────────────────────────
+  // Google Cloud TTS with browser SpeechSynthesis fallback
   const tts = {
-    synth: window.speechSynthesis,
-    utt: null,
+    audio: null,
     playing: false,
+    paused: false,
     rate: 1,
+    voice: 'de-DE-Neural2-B',
     currentEl: null,
-    speak(el) {
-      if (!this.synth) return;
-      this.stop();
-      const text = el.innerText || el.textContent;
-      this.utt = new SpeechSynthesisUtterance(text);
-      this.utt.lang = 'de-DE';
-      this.utt.rate = this.rate;
-      this.utt.onboundary = (e) => {
-        if (e.name === 'word' && this.currentEl) {
-          // Highlight current word range
-          this.currentEl.classList.add('lp-tts-active');
-        }
-      };
-      this.utt.onend = () => { this.playing = false; this.currentEl?.classList.remove('lp-tts-active'); this.updateUI(); };
-      this.currentEl = el;
-      el.classList.add('lp-tts-active');
-      this.synth.speak(this.utt);
-      this.playing = true;
+    queue: [],
+    queueIdx: 0,
+
+    getKey() { return localStorage.getItem('lp_google_tts_key') || ''; },
+    hasCloudTTS() { return this.getKey().length > 10; },
+
+    // Google Cloud TTS
+    async cloudSpeak(text) {
+      const key = this.getKey();
+      if (!key) return false;
+      // API limit: 5000 bytes per request — split if needed
+      const chunks = this.splitText(text, 4500);
+      this.queue = [];
+      for (const chunk of chunks) {
+        try {
+          const res = await fetch('https://texttospeech.googleapis.com/v1/text:synthesize', {
+            method: 'POST',
+            headers: { 'X-Goog-Api-Key': key, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              input: { text: chunk },
+              voice: { languageCode: 'de-DE', name: this.voice },
+              audioConfig: { audioEncoding: 'MP3', speakingRate: this.rate },
+            }),
+          });
+          if (!res.ok) { console.warn('TTS API error:', res.status); return false; }
+          const { audioContent } = await res.json();
+          this.queue.push('data:audio/mp3;base64,' + audioContent);
+        } catch (e) { console.warn('TTS fetch error:', e); return false; }
+      }
+      if (this.queue.length) { this.queueIdx = 0; this.playQueue(); return true; }
+      return false;
+    },
+
+    playQueue() {
+      if (this.queueIdx >= this.queue.length) {
+        this.playing = false; this.currentEl?.classList.remove('lp-tts-active');
+        this.updateUI(); return;
+      }
+      this.audio = new Audio(this.queue[this.queueIdx]);
+      this.audio.onended = () => { this.queueIdx++; this.playQueue(); };
+      this.audio.play();
+      this.playing = true; this.paused = false;
       this.updateUI();
     },
-    speakSection(sectionEl) {
+
+    splitText(text, maxBytes) {
+      const chunks = [];
+      const sentences = text.split(/(?<=[.!?])\s+/);
+      let current = '';
+      for (const s of sentences) {
+        if ((current + ' ' + s).length > maxBytes) {
+          if (current) chunks.push(current.trim());
+          current = s;
+        } else {
+          current += (current ? ' ' : '') + s;
+        }
+      }
+      if (current) chunks.push(current.trim());
+      return chunks.length ? chunks : [text.slice(0, maxBytes)];
+    },
+
+    // Browser fallback
+    browserSpeak(text) {
+      const synth = window.speechSynthesis;
+      if (!synth) return;
+      synth.cancel();
+      const utt = new SpeechSynthesisUtterance(text);
+      utt.lang = 'de-DE'; utt.rate = this.rate;
+      utt.onend = () => { this.playing = false; this.currentEl?.classList.remove('lp-tts-active'); this.updateUI(); };
+      synth.speak(utt);
+      this.playing = true; this.paused = false;
+      this.updateUI();
+    },
+
+    async speakSection(sectionEl) {
       const paragraphs = sectionEl.querySelectorAll('p, .def-box, .merksatz, .example, .achtung');
       const text = Array.from(paragraphs).map(p => p.innerText).join('. ');
       if (!text) return;
       this.stop();
-      this.utt = new SpeechSynthesisUtterance(text);
-      this.utt.lang = 'de-DE';
-      this.utt.rate = this.rate;
-      this.utt.onend = () => { this.playing = false; this.updateUI(); };
-      this.synth.speak(this.utt);
-      this.playing = true;
       this.currentEl = sectionEl;
-      this.updateUI();
+      sectionEl.classList.add('lp-tts-active');
+      if (this.hasCloudTTS()) {
+        const ok = await this.cloudSpeak(text);
+        if (!ok) this.browserSpeak(text); // fallback
+      } else {
+        this.browserSpeak(text);
+      }
     },
+
     pause() {
-      if (this.synth.speaking) { this.synth.pause(); this.playing = false; this.updateUI(); }
+      if (this.audio && this.playing) { this.audio.pause(); this.paused = true; this.playing = false; this.updateUI(); }
+      else if (window.speechSynthesis?.speaking) { window.speechSynthesis.pause(); this.paused = true; this.playing = false; this.updateUI(); }
     },
     resume() {
-      if (this.synth.paused) { this.synth.resume(); this.playing = true; this.updateUI(); }
+      if (this.audio && this.paused) { this.audio.play(); this.playing = true; this.paused = false; this.updateUI(); }
+      else if (window.speechSynthesis?.paused) { window.speechSynthesis.resume(); this.playing = true; this.paused = false; this.updateUI(); }
     },
     stop() {
-      this.synth.cancel();
-      this.playing = false;
+      if (this.audio) { this.audio.pause(); this.audio = null; }
+      this.queue = []; this.queueIdx = 0;
+      window.speechSynthesis?.cancel();
+      this.playing = false; this.paused = false;
       this.currentEl?.classList.remove('lp-tts-active');
       this.currentEl = null;
       this.updateUI();
     },
     togglePlayPause() {
       if (this.playing) this.pause();
-      else if (this.synth.paused) this.resume();
+      else if (this.paused) this.resume();
     },
     setRate(r) { this.rate = r; },
+    setVoice(v) { this.voice = v; localStorage.setItem('lp_tts_voice', v); },
     updateUI() {
       const btn = document.getElementById('lp-tts-play');
       if (btn) btn.textContent = this.playing ? '⏸' : '▶';
+    },
+    init() {
+      const saved = localStorage.getItem('lp_tts_voice');
+      if (saved) this.voice = saved;
     },
   };
 
@@ -838,6 +904,10 @@ const LP = (() => {
       <div class="lp-setting-row"><label>⏱ Timer (Min)</label><select id="lp-s-timerMin" style="border-radius:4px;padding:2px 4px"><option>15</option><option>20</option><option>25</option></select></div>
       <div class="lp-setting-row"><label>📝 Lückentext</label><input type="checkbox" id="lp-s-cloze"></div>
       <div class="lp-setting-row"><label>🔍 Active Recall</label><input type="checkbox" id="lp-s-recall"></div>
+      <div class="lp-settings-title" style="margin-top:.75rem">🔊 Vorlesen</div>
+      <div class="lp-setting-row"><label style="flex:.4">Stimme</label><select id="lp-s-ttsVoice" style="flex:1;border-radius:4px;padding:2px 4px;font-size:.78rem"><option value="de-DE-Neural2-B">Mann (Neural2-B)</option><option value="de-DE-Neural2-A">Frau (Neural2-A)</option><option value="de-DE-Neural2-D">Mann 2 (Neural2-D)</option><option value="de-DE-Neural2-C">Frau 2 (Neural2-C)</option></select></div>
+      <div class="lp-setting-row"><label style="flex:.35">API Key</label><input type="password" id="lp-s-ttsKey" placeholder="Google TTS Key" style="flex:1;border:1px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.75rem;background:var(--bg-card);color:var(--text)"></div>
+      <div style="font-size:.65rem;color:var(--text-secondary);margin:-.2rem 0 .4rem;line-height:1.3">Ohne Key: Browser-Stimme. Mit Key: natürliche Google Neural2 Stimme (<a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--accent3)">Key erstellen</a>)</div>
       <div class="lp-setting-row"><button id="lp-s-challenge" style="width:100%;padding:6px;border-radius:6px;border:1px solid var(--accent3);background:transparent;color:var(--accent3);cursor:pointer;font-weight:600;font-size:.82rem;">🤝 Challenge generieren</button></div>
     `;
     document.body.appendChild(panel);
@@ -854,6 +924,10 @@ const LP = (() => {
     panel.querySelector('#lp-s-timerMin').addEventListener('change', e => { state.timerMin = +e.target.value; saveState(); pomo.reset(); });
     panel.querySelector('#lp-s-cloze').addEventListener('change', () => cloze.toggle());
     panel.querySelector('#lp-s-recall').addEventListener('change', () => recall.toggle());
+    panel.querySelector('#lp-s-ttsVoice').value = tts.voice;
+    panel.querySelector('#lp-s-ttsVoice').addEventListener('change', e => tts.setVoice(e.target.value));
+    panel.querySelector('#lp-s-ttsKey').value = tts.getKey();
+    panel.querySelector('#lp-s-ttsKey').addEventListener('change', e => localStorage.setItem('lp_google_tts_key', e.target.value.trim()));
     panel.querySelector('#lp-s-challenge').addEventListener('click', () => studyBuddy.generateChallenge());
 
     settingsPanel.refresh();
@@ -968,6 +1042,7 @@ const LP = (() => {
     injectStyles();
     injectUI();
     bionic.init();
+    tts.init();
     lootBag.init();
     if (state.noise) brownNoise.start();
     if (state.focusMode) focus.activate();

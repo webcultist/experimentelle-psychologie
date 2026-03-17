@@ -2493,7 +2493,7 @@ const LP = (() => {
     // Panic button
     const panicBtn = document.createElement('div');
     panicBtn.id = 'lp-panic-controls';
-    panicBtn.innerHTML = `<button class="lp-fab" id="lp-panic-btn" title="Panik-Modus: Zeig nur einen Chunk" style="background:#e74c3c;color:#fff;bottom:auto;right:auto">😵</button>`;
+    panicBtn.innerHTML = `<button id="lp-panic-btn" title="Panik-Modus: Zeig nur einen Chunk" style="background:#e74c3c;color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:1.2rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center">😵</button>`;
     document.body.appendChild(panicBtn);
     document.getElementById('lp-panic-btn').addEventListener('click', () => {
       if (panic.active) {
@@ -2502,14 +2502,14 @@ const LP = (() => {
       } else {
         panic.enter();
         const nextBtn = document.createElement('button');
-        nextBtn.id = 'lp-panic-next'; nextBtn.className = 'lp-fab';
-        nextBtn.style.cssText = 'background:#2c6e49;color:#fff;bottom:auto;right:auto;border-radius:8px;width:auto;padding:0 12px;font-size:.85rem';
+        nextBtn.id = 'lp-panic-next';
+        nextBtn.style.cssText = 'background:#2c6e49;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:.85rem;cursor:pointer;min-height:44px;box-shadow:0 2px 8px rgba(0,0,0,.25)';
         nextBtn.textContent = 'Weiter →';
         nextBtn.addEventListener('click', () => panic.next());
         const exitBtn = document.createElement('button');
-        exitBtn.className = 'lp-fab'; exitBtn.style.cssText = 'background:#555;color:#fff;bottom:auto;right:auto;border-radius:8px;width:auto;padding:0 12px;font-size:.85rem';
+        exitBtn.style.cssText = 'background:#555;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:.85rem;cursor:pointer;min-height:44px;box-shadow:0 2px 8px rgba(0,0,0,.25)';
         exitBtn.textContent = 'Alles zeigen';
-        exitBtn.addEventListener('click', () => { panic.exit(); panicBtn.querySelectorAll('.lp-fab:not(#lp-panic-btn)').forEach(b => b.remove()); });
+        exitBtn.addEventListener('click', () => { panic.exit(); panicBtn.querySelectorAll('button:not(#lp-panic-btn)').forEach(b => b.remove()); });
         panicBtn.appendChild(nextBtn); panicBtn.appendChild(exitBtn);
       }
     });

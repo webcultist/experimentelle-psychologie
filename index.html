@@ -8,7 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/icons/icon-192.svg">
-<title>Lernplattform | Uni Tubingen</title>
+<title>Lernplattform | Uni Tübingen</title>
+<meta name="description" content="Kostenlose Lernhilfen, Wissenstests und Crash-Courses für das Psychologie-Studium an der Universität Tübingen">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -70,11 +71,12 @@ footer { text-align: center; padding: 2.5rem 1.5rem; border-top: 1px solid var(-
 </style>
 </head>
 <body>
+<button id="themeToggle" onclick="(function(){var h=document.documentElement,a=h.getAttribute('data-theme'),d=a?a==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches,n=d?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('lp_global_theme',n);document.getElementById('themeToggle').textContent=n==='dark'?'☀️':'🌙'})()" style="position:fixed;top:12px;right:12px;z-index:100;background:var(--bg-card);border:1px solid var(--border);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px var(--shadow)">🌙</button>
 
 <header>
-  <div class="uni-badge">Universitat Tubingen &middot; Fachbereich Psychologie</div>
+  <div class="uni-badge">Universität Tübingen &middot; Fachbereich Psychologie</div>
   <h1>Lern<em>plattform</em></h1>
-  <p class="subtitle">Lernhilfen, Wissenstests und Crash-Courses &mdash; kompakt, verstandlich, prufungsrelevant</p>
+  <p class="subtitle">Lernhilfen, Wissenstests und Crash-Courses &mdash; kompakt, verständlich, prüfungsrelevant</p>
 </header>
 
 <div id="installBanner" style="display:none;background:#c0392b;color:#fff;padding:12px 20px;text-align:center;border-radius:8px;margin:0 1rem 1rem;font-family:'Source Sans 3',sans-serif;">
@@ -84,7 +86,7 @@ footer { text-align: center; padding: 2.5rem 1.5rem; border-top: 1px solid var(-
 </div>
 
 <main>
-  <h2>Verfugbare Themen</h2>
+  <h2>Verfügbare Themen</h2>
   <div class="topic-grid">
 
     <div class="topic-card">
@@ -123,7 +125,7 @@ footer { text-align: center; padding: 2.5rem 1.5rem; border-top: 1px solid var(-
       </div>
     </div>
 
-    <!-- Platzhalter fur zukunftige Themen:
+    <!-- Platzhalter für zukünftige Themen:
     <div class="topic-card">
       <div class="semester">Bachelorstudium</div>
       <h3>Neues Thema</h3>
@@ -143,8 +145,8 @@ footer { text-align: center; padding: 2.5rem 1.5rem; border-top: 1px solid var(-
 </main>
 
 <footer>
-  <p>Lernplattform &middot; Fachbereich Psychologie &middot; Universitat Tubingen</p>
-  <p style="margin-top:0.5rem">Keine offizielle Universitatsseite.</p>
+  <p>Lernplattform &middot; Fachbereich Psychologie &middot; Universität Tübingen</p>
+  <p style="margin-top:0.5rem">Keine offizielle Universitätsseite.</p>
 </footer>
 
 <script>
@@ -175,6 +177,9 @@ document.getElementById('installBtn')?.addEventListener('click', async () => {
     document.getElementById('installBanner').style.display = 'none';
   }
 });
+</script>
+<script>
+(function(){var d=document.documentElement.getAttribute('data-theme')==='dark'||(!document.documentElement.getAttribute('data-theme')&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.getElementById('themeToggle').textContent=d?'☀️':'🌙'})();
 </script>
 </body>
 </html>

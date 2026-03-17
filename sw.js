@@ -1,4 +1,4 @@
-const CACHE_NAME = 'psychlearn-v1';
+const CACHE_NAME = 'psychlearn-v2';
 const ASSETS = [
   '/',
   '/index.html',

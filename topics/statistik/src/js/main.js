@@ -775,7 +775,7 @@ const LP = (() => {
       /* Panic mode */
       .lp-panic-hidden{display:none!important}
       .lp-panic-current{outline:2px dashed var(--accent,#c0392b);outline-offset:4px}
-      #lp-panic-controls{position:fixed;bottom:50px;right:50px;z-index:9002;display:flex;gap:8px;flex-direction:column;align-items:flex-end}
+      #lp-panic-controls{position:fixed;bottom:50px;right:50px;z-index:9002;display:flex;gap:8px;flex-direction:column;align-items:flex-end;min-width:44px;min-height:44px}
       /* Focus mode */
       body.focus-mode footer,body.focus-mode .page-subtitle,body.focus-mode nav{opacity:.08;pointer-events:none;transition:opacity .3s}
       body.focus-mode{font-size:calc(1em + 2px)}

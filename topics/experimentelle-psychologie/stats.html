@@ -693,6 +693,47 @@ function renderReadiness(mastery) {
   }).join('');
 }
 
+// ── ACHIEVEMENTS ───────────────────────────────────────────────
+const BADGES = [
+  { id: 'first_card', icon: '🎴', name: 'Erste Karte', desc: 'Erste Lernkarte bewertet' },
+  { id: 'ten_cards', icon: '🔟', name: 'Zehn geschafft', desc: '10 Karten bewertet' },
+  { id: 'fifty_cards', icon: '🏅', name: 'Halbzeit', desc: '50 Karten bewertet' },
+  { id: 'hundred_cards', icon: '💯', name: 'Centurion', desc: '100 Karten bewertet' },
+  { id: 'streak_3', icon: '🔥', name: '3-Tage-Streak', desc: '3 Tage hintereinander gelernt' },
+  { id: 'streak_7', icon: '🔥🔥', name: 'Wochenkrieger', desc: '7 Tage hintereinander gelernt' },
+  { id: 'streak_30', icon: '🏆', name: 'Monatsmeister', desc: '30 Tage hintereinander gelernt' },
+  { id: 'early_bird', icon: '🌅', name: 'Frühlernerrin', desc: '5x vor 9 Uhr gelernt' },
+  { id: 'quiz_streak_5', icon: '⚡', name: '5er-Streak', desc: '5 Quiz-Fragen richtig am Stück' },
+  { id: 'quiz_streak_10', icon: '⚡⚡', name: 'Blitzmerker', desc: '10 Quiz-Fragen richtig am Stück' },
+  { id: 'quiz_streak_20', icon: '💎', name: 'Speed-Demon', desc: '20er Quiz-Streak' },
+  { id: 'pomo_first', icon: '🍅', name: 'Erster Pomodoro', desc: 'Ersten Pomodoro-Block abgeschlossen' },
+  { id: 'pomo_ten', icon: '🍅🍅', name: 'Pomodoro-Pro', desc: '10 Pomodoro-Blöcke' },
+  { id: 'dark_scholar', icon: '🌙', name: 'Nachtgelehrte', desc: 'Dark Mode aktiviert' },
+  { id: 'bionic_user', icon: '👁️', name: 'Bionic Reader', desc: 'Bionic Reading ausprobiert' },
+  { id: 'noise_zen', icon: '🧘', name: 'Zen-Modus', desc: 'Brown Noise + Focus Mode' },
+];
+
+function renderBadges() {
+  const data = JSON.parse(localStorage.getItem('lp_global_achievements') || '{}');
+  const unlocked = data.unlocked || [];
+  const grid = document.getElementById('badge-grid');
+  if (!grid) return;
+  grid.innerHTML = BADGES.map(b => {
+    const isUnlocked = unlocked.includes(b.id);
+    return `<div style="background:var(--bg-card);border:1.5px solid ${isUnlocked ? 'var(--accent2)' : 'var(--border)'};border-radius:8px;padding:12px;text-align:center;${isUnlocked ? '' : 'opacity:0.4;filter:grayscale(1);'}">
+      <div style="font-size:2rem;margin-bottom:4px;">${b.icon}</div>
+      <div style="font-weight:700;font-size:.82rem;">${b.name}</div>
+      <div style="font-size:.72rem;color:var(--text-secondary);margin-top:2px;">${b.desc}</div>
+    </div>`;
+  }).join('');
+  const count = unlocked.length;
+  const total = BADGES.length;
+  const streakEl = document.createElement('p');
+  streakEl.style.cssText = 'margin-top:12px;font-size:.85rem;color:var(--text-secondary);';
+  streakEl.textContent = `${count} von ${total} freigeschaltet · Streak: ${data.currentStreak || 0} Tage · Längster Streak: ${data.longestStreak || 0} Tage`;
+  grid.after(streakEl);
+}
+
 // ── MAIN INIT ─────────────────────────────────────────────────
 (function init() {
   const { ccState, globalState } = loadData();
@@ -753,48 +794,7 @@ function importData(event) {
   reader.readAsText(file);
 }
 
-// ── ACHIEVEMENTS ───────────────────────────────────────────────
-const BADGES = [
-  { id: 'first_card', icon: '🎴', name: 'Erste Karte', desc: 'Erste Lernkarte bewertet' },
-  { id: 'ten_cards', icon: '🔟', name: 'Zehn geschafft', desc: '10 Karten bewertet' },
-  { id: 'fifty_cards', icon: '🏅', name: 'Halbzeit', desc: '50 Karten bewertet' },
-  { id: 'hundred_cards', icon: '💯', name: 'Centurion', desc: '100 Karten bewertet' },
-  { id: 'streak_3', icon: '🔥', name: '3-Tage-Streak', desc: '3 Tage hintereinander gelernt' },
-  { id: 'streak_7', icon: '🔥🔥', name: 'Wochenkrieger', desc: '7 Tage hintereinander gelernt' },
-  { id: 'streak_30', icon: '🏆', name: 'Monatsmeister', desc: '30 Tage hintereinander gelernt' },
-  { id: 'early_bird', icon: '🌅', name: 'Frühlernerrin', desc: '5x vor 9 Uhr gelernt' },
-  { id: 'quiz_streak_5', icon: '⚡', name: '5er-Streak', desc: '5 Quiz-Fragen richtig am Stück' },
-  { id: 'quiz_streak_10', icon: '⚡⚡', name: 'Blitzmerker', desc: '10 Quiz-Fragen richtig am Stück' },
-  { id: 'quiz_streak_20', icon: '💎', name: 'Speed-Demon', desc: '20er Quiz-Streak' },
-  { id: 'pomo_first', icon: '🍅', name: 'Erster Pomodoro', desc: 'Ersten Pomodoro-Block abgeschlossen' },
-  { id: 'pomo_ten', icon: '🍅🍅', name: 'Pomodoro-Pro', desc: '10 Pomodoro-Blöcke' },
-  { id: 'dark_scholar', icon: '🌙', name: 'Nachtgelehrte', desc: 'Dark Mode aktiviert' },
-  { id: 'bionic_user', icon: '👁️', name: 'Bionic Reader', desc: 'Bionic Reading ausprobiert' },
-  { id: 'noise_zen', icon: '🧘', name: 'Zen-Modus', desc: 'Brown Noise + Focus Mode' },
-];
 
-function renderBadges() {
-  const data = JSON.parse(localStorage.getItem('lp_global_achievements') || '{}');
-  const unlocked = data.unlocked || [];
-  const grid = document.getElementById('badge-grid');
-  if (!grid) return;
-  grid.innerHTML = BADGES.map(b => {
-    const isUnlocked = unlocked.includes(b.id);
-    return `<div style="background:var(--bg-card);border:1.5px solid ${isUnlocked ? 'var(--accent2)' : 'var(--border)'};border-radius:8px;padding:12px;text-align:center;${isUnlocked ? '' : 'opacity:0.4;filter:grayscale(1);'}">
-      <div style="font-size:2rem;margin-bottom:4px;">${b.icon}</div>
-      <div style="font-weight:700;font-size:.82rem;">${b.name}</div>
-      <div style="font-size:.72rem;color:var(--text-secondary);margin-top:2px;">${b.desc}</div>
-    </div>`;
-  }).join('');
-
-  // Stats summary
-  const count = unlocked.length;
-  const total = BADGES.length;
-  const streakEl = document.createElement('p');
-  streakEl.style.cssText = 'margin-top:12px;font-size:.85rem;color:var(--text-secondary);';
-  streakEl.textContent = `${count} von ${total} freigeschaltet · Streak: ${data.currentStreak || 0} Tage · Längster Streak: ${data.longestStreak || 0} Tage`;
-  grid.after(streakEl);
-}
 </script>
 </body>
 </html>

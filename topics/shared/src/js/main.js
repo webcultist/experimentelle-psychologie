@@ -775,7 +775,7 @@ const LP = (() => {
       /* Panic mode */
       .lp-panic-hidden{display:none!important}
       .lp-panic-current{outline:2px dashed var(--accent,#c0392b);outline-offset:4px}
-      #lp-panic-controls{position:fixed;bottom:16px;right:16px;z-index:9002;display:flex;gap:8px;flex-direction:column;align-items:flex-end}
+      #lp-panic-controls{position:fixed;bottom:64px;left:12px;z-index:9002;display:flex;gap:8px;flex-direction:column;align-items:flex-start}
       /* Focus mode */
       body.focus-mode footer,body.focus-mode .page-subtitle,body.focus-mode nav{opacity:.08;pointer-events:none;transition:opacity .3s}
       body.focus-mode{font-size:calc(1em + 2px)}
@@ -892,7 +892,7 @@ const LP = (() => {
     // Decision Roulette button
     const rouletteBtn = document.createElement('button');
     rouletteBtn.className = 'lp-fab'; rouletteBtn.title = 'Was soll ich tun?';
-    rouletteBtn.style.cssText = 'bottom:64px;right:12px;font-size:1rem;';
+    rouletteBtn.style.cssText = 'bottom:5.5rem;right:1.2rem;font-size:1rem;';
     rouletteBtn.textContent = '🎲';
     rouletteBtn.addEventListener('click', () => roulette.spin());
     document.body.appendChild(rouletteBtn);
@@ -901,7 +901,7 @@ const LP = (() => {
     const lootBtn = document.createElement('button');
     lootBtn.className = 'lp-fab loot-bag-btn';
     lootBtn.title = 'Loot Bag (Doppelklick zum Sammeln)';
-    lootBtn.style.cssText = 'position:fixed;bottom:120px;right:12px;';
+    lootBtn.style.cssText = 'position:fixed;bottom:9rem;right:1.2rem;';
     lootBtn.innerHTML = '🎒<span id="lp-loot-count" style="position:absolute;top:-4px;right:-4px;background:var(--accent);color:#fff;font-size:.6rem;min-width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;"></span>';
     lootBtn.addEventListener('click', () => {
       if (lootBag.items.length) {
